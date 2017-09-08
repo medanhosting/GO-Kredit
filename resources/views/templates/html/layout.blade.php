@@ -12,14 +12,12 @@
 	<body class=''>
 		<nav class="navbar navbar-expand navbar-light bg-white text-white main border border-primary border-bottom-0 border-right-0 border-left-0">
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-				<a class="navbar-brand" href="{{ route('dashboard') }}">{{ config('app.name') }}</a>
+				<a class="navbar-brand" href="{{ route('home', ['kantor_aktif' => $kantor_aktif]) }}">{{ config('app.name') }}</a>
 				<ul class="navbar-nav mr-auto mt-lg-0">
-					<li class="nav-item btn btn-outline-primary {{ str_is('dashboard', $active_menu) ? 'active' : '' }}">
+					<li class="nav-item btn btn-outline-primary {{ str_is('home', $active_menu) ? 'active' : '' }}">
 						<a class="nav-link" href="#" data-toggle='modal' data-target='#select_social_media'>
-						@if ($active_account)
-							{!! Form::bsIcon($active_account->type) !!} {{ $active_account->name }}
-						@else
-							Select Social Media
+						@if (1)
+							{{$kantor_aktif['nama']}}
 						@endif
 						<i class='fa fa-caret-down'></i>
 						</a>

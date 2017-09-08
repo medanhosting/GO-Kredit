@@ -7,34 +7,36 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
+use Thunderlabid\Manajemen\Models\Kantor;
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+
 use Auth;
-use Thunderlabid\SocialMedia\Models\Account;
+use Carbon\Carbon;
 
 class Controller extends BaseController
 {
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-	protected $social_media_list = ['instagram', 'facebook', 'twitter'];
-
 	function __construct()
 	{
-		$this->social_media_list = Account::$types;
-		asort($this->social_media_list);
+		$this->me 		= Auth::user();
+		$hari_ini 		= Carbon::now();
 
-		////////////////////
-		// Get My Account //
-		////////////////////
-		$social_media = Account::active()->owner($this->me->id)->orderBy('name')->get();
-		view()->share('my_social_media', $social_media);
+		//GET PILIHAN KANTOR
+		$penempatan 	= PenempatanKaryawan::where('orang_id', $this->me['id'])->active($hari_ini)->get(['kantor_id'])->toArray();
+		$ids 			= array_column($penempatan, 'kantor_id');
+
+		$this->kantor 		= Kantor::WhereIn('id', $ids)->get(['nama', 'id']);
+		$this->kantor_aktif	= Kantor::find(request()->get('kantor_aktif_id'));
 
 		//////////////////
 		// General Info //
 		//////////////////
-		$this->me = Auth::user();
-		view()->share('me', Auth::user());
-		view()->share('social_media_list', array_combine($this->social_media_list, $this->social_media_list));
+		view()->share('me', $this->me);
+		view()->share('kantor', $this->kantor);
+		view()->share('kantor_aktif', $this->kantor_aktif);
 
-		$this->layout = view('templates.html.layout');
-		$this->layout->html['title'] = 'KLEPON';
+		$this->layout 	= view('templates.html.layout');
+		$this->layout->html['title'] = 'GO-KREDIT.COM';
 	}
 }

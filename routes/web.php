@@ -21,7 +21,7 @@ Route::domain('localhost')->group(function(){
 	Route::post('/forget_password', 		['as'	=> 'forget_password.post', 			'uses' => 'LoginController@post_forget_password']);
 
 	Route::group(['middleware' => 'auth'], function(){
-		Route::get('/dashboard', 			['as'	=> 'dashboard', 	'uses' => 'DashboardController@overview']);
+		Route::get('/home',					['as'	=> 'home', 	'uses' => 'DashboardController@home']);
 
 		////////
 		// HR //

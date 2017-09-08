@@ -3,7 +3,7 @@
 		<div class="row">
 			<div class="col">
 				<h4 class='mb-3'>
-					Hi, {{ $me->name }}
+					Hi, {{ $me->nama }}
 				</h4>
 			</div>
 		</div>

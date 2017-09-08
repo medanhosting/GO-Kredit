@@ -8,11 +8,13 @@ namespace App\Http\Controllers;
 use Auth;
 use Exception;
 use Validator;
+use Carbon\Carbon;
 
 ////////////////////
 // MODEL 		  //
 ////////////////////
-use Thunderlabid\Auths\Models\User;
+use Thunderlabid\Manajemen\Models\Orang;
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
 class LoginController extends Controller
 {
@@ -36,7 +38,11 @@ class LoginController extends Controller
 		$credential = ['email' => $email, 'password' => $password];
 		if (Auth::attempt($credential))
 		{
-			return redirect()->route('dashboard');
+			//get kantor id
+			$hari_ini 	= Carbon::now();
+			$penempatan	= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active($hari_ini)->first();
+			
+			return redirect()->route('home', ['kantor_aktif_id' => $penempatan['kantor_id']]);
 		}
 		else
 		{
@@ -57,9 +63,9 @@ class LoginController extends Controller
 
 	public function post_forget_password()
 	{
-		$user = User::email(request()->input('email'))->first();
+		$orang = Orang::email(request()->input('email'))->first();
 
-		if (!$user)
+		if (!$orang)
 		{
 			session()->flash('alert_danger', 'Your email has not been registered as a member');
 			return redirect()->route('login');
@@ -88,9 +94,9 @@ class LoginController extends Controller
 			return redirect()->back()->withInput()->withErrors($validator);
 		}
 
-		$user = new User(request()->input());
+		$orang = new Orang(request()->input());
 		try {
-			$user->save();
+			$orang->save();
 			session()->flash('alert_success', 'Your account has been created. Please enter your email and password to start using ' . config('APP_NAME'));
 			return redirect()->route('login');
 		} catch (Exception $e) {

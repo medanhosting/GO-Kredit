@@ -178,8 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
 
-        Thunderlabid\Auths\AuthServiceProvider::class,
-        Thunderlabid\Socialmedia\SocialmediaServiceProvider::class,
+        Thunderlabid\Manajemen\ManajemenServiceProvider::class,
 
     ],
 
