@@ -1,0 +1,41 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Bungee+Hairline|Roboto+Slab:100,300,400,700');
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "node_modules/bootstrap/scss/bootstrap";
+@import "flatpickr.css";
+
+// HTML & BODY
+html, body {}
+
+// Typography
+.text-decorative { font-family:"Roboto Slab" !important; font-weight:100 !important;}
+
+// Nav
+.navbar.main { 
+	.nav-item { @extend .py-0; @extend .rounded; }
+	.nav-item.active { background:$gray-100; }
+}
+
+// Cursor
+.btn { cursor:pointer !important; }
+
+// Social Media Color
+.bg-facebook { background: #3b5999 ; color: #fff !important; }
+.bg-twitter { background: #55acee ; color: #fff !important; }
+.bg-instagram { background: #e4405f ; color: #fff !important; }
+
+// Card
+.card { 
+	overflow:hidden; 
+	* {
+		@extend .mw-100;
+	}
+}
+
+// Cursor
+a, button { cursor:pointer !important; }
