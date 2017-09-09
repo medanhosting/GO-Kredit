@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Manajemen\Events\Kantor;
+namespace Thunderlabid\Manajemen\Events\PenempatanKaryawan;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -10,9 +10,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-use Thunderlabid\Manajemen\Models\Kantor;
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
-class KantorSaving
+class PenempatanKaryawanCreating
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,7 +22,7 @@ class KantorSaving
      *
      * @return void
      */
-    public function __construct(Kantor $data)
+    public function __construct(PenempatanKaryawan $data)
     {
         $this->data = $data;
     }

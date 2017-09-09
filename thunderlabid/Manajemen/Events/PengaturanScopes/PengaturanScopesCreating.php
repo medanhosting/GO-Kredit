@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Manajemen\Events\PenempatanKaryawan;
+namespace Thunderlabid\Manajemen\Events\PengaturanScopes;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -10,9 +10,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+use Thunderlabid\Manajemen\Models\PengaturanScopes;
 
-class PenempatanKaryawanSaving
+class PengaturanScopesCreating
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,7 +22,7 @@ class PenempatanKaryawanSaving
      *
      * @return void
      */
-    public function __construct(PenempatanKaryawan $data)
+    public function __construct(PengaturanScopes $data)
     {
         $this->data = $data;
     }

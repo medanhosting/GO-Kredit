@@ -17,7 +17,7 @@ use Thunderlabid\Manajemen\Exceptions\AppException;
 ////////////
 use Thunderlabid\Manajemen\Events\Kantor\KantorCreating;
 // use Thunderlabid\Manajemen\Events\Kantor\KantorCreated;
-// use Thunderlabid\Manajemen\Events\Kantor\KantorUpdating;
+use Thunderlabid\Manajemen\Events\Kantor\KantorUpdating;
 // use Thunderlabid\Manajemen\Events\Kantor\KantorUpdated;
 // use Thunderlabid\Manajemen\Events\Kantor\KantorDeleting;
 // use Thunderlabid\Manajemen\Events\Kantor\KantorDeleted;
@@ -44,7 +44,7 @@ class Kantor extends Model
         // 'created' 	=> KantorCreated::class,
         'creating' 	=> KantorCreating::class,
         // 'updated' 	=> KantorUpdated::class,
-        // 'updating' 	=> KantorUpdating::class,
+        'updating' 	=> KantorUpdating::class,
         // 'deleted' 	=> KantorDeleted::class,
         // 'deleting' 	=> KantorDeleting::class,
     ];

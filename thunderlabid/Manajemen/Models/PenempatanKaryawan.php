@@ -18,10 +18,9 @@ use Thunderlabid\Manajemen\Exceptions\AppException;
 ////////////
 // EVENTS //
 ////////////
-// use Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating;
+use Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating;
 // use Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreated;
-use Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanSaving;
-// use Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating;
+use Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating;
 // use Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdated;
 // use Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanDeleting;
 // use Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanDeleted;
@@ -42,14 +41,12 @@ class PenempatanKaryawan extends Model
 	protected $latest_analysis;
 
 	protected $events = [
-		// 'creating' 	=> PenempatanKaryawanCreating::class,
+		'creating' 	=> PenempatanKaryawanCreating::class,
 		// 'created' 	=> PenempatanKaryawanCreated::class,
-		'saving' 		=> PenempatanKaryawanSaving::class,
-		// 'saved' 		=> PenempatanKaryawanSaved::class,
+		'updating' 	=> PenempatanKaryawanUpdating::class,
 		// 'updated' 	=> PenempatanKaryawanUpdated::class,
-		// 'updating' 	=> PenempatanKaryawanUpdating::class,
-		// 'deleted' 	=> PenempatanKaryawanDeleted::class,
 		// 'deleting' 	=> PenempatanKaryawanDeleting::class,
+		// 'deleted' 	=> PenempatanKaryawanDeleted::class,
 	];
 	
 	// ------------------------------------------------------------------------------------------------------------
@@ -119,7 +116,7 @@ class PenempatanKaryawan extends Model
 		$rules['scopes']	= ['required', 'json'];
 		$rules['policies']	= ['json'];
 		$rules['tanggal_masuk']		= ['required','date_format:"Y-m-d H:i:s"'];
-		$rules['tanggal_keluar']	= ['date_format:"Y-m-d H:i:s"'];
+		$rules['tanggal_keluar']	= ['date_format:"Y-m-d H:i:s"', 'after:tanggal_masuk'];
 
 		//////////////
 		// Validate //
@@ -131,30 +128,7 @@ class PenempatanKaryawan extends Model
 			return false;
 		}
 
-		//check possibility of duplicate kantor
-		$id 			= $this->id;
-		if(is_null($this->id))
-		{
-			$id 		= 0;
-		}
-		$penempatan 	= PenempatanKaryawan::where('kantor_id', $this->attributes['kantor_id'])->where('orang_id', $this->attributes['orang_id'])->where('id', '<>', $id)->active(Carbon::parse($this->attributes['tanggal_masuk']));
-
-		if(!is_null($this->attributes['tanggal_keluar']))
-		{
-			$penempatan = $penempatan->active(Carbon::parse($this->attributes['tanggal_keluar']));
-		}
-		$penempatan 	= $penempatan->first();
-		
-		if($penempatan)
-		{
-			$this->errors = 'Karyawan sudah terdaftar di cabang ini pada tanggal rentang waktu tersebut';
-			return false;
-		}
-		else
-		{
-			$this->errors = null;
-			return true;
-		}
+		return true;
 	}
 
 	public function getPoliciesAttribute()

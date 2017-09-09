@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 use Thunderlabid\Manajemen\Models\PengaturanScopes;
 
-class PengaturanScopesSaving
+class PengaturanScopesUpdating
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

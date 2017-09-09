@@ -15,9 +15,9 @@ use Thunderlabid\Manajemen\Exceptions\AppException;
 ////////////
 // EVENTS //
 ////////////
-// use Thunderlabid\Manajemen\Events\PengaturanScopes\PengaturanScopesCreating;
+use Thunderlabid\Manajemen\Events\PengaturanScopes\PengaturanScopesCreating;
 // use Thunderlabid\Manajemen\Events\PengaturanScopes\PengaturanScopesCreated;
-// use Thunderlabid\Manajemen\Events\PengaturanScopes\PengaturanScopesUpdating;
+use Thunderlabid\Manajemen\Events\PengaturanScopes\PengaturanScopesUpdating;
 // use Thunderlabid\Manajemen\Events\PengaturanScopes\PengaturanScopesUpdated;
 // use Thunderlabid\Manajemen\Events\PengaturanScopes\PengaturanScopesDeleting;
 // use Thunderlabid\Manajemen\Events\PengaturanScopes\PengaturanScopesDeleted;
@@ -36,12 +36,12 @@ class PengaturanScopes extends Model
 	protected $latest_analysis;
 
 	protected $events = [
+        'creating' 	=> PengaturanScopesCreating::class,
         // 'created' 	=> PengaturanScopesCreated::class,
-        // 'creating' 	=> PengaturanScopesCreating::class,
+        'updating' 	=> PengaturanScopesUpdating::class,
         // 'updated' 	=> PengaturanScopesUpdated::class,
-        // 'updating' 	=> PengaturanScopesUpdating::class,
-        // 'deleted' 	=> PengaturanScopesDeleted::class,
         // 'deleting' 	=> PengaturanScopesDeleting::class,
+        // 'deleted' 	=> PengaturanScopesDeleted::class,
     ];
 	
 	// ------------------------------------------------------------------------------------------------------------
