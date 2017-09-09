@@ -27,7 +27,7 @@ class Kantor extends Model
 	use SoftDeletes;
 
 	protected $table	= 'm_kantor';
-	protected $fillable	= ['kantor_id', 'nama', 'alamat', 'geolocation', 'telepon', 'tipe'];
+	protected $fillable	= ['kantor_id', 'nama', 'alamat', 'geolocation', 'telepon', 'tipe', 'jenis'];
 	protected $hidden	= [];
 	protected $dates	= [];
 

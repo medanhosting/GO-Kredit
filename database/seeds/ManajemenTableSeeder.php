@@ -29,7 +29,7 @@ class ManajemenTableSeeder extends Seeder
 		//BASIC HOLDING
 		Kantor::create(['nama'   => 'Kantor Holding', 'alamat' => ['alamat' => 'Jl. Letjen Sutoyo 102A', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Blimbing', 'kecamatan' => 'Blimbing', 'kota' => 'Malang', 'provinsi' => 'Indonesia'], 'geolocation' => ['latitude' => 7, 'longitude' => 102], 'telepon' => '0341 888888', 'tipe' => 'holding']);
 		
-		Kantor::create(['nama'   => 'Koperasi Artha Makmur', 'alamat' => ['alamat' => 'Jl. Letjen Sutoyo 102B', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Blimbing', 'kecamatan' => 'Blimbing', 'kota' => 'Malang', 'provinsi' => 'Indonesia'], 'geolocation' => ['latitude' => 7, 'longitude' => 102], 'telepon' => '0341 777777', 'tipe' => 'pusat']);
+		Kantor::create(['nama'   => 'Koperasi Artha Makmur', 'alamat' => ['alamat' => 'Jl. Letjen Sutoyo 102B', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Blimbing', 'kecamatan' => 'Blimbing', 'kota' => 'Malang', 'provinsi' => 'Indonesia'], 'geolocation' => ['latitude' => 7, 'longitude' => 102], 'telepon' => '0341 777777', 'tipe' => 'pusat', 'jenis' => 'BPR']);
 
 		//BASIC ADMIN
 		Orang::create(['nama'   => 'Chelsy Mooy', 'email' => 'chelsy@thunderlab.id', 'password' => 'adminadmin']);

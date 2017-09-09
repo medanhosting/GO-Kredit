@@ -21,6 +21,7 @@ class CreateManajemenKantorTable extends Migration
 			$table->text('geolocation');
 			$table->string('telepon', 20);
 			$table->enum('tipe', ['holding', 'pusat', 'cabang']);
+			$table->enum('jenis', ['bpr', 'koperasi'])->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		
