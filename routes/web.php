@@ -22,6 +22,10 @@ Route::domain('localhost')->group(function(){
 
 	Route::group(['middleware' => 'auth'], function(){
 		Route::get('/home',					['as'	=> 'home', 	'uses' => 'DashboardController@home']);
+	
+		Route::group(['prefix' => 'pengajuan', 'namespace' => 'Pengajuan'], function(){
+			Route::resource('permohonan', 'PermohonanController');
+		});
 
 		////////
 		// HR //

@@ -179,6 +179,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
 
         Thunderlabid\Manajemen\ManajemenServiceProvider::class,
+        Thunderlabid\Pengajuan\PengajuanServiceProvider::class,
 
     ],
 
