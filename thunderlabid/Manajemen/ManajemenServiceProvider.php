@@ -19,6 +19,7 @@ class ManajemenServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating', 'Thunderlabid\Manajemen\Listeners\SavingPenempatanKaryawan');
 		Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating', 'Thunderlabid\Manajemen\Listeners\SavingPenempatanKaryawan');
 
+		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\AssignIDKantor');
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\SavingKantor');
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorUpdating', 'Thunderlabid\Manajemen\Listeners\SavingKantor');
 		Event::listen('Thunderlabid\Manajemen\Events\MobileApi\MobileApiCreating', 'Thunderlabid\Manajemen\Listeners\SavingMobileApi');
