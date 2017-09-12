@@ -26,10 +26,17 @@ class ManajemenTableSeeder extends Seeder
 		DB::table('m_mobile_api')->truncate();
 		
 		//
-		//BASIC HOLDING
-		Kantor::create(['nama'   => 'Kantor Holding', 'alamat' => ['alamat' => 'Jl. Letjen Sutoyo 102A', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Blimbing', 'kecamatan' => 'Blimbing', 'kota' => 'Malang', 'provinsi' => 'Jawa Timur'], 'geolocation' => ['latitude' => 7, 'longitude' => 102], 'telepon' => '0341 888888', 'tipe' => 'holding']);
+		//BASIC HOLDING SURABAYA
+		Kantor::create(['nama'   => 'Kantor Holding', 'alamat' => ['alamat' => 'Perum Hladiola', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Angkasa Purna', 'kecamatan' => 'Kota Lama', 'kota' => 'Surabaya', 'provinsi' => 'Jawa Timur'], 'geolocation' => ['latitude' => -7.275614, 'longitude' => 112.6414716], 'telepon' => '031 888888', 'tipe' => 'holding']);
 		
-		Kantor::create(['nama'   => 'Koperasi Artha Makmur', 'alamat' => ['alamat' => 'Jl. Letjen Sutoyo 102B', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Blimbing', 'kecamatan' => 'Blimbing', 'kota' => 'Malang', 'provinsi' => 'Jawa Timur'], 'geolocation' => ['latitude' => 7, 'longitude' => 102], 'telepon' => '0341 777777', 'tipe' => 'pusat', 'jenis' => 'BPR']);
+		//pusat malang
+		Kantor::create(['nama'   => 'BPR Artha Makmur', 'alamat' => ['alamat' => 'Jl. Letjen Sutoyo 102B', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Blimbing', 'kecamatan' => 'Blimbing', 'kota' => 'Malang', 'provinsi' => 'Jawa Timur'], 'geolocation' => ['latitude' => -7.9786394, 'longitude' => 112.5615702], 'telepon' => '0341 777777', 'tipe' => 'pusat', 'jenis' => 'bpr']);
+		
+		//cabang kediri
+		Kantor::create(['nama'   => 'Koperasi Surya Gemilang', 'alamat' => ['alamat' => 'Jl. Adi Sucipto No. 93', 'rt' => '004', 'rw' => '004', 'kelurahan' => 'Banju Biore', 'kecamatan' => 'Savana', 'kota' => 'Kediri', 'provinsi' => 'Jawa Timur'], 'geolocation' => ['latitude' => -7.8424163, 'longitude' => 111.946147], 'telepon' => '031 635366', 'tipe' => 'cabang', 'jenis' => 'koperasi']);
+
+		//cabang jombang
+		Kantor::create(['nama'   => 'Koperasi Mentari Jaya', 'alamat' => ['alamat' => 'Jl. Mulawarman 3', 'rt' => '004', 'rw' => '001', 'kelurahan' => 'Coban Camit', 'kecamatan' => 'Kota Lama', 'kota' => 'Jombang', 'provinsi' => 'Jawa Timur'], 'geolocation' => ['latitude' => -7.5613891, 'longitude' => 111.9783402], 'telepon' => '031 844366', 'tipe' => 'cabang', 'jenis' => 'koperasi']);
 
 		//BASIC ADMIN
 		Orang::create(['nama'   => 'Chelsy Mooy', 'email' => 'chelsy@thunderlab.id', 'password' => 'adminadmin']);

@@ -15,9 +15,9 @@ use Thunderlabid\Manajemen\Exceptions\AppException;
 ////////////
 // EVENTS //
 ////////////
-// use Thunderlabid\Manajemen\Events\MobileApi\MobileApiCreating;
+use Thunderlabid\Manajemen\Events\MobileApi\MobileApiCreating;
 // use Thunderlabid\Manajemen\Events\MobileApi\MobileApiCreated;
-// use Thunderlabid\Manajemen\Events\MobileApi\MobileApiUpdating;
+use Thunderlabid\Manajemen\Events\MobileApi\MobileApiUpdating;
 // use Thunderlabid\Manajemen\Events\MobileApi\MobileApiUpdated;
 // use Thunderlabid\Manajemen\Events\MobileApi\MobileApiDeleting;
 // use Thunderlabid\Manajemen\Events\MobileApi\MobileApiDeleted;
@@ -36,12 +36,12 @@ class MobileApi extends Model
 	protected $latest_analysis;
 
 	protected $events = [
+        'creating' 	=> MobileApiCreating::class,
         // 'created' 	=> MobileApiCreated::class,
-        // 'creating' 	=> MobileApiCreating::class,
+        'updating' 	=> MobileApiUpdating::class,
         // 'updated' 	=> MobileApiUpdated::class,
-        // 'updating' 	=> MobileApiUpdating::class,
-        // 'deleted' 	=> MobileApiDeleted::class,
         // 'deleting' 	=> MobileApiDeleting::class,
+        // 'deleted' 	=> MobileApiDeleted::class,
     ];
 	
 	// ------------------------------------------------------------------------------------------------------------

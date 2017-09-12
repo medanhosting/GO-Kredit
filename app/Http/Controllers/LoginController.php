@@ -33,9 +33,9 @@ class LoginController extends Controller
 
 	public function post_login() {
 
-		$email 		= request()->input('email');
+		$nip 		= request()->input('nip');
 		$password 	= request()->input('password');
-		$credential = ['email' => $email, 'password' => $password];
+		$credential = ['nip' => $nip, 'password' => $password];
 		if (Auth::attempt($credential))
 		{
 			//get kantor id
