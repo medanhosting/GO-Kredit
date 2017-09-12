@@ -17,6 +17,7 @@ class CreatePengajuanJaminanTable extends Migration
 			$table->increments('id');
 			$table->enum('jenis', ['bpkb', 'shm', 'shgb']);
 			$table->double('nilai_jaminan');
+			$table->integer('tahun_perolehan');
 			$table->text('dokumen_jaminan');
 			$table->string('pengajuan_id');
 			$table->timestamps();

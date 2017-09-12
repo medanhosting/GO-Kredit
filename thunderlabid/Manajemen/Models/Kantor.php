@@ -101,6 +101,7 @@ class Kantor extends Model
 		$rules['geolocation']['longitude'] 		= ['required'];
 		$rules['telepon'] 						= ['required'];
 		$rules['tipe'] 							= ['required', 'in:' . implode(',',SELF::$types)];
+		$rules['jenis'] 						= ['in:bpr,koperasi'];
 
 		//////////////
 		// Validate //

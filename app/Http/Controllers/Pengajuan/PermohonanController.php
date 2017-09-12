@@ -8,11 +8,12 @@ use Thunderlabid\Pengajuan\Models\Pengajuan;
 
 use Exception;
 use Session;
+
 class PermohonanController extends Controller
 {
 	public function index() 
 	{
-		$permohonan 			= Pengajuan::status('permohonan')->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir'])->paginate();
+		$permohonan 			= Pengajuan::status('permohonan')->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan'])->orderby('created_at', 'desc')->paginate();
 
 		$this->layout->pages 	= view('dashboard.overview', compact('permohonan'));
 
@@ -86,7 +87,7 @@ class PermohonanController extends Controller
 	{
 		try {
 			$permohonan		= Pengajuan::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan', 'riwayat_status', 'status_terakhir')->first();
-			
+
 			if(!$permohonan)
 			{
 				throw new Exception("Data tidak ada!", 1);

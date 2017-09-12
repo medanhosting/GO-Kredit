@@ -22,6 +22,12 @@ class PengajuanServiceProvider extends ServiceProvider
 
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreating', 'Thunderlabid\Pengajuan\Listeners\SavingJaminan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdating', 'Thunderlabid\Pengajuan\Listeners\SavingJaminan');
+
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreating', 'Thunderlabid\Pengajuan\Listeners\BatasanJaminan');
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdating', 'Thunderlabid\Pengajuan\Listeners\BatasanJaminan');
+
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreating', 'Thunderlabid\Pengajuan\Listeners\DuplikasiJaminan');
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdating', 'Thunderlabid\Pengajuan\Listeners\DuplikasiJaminan');
 	}
 
 	public function register()

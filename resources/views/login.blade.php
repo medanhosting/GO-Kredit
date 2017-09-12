@@ -8,7 +8,7 @@
 
 @push('body')
 	{!! Form::open(['url' => route('login.post'), 'method' => 'post']) !!}
-	{!! Form::bsText(null, 'email', null, ['placeholder' => 'email']) !!}
+	{!! Form::bsText(null, 'nip', null, ['placeholder' => 'nip']) !!}
 	{!! Form::bsPassword(null, 'password', ['placeholder' => 'password']) !!}
 	<a href='{{ route('forget_password') }}'>Forget my password</a>
 	{!! Form::bsSubmit('LOGIN', ['class' => 'btn btn-primary float-right']) !!}

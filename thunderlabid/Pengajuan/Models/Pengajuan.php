@@ -103,6 +103,18 @@ class Pengajuan extends Model
 
 	public function scopeStatus($query, $variable)
 	{
+		if(is_array($variable))
+		{
+			$to_string 				= [];
+			foreach ($variable as $key => $value) 
+			{
+				$to_string[$key] 	= '"'.$value.'"';
+			}
+			$status 				= implode(',', $to_string);
+
+			return $query->selectraw('p_pengajuan.*')->whereraw(DB::raw('(IFNULL((select p_status_now.status from p_status as p_status_now join p_status on p_status.id = p_status_now.id order by p_status_now.tanggal desc limit 1), "permohonan")) in ('.$status.')'));
+		}
+
 		return $query->selectraw('p_pengajuan.*')->whereraw(DB::raw('(IFNULL((select p_status_now.status from p_status as p_status_now join p_status on p_status.id = p_status_now.id order by p_status_now.tanggal desc limit 1), "permohonan")) = "'.$variable.'"'));
 	}
 

@@ -30,7 +30,7 @@ class Jaminan extends Model
 	use IDRTrait;
 
 	protected $table	= 'p_jaminan';
-	protected $fillable	= ['jenis', 'nilai_jaminan', 'dokumen_jaminan', 'pengajuan_id'];
+	protected $fillable	= ['jenis', 'nilai_jaminan', 'tahun_perolehan', 'dokumen_jaminan', 'pengajuan_id'];
 	protected $hidden	= [];
 	protected $dates	= [];
 
@@ -60,6 +60,10 @@ class Jaminan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
+	public function pengajuan()
+	{
+		return $this->belongsTo(Pengajuan::class, 'pengajuan_id');
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
@@ -97,13 +101,14 @@ class Jaminan extends Model
 		//////////////////
 		$rules['jenis']					= ['required', 'in:' . implode(',',SELF::$types)];
 		$rules['nilai_jaminan']			= ['required', 'numeric'];
+		$rules['tahun_perolehan']		= ['required', 'date_format:"Y"', 'before:'.date('Y')];
 		
-		$rules['dokumen_jaminan.bpkb.tipe']			= ['required_if:jenis,bpkb', 'max:255', 'in:roda_2,roda_3,roda_4,roda_6'];
-		$rules['dokumen_jaminan.bpkb.merk']			= ['required_if:jenis,bpkb', 'max:255'];
-		$rules['dokumen_jaminan.bpkb.tahun']		= ['required_if:jenis,bpkb', 'date_format:"Y"', 'before:'.date('Y')];
-		$rules['dokumen_jaminan.bpkb.nomor_bpkb']	= ['required_if:jenis,bpkb', 'max:255'];
-		$rules['dokumen_jaminan.bpkb.atas_nama']	= ['required_if:jenis,bpkb', 'max:255'];
-		$rules['dokumen_jaminan.bpkb.jenis']		= ['required_if:jenis,bpkb', 'max:255'];
+		$rules['dokumen_jaminan.bpkb.tipe']				= ['required_if:jenis,bpkb', 'max:255', 'in:roda_2,roda_3,roda_4,roda_6'];
+		$rules['dokumen_jaminan.bpkb.merk']				= ['required_if:jenis,bpkb', 'max:255'];
+		$rules['dokumen_jaminan.bpkb.tahun']			= ['required_if:jenis,bpkb', 'date_format:"Y"', 'before:'.date('Y')];
+		$rules['dokumen_jaminan.bpkb.nomor_bpkb']		= ['required_if:jenis,bpkb', 'max:255'];
+		$rules['dokumen_jaminan.bpkb.atas_nama']		= ['required_if:jenis,bpkb', 'max:255'];
+		$rules['dokumen_jaminan.bpkb.jenis']			= ['required_if:jenis,bpkb', 'max:255'];
 
 		$rules['dokumen_jaminan.shm.tipe']				= ['required_if:jenis,shm', 'max:255', 'in:tanah,tanah_dan_bangunan'];
 		$rules['dokumen_jaminan.shm.nomor_sertifikat']	= ['required_if:jenis,shm', 'max:255'];

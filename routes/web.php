@@ -23,7 +23,7 @@ Route::domain('localhost')->group(function(){
 	Route::group(['middleware' => 'auth'], function(){
 		Route::get('/home',					['as'	=> 'home', 	'uses' => 'DashboardController@home']);
 	
-		Route::group(['prefix' => 'pengajuan', 'namespace' => 'Pengajuan'], function(){
+		Route::group(['prefix' => 'pengajuan', 'namespace' => 'Pengajuan', 'middleware' => 'scope:permohonan'], function(){
 			Route::resource('permohonan', 'PermohonanController');
 		});
 
