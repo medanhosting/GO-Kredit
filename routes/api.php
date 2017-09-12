@@ -16,3 +16,11 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//LOGIN API
+
+Route::group(['namespace' => 'API'], function(){
+	Route::post('/check/device',	['uses' => 'LoginController@post_login_device']);
+	Route::post('/check/user',		['uses' => 'LoginController@post_login_with_username']);
+	Route::post('/permohonan',		['uses' => 'PermohonanController@store', 'middleware' => 'device']);
+});
