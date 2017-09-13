@@ -45,11 +45,11 @@ class SavingPenempatanKaryawan
 		{
 			$id 		= 0;
 		}
-		$penempatan 	= PenempatanKaryawan::where('kantor_id', $model->kantor_id)->where('orang_id', $model->orang_id)->where('id', '<>', $id)->active(Carbon::parse($model->tanggal_masuk));
+		$penempatan 	= PenempatanKaryawan::where('kantor_id', $model->kantor_id)->where('orang_id', $model->orang_id)->where('id', '<>', $id)->active(Carbon::createFromFormat('d/m/Y H:i', $model->tanggal_masuk));
 
 		if(!is_null($model->tanggal_keluar))
 		{
-			$penempatan = $penempatan->active(Carbon::parse($model->tanggal_keluar));
+			$penempatan = $penempatan->active(Carbon::createFromFormat('d/m/Y H:i', $model->tanggal_keluar));
 		}
 		$penempatan 	= $penempatan->first();
 		

@@ -38,11 +38,11 @@ class AutoAssignNIP
 			
 			if($riwayat_kerja && $riwayat_kerja->tanggal_masuk < $penempatan->tanggal_masuk)
 			{
-				$first_letter	= Carbon::parse($riwayat_kerja->tanggal_masuk)->format('Y').'.';
+				$first_letter	= Carbon::createFromFormat('d/m/Y H:i', $riwayat_kerja->tanggal_masuk)->format('Y').'.';
 			}
 			else
 			{
-				$first_letter	= Carbon::parse($penempatan->tanggal_masuk)->format('Y').'.';
+				$first_letter	= Carbon::createFromFormat('d/m/Y H:i', $penempatan->tanggal_masuk)->format('Y').'.';
 			}
 
 			$prev_data          = Orang::where('nip', 'like', $first_letter.'%')->orderby('nip', 'desc')->first();
