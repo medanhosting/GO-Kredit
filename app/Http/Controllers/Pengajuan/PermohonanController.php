@@ -8,19 +8,23 @@ use Thunderlabid\Pengajuan\Models\Pengajuan;
 
 use Exception;
 use Session;
+use MessageBag;
 
 class PermohonanController extends Controller
 {
-	public function index() 
+	protected $view_dir = 'pengajuan.permohonan.';
+
+	public function index () 
 	{
 		$permohonan 			= Pengajuan::status('permohonan')->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan'])->orderby('created_at', 'desc')->paginate();
 
-		$this->layout->pages 	= view('dashboard.overview', compact('permohonan'));
+		view()->share('permohonan', $permohonan);
+		$this->layout->pages 	= view($this->view_dir . 'index');
 
 		return $this->layout;
 	}
 
-	public function create($id = null)
+	public function create ($id = null)
 	{
 		try {
 			$permohonan 			= Pengajuan::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan')->first();
@@ -33,18 +37,22 @@ class PermohonanController extends Controller
 				throw new Exception("Data tidak ada, Silahkan buat permohonan baru.", 1);
 			}
 
-			$this->layout->pages 	= view('dashboard.overview', compact('permohonan'));
+			view()->share('hari_ini', \Carbon\Carbon::now()->format('d/m/Y'));
+			view()->share('permohonan', $permohonan);
+			$this->variable_to_view();
+
+			$this->layout->pages 	= view($this->view_dir . 'create');
 			return $this->layout;
 		} catch (Exception $e) {
 			return redirect(route('permohonan.create', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
 		}
 	}
 
-	public function store($id = null)
+	public function store ($id = null)
 	{
 		try {
 			$permohonan 			= Pengajuan::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan')->first();
-			if(!$permohonan)
+			if (!$permohonan)
 			{
 				$permohonan 		= new Pengajuan;
 			}
@@ -52,15 +60,19 @@ class PermohonanController extends Controller
 			$data_input 				= request()->all();
 			$data_input['kode_kantor']	= request()->get('kantor_aktif_id');
 
+			if (isset($data_input['nasabah']['nik'])) {
+				$data_input['nasabah']['nik'] = '35-' . $data_input['nasabah']['nik'];
+			}
+
 			$permohonan->fill($data_input);
 			$permohonan->save();
 
-			foreach($permohonan->jaminan as $key => $value)
+			foreach ($permohonan->jaminan as $key => $value)
 			{
 				$value->delete();
 			}
 
-			if(request()->has('jaminan'))
+			if (request()->has('jaminan'))
 			{
 				foreach (request()->get('jaminan') as $key => $value) 
 				{
@@ -71,14 +83,25 @@ class PermohonanController extends Controller
 				}
 			}
 	
-			return redirect(route('permohonan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]));
+			return redirect(route($this->view_dir . 'show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]));
 		} catch (Exception $e) {
 			if(!is_null($id))
 			{
-				return redirect(route('permohonan.edit', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
+				return redirect(route($this->view_dir . 'edit', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
 			}
 
-			return redirect(route('permohonan.create', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
+			$errors = new MessageBag();
+			dd($e);
+			foreach ($e->getMessage()->toArray() as $k => $error)
+			{
+				foreach ($error as $x)
+				{
+					$errors->add(str_replace('.', '_', $k), $x);
+				}
+			}
+			// return redirect()->back()->withErrors($errors)->withInput();
+
+			return redirect(route($this->view_dir . 'create', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($errors)->withInput();
 		}
 
 	}
@@ -115,12 +138,12 @@ class PermohonanController extends Controller
 	{
 		try {
 			$permohonan		= Pengajuan::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan')->first();
-			if(!$permohonan)
+			if (!$permohonan)
 			{
 				throw new Exception("Data tidak ada!", 1);
 			}
 
-			foreach($permohonan->jaminan as $key => $value)
+			foreach ($permohonan->jaminan as $key => $value)
 			{
 				$value->delete();
 			}
@@ -131,5 +154,43 @@ class PermohonanController extends Controller
 		} catch (Exception $e) {
 			return redirect(route('permohonan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
 		}
+	}
+
+	private function variable_to_view () 
+	{
+		$jenis_pekerjaan	= [
+			'tidak_bekerja'		=> 'Belum / Tidak Bekerja',
+			'karyawan_swasta'	=> 'Karyawan Swasta',
+			'nelayan'			=> 'Nelayan',
+			'pegawai_negeri'	=> 'Pegawai Negeri',
+			'petani'			=> 'Petani',
+			'polri'				=> 'Polri',
+			'wiraswasta'		=> 'Wiraswasta',
+			'lain_lain'			=> 'Lainnya'
+		];
+
+		$jenis_kendaraan 	= [
+			'roda_2'		=> 'roda 2',
+			'roda_3'		=> 'roda 3',
+			'roda_4'		=> 'roda 4',
+			'roda_6'		=> 'roda 6'
+		];
+
+		$jenis_sertifikat	= [
+			'shm'			=> 'Surat Hak Milik',
+			'shgb'			=> 'Surat Hak Guna Bangunan'
+		];
+
+		$status_perkawinan = [
+			'belum_kawin'	=> 'Belum Kawin',
+			'kawin'			=> 'Kawin',
+			'cerai'			=> 'Cerai',
+			'cerai_mati'	=> 'Cerai Mati'
+		];
+
+		view()->share('jenis_pekerjaan', $jenis_pekerjaan);
+		view()->share('jenis_kendaraan', $jenis_kendaraan);
+		view()->share('jenis_sertifikat', $jenis_sertifikat);
+		view()->share('status_perkawinan', $status_perkawinan);
 	}
 }

@@ -1,0 +1,31 @@
+<div class="modal fade" id="{{ $id }}">
+	<div class="modal-dialog " role="document">
+		<div class="modal-content">
+			@if ($title || $body || $footer)
+				@if ($title)
+					<div class="modal-header">
+						<h4 class="modal-title">{!! $title !!}</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							<span class="sr-only">Close</span>
+						</button>
+					</div>
+				@endif
+
+				@if ($body)
+					<div class="modal-body">
+						{!! $body !!}
+					</div>
+				@endif
+
+				@if ($footer)
+					<div class="modal-footer">
+						{!! $footer !!}
+					</div>
+				@endif
+			@endif
+
+			{!! $slot !!}
+		</div>
+	</div>
+</div>

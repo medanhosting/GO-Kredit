@@ -16,8 +16,8 @@ class ManajemenServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Manajemen\Events\Orang\OrangUpdating', 'Thunderlabid\Manajemen\Listeners\SavingOrang');
 		Event::listen('Thunderlabid\Manajemen\Events\Orang\OrangDeleting', 'Thunderlabid\Manajemen\Listeners\DeletingOrang');
 		
-		Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating', 'Thunderlabid\Manajemen\Listeners\SavingPenempatanKaryawan');
-		Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating', 'Thunderlabid\Manajemen\Listeners\SavingPenempatanKaryawan');
+		//Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating', 'Thunderlabid\Manajemen\Listeners\SavingPenempatanKaryawan');
+		//Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating', 'Thunderlabid\Manajemen\Listeners\SavingPenempatanKaryawan');
 
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\AssignIDKantor');
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\SavingKantor');
@@ -40,8 +40,8 @@ class ManajemenServiceProvider extends ServiceProvider
 		//////////////////////
 		//    Assign  NIP   //
 		//////////////////////
-		Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating', 'Thunderlabid\Manajemen\Listeners\AutoAssignNIP');
-		Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating', 'Thunderlabid\Manajemen\Listeners\AutoAssignNIP');
+		//Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating', 'Thunderlabid\Manajemen\Listeners\AutoAssignNIP');
+		//Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating', 'Thunderlabid\Manajemen\Listeners\AutoAssignNIP');
 	}
 
 	public function register()

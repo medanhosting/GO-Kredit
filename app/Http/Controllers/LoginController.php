@@ -22,7 +22,7 @@ class LoginController extends Controller
 
 	function __construct()
 	{
-		view()->share('html', ['title' => 'KLEPON - Social Media Manager']);
+		view()->share('html', ['title' => 'GO-Kredit.com']);
 		$this->layout = view('templates.html.layout2');
 	}
 
@@ -32,21 +32,22 @@ class LoginController extends Controller
 	}
 
 	public function post_login() {
-
 		$nip 		= request()->input('nip');
 		$password 	= request()->input('password');
-		$credential = ['nip' => $nip, 'password' => $password];
+		$credential = ['email' => $nip, 'password' => $password];
+
 		if (Auth::attempt($credential))
 		{
 			//get kantor id
 			$hari_ini 	= Carbon::now();
 			$penempatan	= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active($hari_ini)->first();
-			
+			// dd(1);
 			return redirect()->route('home', ['kantor_aktif_id' => $penempatan['kantor_id']]);
 		}
 		else
 		{
-			return redirect()->route('login')->withErrors();
+			// dd(2);
+			return redirect()->route('login')->withErrors('invalid password/username');
 		}
 	}
 

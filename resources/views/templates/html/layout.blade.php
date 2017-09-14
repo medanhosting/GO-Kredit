@@ -8,26 +8,31 @@
 		<title>{{ $html['title'] }}</title>
 		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		@stack('css')
 	</head>
 	<body class=''>
-		<nav class="navbar navbar-expand navbar-light bg-white text-white main border border-primary border-bottom-0 border-right-0 border-left-0">
+		<nav class="navbar navbar-expand navbar-dark bg-success text-white main">
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-				<a class="navbar-brand" href="{{ route('home', ['kantor_aktif' => $kantor_aktif]) }}">{{ config('app.name') }}</a>
+				<a class="navbar-brand" href="{{ route('home') }}">{{ config('app.name') }}</a>
 				<ul class="navbar-nav mr-auto mt-lg-0">
-					<li class="nav-item btn btn-outline-primary {{ str_is('home', $active_menu) ? 'active' : '' }}">
+					<li class="nav-item btn btn-outline-primary {{ str_is('dashboard', $active_menu) ? 'active' : '' }}">
 						<a class="nav-link" href="#" data-toggle='modal' data-target='#select_social_media'>
-						@if (1)
-							{{$kantor_aktif['nama']}}
-						@endif
-						<i class='fa fa-caret-down'></i>
+							@if ($active_account)
+								{!! Form::bsIcon($active_account->type) !!} {{ $active_account->name }}
+							@else
+								<i class="fa fa-building-o"></i>&nbsp; Cabang &nbsp;&nbsp;
+							@endif
+							<i class='fa fa-caret-down'></i>
 						</a>
 					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto mt-lg-0">
-					<li class="nav-item"><a class="nav-link" href="{{ route('social_media.index') }}"'><i class='fa fa-plus-circle'></i><span class='d-none d-md-'>Add Account</span></a></li>
+					{{-- <li class="nav-item"><a class="nav-link" href="{{ route('social_media.index') }}"'><i class='fa fa-plus-circle'></i><span class='d-none d-md-'>Add Account</span></a></li> --}}
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<div class='d-none d-sm-inline'>{{ $me->email }}</div>
+							<div class='d-none d-sm-inline'>
+								<i class="fa fa-user-circle"></i>&nbsp; {{ $me->email }} &nbsp;&nbsp;&nbsp;
+							</div>
 							<span class='d-sm-none'><i class='fa fa-user'></i></span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
@@ -54,7 +59,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col text-center">
-					  	Klepon.id &copy; {{ date('Y') }} - Developed by <a href='http://thunderlab.id' target='_blank'>Thunderlab.id</a>
+					  	{{ config('app.name') }}.com &copy; {{ date('Y') }} - Developed by <a href='http://thunderlab.id' target='_blank'>Thunderlab.id</a>
 					</div>
 				</div>
 			</div>

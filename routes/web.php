@@ -20,10 +20,10 @@ Route::domain('localhost')->group(function(){
 	Route::post('/register', 				['as'	=> 'register.post', 				'uses' => 'LoginController@post_register']);
 	Route::post('/forget_password', 		['as'	=> 'forget_password.post', 			'uses' => 'LoginController@post_forget_password']);
 
-	Route::group(['middleware' => 'auth'], function(){
+	Route::middleware('auth')->group( function() {
 		Route::get('/home',					['as'	=> 'home', 	'uses' => 'DashboardController@home']);
 	
-		Route::group(['prefix' => 'pengajuan', 'namespace' => 'Pengajuan', 'middleware' => 'scope:permohonan'], function(){
+		Route::prefix('pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
 			Route::resource('permohonan', 'PermohonanController');
 		});
 

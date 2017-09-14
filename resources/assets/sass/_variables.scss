@@ -1,6 +1,6 @@
 
 // Body
-$body-bg: #eaeaea;
+$body-bg: #fafafa;
 
 // Borders
 $laravel-border-color: darken($body-bg, 10%);
@@ -40,7 +40,7 @@ $pink:    #e83e8c !default;
 $red:     #dc3545 !default;
 $orange:  #fd7e14 !default;
 $yellow:  #ffc107 !default;
-$green:   #28a745 !default;
+$green:   #00c69b !default;
 $teal:    #20c997 !default;
 $cyan:    #17a2b8 !default;
 
@@ -61,7 +61,7 @@ $colors: (
 ) !default;
 
 $theme-colors: (
-  primary: $teal,
+  primary: $green,
   secondary: $gray-600,
   success: $green,
   info: $cyan,
@@ -72,21 +72,25 @@ $theme-colors: (
 ) !default;
 
 // Brands
-$brand-primary: #3097D1;
+$brand-primary: $green;
 $brand-info: #8eb4cb;
 $brand-success: #2ab27b;
 $brand-warning: #cbb956;
 $brand-danger: #bf5329;
 
 // Typography
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-$font-family-sans-serif: "Roboto Slab", sans-serif;
+$font-family-sans-serif: "Lato", sans-serif;
 $font-size-base: 0.8rem;
 $line-height-base: 1.6;
 $text-color: #636b6f;
 
 // Navbar
 $navbar-default-bg: #fff;
+
+$navbar-dark-color:                 rgba($white,.85) !default;
+$navbar-dark-hover-color:           rgba($white,.95) !default;
+$navbar-dark-active-color:          rgba($white,1) !default;
+$navbar-dark-disabled-color:        rgba($white,.25) !default;
 
 // Buttons
 $btn-default-color: $text-color;

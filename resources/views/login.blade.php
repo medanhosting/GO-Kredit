@@ -1,5 +1,5 @@
 @push('logo')
-	<img class="card-img-top" src="/images/bg.jpg">
+	<img class="card-img-top" src="/images/background.jpg">
 @endpush
 
 @push('title')
