@@ -27,7 +27,7 @@
 			  				<td>23/09/2017</td>
 			  				<td>20.000.000</td>
 			  				<td>Suhento Mommi</td>
-			  				<td rowspan="2"><a href="#" class="btn btn-sm btn-primary">Action</a></td>
+			  				<td rowspan="2"><a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#delete">Action</a></td>
 			  			</tr>
 			  			<tr>
 			  				<td colspan="4">
@@ -118,6 +118,27 @@
 			</div>
 		</div>
 	</div>
+	
+	<!--///////////////////////
+	/// MODAL 		///////
+ 	/////////////////////// -->
+
+	<!-- jaminan kendaraan -->
+	@component ('bootstrap.modal', ['id' => 'delete'])
+		@slot ('title')
+			Hapus Data
+		@endslot
+
+		@slot ('body')
+			<p>Untuk menghapus data ini, silahkan masukkan password dibawah!</p>
+			{!! Form::bsPassword(null, 'password', ['placeholder' => 'Password']) !!}
+		@endslot
+
+		@slot ('footer')
+			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
+			<a href="#" class="btn btn-danger btn-outline">Tambahkan</a>
+		@endslot
+	@endcomponent
 @endpush
 
 @push('submenu')

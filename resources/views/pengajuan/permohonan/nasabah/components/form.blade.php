@@ -33,7 +33,7 @@
 	{!! Form::bsText('Tanggal lahir', 'nasabah[tanggal_lahir]', null, ['class' => 'form-control', 'placeholder' => 'masukkan tanggal dd/mm/yyyy']) !!}
 </div>
 <div class="col-auto col-md-2">
-	{!! Form::bsSelect('Jenis Kelamin', 'nasabah[jenis_kelamin]', ['' => 'pilih', 'laki_laki' => 'Laki-Laki', 'perempuan' => 'perempuan'], null, ['class' => 'custom-select form-control']) !!}
+	{!! Form::bsSelect('Jenis Kelamin', 'nasabah[jenis_kelamin]', ['' => 'pilih', 'laki-laki' => 'Laki-Laki', 'perempuan' => 'perempuan'], null, ['class' => 'custom-select form-control']) !!}
 </div>
 <div class="col-auto col-md-2">
 	{!! Form::bsSelect('Status pernikahan', 'nasabah[status_perkawinan]', array_merge(['' => 'pilih'], $status_perkawinan), null, ['class' => 'custom-select form-control']) !!}

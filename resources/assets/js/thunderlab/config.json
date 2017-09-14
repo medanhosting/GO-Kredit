@@ -1,0 +1,7 @@
+{
+    "plugins": {
+    	"formValidation" : "./formValidation.js"
+    },
+    "autoload" : true,
+    "debug" : true
+}
