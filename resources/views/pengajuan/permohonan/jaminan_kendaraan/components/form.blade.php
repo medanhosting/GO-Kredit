@@ -12,8 +12,11 @@
 	{!! Form::bsText('tahun', 'tahun', null, ['class' => 'form-control']) !!}
 </div>
 <div class="col-auto col-md-4">
-	{!! Form::bsText('No. BPKB', 'no_bpkb', null, ['class' => 'form-control']) !!}
+	{!! Form::bsText('No. BPKB', 'nomor_bpkb', null, ['class' => 'form-control']) !!}
 </div>
 <div class="col-auto col-md-6">
-	{!! Form::bsText('Harga Jaminan', 'harga_jaminan', null, ['class' => 'form-control']) !!}
+	{!! Form::bsText('Nilai Jaminan', 'nilai_jaminan', null, ['class' => 'form-control']) !!}
+</div>
+<div class="col-auto col-md-3">
+	{!! Form::bsText('Tahun Perolehan', 'tahun_perolehan', null, ['class' => 'form-control']) !!}
 </div>

@@ -7,7 +7,7 @@
 			border-right: 0 !important;
 			border-bottom: 1px solid #eee;
 		}
-		.nav-tabs .nav-link:hover {
+		.nav-tabs .nav-link:hover, .nav-tabs .nav-link:hover .active{
 			border: 0 !important;
 		}
 	</style>
@@ -15,6 +15,7 @@
 
 @push('main')
 	<div class="container bg-white bg-shadow">
+
 		<div class="row">
 			<div class="col p-5">
 				<h4 class='mb-4 text-style text-uppercase text-secondary'>
@@ -26,7 +27,7 @@
 					<a href="#jaminan" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="jaminan" aria-expanded="true"><h6 class="mb-0">3 &nbsp;jaminan</h6></a>
 				</nav>
 
-				{!! Form::open(['url' => route('pengajuan.permohonan.store'), 'files' => true]) !!}
+				{!! Form::open(['url' => route('pengajuan.permohonan.store'), 'files' => true, 'thunder-validation-submitvalidation' => true, 'class' => 'thunder-validation-form']) !!}
 					<div class="tab-content">
 						<!-- data kredit -->
 						<div class="tab-pane fade show active" id="kredit" role="tabpanel">
@@ -79,7 +80,7 @@
 
 		@slot ('footer')
 			<a href="#" data-dismiss="modal" class="btn btn-default">Batal</a>
-			<a href="#" class="btn btn-primary add" data-modal="add" data-dismiss="modal" data-input="{'jenis', 'merk', 'tipe', 'tahun', 'nomor_bpkb', 'nilai_jaminan'}">Tambahkan</a>
+			<a href="#" class="btn btn-primary add" data-modal="add" data-dismiss="modal" data-id="jaminan-kendaraan" data-input="['jenis', 'merk', 'tipe', tahun', 'nomor_bpkb', nilai_jaminan', 'tahun_perolehan']" data-target="#">Tambahkan</a>
 		@endslot
 	@endcomponent
 
@@ -115,15 +116,36 @@
 
 @push ('js')
 	<script>
+		inputKendaraan = ['jenis', 'merk', 'tipe', 'tahun', 'nomor_bpkb', 'nilai_jaminan', 'tahun_perolehan']; 
+		elementID = $(document.getElementById('clone-kendaraan'));
+		
 		function templateClone() {
-			elementID = $(document.getElementById('clone-kendaraan'));
+		}
+
+		function getData () {
+
 		}
 
 		$('.add').on('click', function (e) {
 			e.preventDefault();
 			dataInput = $(this).attr('data-input');
+			// dataInput = JSON.parse('"' + dataInput + '"');
+			dataId = $(this).attr('data-id');
 
-			console.log({ data: dataInput });
+			for (x=0; x<inputKendaraan.length; x++) {
+				elClone = elementID.clone();
+				dataForm = $(document.getElementById(dataId)).find('[name="' + inputKendaraan[x] + '"]').val();
+
+				elClone.find('.' + inputKendaraan[x]).val(dataForm);
+				elClone.find('name["' + inputKendaraan[x] + '"]').val(dataForm);
+
+				// console.log($(document.getElementById(dataId)).find('[name="' + inputKendaraan[x] +'"]'));
+				
+				
+			}
+			// $.map(dataInput, function(k, v) {
+				// $(document.getElementById(dataInput)).find('input[name="'  '"]')
+			// });
 		});
 
 		$('.modal').on('hide.bs.modal', function(e) {

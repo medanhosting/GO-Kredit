@@ -21,19 +21,19 @@
 				<td class="nomor"></td>
 				<td class="jenis text-capitalize"></td>
 				<td class="tipe text-capitalize"></td>
-				<td class="no_sertifikat text-capitalize"></td>
+				<td class="nomor_sertifikat text-capitalize"></td>
 				<td class="luas_tanah text-capitalize"></td>
 				<td class="atas_nama text-capitalize"></td>
 				<td class="harga_jaminan text-capitalize"></td>
 				<td class="action"></td>
 
-				{!! Form::hidden('jenis', null) !!}
-				{!! Form::hidden('tipe', null) !!}
-				{!! Form::hidden('no_sertifikat', null) !!}
-				{!! Form::hidden('luas_tanah', null) !!}
-				{!! Form::hidden('luas_bangunan', null) !!}
-				{!! Form::hidden('atas_nama', null) !!}
-				{!! Form::hidden('harga_jaminan', null) !!}
+				{!! Form::hidden('jaminan[dokumen_jaminan][jenis]', null) !!}
+				{!! Form::hidden('jaminan[dokumen_jaminan][tipe]', null) !!}
+				{!! Form::hidden('jaminan[dokumen_jaminan][nomor_sertifikat]', null) !!}
+				{!! Form::hidden('jaminan[dokumen_jaminan][luas_tanah]', null) !!}
+				{!! Form::hidden('jaminan[dokumen_jaminan][luas_bangunan]', null) !!}
+				{!! Form::hidden('jaminan[dokumen_jaminan][atas_nama]', null) !!}
+				{!! Form::hidden('jaminan[dokumen_jaminan][nilai_jaminan]', null) !!}
 			</tr>
 		</tbody>
 	</table>

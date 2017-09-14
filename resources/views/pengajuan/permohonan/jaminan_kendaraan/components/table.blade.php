@@ -15,7 +15,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
+			<tr id="content-kendaraan">
 				<td colspan="8" class="text-center">Belum ada jaminan kendaraan</td>
 			</tr>
 			<tr id="clone-kendaraan" style="display: none;">
@@ -25,7 +25,7 @@
 				<td class="tipe text-capitalize"></td>
 				<td class="tahun text-uppercase"></td>
 				<td class="nomor_bpkb text-capitalize"></td>
-				<td class="harga_jaminan text-capitalize"></td>
+				<td class="nilai_jaminan text-capitalize"></td>
 				<td class="tahun_perolehan"></td>
 				<td class="action"></td>
 
