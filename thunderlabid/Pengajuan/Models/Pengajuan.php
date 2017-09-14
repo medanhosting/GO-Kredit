@@ -74,9 +74,24 @@ class Pengajuan extends Model
 		return $this->hasOne(Status::class, 'pengajuan_id')->orderby('tanggal', 'desc');
 	}
 
+	public function status_permohonan()
+	{
+		return $this->hasOne(Status::class, 'pengajuan_id')->where('status', 'permohonan')->orderby('tanggal', 'asc');
+	}
+
 	public function jaminan()
 	{
 		return $this->hasMany(Jaminan::class, 'pengajuan_id');
+	}
+
+	public function jaminan_kendaraan()
+	{
+		return $this->hasMany(Jaminan::class, 'pengajuan_id')->where('jenis', 'bpkb');
+	}
+
+	public function jaminan_tanah_bangunan()
+	{
+		return $this->hasMany(Jaminan::class, 'pengajuan_id')->whereIn('jenis', ['shm', 'shgb'])->orderby('jenis', 'asc');
 	}
 
 	public function riwayat_status()
@@ -103,6 +118,8 @@ class Pengajuan extends Model
 
 	public function scopeStatus($query, $variable)
 	{
+		return $query->whereHas('status_terakhir', function($q)use($variable){$q->status($variable);});
+		
 		if(is_array($variable))
 		{
 			$to_string 				= [];

@@ -61,7 +61,7 @@ class PengajuanTableSeeder extends Seeder
 		$this->type_k	= ['roda_2', 'roda_3', 'roda_4', 'roda_6'];
 		$this->type_tb	= ['tanah', 'tanah_dan_bangunan'];
 		$this->merk_k	= ['honda', 'yamaha', 'suzuki', 'kawasaki', 'mitsubishi', 'toyota', 'nissan', 'kia', 'daihatsu', 'isuzu'];
-		$this->jenis_k	= ['roda_2' => ['bebek', 'ninja'], 'roda_3' => ['bajaj', 'backtruck'], 'roda_4' => ['suv', 'pickup'], 'roda_6' => 'truck', 'bis'];
+		$this->jenis_k	= ['roda_2' => ['bebek', 'ninja'], 'roda_3' => ['bajaj', 'backtruck'], 'roda_4' => ['suv', 'pickup'], 'roda_6' => ['truck', 'bis']];
 		$this->char 	= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 
