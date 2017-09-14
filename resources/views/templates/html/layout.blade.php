@@ -20,7 +20,7 @@
 							@if ($active_account)
 								{!! Form::bsIcon($active_account->type) !!} {{ $active_account->name }}
 							@else
-								<i class="fa fa-building-o"></i>&nbsp; Cabang &nbsp;&nbsp;
+								<i class="fa fa-building-o"></i>&nbsp; {{$kantor_aktif['nama']}} &nbsp;&nbsp;
 							@endif
 							<i class='fa fa-caret-down'></i>
 						</a>
@@ -105,27 +105,51 @@
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">My Social Media</h5>
+						<h5 class="modal-title" id="exampleModalLabel">BPR / Koperasi</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
 						<div class="form-row">
-							@foreach ($my_social_media as $x)
-								<div class="col-6 col-sm-4 col-lg-3">
-									@if ($x->is_instagram)
-										<a href='{{ route('social_media.instagram', ['account_id' => $x->id]) }}' class='btn btn-block bg-{{ $x->type }}'>
-											{!! Form::bsIcon($x->type, 'fa-4x') !!}
-											<p class='mt-2 mb-0 pb-0'>{{ $x->name }}</p>
+							@php
+								$all = request()->all();
+							@endphp
+							@foreach ($kantor as $x)
+								@if (in_array(strtolower($x['jenis']), ['bpr', 'koperasi']))
+									@php
+										$all['kantor_aktif_id'] = '1709.0002';
+									@endphp
+									<div class="col-6 col-sm-4 col-lg-3">
+										<a href="{{request()->url().'?'.http_build_query($all)}}" class="btn 
+
+											@if($kantor_aktif['id']==$x['id']) btn-info disabled @else btn-primary @endif">
+											{{ $x['nama'] }}
 										</a>
-									@endif
-								</div>
+									</div>
+								@else
+									<div class="col-6 col-sm-4 col-lg-3">
+										<a href="{{route('home', ['kantor_aktif_id' => $x['id']])}}" class="btn btn-primary">
+											{{ $x['nama'] }}
+										</a>
+									</div>
+									@php $is_holder = true; @endphp
+								@endif
 							@endforeach
 						</div>
 					</div>
 					<div class="modal-footer">
-						<a href="{{ route('social_media.index') }}" class="btn btn-primary"><i class='fa fa-plus'></i> Add Account</a>
+						@if($is_holder)
+							<a href="{{ route('social_media.index') }}" class="btn btn-primary">
+								<i class='fa fa-plus'></i> 
+								Kantor Baru
+							</a>
+						@else
+							<!-- <a href="#" class="btn btn-disabled">
+								<i class='fa fa-plus'></i> 
+								Kantor Baru
+							</a> -->
+						@endif
 					</div>
 				</div>
 			</div>
