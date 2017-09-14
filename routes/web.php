@@ -21,10 +21,13 @@ Route::domain('localhost')->group(function(){
 	Route::post('/forget_password', 		['as'	=> 'forget_password.post', 			'uses' => 'LoginController@post_forget_password']);
 
 	Route::middleware('auth')->group( function() {
-		Route::get('/home',					['as'	=> 'home', 	'uses' => 'DashboardController@home']);
+		Route::get('/home',			['as'	=> 'home', 	'uses' => 'DashboardController@home']);
 	
 		Route::prefix('pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
-			Route::resource('permohonan', 'PermohonanController');
+
+			Route::get('/{status}',			['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);
+
+			Route::resource('permohonan', 	'PermohonanController');
 		});
 
 		////////
