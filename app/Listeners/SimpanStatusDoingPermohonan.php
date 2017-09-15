@@ -1,22 +1,20 @@
 <?php
 
-namespace Thunderlabid\Pengajuan\Listeners;
+namespace App\Listeners;
 
 ///////////////
 // Exception //
 ///////////////
-use Thunderlabid\Pengajuan\Exceptions\AppException;
+use Thunderlabid\Survei\Exceptions\AppException;
 
 ///////////////
 // Framework //
 ///////////////
-use Hash, Auth;
-use Carbon\Carbon;
+use Carbon\Carbon, Auth;
 
-use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Status;
 
-class GenerateStatusPermohonan
+class SimpanStatusDoingPermohonan
 {
 	/**
 	 * Create the event listener.
@@ -30,7 +28,7 @@ class GenerateStatusPermohonan
 
 	/**
 	 * Handle event
-	 * @param  PengajuanCreated $event [description]
+	 * @param  KantorCreated $event [description]
 	 * @return [type]             [description]
 	 */
 	public function handle($event)

@@ -68,10 +68,12 @@ class PengajuanTableSeeder extends Seeder
 		//BASIC PENGAJUAN
 		foreach (range(0, 99) as $value) 
 		{
-			$pokok_pinjaman 	= (rand(2500,25000)) * 1000;
-			$bunga 				= (rand(1,50))/10;
-			$jangka_waktu 		= rand(1,12)*6;
-			$angsuran 			= ($pokok_pinjaman + (($pokok_pinjaman*$bunga)/100))/$jangka_waktu;
+			$pokok_pinjaman 	= (rand(25,250)) * 100000;
+			$bunga 				= (rand(100,500))/1000;
+			$jangka_waktu 		= rand(4,12)*3;
+			$angsuran 			= ($pokok_pinjaman + ($pokok_pinjaman*$bunga))/$jangka_waktu;
+			$angsuran 			= ceil($angsuran/100000);
+			$angsuran 			= $angsuran * 100000;
 			$mobile 			= rand(0,1);
 			$nip_ao				= null;
 
