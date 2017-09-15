@@ -40,8 +40,8 @@ class ManajemenServiceProvider extends ServiceProvider
 		//////////////////////
 		//    Assign  NIP   //
 		//////////////////////
-		//Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating', 'Thunderlabid\Manajemen\Listeners\AutoAssignNIP');
-		//Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating', 'Thunderlabid\Manajemen\Listeners\AutoAssignNIP');
+		Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating', 'Thunderlabid\Manajemen\Listeners\AutoAssignNIP');
+		Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating', 'Thunderlabid\Manajemen\Listeners\AutoAssignNIP');
 	}
 
 	public function register()

@@ -17,7 +17,6 @@ class PengajuanServiceProvider extends ServiceProvider
 
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreating', 'Thunderlabid\Pengajuan\Listeners\AssignIDPengajuan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreating', 'Thunderlabid\Pengajuan\Listeners\SavingPengajuan');
-		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreated', 'Thunderlabid\Pengajuan\Listeners\GenerateStatusPermohonan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdating', 'Thunderlabid\Pengajuan\Listeners\SavingPengajuan');
 
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreating', 'Thunderlabid\Pengajuan\Listeners\SavingJaminan');
@@ -28,6 +27,9 @@ class PengajuanServiceProvider extends ServiceProvider
 
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreating', 'Thunderlabid\Pengajuan\Listeners\DuplikasiJaminan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdating', 'Thunderlabid\Pengajuan\Listeners\DuplikasiJaminan');
+
+		Event::listen('Thunderlabid\Pengajuan\Events\Analisa\AnalisaCreating', 'Thunderlabid\Pengajuan\Listeners\SavingAnalisa');
+		Event::listen('Thunderlabid\Pengajuan\Events\Analisa\AnalisaUpdating', 'Thunderlabid\Pengajuan\Listeners\SavingAnalisa');
 	}
 
 	public function register()
