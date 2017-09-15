@@ -41,7 +41,7 @@ class SimpanStatusDoingSurvei
 		}
 		else
 		{
-			$karyawan 	= [];
+			$karyawan 	= $model->survei->surveyor;
 		}
 
 		$mulai_survei 	= Carbon::createFromFormat('d/m/Y H:i', $model->survei->tanggal)->startofday()->format('Y-m-d H:i:s');

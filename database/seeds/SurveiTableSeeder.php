@@ -47,6 +47,8 @@ class SurveiTableSeeder extends Seeder
 		$capi_owner 		= ['milik_sendiri','keluarga','dinas','sewa'];
 		$capi_ousaha 		= ['milik_sendiri','milik_keluarga','kerjasama_bagi_hasil'];
 		$capi_busaha		= ['media', 'perkebunan', 'garmen', 'kuliner'];
+		$sper 				= ['k','tk','k1','k2','k3'];
+		$nm_bank 			= ['bca', 'bni', 'niaga', 'mandiri'];
 
 		$this->warna		= ['putih', 'biru', 'pink', 'hitam', 'hijau', 'abu-abu'];
 		$this->fs_harian	= ['Transportasi pribadi', 'Disewakan', 'Transportasi usaha', 'Dipinjamkan untuk NPO'];
@@ -181,7 +183,7 @@ class SurveiTableSeeder extends Seeder
 		foreach ($pengajuan as $key => $value) 
 		{
 			//character
-			$survei['tanggal']		= Carbon::now()->addDays(rand(1,14))->format('d/m/Y H:i');
+			$survei['tanggal']		= Carbon::now()->addHours(rand(1,12))->format('d/m/Y H:i');
 			$survei['surveyor']		= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
 			$survei['pengajuan_id'] = $value['id'];
 
@@ -201,23 +203,20 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c2['dokumen_survei']['condition']['pengalaman_usaha']			= $cond_pgu[rand(0,3)];
 			$s_survei_c2['dokumen_survei']['condition']['resiko_usaha_kedepan']		= $cond_risk[rand(0,2)];
 			$s_survei_c2['dokumen_survei']['condition']['jumlah_pelanggan_harian']	= $cond_cust[rand(0,3)];
-			$s_survei_c2['dokumen_survei']['condition']['catatan']		= $cond_catatan[rand(0,1)];
+			$s_survei_c2['dokumen_survei']['condition']['catatan']			= $cond_catatan[rand(0,1)];
 
 			$s_survei_c3['jenis']	= 'capacity';
 			$s_survei_c3['dokumen_survei']['capacity']['manajemen_usaha']	= $char_watak[rand(0,2)];
-			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['gaji']			= $this->formatMoneyTo(rand(10,50)*100000);
+			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['utama']			= $this->formatMoneyTo(rand(10,50)*100000);
 			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['pasangan']		= $this->formatMoneyTo(rand(20,50)*50000);
 			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['usaha']			= $this->formatMoneyTo(rand(0,50)*50000);
-			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['lain_lain']		= $this->formatMoneyTo(rand(0,50)*50000);
-			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['biaya_produksi']	= $this->formatMoneyTo(rand(0,50)*50000);
-			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['biaya_rumah_tangga']			= $this->formatMoneyTo(rand(0,50)*50000);
-			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['biaya_listrik_pdam_telepon']	= $this->formatMoneyTo(rand(0,50)*50000);
-			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['biaya_pendidikan']			= $this->formatMoneyTo(rand(0,50)*50000);
-			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['lain_lain']					= $this->formatMoneyTo(rand(0,50)*50000);
-			$s_survei_c3['dokumen_survei']['capacity']['kemampuan_angsur']		= $this->formatMoneyTo(rand(0,50)*50000);
-			$s_survei_c3['dokumen_survei']['capacity']['sumber_pengembalian_pokok_pinjaman']		= $cap_sppj[rand(0,1)];
-			$s_survei_c3['dokumen_survei']['capacity']['tempat_kerja_pasangan']	= $faker->address;
-			$s_survei_c3['dokumen_survei']['capacity']['catatan']				= $cap_catatan[rand(0,1)];
+
+			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['biaya_rutin']		= $this->formatMoneyTo(rand(0,50)*500000);
+			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['angsuran_kredit']	= $this->formatMoneyTo(rand(0,50)*500000);
+			$s_survei_c3['dokumen_survei']['capacity']['rincian_pengeluaran_rutin']		= ['Biaya rumah tangga, pdam, telepon, listrik'];
+			$s_survei_c3['dokumen_survei']['capacity']['rincian_penghasilan_utama']		= $cap_sppj[rand(0,1)];
+			$s_survei_c3['dokumen_survei']['capacity']['tanggungan_keluarga']			= $sper[rand(0,4)];
+			$s_survei_c3['dokumen_survei']['capacity']['catatan']						= $cap_catatan[rand(0,1)];
 
 			$s_survei_c4['jenis']	= 'capital';
 			$status_rumah 	= $capi_owner[rand(0,3)];
@@ -267,6 +266,17 @@ class SurveiTableSeeder extends Seeder
 			}
 
 			$s_survei_c4['dokumen_survei']['capital']['usaha']['nilai_aset']	= $this->formatMoneyTo(rand(1,10)*5000000 * $lama_usaha);
+
+			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['nama_bank']			= $nm_bank[rand(0,3)];
+			$jlh_pinjaman 	= rand(1,10)*2500000;
+			$jww 			= rand(12,60);
+			$angs_bul 		= rand(10,50)/1000;
+			$rp_bunga 		= floor($jlh_pinjaman/$jww) * $angs_bul;
+			$angsuran 		= floor($jlh_pinjaman/$jww) + $rp_bunga;
+
+			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['jumlah_pinjaman']	= $this->formatMoneyTo($jlh_pinjaman);
+			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['jumlah_angsuran']	= $this->formatMoneyTo($angsuran);
+			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['jangka_waktu']		= $this->formatMoneyTo($jww);
 
 			///COLLATERAL///
 			$s_survei_c5 	= [];

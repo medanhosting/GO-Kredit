@@ -85,16 +85,11 @@ class SurveiDetail extends Model
 	{
 		if(str_is($this->jenis, 'capacity'))
 		{
-			$variable['capacity']['penghasilan']['gaji']		= $this->formatMoneyFrom($variable['capacity']['penghasilan']['gaji']);
+			$variable['capacity']['penghasilan']['utama']		= $this->formatMoneyFrom($variable['capacity']['penghasilan']['utama']);
 			$variable['capacity']['penghasilan']['pasangan']	= $this->formatMoneyFrom($variable['capacity']['penghasilan']['pasangan']);
 			$variable['capacity']['penghasilan']['usaha']		= $this->formatMoneyFrom($variable['capacity']['penghasilan']['usaha']);
-			$variable['capacity']['penghasilan']['lain_lain']	= $this->formatMoneyFrom($variable['capacity']['penghasilan']['lain_lain']);
-			$variable['capacity']['pengeluaran']['biaya_produksi']		= $this->formatMoneyFrom($variable['capacity']['pengeluaran']['biaya_produksi']);
-			$variable['capacity']['pengeluaran']['biaya_rumah_tangga']	= $this->formatMoneyFrom($variable['capacity']['pengeluaran']['biaya_rumah_tangga']);
-			$variable['capacity']['pengeluaran']['biaya_listrik_pdam_telepon']	= $this->formatMoneyFrom($variable['capacity']['pengeluaran']['biaya_listrik_pdam_telepon']);
-			$variable['capacity']['pengeluaran']['biaya_pendidikan']	= $this->formatMoneyFrom($variable['capacity']['pengeluaran']['biaya_pendidikan']);
-			$variable['capacity']['pengeluaran']['lain_lain']	= $this->formatMoneyFrom($variable['capacity']['pengeluaran']['lain_lain']);
-			$variable['capacity']['kemampuan_angsur']			= $this->formatMoneyFrom($variable['capacity']['kemampuan_angsur']);
+			$variable['capacity']['pengeluaran']['biaya_rutin']	= $this->formatMoneyFrom($variable['capacity']['pengeluaran']['biaya_rutin']);
+			$variable['capacity']['pengeluaran']['angsuran_kredit']		= $this->formatMoneyFrom($variable['capacity']['pengeluaran']['angsuran_kredit']);
 		}
 
 		if(str_is($this->jenis, 'capital'))
@@ -106,7 +101,16 @@ class SurveiDetail extends Model
 			$variable['capital']['rumah']['nilai_rumah']			= $this->formatMoneyFrom($variable['capital']['rumah']['nilai_rumah']);
 			$variable['capital']['kendaraan']['nilai_kendaraan']	= $this->formatMoneyFrom($variable['capital']['kendaraan']['nilai_kendaraan']);
 			$variable['capital']['usaha']['nilai_aset']				= $this->formatMoneyFrom($variable['capital']['usaha']['nilai_aset']);
+
+			if(isset($variable['dokumen_survei']['capital']['hutang']))
+			{
+				foreach ($variable['dokumen_survei']['capital']['hutang'] as $k => $v) {
+					$variable['dokumen_survei']['capital']['hutang'][$k]['jumlah_pinjaman'] 	= $this->formatMoneyFrom($variable['dokumen_survei']['capital']['hutang'][$k]['jumlah_pinjaman']);
+					$variable['dokumen_survei']['capital']['hutang'][$k]['jumlah_angsuran'] 	= $this->formatMoneyFrom($variable['dokumen_survei']['capital']['hutang'][$k]['jumlah_angsuran']);
+				}
+			}
 		}
+
 
 		if(str_is($this->jenis, 'collateral') && str_is($variable['collateral']['jenis'], 'bpkb'))
 		{
@@ -178,18 +182,14 @@ class SurveiDetail extends Model
 
 		//CAPACITY
 		$rules['dokumen_survei.capacity.manajemen_usaha']				= ['required_if:jenis,capacity', 'in:baik,cukup_baik,tidak_baik'];
-		$rules['dokumen_survei.capacity.penghasilan.gaji']				= ['required_if:jenis,capacity', 'numeric'];
+		$rules['dokumen_survei.capacity.penghasilan.utama']				= ['required_if:jenis,capacity', 'numeric'];
 		$rules['dokumen_survei.capacity.penghasilan.pasangan']			= ['numeric'];
 		$rules['dokumen_survei.capacity.penghasilan.usaha']				= ['numeric'];
-		$rules['dokumen_survei.capacity.penghasilan.lain_lain']			= ['numeric'];
-		$rules['dokumen_survei.capacity.pengeluaran.biaya_produksi']	= ['numeric'];
-		$rules['dokumen_survei.capacity.pengeluaran.biaya_rumah_tangga']= ['numeric'];
-		$rules['dokumen_survei.capacity.pengeluaran.biaya_listrik_pdam_telepon'] 		= ['numeric'];
-		$rules['dokumen_survei.capacity.pengeluaran.biaya_pendidikan']	= ['numeric'];
-		$rules['dokumen_survei.capacity.pengeluaran.lain_lain']			= ['numeric'];
-		$rules['dokumen_survei.capacity.kemampuan_angsur']				= ['numeric'];
-		$rules['dokumen_survei.capacity.sumber_pengembalian_pokok_pinjaman']= ['required_if:jenis,capacity'];
-		$rules['dokumen_survei.capacity.tempat_kerja_pasangan']			= ['required_with:dokumen_survei.capacity.penghasilan.pasangan'];
+		$rules['dokumen_survei.capacity.pengeluaran.biaya_rutin']		= ['numeric'];
+		$rules['dokumen_survei.capacity.pengeluaran.angsuran_kredit']	= ['numeric'];
+		$rules['dokumen_survei.capacity.rincian_pengeluaran_rutin']		= ['required_if:jenis,capacity'];
+		$rules['dokumen_survei.capacity.rincian_penghasilan_utama']		= ['required_if:jenis,capacity'];
+		$rules['dokumen_survei.capacity.tanggungan_keluarga']			= ['required_if:jenis,capacity'];
 
 		//CAPITAL
 		$rules['dokumen_survei.capital.rumah.status']			= ['required_if:jenis,capital','in:milik_sendiri,keluarga,dinas,sewa'];
@@ -211,6 +211,12 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.capital.usaha.status_usaha']		= ['required_if:jenis,capital', 'in:milik_sendiri,milik_keluarga,kerjasama_bagi_hasil'];
 		$rules['dokumen_survei.capital.usaha.bagi_hasil']		= ['required_if:dokumen_survei.capital.usaha.status_usaha,kerjasama_bagi_hasil'];
 		$rules['dokumen_survei.capital.usaha.nilai_aset']		= ['required_if:jenis,capital'];
+		$rules['dokumen_survei.capital.usaha.omzet_bulanan']	= ['required_if:jenis,capital'];
+		
+		$rules['dokumen_survei.capital.hutang.*.nama_bank']			= ['max:255'];
+		$rules['dokumen_survei.capital.hutang.*.jumlah_pinjaman']	= ['numeric'];
+		$rules['dokumen_survei.capital.hutang.*.jumlah_angsuran']	= ['numeric'];
+		$rules['dokumen_survei.capital.hutang.*.jangka_waktu']		= ['numeric'];
 
 		//COLLATERAL
 		$rules['dokumen_survei.collateral.jenis']			= ['required_if:jenis,collateral', 'in:bpkb,shm,shgb'];
@@ -333,16 +339,11 @@ class SurveiDetail extends Model
 
 		if(str_is($this->jenis, 'capacity'))
 		{
-			$variable['capacity']['penghasilan']['gaji']		= $this->formatMoneyTo($variable['capacity']['penghasilan']['gaji']);
+			$variable['capacity']['penghasilan']['utama']		= $this->formatMoneyTo($variable['capacity']['penghasilan']['utama']);
 			$variable['capacity']['penghasilan']['pasangan']	= $this->formatMoneyTo($variable['capacity']['penghasilan']['pasangan']);
 			$variable['capacity']['penghasilan']['usaha']		= $this->formatMoneyTo($variable['capacity']['penghasilan']['usaha']);
-			$variable['capacity']['penghasilan']['lain_lain']	= $this->formatMoneyTo($variable['capacity']['penghasilan']['lain_lain']);
-			$variable['capacity']['pengeluaran']['biaya_produksi']		= $this->formatMoneyTo($variable['capacity']['pengeluaran']['biaya_produksi']);
-			$variable['capacity']['pengeluaran']['biaya_rumah_tangga']	= $this->formatMoneyTo($variable['capacity']['pengeluaran']['biaya_rumah_tangga']);
-			$variable['capacity']['pengeluaran']['biaya_listrik_pdam_telepon']	= $this->formatMoneyTo($variable['capacity']['pengeluaran']['biaya_listrik_pdam_telepon']);
-			$variable['capacity']['pengeluaran']['biaya_pendidikan']	= $this->formatMoneyTo($variable['capacity']['pengeluaran']['biaya_pendidikan']);
-			$variable['capacity']['pengeluaran']['lain_lain']	= $this->formatMoneyTo($variable['capacity']['pengeluaran']['lain_lain']);
-			$variable['capacity']['kemampuan_angsur']			= $this->formatMoneyTo($variable['capacity']['kemampuan_angsur']);
+			$variable['capacity']['pengeluaran']['biaya_rutin']	= $this->formatMoneyTo($variable['capacity']['pengeluaran']['biaya_rutin']);
+			$variable['capacity']['pengeluaran']['angsuran_kredit']	= $this->formatMoneyTo($variable['capacity']['pengeluaran']['angsuran_kredit']);
 		}
 
 		if(str_is($this->jenis, 'capital'))
@@ -354,6 +355,14 @@ class SurveiDetail extends Model
 			$variable['capital']['rumah']['nilai_rumah']			= $this->formatMoneyTo($variable['capital']['rumah']['nilai_rumah']);
 			$variable['capital']['kendaraan']['nilai_kendaraan']	= $this->formatMoneyTo($variable['capital']['kendaraan']['nilai_kendaraan']);
 			$variable['capital']['usaha']['nilai_aset']				= $this->formatMoneyTo($variable['capital']['usaha']['nilai_aset']);
+
+			if(isset($variable['dokumen_survei']['capital']['hutang']))
+			{
+				foreach ($variable['dokumen_survei']['capital']['hutang'] as $k => $v) {
+					$variable['dokumen_survei']['capital']['hutang'][$k]['jumlah_pinjaman'] 	= $this->formatMoneyTo($variable['dokumen_survei']['capital']['hutang'][$k]['jumlah_pinjaman']);
+					$variable['dokumen_survei']['capital']['hutang'][$k]['jumlah_angsuran'] 	= $this->formatMoneyTo($variable['dokumen_survei']['capital']['hutang'][$k]['jumlah_angsuran']);
+				}
+			}
 		}
 
 		if(str_is($this->jenis, 'collateral') && str_is($variable['collateral']['jenis'], 'bpkb'))

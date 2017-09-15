@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 use Thunderlabid\Survei\Models\Survei;
 
-class SurveiCreating
+class SurveiUpdating
 {
 	use Dispatchable, InteractsWithSockets, SerializesModels;
 
