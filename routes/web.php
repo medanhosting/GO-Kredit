@@ -26,36 +26,12 @@ Route::domain('localhost')->group(function(){
 		Route::prefix('pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
 
 			Route::get('/{status}',			['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);
-
 			Route::resource('permohonan', 	'PermohonanController');
 		});
 
-		////////
-		// HR //
-		////////
-		Route::prefix('social-media')->group(function(){
-			Route::get('/', 																['as'	=> 'social_media.index', 									'uses' => 'SocialMediaController@index']);
-			Route::get('/authenticate/{type}',												['as'	=> 'social_media.authenticate',								'uses' => 'SocialMediaController@authenticate']);
-
-			Route::prefix('instagram')->group(function(){
-				Route::get('/{id}',			 												['as'	=> 'social_media.instagram',								'uses' => 'InstagramController@index']);
-
-				// Engage
-				Route::get('/{id}/engage',													['as'	=> 'social_media.instagram.engage',							'uses' => 'InstagramController@engage']);
-				Route::post('/{id}/engage/post',											['as'	=> 'social_media.instagram.engage.post',					'uses' => 'InstagramController@post_engage']);
-				Route::get('/{id}/engage/{engage_id}/activate/{is_active}',					['as'	=> 'social_media.instagram.engage.activate',				'uses' => 'InstagramController@engage_activate']);
-
-				// Media
-				Route::get('/{id}/media',													['as'	=> 'social_media.instagram.media',							'uses' => 'InstagramController@media']);
-				Route::get('/{id}/tag',														['as'	=> 'social_media.instagram.tag',							'uses' => 'InstagramController@tag']);
-				Route::get('/{id}/audience',												['as'	=> 'social_media.instagram.audience',						'uses' => 'InstagramController@audience']);
-				Route::get('/{id}/activity',												['as'	=> 'social_media.instagram.activity',						'uses' => 'InstagramController@activity']);
-				Route::get('/authenticate/callback', 										['as' 	=> 'social_media.instagram.redirect_authenticate',			'uses' => 'InstagramController@authenticate_callback']);
-			});
-
-			// Instagram Redirect URL
-		});
-
+		Route::any('regensi',	['uses' => 'HelperController@getRegensi', 		'as' => 'regensi.index']);
+		Route::any('distrik',	['uses'	=> 'HelperController@getDistrik',		'as' => 'distrik.index']);
+		Route::any('desa',		['uses' => 'HelperController@getDesa',			'as' => 'desa.index']);
 	});
 });
 
