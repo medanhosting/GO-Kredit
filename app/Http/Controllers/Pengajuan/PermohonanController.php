@@ -91,7 +91,6 @@ class PermohonanController extends Controller
 			}
 
 			$errors = new MessageBag();
-			dd($e);
 			foreach ($e->getMessage()->toArray() as $k => $error)
 			{
 				foreach ($error as $x)

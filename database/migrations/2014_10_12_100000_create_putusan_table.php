@@ -27,7 +27,7 @@ class CreatePutusanTable extends Migration
 			$table->double('legal');
 			$table->text('checklists');
 			$table->enum('putusan', ['tolak', 'setuju']);
-			$table->text('catatan');
+			$table->text('catatan')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});
