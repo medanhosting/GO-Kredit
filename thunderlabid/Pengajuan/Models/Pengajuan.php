@@ -18,7 +18,7 @@ use Thunderlabid\Pengajuan\Exceptions\AppException;
 use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreating;
 use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreated;
 use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdating;
-// use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdated;
+use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdated;
 // use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleting;
 // use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleted;
 
@@ -53,7 +53,7 @@ class Pengajuan extends Model
 		'creating' 	=> PengajuanCreating::class,
 		'created' 	=> PengajuanCreated::class,
 		'updating' 	=> PengajuanUpdating::class,
-		// 'updated' 	=> PengajuanUpdated::class,
+		'updated' 	=> PengajuanUpdated::class,
 		// 'deleted' 	=> PengajuanDeleted::class,
 		// 'deleting' 	=> PengajuanDeleting::class,
 	];
