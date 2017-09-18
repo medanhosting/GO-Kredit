@@ -1,24 +1,35 @@
-@php
-	// dd($permohonan['nasabah']['keluarga']);
-@endphp
-<div class="row mt-4">
+<div class="row">
 	<div class="col">
 		<h5 class="pb-4">Overview</h5>
 	</div>
 </div>
 @isset ($permohonan['nasabah'])
 	@foreach ($permohonan['nasabah'] as $k => $v)
-		@if (($k != 'keluarga') && ($k != 'alamat'))
+		@if (($k != 'keluarga') && ($k != 'alamat') && ($k != 'is_ktp') && ($k != 'nik'))
 			<div class="row">
 				<div class="col-3">
 					<p class="text-secondary text-capitalize">{{ str_replace('_', ' ', $k) }}</p>
 				</div>
 				<div class="col">
-					<p class="text-capitalize">{{ str_replace('_', ' ', $v) }}</p>
+					<p class="{{ ($k != 'email') ? 'text-capitalize' : '' }}">{{ str_replace('_', ' ', $v) }}</p>
+				</div>
+			</div>
+		@elseif ($k == 'nik')
+			<div class="row">
+				<div class="col-3">
+					<p class="text-secondary text-uppercase">{{ str_replace('_', ' ', $k) }}</p>
+				</div>
+				<div class="col">
+					<p class="text-capitalize">
+						{{ str_replace('_', ' ', $v) }} 
+						@isset ($permohonan['nasabah']['is_ktp'])
+							&nbsp;<span class="badge badge-info">E-KTP</span>
+						@endisset
+					</p>
 				</div>
 			</div>
 		@elseif ($k == 'alamat')
-			<div class="row">
+			<div class="row mb-3">
 				<div class="col-3">
 					<p class="text-secondary text-capitalize">{{ $k }}</p>
 				</div>
@@ -46,7 +57,7 @@
 					@endisset
 
 					@empty ($v['alamat'])
-						<p>Alamat belum diinputkan</p>
+						<p class="mb-1">Alamat belum diinputkan</p>
 					@endempty
 				</div>
 			</div>

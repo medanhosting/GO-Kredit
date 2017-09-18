@@ -19,21 +19,16 @@
 				<div class="card text-left">
 					<div class="card-body">
 						<h4 class="card-title">Menu Permohonan</h4>
-						<a href="#" class="btn btn-link d-block text-left">Overview</a>
-						<a href="#" class="btn btn-link d-block text-left">Kerabat/Keluarga</a>
-						<a href="#" class="btn btn-link d-block text-left">Survei</a>
-						<a href="#" class="btn btn-link d-block text-left">Analisa</a>
-						<a href="#" class="btn btn-link d-block text-left">Keputusan</a>
-						<a href="#" class="btn btn-link d-block text-left">Realisasi</a>
+						<nav class="nav flex-column" role="tablist">
+							<a href="#overview" id="overview-tab" class="nav-link active" role="tab" data-toggle="tab" arial-controls="overview" aria-expanded="true">Overview</a>
+							<a href="#keluarga" id="keluarga-tab" class="nav-link" role="tab" data-toggle="tab" arial-controls="keluarga" aria-expanded="true">Kerabata/Keluarga</a>
+							<a href="#survei" id="survei-tab" class="nav-link" role="tab" data-toggle="tab" arial-controls="survei" aria-expanded="true">Survei</a>
+							<a href="#analisa" id="analisa-tab" class="nav-link" role="tab" data-toggle="tab" arial-controls="analisa" aria-expanded="true">Analisa</a>
+							<a href="#keputusan" id="keputusan-tab" class="nav-link" role="tab" data-toggle="tab" arial-controls="keputusan" aria-expanded="true">Keputusan</a>
+							<a href="#realisasi" id="realisasi-tab" class="nav-link" role="tab" data-toggle="tab" arial-controls="realisasi" aria-expanded="true">Realisasi</a>
+						</nav>
 					</div>
 				</div>
-				{{-- <div class="card" style="width: 20rem;">
-					<ul class="list-group list-group-flush">
-						<li class="list-group-item">Cras justo odio</li>
-						<li class="list-group-item">Dapibus ac facilisis in</li>
-						<li class="list-group-item">Vestibulum at eros</li>
-					</ul>
-				</div> --}}
 			</div>
 			<div class="col">
 				@include('pengajuan.permohonan.kredit.detail')

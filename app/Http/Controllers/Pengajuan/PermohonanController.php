@@ -17,7 +17,8 @@ class PermohonanController extends Controller
 
 	public function index () 
 	{
-		$permohonan 			= Pengajuan::status('permohonan')->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan'])->orderby('created_at', 'desc')->paginate();
+		$permohonan 			= Pengajuan::status('permohonan')->kantor(request()->get('kantor_aktif_id'))
+									->with(['status_terakhir', 'jaminan'])->orderby('created_at', 'desc')->paginate();
 
 		view()->share('permohonan', $permohonan);
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
@@ -105,8 +106,8 @@ class PermohonanController extends Controller
 				}
 			}
 			// return redirect()->back()->withErrors($errors)->withInput();
-
-			return redirect(route($this->view_dir . 'create', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($errors)->withInput();
+			return redirect(route($this->view_dir . 'create', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage())->withInput();
+		}
 	}
 
 	public function show($id)

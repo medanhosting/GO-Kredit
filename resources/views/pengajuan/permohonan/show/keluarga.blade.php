@@ -3,7 +3,6 @@
 		<h5 class="pb-4">Kerabat/Keluarga</h5>
 	</div>
 </div>
-
 @isset ($permohonan['nasabah']['keluarga'])
 	<table class="table table-sm">
 		<thead class="thead-default">
@@ -32,3 +31,23 @@
 		</tbody>
 	</table>
 @endisset
+
+@empty ($permohonan['nasabah']['keluarga'])
+	<table class="table table-sm">
+		<thead class="thead-default">
+			<tr>
+				<th>#</th>
+				<th>Hubungan</th>
+				<th>Nama</th>
+				<th>NIK</th>
+				<th>Telepon</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td colspan="6" class="text-center">Belum ada data keluarga disimpan</td>
+			</tr>
+		</tbody>
+	</table>
+@endempty
