@@ -347,7 +347,7 @@ class SurveiTableSeeder extends Seeder
 		$s_survei_c5['jenis']	= 'collateral';
 		$s_survei_c5['dokumen_survei']['collateral']['jenis']					= 'bpkb';
 		$s_survei_c5['dokumen_survei']['collateral']['bpkb']['merk']			= $jaminan['dokumen_jaminan']['bpkb']['merk'];
-		$s_survei_c5['dokumen_survei']['collateral']['bpkb']['jenis']			= $jaminan['dokumen_jaminan']['bpkb']['jenis'];
+		$s_survei_c5['dokumen_survei']['collateral']['bpkb']['tipe']			= $jaminan['dokumen_jaminan']['bpkb']['tipe'];
 		$s_survei_c5['dokumen_survei']['collateral']['bpkb']['nomor_polisi']	= rand('A','Z').' '.rand(1001,9999).' '.rand('A','Z').rand('A','Z');
 		$s_survei_c5['dokumen_survei']['collateral']['bpkb']['warna']			= $this->warna[rand(0,5)];
 		$s_survei_c5['dokumen_survei']['collateral']['bpkb']['tahun']			= $jaminan['dokumen_jaminan']['bpkb']['tahun'];
