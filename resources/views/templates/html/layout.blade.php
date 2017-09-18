@@ -139,7 +139,7 @@
 					</div>
 					<div class="modal-footer">
 						@if($is_holder)
-							<a href="#" class="btn btn-primary">
+							<a href="{{ route('home') }}" class="btn btn-primary">
 								<i class='fa fa-plus'></i> 
 								Kantor Baru
 							</a>

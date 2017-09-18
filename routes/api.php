@@ -44,8 +44,8 @@ Route::get('/pengaturan', function (Request $request)
 {
 	if($request->has('nip_karyawan'))
 	{
-		return Response::json(['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1])->asArray();
+		return Response::json(['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1]);
 	}
 
-	return Response::json(['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 3])->asArray();
+	return Response::json(['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 3]);
 });
