@@ -16,9 +16,9 @@ use Thunderlabid\Pengajuan\Exceptions\AppException;
 // EVENTS //
 ////////////
 use Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreating;
-// use Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated;
+use Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated;
 use Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdating;
-// use Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated;
+use Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated;
 // use Thunderlabid\Pengajuan\Events\Jaminan\JaminanDeleting;
 // use Thunderlabid\Pengajuan\Events\Jaminan\JaminanDeleted;
 
@@ -41,10 +41,10 @@ class Jaminan extends Model
 	public static $types	= ['bpkb', 'shm', 'shgb'];
 
 	protected $events 		= [
-		// 'created' 	=> JaminanCreated::class,
 		'creating' 	=> JaminanCreating::class,
-		// 'updated' 	=> JaminanUpdated::class,
+		'created' 	=> JaminanCreated::class,
 		'updating' 	=> JaminanUpdating::class,
+		'updated' 	=> JaminanUpdated::class,
 		// 'deleted' 	=> JaminanDeleted::class,
 		// 'deleting' 	=> JaminanDeleting::class,
 	];

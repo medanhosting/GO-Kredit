@@ -38,5 +38,26 @@ class EventServiceProvider extends ServiceProvider
 
 		Event::listen('Thunderlabid\Pengajuan\Events\Analisa\AnalisaCreated', 'App\Listeners\SimpanStatusDoingAnalisa');
 		Event::listen('Thunderlabid\Pengajuan\Events\Analisa\AnalisaUpdated', 'App\Listeners\SimpanStatusDoingAnalisa');
+
+		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanCreated', 'App\Listeners\SimpanStatusDonePutusan');
+		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanUpdated', 'App\Listeners\SimpanStatusDonePutusan');
+
+		//LISTEN LOG
+		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreated', 'App\Listeners\SimpanLogNasabah');
+		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdated', 'App\Listeners\SimpanLogNasabah');
+
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated', 'App\Listeners\SimpanLogBPKB');
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated', 'App\Listeners\SimpanLogBPKB');
+
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated', 'App\Listeners\SimpanLogSHM');
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated', 'App\Listeners\SimpanLogSHM');
+
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated', 'App\Listeners\SimpanLogSHGB');
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated', 'App\Listeners\SimpanLogSHGB');
+
+		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreated', 'App\Listeners\SimpanLogKredit');
+		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdated', 'App\Listeners\SimpanLogKredit');
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated', 'App\Listeners\SimpanLogKreditViaJaminan');
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated', 'App\Listeners\SimpanLogKreditViaJaminan');
 	}
 }

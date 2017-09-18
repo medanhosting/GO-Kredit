@@ -31,7 +31,7 @@ class Putusan extends Model
 	use WaktuTrait;
 	use IDRTrait;
 
-	protected $table	= 's_putusan';
+	protected $table	= 'p_putusan';
 	protected $fillable	= ['pengajuan_id', 'pembuat_keputusan', 'tanggal', 'is_baru', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal', 'checklists', 'putusan', 'catatan'];
 	protected $hidden	= [];
 	protected $dates	= [];
@@ -60,6 +60,10 @@ class Putusan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
+	public function pengajuan()
+	{
+		return $this->belongsTo(Pengajuan::class, 'pengajuan_id');
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
@@ -101,7 +105,11 @@ class Putusan extends Model
 	{
 		$this->attributes['legal']				= $this->formatMoneyFrom($variable);
 	}
-
+	
+	public function setChecklistsAttribute($variable)
+	{
+		$this->attributes['checklists']			= json_encode($variable);
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
 	// ------------------------------------------------------------------------------------------------------------
@@ -188,6 +196,11 @@ class Putusan extends Model
 	public function getPembuatKeputusanAttribute($variable)
 	{
 		return json_decode($this->attributes['pembuat_keputusan'], true);
+	}
+
+	public function getChecklistsAttribute($variable)
+	{
+		return json_decode($this->attributes['checklists'], true);
 	}
 
 	public function getLimitAngsuranAttribute($variable)
