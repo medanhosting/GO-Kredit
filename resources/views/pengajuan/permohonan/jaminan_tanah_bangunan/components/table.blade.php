@@ -4,36 +4,48 @@
 		<thead class="thead-default">
 			<tr>
 				<th>#</th>
+				<th>Tipe</th>
 				<th>Jenis</th>
-				<th>Tipe Sertifikat</th>
-				<th>No. Sertifikat</th>
-				<th>Luas Bangunan/ Luas Tanah </th>
+				<th class="text-center">No. Sertifikat</th>
+				<th>Model</th>
+				<th class="text-center">Luas Bangunan/ Luas Tanah </th>
 				<th>Atas Nama</th>
-				<th>Harga Jaminan</th>
+				<th class="text-center">Nilai Jaminan</th>
+				<th class="text-center">Tahun Perolehan</th>
 				<th></th>
 			</tr>
 		</thead>
-		<tbody>
-			<tr>
-				<td colspan="7" class="text-center">Belum ada jaminan tanah &amp; bangunan</td>
+		<tbody id="content-tanah-bangunan">
+			<tr id="content-tanah-bangunan-default">
+				<td colspan="10" class="text-center">Belum ada jaminan tanah &amp; bangunan</td>
 			</tr>
 			<tr id="clone-tanah-bangunan" style="display: none;">
 				<td class="nomor"></td>
-				<td class="jenis text-capitalize"></td>
 				<td class="tipe text-capitalize"></td>
-				<td class="nomor_sertifikat text-capitalize"></td>
-				<td class="luas_tanah text-capitalize"></td>
+				<td class="jenis_sertifikat text-capitalize"></td>
+				<td class="nomor_sertifikat text-capitalize text-center"></td>
+				<td class="model text-capitalize"></td>
+				<td class="luas_tanah text-capitalize text-center"></td>
 				<td class="atas_nama text-capitalize"></td>
-				<td class="harga_jaminan text-capitalize"></td>
+				<td class="nilai_jaminan text-capitalize text-right"></td>
+				<td class="tahun_perolehan text-center"></td>
 				<td class="action"></td>
 
-				{!! Form::hidden('jaminan[dokumen_jaminan][jenis]', null) !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][tipe]', null) !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][nomor_sertifikat]', null) !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][luas_tanah]', null) !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][luas_bangunan]', null) !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][atas_nama]', null) !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][nilai_jaminan]', null) !!}
+				{!! Form::hidden('jenis', null, ['disabled' => true]) !!}
+				{!! Form::hidden('tipe', null, ['disabled' => true]) !!}
+				{!! Form::hidden('nomor_sertifikat', null, ['disabled' => true]) !!}
+				{!! Form::hidden('luas_tanah', null, ['disabled' => true]) !!}
+				{!! Form::hidden('luas_bangunan', null, ['disabled' => true]) !!}
+				{!! Form::hidden('atas_nama', null, ['disabled' => true]) !!}
+				{!! Form::hidden('nilai_jaminan', null, ['disabled' => true]) !!}
+				{!! Form::hidden('tahun_perolehan', null, ['disabled' => true]) !!}
+				{!! Form::hidden('alamat[alamat]', null, ['disabled' => true]) !!}
+				{!! Form::hidden('alamat[rw]', null, ['disabled' => true]) !!}
+				{!! Form::hidden('alamat[rt]', null, ['disabled' => true]) !!}
+				{!! Form::hidden('alamat[kota]', null, ['disabled' => true]) !!}
+				{!! Form::hidden('alamat[kecamatan]', null, ['disabled' => true]) !!}
+				{!! Form::hidden('alamat[kelurahan]', null, ['disabled' => true]) !!}
+				{!! Form::hidden('tahun_perolehan', null, ['disabled' => true]) !!}
 			</tr>
 		</tbody>
 	</table>

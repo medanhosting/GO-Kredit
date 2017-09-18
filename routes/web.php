@@ -32,6 +32,9 @@ Route::domain('localhost')->group(function(){
 		Route::any('regensi',	['uses' => 'HelperController@getRegensi', 		'as' => 'regensi.index']);
 		Route::any('distrik',	['uses'	=> 'HelperController@getDistrik',		'as' => 'distrik.index']);
 		Route::any('desa',		['uses' => 'HelperController@getDesa',			'as' => 'desa.index']);
+		
+		Route::any('upload/image', 				['as' => 'upload.image.store',				'uses' => 'HelperController@storeGambar']);
+		Route::any('remove/image',				['as' => 'upload.image.destroy',			'uses' => 'HelperController@destroyGambar']);
 	});
 });
 

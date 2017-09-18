@@ -1,6 +1,3 @@
-@php
-	// dd($permohonan);
-@endphp
 @push('main')
 	<div class="container bg-white bg-shadow p-4">
 		<div class="row">

@@ -7,36 +7,38 @@
 				<th>Jenis</th>
 				<th>Merk</th>
 				<th>Tipe</th>
-				<th>Tahun</th>
-				<th>No. BPKB</th>
-				<th>Harga Jaminan</th>
-				<th>Tahun Perolehan</th>
+				<th class="text-center">Tahun</th>
+				<th class="text-center">No. BPKB</th>
+				<th>Atas Nama</th>
+				<th class="text-center">Nilai Jaminan</th>
+				<th class="text-center">Tahun Perolehan</th>
 				<th></th>
 			</tr>
 		</thead>
-		<tbody>
-			<tr id="content-kendaraan">
-				<td colspan="8" class="text-center">Belum ada jaminan kendaraan</td>
+		<tbody id="content-kendaraan">
+			<tr id="content-kendaraan-default">
+				<td colspan="10" class="text-center">Belum ada jaminan kendaraan</td>
 			</tr>
 			<tr id="clone-kendaraan" style="display: none;">
 				<td class="nomor text-capitalize"></td>
 				<td class="jenis text-capitalize"></td>
 				<td class="merk text-capitalize"></td>
 				<td class="tipe text-capitalize"></td>
-				<td class="tahun text-uppercase"></td>
-				<td class="nomor_bpkb text-capitalize"></td>
-				<td class="nilai_jaminan text-capitalize"></td>
-				<td class="tahun_perolehan"></td>
+				<td class="tahun text-uppercase text-center"></td>
+				<td class="nomor_bpkb text-capitalize text-center"></td>
+				<td class="atas_nama text-capitalize"></td>
+				<td class="nilai_jaminan text-capitalize text-right"></td>
+				<td class="tahun_perolehan text-center"></td>
 				<td class="action"></td>
 
-				{!! Form::hidden('jaminan[dokumen_jaminan][bpkb][jenis]', 'roda_2') !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][bpkb][merk]', 'yamaha') !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][bpkb][tipe]', 'mio') !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][bpkb][tahun]', '2009') !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][bpkb][nomor_bpkb]', 'D 92139213') !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][bpkb][atas_nama]', 'Agil M') !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][bpkb][nilai_jaminan]', 'Rp. 8.000.000') !!}
-				{!! Form::hidden('jaminan[dokumen_jaminan][bpkb][tahun_perolehan]', '2009') !!}
+				{!! Form::hidden('jenis', null, ['disabled' => true]) !!}
+				{!! Form::hidden('merk', null, ['disabled' => true]) !!}
+				{!! Form::hidden('tipe', null, ['disabled' => true]) !!}
+				{!! Form::hidden('tahun', null, ['disabled' => true]) !!}
+				{!! Form::hidden('nomor_bpkb', null, ['disabled' => true]) !!}
+				{!! Form::hidden('atas_nama', null, ['disabled' => true]) !!}
+				{!! Form::hidden('nilai_jaminan', null, ['disabled' => true]) !!}
+				{!! Form::hidden('tahun_perolehan', null, ['disabled' => true]) !!}
 			</tr>
 		</tbody>
 	</table>

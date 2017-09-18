@@ -21,7 +21,7 @@
 	</div>
 </div>
 <div class="col-auto col-md-9 pb-3">
-	{!! Form::bsCheckbox('Nasabah menggunakan E-kTP', 'nasabah[is_ktp]', null, ['class' => 'form-check-input']) !!}
+	{!! Form::bsCheckbox('Nasabah menggunakan E-kTP', 'nasabah[is_ktp]', null, ['class' => 'form-check-input'], true) !!}
 </div>
 <div class="col-auto col-md-6">
 	{!! Form::bsText('Nama', 'nasabah[nama]', null, ['class' => 'form-control', 'placeholder' => 'masukkan nama lengkap']) !!}
@@ -62,10 +62,10 @@
 	</div>
 </div>
 <div class="col-auto col-md-4">
-	{!! Form::bsSelect('Kota/Kabupaten', 'nasabah[alamat][kota]', ['' => 'pilih'], null, ['class' => 'custom-select form-control', 'placeholder' => '']) !!}
+	{!! Form::bsSelect('Kota/Kabupaten', 'nasabah[alamat][kota]', array_merge(['' => 'pilih'], $list_kota), null, ['class' => 'custom-select form-control', 'placeholder' => '']) !!}
 </div>
 <div class="col-auto col-md-4">
-	{!! Form::bsSelect('Kecamatan', 'nasabah[alamat][kecamatan]', ['' => 'pilih'], null, ['class' => 'custom-select form-control', 'placeholder' => '']) !!}
+	{!! Form::bsSelect('Kecamatan', 'nasabah[alamat][kecamatan]', array_merge(['' => 'pilih'], $list_kecamatan), null, ['class' => 'custom-select form-control', 'placeholder' => '']) !!}
 </div>
 <div class="col-auto col-md-4">
 	{!! Form::bsText('Desa/Dusun', 'nasabah[alamat][kelurahan]', null, ['class' => 'form-control', 'placeholder' => '']) !!}
@@ -88,6 +88,10 @@
 <div class="col-auto col-md-5">
 	<div class="form-group">
 		<label class="mb-1">FOTO KTP</label><br/>
+		{{-- <div class="thunder-imgUploader" thunder-imgUploader-subtitle = "* File maksimum 1MB" 
+			thunder-imageUploader-store-url="{{ route('upload.image.store') }}" thunder-imageUploader-remove-url="{{ route('upload.image.destroy') }}">
+			<input id="jaminan_kendaraan[foto]" name="jaminan_kendaraan[foto]" type="file" multiple accept='image/jpeg'/>
+		</div> --}}
 		<label class="custom-file">
 			{!! Form::file('dokumen_pelengkap[ktp]', ['class' => 'custom-file-input']) !!}
 			<span class="custom-file-control"></span>
