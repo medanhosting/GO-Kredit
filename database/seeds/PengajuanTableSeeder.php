@@ -81,7 +81,7 @@ class PengajuanTableSeeder extends Seeder
 								'alamat'			=> $faker->address,
 								'rt'				=> '00'.rand(0,9),
 								'rw'				=> '00'.rand(0,9),
-								'regensi'			=> $kab[rand(0,28)],
+								'kota'				=> $kab[rand(0,28)],
 								'provinsi'			=> 'Jawa Timur',
 								'negara'			=> 'Indonesia',
 							];
@@ -140,7 +140,7 @@ class PengajuanTableSeeder extends Seeder
 							'alamat'			=> $faker->address,
 							'rt'				=> '00'.rand(0,9),
 							'rw'				=> '00'.rand(0,9),
-							'regensi'			=> $kab[rand(0,28)],
+							'kota'				=> $kab[rand(0,28)],
 							'provinsi'			=> 'Jawa Timur',
 							'negara'			=> 'Indonesia',
 						];
@@ -182,13 +182,13 @@ class PengajuanTableSeeder extends Seeder
 		$data['jenis']					= 'bpkb';
 		$data['nilai_jaminan']			= $this->formatMoneyTo(rand(10,100)*1000000);
 		$data['tahun_perolehan']		= rand(1990,2016);
-		$data['dokumen_jaminan']['bpkb']['tipe']		= $this->type_k[rand(0,3)];
+		$data['dokumen_jaminan']['bpkb']['jenis']		= $this->type_k[rand(0,3)];
 		$data['dokumen_jaminan']['bpkb']['merk']		= $this->merk_k[rand(0,9)];
 		$data['dokumen_jaminan']['bpkb']['tahun']		= rand(1990,2016);
 		$data['dokumen_jaminan']['bpkb']['nomor_bpkb']	= $this->char[rand(0,25)].' '.rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9);
 		// $data['dokumen_jaminan']['bpkb']['nomor_bpkb']	= 'F 1111111';
 		$data['dokumen_jaminan']['bpkb']['atas_nama']		= $name;
-		$data['dokumen_jaminan']['bpkb']['jenis']			= $this->jenis_k[$data['dokumen_jaminan']['bpkb']['tipe']][rand(0,1)];
+		$data['dokumen_jaminan']['bpkb']['tipe']			= $this->jenis_k[$data['dokumen_jaminan']['bpkb']['tipe']][rand(0,1)];
 		$data['dokumen_jaminan']['bpkb']['tahun_perolehan']	= rand(1990,2016);
 
 		return $data;
