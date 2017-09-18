@@ -8,7 +8,7 @@
 				</h4>
 				<div class="row">
 					<div class="col-5">
-						<a href="{{ route('pengajuan.permohonan.create') }}" class="btn btn-primary text-capitalize text-style mb-2">pengajuan baru</a>
+						<a href="{{ route('pengajuan.permohonan.create', ['kantor_aktif_id' => $kantor_aktif_id]) }}" class="btn btn-primary text-capitalize text-style mb-2">pengajuan baru</a>
 					</div>
 					<div class="col-4">
 						<form action="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status]))}}" method="GET">
@@ -43,7 +43,7 @@
 				<div class="clearfix">&nbsp;</div>
 
 				<div id="accordion" role="tablist" aria-multiselectable="true">
-  					<div class="card" style="background-color:#eee;border:none;border-radius:0">
+  					<div class="card" style="border:none;border-radius:0">
 						<div class="card-header" role="tab" id="headingOne">
 							<div class="row text-left">
 								<div class="col-1"><strong>#</strong></div>
@@ -74,7 +74,7 @@
 									<div class="col-2">
 			    						<div class="row text-center">
 											<div class="col-4">
-												<a href=""><i class="fa fa-eye"></i></a>
+												<a href="{{ route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]) }}"><i class="fa fa-eye"></i></a>
 											</div>
 											<div class="col-4">
 												<a href="#" data-toggle="modal" data-target="#delete"><i class="fa fa-trash"></i></a>
@@ -87,7 +87,7 @@
 								</div>
 						    </div>
 							<div id="collapse{{$k}}" class="collapse" role="tabpanel" aria-labelledby="heading{{$k}}">
-								<div class="card-block" style="background-color:#ccc;border-bottom:1px solid #bbb;padding-bottom:20px;">
+								<div class="card-block" style="border-bottom:1px solid #bbb;padding-bottom:20px;">
 									<div class="row">
 										<div class="col-1">
 										</div>
@@ -115,28 +115,28 @@
 											</div>
 
 											<p class="text-secondary text-capitalize mb-1">kendaraan</p>
-											<table class="table table-sm table-bordered" style="background-color:#ccc;">
-												<thead>
+											<table class="table table-sm table-bordered" style="">
+												<thead class="thead-default">
 													<tr>
-														<th>#</th>
-														<th>Jenis</th>
-														<th>No. BPKB</th>
+														<th class="text-center">#</th>
+														<th class="text-center">Jenis</th>
+														<th class="text-center">No. BPKB</th>
 														<th>Merk</th>
 														<th>Tipe [Tahun]</th>
-														<th>Tahun Perolehan</th>
-														<th>Harga Jaminan (*)</th>
+														<th class="text-center">Tahun Perolehan</th>
+														<th class="text-center">Harga Jaminan (*)</th>
 													</tr>
 												</thead> 
 												<tbody>
-													@forelse($v['jaminan_kendaraan'] as $kj => $vj)
+													@forelse ($v['jaminan_kendaraan'] as $kj => $vj)
 													<tr>
-														<td class="text-center">{{($kj + 1)}}</td>
-														<td>{{ucwords(str_replace('_', ' ', $vj['dokumen_jaminan']['bpkb']['tipe']))}}</td>
-														<td>{{$vj['dokumen_jaminan']['bpkb']['nomor_bpkb']}}</td>
-														<td>{{ucwords($vj['dokumen_jaminan']['bpkb']['merk'])}}</td>
-														<td>{{$vj['dokumen_jaminan']['bpkb']['jenis']}} [{{$vj['dokumen_jaminan']['bpkb']['tahun']}}]</td>
-														<td class="text-right">{{$vj['tahun_perolehan']}}</td>
-														<td class="text-right">{{$vj['nilai_jaminan']}}</td>
+														<td class="text-center">{{ ($kj + 1) }}</td>
+														<td class="text-center">{{ ucwords(str_replace('_', ' ', $vj['dokumen_jaminan']['bpkb']['tipe'])) }}</td>
+														<td class="text-center">{{ $vj['dokumen_jaminan']['bpkb']['nomor_bpkb'] }}</td>
+														<td>{{ ucwords($vj['dokumen_jaminan']['bpkb']['merk']) }}</td>
+														<td>{{ $vj['dokumen_jaminan']['bpkb']['jenis'] }} [{{ $vj['dokumen_jaminan']['bpkb']['tahun'] }}]</td>
+														<td class="text-center">{{ $vj['tahun_perolehan'] }}</td>
+														<td class="text-right">{{ $vj['nilai_jaminan'] }}</td>
 													</tr>
 													@empty
 														<tr>
@@ -154,13 +154,13 @@
 											</table>
 
 											<p class="text-secondary text-capitalize mb-1">tanah &amp; bangunan</p>
-											<table class="table table-sm table-bordered" style="background-color:#ccc;">
-												<thead>
+											<table class="table table-sm table-bordered" style="border-color: #eee;">
+												<thead class="thead-default">
 													<tr>
-														<th rowspan="2" style="vertical-align:middle;">#</th>
-														<th colspan="4">Sertifikat</th>
-														<th rowspan="2" style="vertical-align:middle;">Tahun Perolehan</th>
-														<th rowspan="2" style="vertical-align:middle;">Harga Jaminan (*)</th>
+														<th class="text-center" rowspan="2" style="vertical-align:middle;">#</th>
+														<th class="text-center" colspan="4">Sertifikat</th>
+														<th class="text-center" rowspan="2" style="vertical-align:middle;">Tahun Perolehan</th>
+														<th class="text-center" rowspan="2" style="vertical-align:middle;">Harga Jaminan (*)</th>
 													</tr>
 													<tr>
 														<th>Jenis [Masa Berlaku]</th>
@@ -227,123 +227,6 @@
 						{{$pengajuan->appends(request()->all())}}
 					</div>
 				</div>
-
-				<!-- <table class="table table-responsive table-bordered">
-					<thead class="thead-default">
-						<tr>
-							<th>#</th>
-							<th>No. Pengajuan</th>
-							<th>Tgl Pengajuan</th>
-							<th>Jumlah Pinjaman</th>
-							<th>Nasabah</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach($pengajuan as $k => $v)
-							<tr>
-								<td rowspan="2">{{(($pengajuan->currentPage() - 1) * $pengajuan->perPage()) + $k + 1}}</td>
-								<td>{{$v['id']}}</td>
-								<td>{{$v['status_permohonan']['tanggal']}}</td>
-								<td>{{$v['pokok_pinjaman']}}</td>
-								<td>{{$v['nasabah']['nama']}}</td>
-								<td rowspan="2"><a href="#" class="btn btn-sm btn-primary">Action</a></td>
-							</tr>
-							<tr>
-								<td colspan="4">
-									<p>Jaminan :</p>
-									<p class="text-secondary text-capitalize mb-1">kendaraan</p>
-									<table class="table table-sm bg-white no-border">
-										<thead>
-											<tr>
-												<th>#</th>
-												<th>Jenis</th>
-												<th>No. BPKB</th>
-												<th>Merk</th>
-												<th>Tipe [Tahun]</th>
-												<th>Tahun Perolehan</th>
-												<th>Harga Jaminan (*)</th>
-											</tr>
-										</thead> 
-										<tbody>
-											@foreach($v['jaminan_kendaraan'] as $kj => $vj)
-											<tr>
-												<td class="text-center">{{($kj + 1)}}</td>
-												<td>{{ucwords(str_replace('_', ' ', $vj['dokumen_jaminan']['bpkb']['tipe']))}}</td>
-												<td>{{$vj['dokumen_jaminan']['bpkb']['nomor_bpkb']}}</td>
-												<td>{{ucwords($vj['dokumen_jaminan']['bpkb']['merk'])}}</td>
-												<td>{{$vj['dokumen_jaminan']['bpkb']['jenis']}} [{{$vj['dokumen_jaminan']['bpkb']['tahun']}}]</td>
-												<td class="text-right">{{$vj['tahun_perolehan']}}</td>
-												<td class="text-right">{{$vj['nilai_jaminan']}}</td>
-											</tr>
-											@endforeach
-											<tr>
-												<td colspan="7" class="text-right" style="border:0">
-													<small>
-														<i class="text-secondary">* menurut nasabah</i>
-													</small>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-
-									<p class="text-secondary text-capitalize mb-1">tanah &amp; bangunan</p>
-									<table class="table table-sm bg-white no-border">
-										<thead>
-											<tr>
-												<th rowspan="2" style="vertical-align:middle;">#</th>
-												<th colspan="4">Sertifikat</th>
-												<th rowspan="2" style="vertical-align:middle;">Tahun Perolehan</th>
-												<th rowspan="2" style="vertical-align:middle;">Harga Jaminan (*)</th>
-											</tr>
-											<tr>
-												<th>Jenis [Masa Berlaku]</th>
-												<th>Nomor</th>
-												<th>Tipe</th>
-												<th>Luas</th>
-											</tr>
-										</thead>
-										<tbody>
-											@foreach($v['jaminan_tanah_bangunan'] as $kj => $vj)
-											<tr>
-												<td class="text-center">{{$kj+1}}</td>
-												<td>{{strtoupper($vj['jenis'])}} </td>
-												<td>
-													{{$vj['dokumen_jaminan'][$vj['jenis']]['nomor_sertifikat']}}
-													@if(isset($vj['dokumen_jaminan'][$vj['jenis']]['masa_berlaku_sertifikat']))
-														[{{$vj['dokumen_jaminan'][$vj['jenis']]['masa_berlaku_sertifikat']}}]
-													@endif
-												</td>
-												<td>{{str_replace('_', ' ', $vj['dokumen_jaminan'][$vj['jenis']]['tipe'])}}</td>
-												<td>
-													Luas Tanah : {{$vj['dokumen_jaminan'][$vj['jenis']]['luas_tanah']}}M<sup>2</sup>
-													<br/>
-													@if(isset($vj['dokumen_jaminan'][$vj['jenis']]['luas_bangunan']))
-														Luas Bangunan : {{$vj['dokumen_jaminan'][$vj['jenis']]['luas_bangunan']}}M<sup>2</sup>
-													@endif
-												</td>
-												<td class="text-right">{{$vj['tahun_perolehan']}}</td>
-												<td class="text-right">{{$vj['nilai_jaminan']}}</td>
-											</tr>
-											@endforeach
-											<tr>
-												<td colspan="7" class="text-right" style="border:0">
-													<small>
-														<i class="text-secondary">* menurut nasabah</i>
-													</small>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-									{{-- <ol class="pl-3">
-										<li class="text-capitalize">(roda 4) mitsubishi colt l300 th 2010 dengan harga Rp. 100.000.000</li>
-										<li class="text-capitalize">(roda 2) yamaha mio th 2009 dengan harga Rp. 9.000.000</li>
-									</ol> --}}
-								</td>
-							</tr>
-						@endforeach
-					</tbody>
-				</table> -->
 			</div>
 		</div>
 	</div>
@@ -372,6 +255,7 @@
 		<div class="row">
 			<div class="col">
 				<nav class="nav">
+					<a href="{{ route('home') }}" class="nav-link text-secondary">Menu Utama</a>
 					<a href="#" class="nav-link text-secondary">Simulasi Kredit</a>
 				</nav>
 			</div>

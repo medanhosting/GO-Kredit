@@ -66,7 +66,7 @@ Class HelperController extends Controller
 
 	public function storeGambar(Request $request)
 	{		
-		$input 		= $request->input('_file');
+		$input 		= request()->input('_file');
 
 		$survei 	= base64_decode($input);
 		$gambar 	= new UploadBase64Gambar('survei', ['image' => $survei]);
@@ -77,13 +77,12 @@ Class HelperController extends Controller
 
 	public function destroyGambar()
 	{
-		$filename	= Input::get('url');
+		$filename	= request()->get('url');
 		$filename 	= str_replace(url('/'), public_path(), $filename);
 
 		if (file_exists($filename) && str_is(public_path().'*', $filename)) 
 		{
 			unlink($filename);
-
 			return JSend::success([])->asArray();
 		} 
 

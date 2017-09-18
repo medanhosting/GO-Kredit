@@ -27,7 +27,7 @@
 					<a href="#jaminan" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="jaminan" aria-expanded="true"><h6 class="mb-0">3 &nbsp;jaminan</h6></a>
 				</nav>
 
-				{!! Form::open(['url' => route('pengajuan.permohonan.store'), 'files' => true, 'thunder-validation-submitvalidation' => true, 'class' => 'thunder-validation-form']) !!}
+				{!! Form::open(['url' => route('pengajuan.permohonan.store', ['kantor_aktif_id' => $kantor_aktif_id]), 'files' => true]) !!}
 					<div class="tab-content">
 						<!-- data kredit -->
 						<div class="tab-pane fade show active" id="kredit" role="tabpanel">
@@ -80,7 +80,7 @@
 
 		@slot ('footer')
 			<a href="#" data-dismiss="modal" class="btn btn-default">Batal</a>
-			<a href="#" class="btn btn-primary add" data-modal="add" data-dismiss="modal" data-id="jaminan-kendaraan" data-input="['jenis', 'merk', 'tipe', tahun', 'nomor_bpkb', nilai_jaminan', 'tahun_perolehan']" data-target="#">Tambahkan</a>
+			<a href="#" class="btn btn-primary add" data-modal="add" data-dismiss="modal" data-id="jaminan-kendaraan">Tambahkan</a>
 		@endslot
 	@endcomponent
 
@@ -96,7 +96,7 @@
 
 		@slot ('footer')
 			<a href="#" data-dismiss="modal" class="btn btn-default">Batal</a>
-			<a href="#" class="btn btn-primary add" data-modal="add">Tambahkan</a>
+			<a href="#" class="btn btn-primary add" data-modal="add" data-dismiss="modal" data-id="jaminan-tanah-bangunan">Tambahkan</a>
 		@endslot
 	@endcomponent
 
@@ -107,6 +107,7 @@
 		<div class="row">
 			<div class="col">
 				<nav class="nav">
+					<a href="{{ route('home') }}" class="nav-link text-secondary">Menu Utama</a>
 					<a href="#" class="nav-link text-secondary">Simulasi Kredit</a>
 				</nav>
 			</div>
@@ -116,10 +117,13 @@
 
 @push ('js')
 	<script>
-		inputKendaraan = ['jenis', 'merk', 'tipe', 'tahun', 'nomor_bpkb', 'nilai_jaminan', 'tahun_perolehan']; 
-		elementID = $(document.getElementById('clone-kendaraan'));
+		inputKendaraan = ['jenis', 'merk', 'tipe', 'tahun', 'nomor_bpkb', 'nilai_jaminan', 'tahun_perolehan', 'atas_nama'];
+		inputTanahBangunan = ['jenis_sertifikat', 'tipe', 'nomor_sertifikat', 'luas_tanah', 'luas_bangunan', 'atas_nama', 'nilai_jaminan', 'jenis', 'tahun_perolehan', 'alamat[alamat]', 'alamat[rt]', 'alamat[rw]', 'alamat[kota]', 'alamat[kecamatan]', 'alamat[kelurahan]'];
+		templateKendaraan = $(document.getElementById('clone-kendaraan'));
+		templateTanahBangunan = $(document.getElementById('clone-tanah-bangunan'));
 		
-		function templateClone() {
+		function setTemplateClone() {
+
 		}
 
 		function getData () {
@@ -129,28 +133,134 @@
 		$('.add').on('click', function (e) {
 			e.preventDefault();
 			dataInput = $(this).attr('data-input');
-			// dataInput = JSON.parse('"' + dataInput + '"');
 			dataId = $(this).attr('data-id');
 
-			for (x=0; x<inputKendaraan.length; x++) {
-				elClone = elementID.clone();
-				dataForm = $(document.getElementById(dataId)).find('[name="' + inputKendaraan[x] + '"]').val();
+			if (dataId == 'jaminan-kendaraan') {
+				elClone = templateKendaraan.clone();
+				countClone = $('#content-kendaraan').find('tr.clone-kendaraan')
+								.length;
 
-				elClone.find('.' + inputKendaraan[x]).val(dataForm);
-				elClone.find('name["' + inputKendaraan[x] + '"]').val(dataForm);
+				// remove attribute 'id' in template clone
+				// and add class clone kendaraan
+				elClone.attr('id', elClone.attr('id') + '-' + countClone)
+					.addClass('clone-kendaraan');
 
-				// console.log($(document.getElementById(dataId)).find('[name="' + inputKendaraan[x] +'"]'));
-				
-				
+				// set variable data array to array 
+				// dari kendaraan
+				dataArray = inputKendaraan;
+			} else {
+				elClone = templateTanahBangunan.clone();
+				countClone = $('#content-tanah-bangunan').find('tr.clone-tanah-bangunan')
+								.length;
+				// remove attribute 'id' in template clone
+				// and add class clone tanah & bangunan
+				elClone.removeAttr('id')
+					.addClass('clone-tanah-bangunan');
+				// set variable data array 
+				// dari array list tanah & bangunan
+				dataArray = inputTanahBangunan;
 			}
-			// $.map(dataInput, function(k, v) {
-				// $(document.getElementById(dataInput)).find('input[name="'  '"]')
-			// });
+
+			// for untuk ambil data dari form modal
+			// dan memparsing ke table & form hidden
+			for (x=0; x < dataArray.length; x++) {
+				dataForm = $(document.getElementById(dataId)).find('[name="' + dataArray[x] + '"]').val();
+				inputName = elClone.find('[name*="' + dataArray[x] +'"]').attr('name');
+
+				if (dataId  == 'jaminan-kendaraan') {
+					prefixInput = 'bpkb';
+				} else {
+					prefixInput = $(document.getElementById(dataId)).find('[name="jenis_sertifikat"]').val();
+				}
+
+				if (typeof (dataForm) !== 'undefined') {
+					// set input hidden
+					elClone.find('[name="' + dataArray[x] + '"]')
+						.val(dataForm)
+						.removeAttr('disabled');
+
+					// set display table
+					switch (dataArray[x]) {
+						// khusus luas tanah
+						case 'luas_tanah': 
+							// setting value td
+							elClone.find('td.luas_tanah')
+								.html(dataForm.replace('_', ' ') + ' M<sup>2</sup>');
+							// setting name field hidden
+							elClone.find('[name="' + dataArray[x] + '"]')
+								.attr('name', 'jaminan[' + (countClone + 1) + '][dokumen_jaminan][' + prefixInput + '][' + inputName + ']')
+							break;
+						// khusus luas bangunan
+						case 'luas_bangunan':
+							// setting value td
+							elClone.find('td.luas_tanah')
+								.append(' / ' + dataForm.replace('_', ' ') + ' M<sup>2</sup>');
+							// setting name field hidden
+							elClone.find('[name="' + dataArray[x] + '"]')
+								.attr('name', 'jaminan[' + (countClone + 1) + '][dokumen_jaminan][' + prefixInput + '][' + inputName + ']')
+							break;
+						case 'nilai_jaminan': case 'tahun_perolehan':
+							// setting value td
+							elClone.find('td.' + dataArray[x])
+								.html(dataForm.replace('_', ' '));
+							// setting name field hidden
+							elClone.find('[name="' + dataArray[x] + '"]')
+								.attr('name', 'jaminan[' + (countClone + 1) + '][' + inputName + ']')
+							break;
+						case 'jenis_sertifikat': 
+							// setting value td
+							elClone.find('td.' + dataArray[x])
+								.html(dataForm.replace('_', ' '));
+							// setting name field hidden
+							elClone.find('[name="' + dataArray[x] + '"]')
+								.attr('name', 'jaminan[' + (countClone + 1) + '][jenis]');
+							break;
+						default:
+							// setting value td
+							elClone.find('td.' + dataArray[x])
+								.html(dataForm.replace('_', ' '));
+							// setting name field hidden
+							elClone.find('[name="' + dataArray[x] + '"]')
+								.attr('name', 'jaminan[' + (countClone + 1) + '][dokumen_jaminan][' + prefixInput + '][' + inputName + ']')
+							break;
+					}
+				}
+			}
+
+			elClone.append('<input type="hidden" name="jaminan['+ (countClone + 1) +'][jenis]" value="'+ prefixInput +'">');
+			// tambah button delete & 
+			// tambah nomor iterasi disetiap rownya
+			if ((typeof (countClone) !== 'undefined')) {
+				elClone.find('td.nomor')
+					.html(countClone + 1);
+				elClone.find('td.action')
+					.html('<a href="#" class="btn btn-link text-danger btn-sm delete" data-id="' + elClone.attr('id') + '"><i class="fa fa-trash"></i></a>');
+
+				$('.btn.delete').on('click', function(e) {
+					e.preventDefault();
+					deleteClone($(this));
+				});
+			}
+
+			elClone.show();
+
+			if (dataId == 'jaminan-kendaraan') {
+				$('#content-kendaraan-default').hide();
+				$('#content-kendaraan').append(elClone);
+			} else {
+				$('#content-tanah-bangunan-default').hide();
+				$('#content-tanah-bangunan').append(elClone);
+			}
 		});
 
 		$('.modal').on('hide.bs.modal', function(e) {
-			el = $(this).find('input');
-			console.log({ elemnent: e, find: el});
+			$(this).find('input').val('');
+			$(this).find('select').val('');
 		});
+
+		function deleteClone (element) {
+			elementId = element.attr('data-id');
+			$(document.getElementById(elementId)).remove();
+		} 
 	</script>
 @endpush

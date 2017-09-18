@@ -1,6 +1,7 @@
 {
     "plugins": {
-    	"formValidation" : "./formValidation.js"
+    	"formValidation" : "./formValidation.js",
+    	"imageUploader" : "./imageUploader.js"
     },
     "autoload" : true,
     "debug" : true

@@ -12,6 +12,8 @@ class DashboardController extends Controller
 	public function home() 
 	{
 		//atur menu scopes
+		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+		
 		$this->layout->pages 	= view('dashboard.overview');
 		return $this->layout;
 	}
