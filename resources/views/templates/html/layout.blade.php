@@ -26,20 +26,6 @@
 						</a>
 					</li>
 				</ul>
-				<ul class="navbar-nav ml-auto mt-lg-0">
-					{{-- <li class="nav-item"><a class="nav-link" href="{{ route('social_media.index') }}"'><i class='fa fa-plus-circle'></i><span class='d-none d-md-'>Add Account</span></a></li> --}}
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<div class='d-none d-sm-inline'>
-								<i class="fa fa-user-circle"></i>&nbsp; {{ $me->email }} &nbsp;&nbsp;&nbsp;
-							</div>
-							<span class='d-sm-none'><i class='fa fa-user'></i></span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
-						</div>
-					</li>
-				</ul>
 			</div>
 		</nav>
 
@@ -140,7 +126,7 @@
 					</div>
 					<div class="modal-footer">
 						@if($is_holder)
-							<a href="{{ route('social_media.index') }}" class="btn btn-primary">
+							<a href="{{ route('home') }}" class="btn btn-primary">
 								<i class='fa fa-plus'></i> 
 								Kantor Baru
 							</a>
