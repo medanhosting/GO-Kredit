@@ -11,7 +11,17 @@
 			</div>
 		</div>
 		<div class="row ml-0 mr-0">
-			<div class="col bg-gray mb-4" style="background-color: #efefef;">&nbsp;</div>
+			<div class="col p-0">
+				<ol class="breadcrumb" style="border-radius:0;">
+					@foreach($breadcrumb as $k => $v)
+						@if(count($breadcrumb)-1 ==$k)
+							<li class="breadcrumb-item active">{{ucwords($v['title'])}}</li>
+						@else
+							<li class="breadcrumb-item"><a href="{{$v['route']}}">{{ucwords($v['title'])}}</a></li>
+						@endif
+					@endforeach
+				</ol>
+			</div>
 		</div>
 		<div class="row">
 			<div class="col-3">

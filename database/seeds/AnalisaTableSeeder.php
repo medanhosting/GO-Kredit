@@ -60,6 +60,10 @@ class AnalisaTableSeeder extends Seeder
 			$kredit_update 	= $bulan * $k_angs;
 			$total_bunga 	= $kredit_update - $p_pinjaman;
 			$perc_bunga 	= round((($p_pinjaman / max($total_bunga, 1))/100), 2); 
+			if($total_bunga==0)
+			{
+				$perc_bunga = 0;
+			}
 
 			$data['jangka_waktu']		= $bulan;
 			$data['suku_bunga']			= $perc_bunga;

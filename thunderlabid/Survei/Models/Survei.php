@@ -63,6 +63,31 @@ class Survei extends Model
 		return $this->hasMany(SurveiDetail::class, 'survei_id');
 	}
 
+	public function character()
+	{
+		return $this->hasOne(SurveiDetail::class, 'survei_id')->where('jenis', 'character');
+	}
+
+	public function condition()
+	{
+		return $this->hasOne(SurveiDetail::class, 'survei_id')->where('jenis', 'condition');
+	}
+
+	public function capacity()
+	{
+		return $this->hasOne(SurveiDetail::class, 'survei_id')->where('jenis', 'capacity');
+	}
+
+	public function capital()
+	{
+		return $this->hasOne(SurveiDetail::class, 'survei_id')->where('jenis', 'capital');
+	}
+
+	public function collateral()
+	{
+		return $this->hasOne(SurveiDetail::class, 'survei_id')->where('jenis', 'collateral');
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------

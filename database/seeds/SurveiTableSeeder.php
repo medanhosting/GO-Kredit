@@ -276,7 +276,7 @@ class SurveiTableSeeder extends Seeder
 
 			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['jumlah_pinjaman']	= $this->formatMoneyTo($jlh_pinjaman);
 			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['jumlah_angsuran']	= $this->formatMoneyTo($angsuran);
-			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['jangka_waktu']		= $this->formatMoneyTo($jww);
+			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['jangka_waktu']		= $jww;
 
 			///COLLATERAL///
 			$s_survei_c5 	= [];

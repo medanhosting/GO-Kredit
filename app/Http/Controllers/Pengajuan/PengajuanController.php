@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Pengajuan;
 use App\Http\Controllers\Controller;
 
 use Thunderlabid\Pengajuan\Models\Pengajuan;
+use Thunderlabid\Pengajuan\Models\Analisa;
+use Thunderlabid\Pengajuan\Models\Putusan;
+use Thunderlabid\Survei\Models\Survei;
 
 use Exception;
 use Session;
@@ -56,5 +59,42 @@ class PengajuanController extends Controller
 
 		$this->layout->pages 	= view($this->view_dir . 'index');
 		return $this->layout;
+	}
+
+	public function show($status, $id)
+	{
+		try {
+			$permohonan		= Pengajuan::where('id', $id)->status($status)->kantor(request()->get('kantor_aktif_id'))->with('jaminan', 'riwayat_status', 'status_terakhir')->first();
+
+			$breadcrumb 	= [
+				[
+					'title'	=> $status,
+					'route' => route('pengajuan.pengajuan.index', ['status' => $status])
+				], 
+				[
+					'title'	=> $id,
+					'route' => route('pengajuan.pengajuan.index', ['status' => $status, 'id' => $id])
+				]
+			];
+
+			if (!$permohonan)
+			{
+				throw new Exception("Data tidak ada!", 1);
+			}
+			
+			$survei 		= Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'collateral'])->get()->toArray();
+			$analisa 		= Analisa::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->get()->toArray();
+			
+			$putusan 		= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->get()->toArray();
+
+			view()->share('permohonan', $permohonan);
+			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+
+			$this->layout->pages 	= view('pengajuan.show', compact('status', 'breadcrumb', 'survei', 'analisa', 'putusan'));
+			return $this->layout;
+
+		} catch (Exception $e) {
+			return redirect(route('pengajuan.pengajuan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
+		}
 	}
 }
