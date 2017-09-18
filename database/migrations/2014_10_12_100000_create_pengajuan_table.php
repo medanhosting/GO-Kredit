@@ -21,7 +21,7 @@ class CreatePengajuanTable extends Migration
 			$table->text('nasabah');
 			$table->text('dokumen_pelengkap');
 			$table->string('kode_kantor');
-			$table->string('nip_ao')->nullable();
+			$table->text('ao')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			

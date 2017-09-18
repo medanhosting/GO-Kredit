@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Analisa;
 use Thunderlabid\Pengajuan\Models\Putusan;
+use Thunderlabid\Pengajuan\Models\LegalRealisasi;
 use Thunderlabid\Survei\Models\Survei;
 
 use Exception;
@@ -96,5 +97,12 @@ class PengajuanController extends Controller
 		} catch (Exception $e) {
 			return redirect(route('pengajuan.pengajuan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
 		}
+	}
+
+	public function print($id, $mode)
+	{
+		$realisasi 				= LegalRealisasi::where('pengajuan_id', $id)->where('jenis', $mode)->first()->toArray();
+
+		return view('pengajuan.print.'.$mode, compact('realisasi'));
 	}
 }

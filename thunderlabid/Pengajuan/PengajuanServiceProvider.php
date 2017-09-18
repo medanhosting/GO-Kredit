@@ -33,6 +33,9 @@ class PengajuanServiceProvider extends ServiceProvider
 
 		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanCreating', 'Thunderlabid\Pengajuan\Listeners\SavingPutusan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanUpdating', 'Thunderlabid\Pengajuan\Listeners\SavingPutusan');
+
+		Event::listen('Thunderlabid\Pengajuan\Events\LegalRealisasi\LegalRealisasiCreating', 'Thunderlabid\Pengajuan\Listeners\SavingLegalRealisasi');
+		Event::listen('Thunderlabid\Pengajuan\Events\LegalRealisasi\LegalRealisasiUpdating', 'Thunderlabid\Pengajuan\Listeners\SavingLegalRealisasi');
 	}
 
 	public function register()

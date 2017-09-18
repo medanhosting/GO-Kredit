@@ -38,7 +38,7 @@ class Pengajuan extends Model
 	use TanggalTrait;
 
 	protected $table	= 'p_pengajuan';
-	protected $fillable	= ['pokok_pinjaman', 'kemampuan_angsur', 'is_mobile', 'nasabah', 'dokumen_pelengkap', 'kode_kantor', 'nip_ao'];
+	protected $fillable	= ['pokok_pinjaman', 'kemampuan_angsur', 'is_mobile', 'nasabah', 'dokumen_pelengkap', 'kode_kantor', 'ao'];
 	protected $hidden	= [];
 	protected $dates	= [];
 
@@ -97,6 +97,11 @@ class Pengajuan extends Model
 	public function riwayat_status()
 	{
 		return $this->hasMany(Status::class, 'pengajuan_id');
+	}
+	
+	public function setAoAttribute($variable)
+	{
+		$this->attributes['ao']		= json_encode($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -263,6 +268,11 @@ class Pengajuan extends Model
 		}
 
 		return $variable;
+	}
+
+	public function getAoAttribute($variable)
+	{
+		return json_decode($this->attributes['ao'], true);
 	}
 
 	public function getDokumenPelengkapAttribute($variable)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Survei\Models;
+namespace Thunderlabid\Pengajuan\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,41 +10,38 @@ use Validator, DB;
 ///////////////
 // Exception //
 ///////////////
-use Thunderlabid\Survei\Exceptions\AppException;
+use Thunderlabid\Pengajuan\Exceptions\AppException;
 
 ////////////
 // EVENTS //
 ////////////
-use Thunderlabid\Survei\Events\Survei\SurveiCreating;
-// use Thunderlabid\Survei\Events\Survei\SurveiCreated;
-use Thunderlabid\Survei\Events\Survei\SurveiUpdating;
-// use Thunderlabid\Survei\Events\Survei\SurveiUpdated;
-// use Thunderlabid\Survei\Events\Survei\SurveiDeleting;
-// use Thunderlabid\Survei\Events\Survei\SurveiDeleted;
+use Thunderlabid\Pengajuan\Events\LegalRealisasi\LegalRealisasiCreating;
+// use Thunderlabid\Pengajuan\Events\LegalRealisasi\LegalRealisasiCreated;
+use Thunderlabid\Pengajuan\Events\LegalRealisasi\LegalRealisasiUpdating;
+// use Thunderlabid\Pengajuan\Events\LegalRealisasi\LegalRealisasiUpdated;
+// use Thunderlabid\Pengajuan\Events\LegalRealisasi\LegalRealisasiDeleting;
+// use Thunderlabid\Pengajuan\Events\LegalRealisasi\LegalRealisasiDeleted;
 
-use Thunderlabid\Survei\Traits\WaktuTrait;
-
-class Survei extends Model
+class LegalRealisasi extends Model
 {
 	use SoftDeletes;
-	use WaktuTrait;
 
-	protected $table	= 's_survei';
-	protected $fillable	= ['tanggal', 'surveyor', 'pengajuan_id'];
+	protected $table	= 'p_legal_realisasi';
+	protected $fillable	= ['pengajuan_id', 'nomor', 'jenis', 'isi'];
 	protected $hidden	= [];
 	protected $dates	= [];
 
 	protected $rules	= [];
 	protected $errors;
 	protected $latest_analysis;
-    
+
 	protected $events 	= [
-		'creating' 	=> SurveiCreating::class,
-		// 'created' 	=> SurveiCreated::class,
-		'updating' 	=> SurveiUpdating::class,
-		// 'updated' 	=> SurveiUpdated::class,
-		// 'deleted' 	=> SurveiDeleted::class,
-		// 'deleting' 	=> SurveiDeleting::class,
+		'creating' 	=> LegalRealisasiCreating::class,
+		// 'created' 	=> LegalRealisasiCreated::class,
+		'updating' 	=> LegalRealisasiUpdating::class,
+		// 'updated' 	=> LegalRealisasiUpdated::class,
+		// 'deleted' 	=> LegalRealisasiDeleted::class,
+		// 'deleting' 	=> LegalRealisasiDeleting::class,
 	];
 	
 	// ------------------------------------------------------------------------------------------------------------
@@ -58,44 +55,9 @@ class Survei extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
-	public function details()
-	{
-		return $this->hasMany(SurveiDetail::class, 'survei_id');
-	}
-
-	public function character()
-	{
-		return $this->hasOne(SurveiDetail::class, 'survei_id')->where('jenis', 'character');
-	}
-
-	public function condition()
-	{
-		return $this->hasOne(SurveiDetail::class, 'survei_id')->where('jenis', 'condition');
-	}
-
-	public function capacity()
-	{
-		return $this->hasOne(SurveiDetail::class, 'survei_id')->where('jenis', 'capacity');
-	}
-
-	public function capital()
-	{
-		return $this->hasOne(SurveiDetail::class, 'survei_id')->where('jenis', 'capital');
-	}
-
-	public function collateral()
-	{
-		return $this->hasMany(SurveiDetail::class, 'survei_id')->where('jenis', 'collateral');
-	}
-
-	public function foto()
-	{
-		return $this->hasMany(SurveiFoto::class, 'survei_id');
-	}
-
 	public function pengajuan()
 	{
-		return $this->belongsTo(SurveiFoto::class, 'pengajuan_id');
+		return $this->belongsTo(Pengajuan::class, 'pengajuan_id');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -109,14 +71,10 @@ class Survei extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
 	// ------------------------------------------------------------------------------------------------------------
-	public function setTanggalAttribute($variable)
+
+	public function setIsiAttribute($variable)
 	{
-		$this->attributes['tanggal']  	= $this->formatDateTimeFrom($variable);
-	}
-	
-	public function setSurveyorAttribute($variable)
-	{
-		$this->attributes['surveyor']	= json_encode($variable);
+		$this->attributes['isi']		= json_encode($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -132,18 +90,15 @@ class Survei extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['tanggal']			= ['required', 'date_format:"Y-m-d"'];
-		$rules['surveyor']['nip']	= ['required'];
-		$rules['surveyor']['nama']	= ['required'];
 		$rules['pengajuan_id']		= ['required', 'exists:p_pengajuan,id'];
+		$rules['nomor']				= ['required'];
+		$rules['jenis']				= ['required'];
+		$rules['isi']				= ['required'];
 
 		//////////////
 		// Validate //
 		//////////////
-		$data 				= $this->attributes;
-		$data['surveyor'] 	= json_decode($data['surveyor'], true);
-
-		$validator = Validator::make($data, $rules);
+		$validator = Validator::make($this->attributes, $rules);
 		if ($validator->fails())
 		{
 			$this->errors = $validator->messages();
@@ -156,18 +111,8 @@ class Survei extends Model
 		}
 	}
 
-	public function getTanggalAttribute($variable)
+	public function getIsiAttribute($variable)
 	{
-		return $this->formatDateTimeTo($this->attributes['tanggal']);
-	}
-
-	public function getSurveyorAttribute($variable)
-	{
-		return json_decode($this->attributes['surveyor'], true);
-	}
-
-	public function getErrorsAttribute()
-	{
-		return $this->errors;
+		return json_decode($this->attributes['isi'], true);
 	}
 }
