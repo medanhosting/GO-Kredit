@@ -20,15 +20,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //LOGIN API
 
 Route::group(['namespace' => 'API'], function(){
-	Route::post('/check/device',				['uses' => 'LoginController@post_login_device']);
-	Route::post('/check/user',					['uses' => 'LoginController@post_login_with_username']);
-	Route::get('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi', 'middleware' => 'device']);
-	Route::post('/permohonan',					['uses' => 'PermohonanController@store', 'middleware' => 'device']);
-	Route::get('/permohonan',					['uses' => 'PermohonanController@index', 'middleware' => 'device']);
-	Route::post('/foto/survei/{pengajuan_id}',	['uses' => 'SurveiController@upload_foto', 'middleware' => 'device']);
+	Route::any('/check/device',				['uses' => 'LoginController@post_login_device']);
+	Route::any('/check/user',					['uses' => 'LoginController@post_login_with_username']);
+	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi', 'middleware' => 'device']);
+	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store', 'middleware' => 'device']);
+	Route::any('/permohonan/index',				['uses' => 'PermohonanController@index', 'middleware' => 'device']);
+	Route::any('/foto/survei/{pengajuan_id}',	['uses' => 'SurveiController@upload_foto', 'middleware' => 'device']);
 });
 
-Route::get('/pengaturan', function (Request $request) 
+Route::any('/pengaturan', function (Request $request) 
 {
 	if($request->has('nip_karyawan'))
 	{
