@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['namespace' => 'API'], function(){
 	Route::post('/check/device',				['uses' => 'LoginController@post_login_device']);
 	Route::post('/check/user',					['uses' => 'LoginController@post_login_with_username']);
+	Route::get('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi', 'middleware' => 'device']);
 	Route::post('/permohonan',					['uses' => 'PermohonanController@store', 'middleware' => 'device']);
 	Route::get('/permohonan',					['uses' => 'PermohonanController@index', 'middleware' => 'device']);
 	Route::post('/foto/survei/{pengajuan_id}',	['uses' => 'SurveiController@upload_foto', 'middleware' => 'device']);
