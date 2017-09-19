@@ -93,7 +93,7 @@ class SurveiFoto extends Model
 		// Create Rules //
 		//////////////////
 		$rules['arsip_foto.foto.*.url']			= ['required', 'url'];
-		$rules['arsip_foto.foto.*.keterangan']	= ['required'];
+		// $rules['arsip_foto.foto.*.keterangan']	= ['required'];
 
 		$data 				= $this->attributes;
 		$data['arsip_foto']	= json_decode($data['arsip_foto'], true);
