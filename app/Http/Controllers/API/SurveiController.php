@@ -35,9 +35,9 @@ class SurveiController extends BaseController
 				$foto->arsip_foto 	= ['foto' => $fotos];
 			}
 
-			return Response::json(['Sukses']);
+			return Response::json(['status' => 'sukses', 'data' => []]);
 		} catch (Exception $e) {
-			return Response::json($e->getMessage());
+			return Response::json(['status' => 'gagal', 'data' => [], 'pesan' => $e->getMessage()]);
 		}
 	}
 }

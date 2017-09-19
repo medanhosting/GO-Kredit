@@ -50,7 +50,7 @@ Route::get('/pengaturan', function (Request $request)
 	}
 
 	$phone 			= $request->get('mobile');
-	$jlh_pengajuan	= Pengajuan::status('pengajuan')->where('nasabah->telepon', $phone['telepon'])->count();
+	$jlh_pengajuan	= \Thunderlabid\Pengajuan\Models\Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->count();
 
 	return Response::json(['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => (3 - $jlh_pengajuan)]);
 });

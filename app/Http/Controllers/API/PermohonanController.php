@@ -79,10 +79,10 @@ class PermohonanController extends BaseController
 
 			DB::commit();
 
-			return Response::json(['Sukses']);
+			return Response::json(['status' => 'sukses', 'data' => $pengajuan->toArray()]);
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json($e->getMessage());
+			return Response::json(['status' => 'gagal', 'data' => [], 'pesan' => $e->getMessage()]);
 		}
 	}
 
@@ -98,10 +98,10 @@ class PermohonanController extends BaseController
 				$pengajuan	= Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->get();
 			}
 
-			return Response::json($pengajuan->toArray());
+			return Response::json(['status' => 'sukses', 'data' => $pengajuan->toArray()]);
 
 		} catch (Exception $e) {
-			return Response::json($e->getMessage());
+			return Response::json(['status' => 'gagal', 'data' => [], 'pesan' => $e->getMessage()]);
 		}
 	}
 
