@@ -11,7 +11,7 @@
 |
 */
 
-Route::domain('localhost')->group(function(){
+#Route::domain('localhost')->group(function(){
 	Route::get('/', 						['as'	=> 'login', 						'uses' => 'LoginController@login']);
 	Route::post('/', 						['as'	=> 'login.post', 					'uses' => 'LoginController@post_login']);
 	Route::get('/logout', 					['as'	=> 'logout', 						'uses' => 'LoginController@logout']);
@@ -56,7 +56,7 @@ Route::domain('localhost')->group(function(){
 		Route::any('upload/image', 		['as' => 'upload.image.store',		'uses' => 'HelperController@storeGambar']);
 		Route::any('remove/image',		['as' => 'upload.image.destroy',	'uses' => 'HelperController@destroyGambar']);
 	});
-});
+#});
 
 
 Route::get('/test', function() {

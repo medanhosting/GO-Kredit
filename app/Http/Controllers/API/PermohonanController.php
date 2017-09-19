@@ -24,7 +24,7 @@ class PermohonanController extends BaseController
 				$data_input['kode_kantor']	= request()->get('kode_kantor');
 			}
 			else{
-				$location 			= request()->get('lokasi');
+				$location 			= request()->get('geolocation');
 				$semua_koperasi		= Kantor::whereIn('jenis', ['bpr', 'koperasi'])->get();
 				$min_distance 		= null;
 
@@ -44,21 +44,25 @@ class PermohonanController extends BaseController
 			$data_input['kemampuan_angsur'] 	= request()->get('kemampuan_angsur');
 			$data_input['is_mobile'] 			= true;
 			$data_input['nasabah']				= request()->get('nasabah'); 
-			$data_input['dokumen_pelengkap']	= request()->get('dokumen_pelengkap'); 
 
-			//upload ktp
-			$ktp		= base64_decode($data_input['dokumen_pelengkap']['ktp']);
-			$data_ktp	= new UploadBase64Gambar('ktp', ['image' => $ktp]);
-			$data_ktp	= $data_ktp->handle();
+			if(request()->has('dokumen_pelengkap'))
+			{
+				$data_input['dokumen_pelengkap']	= request()->get('dokumen_pelengkap'); 
 
-			$data_input['dokumen_pelengkap']['ktp']				= $data_ktp['url'];
+				//upload ktp
+				$ktp		= base64_decode($data_input['dokumen_pelengkap']['ktp']);
+				$data_ktp	= new UploadBase64Gambar('ktp', ['image' => $ktp]);
+				$data_ktp	= $data_ktp->handle();
 
-			//upload spesimen ttd
-			$ttd		= base64_decode($data_input['dokumen_pelengkap']['tanda_tangan']);
-			$data_ttd	= new UploadBase64Gambar('tanda_tangan', ['image' => $ttd]);
-			$data_ttd	= $data_ttd->handle();
+				$data_input['dokumen_pelengkap']['ktp']				= $data_ktp['url'];
 
-			$data_input['dokumen_pelengkap']['tanda_tangan']	= $data_ttd['url'];
+				//upload spesimen ttd
+				$ttd		= base64_decode($data_input['dokumen_pelengkap']['tanda_tangan']);
+				$data_ttd	= new UploadBase64Gambar('tanda_tangan', ['image' => $ttd]);
+				$data_ttd	= $data_ttd->handle();
+
+				$data_input['dokumen_pelengkap']['tanda_tangan']	= $data_ttd['url'];
+			}
 
 			//get data jaminan
 			$data_jaminan		= request()->get('jaminan');

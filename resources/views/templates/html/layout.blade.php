@@ -119,7 +119,7 @@
 							@foreach ($kantor as $x)
 								@if (in_array(strtolower($x['jenis']), ['bpr', 'koperasi']))
 									@php
-										$all['kantor_aktif_id'] = '1709.0002';
+										$all['kantor_aktif_id'] = $x['id'];
 									@endphp
 									<div class="col-6 col-sm-4 col-lg-3">
 										<a href="{{request()->url().'?'.http_build_query($all)}}" class="btn 
