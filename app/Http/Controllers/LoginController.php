@@ -34,19 +34,18 @@ class LoginController extends Controller
 	public function post_login() {
 		$nip 		= request()->input('nip');
 		$password 	= request()->input('password');
-		$credential = ['email' => $nip, 'password' => $password];
+		$credential = ['nip' => $nip, 'password' => $password];
 
 		if (Auth::attempt($credential))
 		{
 			//get kantor id
 			$hari_ini 	= Carbon::now();
 			$penempatan	= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active($hari_ini)->first();
-			// dd(1);
+
 			return redirect()->route('home', ['kantor_aktif_id' => $penempatan['kantor_id']]);
 		}
 		else
 		{
-			// dd(2);
 			return redirect()->route('login')->withErrors('invalid password/username');
 		}
 	}
@@ -55,6 +54,30 @@ class LoginController extends Controller
 		request()->session()->flush();
 		return redirect()->route('login');
 	}
+
+
+	//PASSWORD
+	public function password_get()
+	{
+		$this->layout 			= view('templates.html.layout');
+		$this->layout->pages 	= view($this->view_dir . '.me.password');
+		return $this->layout;
+	}
+
+	public function password_post()
+	{
+		try {
+			$user 				= Auth::user();
+			$user->password 	= request()->get('password');
+			$user->save();
+
+			return redirect()->route('home', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+		} catch (Exception $e) {
+			return redirect()->back()->withErrors($e->getMessage());
+			
+		}
+	}
+	//PASSWORD
 
 	public function forget_password()
 	{

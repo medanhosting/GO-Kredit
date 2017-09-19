@@ -15,10 +15,13 @@ Route::domain('localhost')->group(function(){
 	Route::get('/', 						['as'	=> 'login', 						'uses' => 'LoginController@login']);
 	Route::post('/', 						['as'	=> 'login.post', 					'uses' => 'LoginController@post_login']);
 	Route::get('/logout', 					['as'	=> 'logout', 						'uses' => 'LoginController@logout']);
-	Route::get('/register', 				['as'	=> 'register', 						'uses' => 'LoginController@register']);
+
 	Route::get('/forget_password', 			['as'	=> 'forget_password', 				'uses' => 'LoginController@forget_password']);
 	Route::post('/register', 				['as'	=> 'register.post', 				'uses' => 'LoginController@post_register']);
 	Route::post('/forget_password', 		['as'	=> 'forget_password.post', 			'uses' => 'LoginController@post_forget_password']);
+
+	Route::get('/password', 	['as'	=> 'password.get', 		'uses' => 'LoginController@password_get']);
+	Route::post('/password', 	['as'	=> 'password.post', 	'uses' => 'LoginController@password_post']);
 
 	Route::middleware('auth')->group( function() {
 		Route::get('/home',					['as'	=> 'home',			'uses' => 'DashboardController@home']);

@@ -18,6 +18,5 @@
 		<hr>
 	</p>
 	<p class='text-center'>
-		Not a member? <a href='{{ route('register') }}'>Sign up now</a>
 	</p>
 @endpush

@@ -35,6 +35,8 @@
 							<span class='d-sm-none'><i class='fa fa-user'></i></span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="{{ route('password.get', ['kantor_aktif_id' => $kantor_aktif['id']]) }}">Ganti Password</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
 						</div>
 					</li>

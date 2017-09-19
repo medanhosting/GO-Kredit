@@ -152,7 +152,7 @@
 			<div class="col">
 				<div class="card text-center border-0" style="height: 100px;">
 					<div class="card-body p-2">
-						<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'survei']) }}" class="card-link text-style">
+						<a href="{{ route('manajemen.karyawan.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
 							<i class="d-block fa fa-users fa-2x"></i>
 							Semua Karyawan
 						</a>
