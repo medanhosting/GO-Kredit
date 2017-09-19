@@ -22,13 +22,18 @@ Route::domain('localhost')->group(function(){
 
 	Route::middleware('auth')->group( function() {
 		Route::get('/home',			['as'	=> 'home', 	'uses' => 'DashboardController@home']);
+		Route::get('/simulasi',		['as'	=> 'simulasi', 	'uses' => 'DashboardController@simulasi']);
 	
 		Route::prefix('pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
 
 			Route::get('/{status}',				['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);
 			Route::get('/{status}/{id}/show',	['as'	=> 'pengajuan.show', 	'uses' => 'PengajuanController@show']);
-			Route::resource('permohonan', 		'PermohonanController');
-			Route::get('/realisasi/{id}/print/{mode}',		['as'	=> 'pengajuan.print', 	'uses' => 'PengajuanController@print']);
+			
+			Route::middleware('scope:permohonan')->group( function() {
+				Route::resource('permohonan', 		'PermohonanController');
+			});
+			
+			Route::get('/realisasi/{id}/print/{mode}',		['as'	=> 'pengajuan.print', 	'uses' => 'PengajuanController@print', 'middleware' => 'scope:realisasi']);
 		});
 
 		Route::any('regensi',	['uses' => 'HelperController@getRegensi', 		'as' => 'regensi.index']);

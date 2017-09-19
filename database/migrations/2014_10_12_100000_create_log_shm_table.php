@@ -16,12 +16,12 @@ class CreateLogShmTable extends Migration
 		Schema::create('l_shm', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('parent_id')->nullable();
-			$table->string('tipe');
-			$table->string('nomor_sertifikat');
-			$table->string('atas_nama');
-			$table->integer('luas_tanah');
+			$table->string('tipe')->nullable();
+			$table->string('nomor_sertifikat')->nullable();
+			$table->string('atas_nama')->nullable();
+			$table->integer('luas_tanah')->nullable();
 			$table->integer('luas_bangunan')->nullable();
-			$table->string('alamat');
+			$table->string('alamat')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});

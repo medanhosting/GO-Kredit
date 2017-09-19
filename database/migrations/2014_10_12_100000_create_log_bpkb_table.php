@@ -16,12 +16,12 @@ class CreateLogBpkbTable extends Migration
 		Schema::create('l_bpkb', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('parent_id')->nullable();
-			$table->string('tipe');
-			$table->string('merk');
-			$table->string('tahun');
-			$table->string('nomor_bpkb');
-			$table->string('atas_nama');
-			$table->string('jenis');
+			$table->string('tipe')->nullable();
+			$table->string('merk')->nullable();
+			$table->string('tahun')->nullable();
+			$table->string('nomor_bpkb')->nullable();
+			$table->string('atas_nama')->nullable();
+			$table->string('jenis')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});
