@@ -47,7 +47,7 @@ class ManajemenTableSeeder extends Seeder
 		//BASIC PENEMPATAN
 		PenempatanKaryawan::create(['kantor_id' => Kantor::first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'komisaris', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'keputusan', 'setujui', 'tolak', 'realisasi', 'expire', 'kantor', 'karyawan'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
 		
-		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(1)->first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'pimpinan', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'keputusan', 'setujui', 'tolak', 'realisasi', 'expire', 'kantor', 'karyawan'], 'policies' => ['setujui' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(1)->first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'pimpinan', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'keputusan', 'setujui', 'tolak', 'realisasi', 'expire', 'kantor', 'karyawan'], 'policies' => ['keputusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
 		
 		//BASIC MOBILE
 		MobileApi::create(['key' => 'THUNDERCUTE', 'secret' => 'AWAWAWLAND', 'tipe' => 'customer', 'versi' => 1]);

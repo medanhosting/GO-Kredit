@@ -57,7 +57,11 @@ class Orang extends Authenticatable
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
-
+	public function penempatan()
+	{
+		return $this->hasMany(PenempatanKaryawan::class, 'orang_id')->orderby('tanggal_masuk', 'asc');
+	}
+	
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------
@@ -78,6 +82,10 @@ class Orang extends Authenticatable
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
 	// ------------------------------------------------------------------------------------------------------------
+    public function setAlamatAttribute($variable)
+    {
+    	$this->attributes['alamat']			= json_encode($variable);
+    }
 
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
@@ -111,6 +119,11 @@ class Orang extends Authenticatable
 			return true;
 		}
 	}
+	
+	public function getAlamatAttribute()
+    {
+    	return json_decode($this->attributes['alamat'], true);
+    }
 
 	public function getErrorsAttribute()
 	{

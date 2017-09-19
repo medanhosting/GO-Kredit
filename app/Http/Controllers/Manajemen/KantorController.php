@@ -21,7 +21,7 @@ class KantorController extends Controller
 		$this->middleware('scope:kantor');
 	}
 
-	public function index ($status) 
+	public function index () 
 	{
 		$field 		= 'nama';
 		$urut 		= 'asc';
@@ -103,10 +103,14 @@ class KantorController extends Controller
 	public function destroy($id)
 	{
 		try {
-			$kantor		= Kantor::findorfail($id)->first();
+			$kantor		= Kantor::findorfail($id);
 			if (!$kantor)
 			{
 				throw new Exception("Data tidak ada!", 1);
+			}
+			
+			foreach ($kantor->penempatan as $k => $v) {
+				$v->delete();
 			}
 
 			$kantor->delete();
@@ -117,7 +121,7 @@ class KantorController extends Controller
 		}
 	}
 
-	public function batch($id)
+	public function batch()
 	{
 		try {
 			if(request()->hasfile('kantor')){

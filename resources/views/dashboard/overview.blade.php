@@ -141,8 +141,8 @@
 			<div class="col">
 				<div class="card text-center border-0" style="height: 100px;">
 					<div class="card-body p-2">
-						<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'permohonan', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style">
-							<i class="d-block fa fa-gear fa-2x"></i>
+						<a href="{{ route('manajemen.karyawan.create', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
+							<i class="d-block fa fa-user-o fa-2x"></i>
 							Karyawan Baru
 						</a>
 					</div>
@@ -153,7 +153,7 @@
 				<div class="card text-center border-0" style="height: 100px;">
 					<div class="card-body p-2">
 						<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'survei']) }}" class="card-link text-style">
-							<i class="d-block fa fa-home fa-2x"></i>
+							<i class="d-block fa fa-users fa-2x"></i>
 							Semua Karyawan
 						</a>
 					</div>

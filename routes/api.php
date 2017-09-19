@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //LOGIN API
 
 Route::group(['namespace' => 'API'], function(){
-	Route::any('/check/device',				['uses' => 'LoginController@post_login_device']);
+	Route::any('/check/device',					['uses' => 'LoginController@post_login_device']);
 	Route::any('/check/user',					['uses' => 'LoginController@post_login_with_username']);
 	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi', 'middleware' => 'device']);
 	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store', 'middleware' => 'device']);

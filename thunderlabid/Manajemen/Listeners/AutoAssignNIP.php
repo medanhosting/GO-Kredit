@@ -49,7 +49,7 @@ class AutoAssignNIP
 
 			if($prev_data)
 			{
-				$last_letter	= explode('.', $prev_data['id']);
+				$last_letter	= explode('.', $prev_data['nip']);
 				$last_letter	= ((int)$last_letter[1] * 1) + 1;
 			}
 			else
