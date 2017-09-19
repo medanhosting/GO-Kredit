@@ -206,15 +206,15 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c2['dokumen_survei']['condition']['catatan']			= $cond_catatan[rand(0,1)];
 
 			$s_survei_c3['jenis']	= 'capacity';
-			$s_survei_c3['dokumen_survei']['capacity']['manajemen_usaha']	= $char_watak[rand(0,2)];
 			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['utama']			= $this->formatMoneyTo(rand(10,50)*100000);
 			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['pasangan']		= $this->formatMoneyTo(rand(20,50)*50000);
 			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['usaha']			= $this->formatMoneyTo(rand(0,50)*50000);
+			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['rincian']		= $cap_sppj[rand(0,1)];
 
 			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['biaya_rutin']		= $this->formatMoneyTo(rand(0,50)*500000);
 			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['angsuran_kredit']	= $this->formatMoneyTo(rand(0,50)*500000);
-			$s_survei_c3['dokumen_survei']['capacity']['rincian_pengeluaran_rutin']		= ['Biaya rumah tangga, pdam, telepon, listrik'];
-			$s_survei_c3['dokumen_survei']['capacity']['rincian_penghasilan_utama']		= $cap_sppj[rand(0,1)];
+			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['rincian']		= 'Biaya rumah tangga, pdam, telepon, listrik';
+			$s_survei_c3['dokumen_survei']['capacity']['manajemen_usaha']				= $char_watak[rand(0,2)];
 			$s_survei_c3['dokumen_survei']['capacity']['tanggungan_keluarga']			= $sper[rand(0,4)];
 			$s_survei_c3['dokumen_survei']['capacity']['catatan']						= $cap_catatan[rand(0,1)];
 

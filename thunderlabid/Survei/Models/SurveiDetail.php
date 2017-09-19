@@ -185,10 +185,10 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.capacity.penghasilan.utama']				= ['required_if:jenis,capacity', 'numeric'];
 		$rules['dokumen_survei.capacity.penghasilan.pasangan']			= ['numeric'];
 		$rules['dokumen_survei.capacity.penghasilan.usaha']				= ['numeric'];
+		$rules['dokumen_survei.capacity.penghasilan.rincian']			= ['required_if:jenis,capacity'];
 		$rules['dokumen_survei.capacity.pengeluaran.biaya_rutin']		= ['numeric'];
 		$rules['dokumen_survei.capacity.pengeluaran.angsuran_kredit']	= ['numeric'];
-		$rules['dokumen_survei.capacity.rincian_pengeluaran_rutin']		= ['required_if:jenis,capacity'];
-		$rules['dokumen_survei.capacity.rincian_penghasilan_utama']		= ['required_if:jenis,capacity'];
+		$rules['dokumen_survei.capacity.pengeluaran.rincian']			= ['required_if:jenis,capacity'];
 		$rules['dokumen_survei.capacity.tanggungan_keluarga']			= ['required_if:jenis,capacity'];
 
 		//CAPITAL

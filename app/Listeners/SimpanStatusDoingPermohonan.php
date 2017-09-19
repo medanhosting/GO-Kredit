@@ -35,13 +35,13 @@ class SimpanStatusDoingPermohonan
 	{
 		$model 			= $event->data;
 
-		if(!is_null($model->ao_nip))
+		if(!is_null($model->ao))
 		{
-			$karyawan 	= ['nip' => $model->ao_nip];
+			$karyawan 	= $model->ao;
 		}
 		elseif(Auth::check())
 		{
-			$karyawan 	= ['nip' => Auth::user()['nip']];
+			$karyawan 	= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 		}
 		else
 		{

@@ -98,13 +98,14 @@ class PermohonanController extends Controller
 			}
 
 			$errors = new MessageBag();
-			foreach ($e->getMessage()->toArray() as $k => $error)
-			{
-				foreach ($error as $x)
-				{
-					$errors->add(str_replace('.', '_', $k), $x);
-				}
-			}
+			dd($e);
+			// foreach ($e->getMessage()->toArray() as $k => $error)
+			// {
+			// 	foreach ($error as $x)
+			// 	{
+			// 		$errors->add(str_replace('.', '_', $k), $x);
+			// 	}
+			// }
 			// return redirect()->back()->withErrors($errors)->withInput();
 			return redirect(route($this->view_dir . 'create', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage())->withInput();
 		}

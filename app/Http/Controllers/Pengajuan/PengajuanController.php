@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Analisa;
 use Thunderlabid\Pengajuan\Models\Putusan;
+use Thunderlabid\Pengajuan\Models\LegalRealisasi;
 use Thunderlabid\Survei\Models\Survei;
 
 use Exception;
@@ -84,17 +85,29 @@ class PengajuanController extends Controller
 			
 			$survei 		= Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'collateral'])->get()->toArray();
 			$analisa 		= Analisa::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->get()->toArray();
-			
 			$putusan 		= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->get()->toArray();
 
 			view()->share('permohonan', $permohonan);
-			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+			view()->share('survei', $survei);
+			view()->share('analisa', $analisa);
+			view()->share('putusan', $putusan);
 
-			$this->layout->pages 	= view('pengajuan.show', compact('status', 'breadcrumb', 'survei', 'analisa', 'putusan'));
+			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+			view()->share('breadcrumb', $breadcrumb);
+			view()->share('status', $status);
+
+			$this->layout->pages 	= view('pengajuan.show');
 			return $this->layout;
 
 		} catch (Exception $e) {
 			return redirect(route('pengajuan.pengajuan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
 		}
+	}
+
+	public function print($id, $mode)
+	{
+		$realisasi 				= LegalRealisasi::where('pengajuan_id', $id)->where('jenis', $mode)->first()->toArray();
+
+		return view('pengajuan.print.'.$mode, compact('realisasi'));
 	}
 }

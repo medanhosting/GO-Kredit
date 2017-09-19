@@ -24,7 +24,8 @@
 				<nav class="nav nav-tabs mb-5 border" role="tablist" style="background-color: #fafafa;">
 					<a href="#kredit" class="nav-item nav-link active w-25 text-primary rounded-0" data-toggle="tab" role="tab" aria-controls="kredit" aria-expanded="true"><h6 class="mb-0">1 &nbsp;kredit</h6></a>
 					<a href="#nasabah" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="nasabah" aria-expanded="true"><h6 class="mb-0">2 &nbsp;nasabah</h6></a>
-					<a href="#jaminan" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="jaminan" aria-expanded="true"><h6 class="mb-0">3 &nbsp;jaminan</h6></a>
+					<a href="#kerabat-keluarga" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="kerabat-keluarga" aria-expanded="true"><h6 class="mb-0">3 &nbsp;kerabat/keluarga</h6></a>
+					<a href="#jaminan" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="jaminan" aria-expanded="true"><h6 class="mb-0">4 &nbsp;jaminan</h6></a>
 				</nav>
 
 				{!! Form::open(['url' => route('pengajuan.permohonan.store', ['kantor_aktif_id' => $kantor_aktif_id]), 'files' => true]) !!}
@@ -33,6 +34,7 @@
 						<div class="tab-pane fade show active" id="kredit" role="tabpanel">
 							<h5 class="text-gray mb-4 pl-3">Data Kredit</h5>
 							@include ('pengajuan.permohonan.kredit.form')
+							<div class="clearfix">&nbsp;</div>
 							<div class="clearfix">&nbsp;</div>
 							<a href="#nasabah" class="btn btn-primary float-right mr-3" data-toggle="tab" role="tab" aria-controls="nasabah" aria-expanded="true">Selanjutnya</a>
 						</div>
@@ -43,20 +45,34 @@
 							@include ('pengajuan.permohonan.nasabah.form')
 
 							<div class="clearfix">&nbsp;</div>
+							<div class="clearfix">&nbsp;</div>
 							<a href="#kredit" class="btn btn-primary btn-outline float-left ml-3" data-toggle="tab" role="tab" aria-controls="kredit" aria-expanded="true">Sebelumnya</a>
+							<a href="#jaminan" class="btn btn-primary float-right mr-3" data-toggle="tab" role="tab" aria-controls="keraba-keluarga" aria-expanded="true">Selanjutnya</a>
+						</div>
+
+						<!-- data keluarga -->
+						 <div class="tab-pane fade" id="kerabat-keluarga" role="tabpanel">
+							<h5 class="text-gray mb-4 pl-3">Data Kerabat/Keluarga</h5>
+							<!-- table keluarga -->
+							@include ('pengajuan.permohonan.keluarga.components.table')
+
+							<div class="clearfix">&nbsp;</div>
+							<div class="clearfix">&nbsp;</div>
+							<a href="#kredit" class="btn btn-primary btn-outline float-left ml-3" data-toggle="tab" role="tab" aria-controls="nasabah" aria-expanded="true">Sebelumnya</a>
 							<a href="#jaminan" class="btn btn-primary float-right mr-3" data-toggle="tab" role="tab" aria-controls="jaminan" aria-expanded="true">Selanjutnya</a>
 						</div>	
 
 						<div class="tab-pane fade" id="jaminan" role="tabpanel">
 							<h5 class="text-gray mb-4 pl-3">Data Jaminan</h5>
 							<!-- table jaminan kendaraan -->
-							@include ('pengajuan.permohonan.jaminan_kendaraan.components.table')
+							@include ('pengajuan.permohonan.jaminan_kendaraan.components.table', ['title' => true])
 
 							<!-- table jaminan tanah bangunan -->
-							@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table')
+							@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table', ['title' => true])
 							
 							<div class="clearfix">&nbsp;</div>
-							<a href="#nasabah" class="btn btn-primary float-left ml-4" data-toggle="tab" role="tab" aria-controls="nasabah" aria-expanded="true">Sebelumnya</a>
+							<div class="clearfix">&nbsp;</div>
+							<a href="#nasabah" class="btn btn-primary float-left ml-4" data-toggle="tab" role="tab" aria-controls="kerabat-keluarga" aria-expanded="true">Sebelumnya</a>
 							{!! Form::bsSubmit('Ajukan Permohonan', ['class' => 'btn btn-primary float-right mr-3']) !!}
 						</div>
 					</div>
@@ -68,6 +84,22 @@
 <!--///////////////////////
 	/// MODAL 		///////
  	/////////////////////// -->
+ 	<!-- keluarga -->
+ 	@component ('bootstrap.modal', ['id' => 'keluarga'])
+ 		@slot ('title')
+ 			Kerabat/Keluarga
+ 		@endslot
+
+ 		@slot ('body')
+ 			@include ('pengajuan.permohonan.keluarga.components.form')
+ 		@endslot
+
+ 		@slot ('footer')
+ 			<a href="#" data-dismiss="modal" class="btn btn-default">Batal</a>
+ 			<a href="#" class="btn btn-primary add" data-modal="add" data-dismiss="modal" data-id="keluarga">Tambahkan</a>
+ 		@endslot
+ 	@endcomponent
+
  	<!-- jaminan kendaraan -->
 	@component ('bootstrap.modal', ['id' => 'jaminan-kendaraan'])
 		@slot ('title')
@@ -107,7 +139,7 @@
 		<div class="row">
 			<div class="col">
 				<nav class="nav">
-					<a href="{{ route('home') }}" class="nav-link text-secondary">Menu Utama</a>
+					<a href="{{ route('home', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]) }}" class="nav-link text-secondary">Menu Utama</a>
 					<a href="#" class="nav-link text-secondary">Simulasi Kredit</a>
 				</nav>
 			</div>
@@ -119,8 +151,11 @@
 	<script>
 		inputKendaraan = ['jenis', 'merk', 'tipe', 'tahun', 'nomor_bpkb', 'nilai_jaminan', 'tahun_perolehan', 'atas_nama'];
 		inputTanahBangunan = ['jenis_sertifikat', 'tipe', 'nomor_sertifikat', 'luas_tanah', 'luas_bangunan', 'atas_nama', 'nilai_jaminan', 'jenis', 'tahun_perolehan', 'alamat[alamat]', 'alamat[rt]', 'alamat[rw]', 'alamat[kota]', 'alamat[kecamatan]', 'alamat[kelurahan]'];
+		inputKeluarga = ['hubungan', 'nik', 'nama', 'telepon'];
+
 		templateKendaraan = $(document.getElementById('clone-kendaraan'));
 		templateTanahBangunan = $(document.getElementById('clone-tanah-bangunan'));
+		templateKeluarga = $(document.getElementById('clone-keluarga'));
 		
 		function setTemplateClone() {
 
@@ -148,6 +183,17 @@
 				// set variable data array to array 
 				// dari kendaraan
 				dataArray = inputKendaraan;
+			} else if (dataId == 'keluarga') {
+				elClone = templateKeluarga.clone();
+				countClone = $('#content-keluarga').find('tr.clone-keluarga')
+								.length;
+				// remove attribute 'id' in template clone
+				// and add class clone keluarga
+				elClone.removeAttr('id')
+					.addClass('clone-keluarga');
+				// set variable data array 
+				// dari array list keluarga
+				dataArray = inputKeluarga;
 			} else {
 				elClone = templateTanahBangunan.clone();
 				countClone = $('#content-tanah-bangunan').find('tr.clone-tanah-bangunan')
@@ -216,18 +262,31 @@
 								.attr('name', 'jaminan[' + (countClone + 1) + '][jenis]');
 							break;
 						default:
-							// setting value td
-							elClone.find('td.' + dataArray[x])
-								.html(dataForm.replace('_', ' '));
-							// setting name field hidden
-							elClone.find('[name="' + dataArray[x] + '"]')
-								.attr('name', 'jaminan[' + (countClone + 1) + '][dokumen_jaminan][' + prefixInput + '][' + inputName + ']')
-							break;
+							if (dataId == 'keluarga') {
+								// setting value td
+								elClone.find('td.' + dataArray[x])
+									.html(dataForm.replace('_', ' '));
+								// setting name field hidden
+								elClone.find('[name="' + dataArray[x] + '"]')
+									.attr('name', 'nasabah[keluarga][' + (countClone + 1) + '][' + inputName + ']')
+								break;
+							} else {
+								// setting value td
+								elClone.find('td.' + dataArray[x])
+									.html(dataForm.replace('_', ' '));
+								// setting name field hidden
+								elClone.find('[name="' + dataArray[x] + '"]')
+									.attr('name', 'jaminan[' + (countClone + 1) + '][dokumen_jaminan][' + prefixInput + '][' + inputName + ']')
+								break;
+							}
 					}
 				}
 			}
 
-			elClone.append('<input type="hidden" name="jaminan['+ (countClone + 1) +'][jenis]" value="'+ prefixInput +'">');
+			if (dataId != 'keluarga') {
+				elClone.append('<input type="hidden" name="jaminan['+ (countClone + 1) +'][jenis]" value="'+ prefixInput +'">');	
+			}
+
 			// tambah button delete & 
 			// tambah nomor iterasi disetiap rownya
 			if ((typeof (countClone) !== 'undefined')) {
@@ -244,7 +303,10 @@
 
 			elClone.show();
 
-			if (dataId == 'jaminan-kendaraan') {
+			if (dataId == 'keluarga') {
+				$('#content-keluarga-default').hide();
+				$('#content-keluarga').append(elClone);
+			} else if (dataId == 'jaminan-kendaraan') {
 				$('#content-kendaraan-default').hide();
 				$('#content-kendaraan').append(elClone);
 			} else {

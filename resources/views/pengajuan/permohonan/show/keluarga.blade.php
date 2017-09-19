@@ -3,22 +3,23 @@
 		<h5 class="pb-4">Kerabat/Keluarga</h5>
 	</div>
 </div>
-@isset ($permohonan['nasabah']['keluarga'])
-	<table class="table table-sm">
-		<thead class="thead-default">
-			<tr>
-				<th>#</th>
-				<th>Hubungan</th>
-				<th>Nama</th>
-				<th>NIK</th>
-				<th>Telepon</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
+
+<table class="table table-sm">
+	<thead class="thead-default">
+		<tr>
+			<th>#</th>
+			<th>Hubungan</th>
+			<th>Nama</th>
+			<th>NIK</th>
+			<th>Telepon</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@isset ($permohonan['nasabah']['keluarga'])
 			@foreach ($permohonan['nasabah']['keluarga'] as $k => $v)
 				<tr>
-					<td>{{ $k+1 }}</td>
+					<td>{{ $k }}</td>
 					@foreach ($v as $k2 => $v2)
 						<td class="text-capitalize">{{ $v2 }}</td>
 					@endforeach
@@ -28,26 +29,12 @@
 					</td>
 				</tr>
 			@endforeach
-		</tbody>
-	</table>
-@endisset
+		@endisset
 
-@empty ($permohonan['nasabah']['keluarga'])
-	<table class="table table-sm">
-		<thead class="thead-default">
-			<tr>
-				<th>#</th>
-				<th>Hubungan</th>
-				<th>Nama</th>
-				<th>NIK</th>
-				<th>Telepon</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
+		@empty ($permohonan['nasabah']['keluarga'])
 			<tr>
 				<td colspan="6" class="text-center">Belum ada data keluarga disimpan</td>
 			</tr>
-		</tbody>
-	</table>
-@endempty
+		@endempty
+	</tbody>
+</table>

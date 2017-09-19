@@ -1,21 +1,27 @@
-<h6 class="text-secondary ml-3"><strong><u>Tanah &amp; Bangunan</u></strong></h6>
-<div class="col-auto">
-	<table class="table table-sm table-responsive">
-		<thead class="thead-default">
-			<tr>
-				<th>#</th>
-				<th>Tipe</th>
-				<th>Jenis</th>
-				<th class="text-center">No. Sertifikat</th>
-				<th>Model</th>
-				<th class="text-center">Luas Bangunan/ Luas Tanah </th>
-				<th>Atas Nama</th>
-				<th class="text-center">Nilai Jaminan</th>
-				<th class="text-center">Tahun Perolehan</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody id="content-tanah-bangunan">
+@isset ($title)
+	<p class="text-secondary mb-1"><strong><u>Tanah &amp; Bangunan</u></strong></p>
+@endif
+<table class="table table-sm table-responsive">
+	<thead class="thead-default">
+		<tr>
+			<th>#</th>
+			<th>Tipe</th>
+			<th>Jenis</th>
+			<th class="text-center">No. Sertifikat</th>
+			<th>Model</th>
+			<th class="text-center">Luas Bangunan/ Luas Tanah </th>
+			<th>Atas Nama</th>
+			<th class="text-center">Nilai Jaminan</th>
+			<th class="text-center">Tahun Perolehan</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody id="content-tanah-bangunan">
+		{{-- @isset ($permohonan['jaminan']) --}}
+
+		{{-- @endisset --}}
+
+		{{-- @empty ($permohonan['jaminan']) --}}
 			<tr id="content-tanah-bangunan-default">
 				<td colspan="10" class="text-center">Belum ada jaminan tanah &amp; bangunan</td>
 			</tr>
@@ -47,10 +53,10 @@
 				{!! Form::hidden('alamat[kelurahan]', null, ['disabled' => true]) !!}
 				{!! Form::hidden('tahun_perolehan', null, ['disabled' => true]) !!}
 			</tr>
-		</tbody>
-	</table>
-	<div class="clearfix">&nbsp;</div>
-	<a href="#" class="btn btn-primary btn-sm btn-link" data-toggle="modal" data-target="#jaminan-tanah-bangunan">Tambah Jaminan Tanah &amp; Bangunan</a>
-</div>
+		{{-- @endempty --}}
+	</tbody>
+</table>
+<div class="clearfix">&nbsp;</div>
+<a href="#" class="btn btn-primary btn-sm btn-link" data-toggle="modal" data-target="#jaminan-tanah-bangunan">Tambah Jaminan Tanah &amp; Bangunan</a>
 <div class="clearfix">&nbsp;</div>
 <div class="clearfix">&nbsp;</div>

@@ -105,17 +105,21 @@ class PengajuanTableSeeder extends Seeder
 
 			if($mobile)
 			{
-				$nip_ao 		= Orang::first()['nip'];
+				$nip_ao 		= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
 				$nasabah 		= [];
 				$nasabah['telepon']	= $faker->phoneNumber;
 				$dokumen_pelengkap 	= ['ktp' => $foto[rand(0,4)]];
+			}
+			elseif(rand(1,1))
+			{
+				$nip_ao 		= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
 			}
 
 			$data 	= [
 				'kemampuan_angsur'	=> $this->formatMoneyTo($angsuran),	
 				'pokok_pinjaman'	=> $this->formatMoneyTo($pokok_pinjaman),
 				'is_mobile'			=> $mobile,
-				'nip_ao'			=> $nip_ao,
+				'ao'				=> $nip_ao,
 				'kode_kantor'		=> Kantor::whereIn('jenis', ['koperasi', 'bpr'])->first()['id'],
 				'nasabah'			=> $nasabah,
 				'dokumen_pelengkap'	=> $dokumen_pelengkap,
@@ -150,26 +154,26 @@ class PengajuanTableSeeder extends Seeder
 			{
 				case 'shm':
 				$jaminan 	= $this->generate_shm($value['id'], $nama, $alamat);
-				// $jaminan_2 	= $this->generate_shm($value['id'], $nama, $alamat);
+				$jaminan_2 	= $this->generate_shm($value['id'], $nama, $alamat);
 				// $jaminan_3 	= $this->generate_shm($value['id'], $nama, $alamat);
 				// $jaminan_4 	= $this->generate_shm($value['id'], $nama, $alamat);
 					break;				
 				case 'shgb':
 				$jaminan 	= $this->generate_shgb($value['id'], $nama, $alamat);
-				// $jaminan_2 	= $this->generate_shgb($value['id'], $nama, $alamat);
+				$jaminan_2 	= $this->generate_shgb($value['id'], $nama, $alamat);
 				// $jaminan_3 	= $this->generate_shgb($value['id'], $nama, $alamat);
 				// $jaminan_4 	= $this->generate_shgb($value['id'], $nama, $alamat);
 					break;
 				default:
 				$jaminan 	= $this->generate_bpkb($value['id'], $nama);
-				// $jaminan_2 	= $this->generate_bpkb($value['id'], $nama);
+				$jaminan_2 	= $this->generate_bpkb($value['id'], $nama);
 				// $jaminan_3 	= $this->generate_bpkb($value['id'], $nama);
 				// $jaminan_4 	= $this->generate_bpkb($value['id'], $nama);
 					break;
 			}
 
 			Jaminan::create($jaminan);
-			// Jaminan::create($jaminan_2);
+			Jaminan::create($jaminan_2);
 			// Jaminan::create($jaminan_3);
 			// Jaminan::create($jaminan_4);
 		}
@@ -188,7 +192,7 @@ class PengajuanTableSeeder extends Seeder
 		$data['dokumen_jaminan']['bpkb']['nomor_bpkb']	= $this->char[rand(0,25)].' '.rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9).rand(1,9);
 		// $data['dokumen_jaminan']['bpkb']['nomor_bpkb']	= 'F 1111111';
 		$data['dokumen_jaminan']['bpkb']['atas_nama']		= $name;
-		$data['dokumen_jaminan']['bpkb']['tipe']			= $this->jenis_k[$data['dokumen_jaminan']['bpkb']['tipe']][rand(0,1)];
+		$data['dokumen_jaminan']['bpkb']['tipe']			= $this->jenis_k[$data['dokumen_jaminan']['bpkb']['jenis']][rand(0,1)];
 		$data['dokumen_jaminan']['bpkb']['tahun_perolehan']	= rand(1990,2016);
 
 		return $data;

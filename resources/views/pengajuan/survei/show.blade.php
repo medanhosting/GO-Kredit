@@ -4,7 +4,7 @@
 	</div>
 </div>
 {{-- isi data survei seperti table dibawah --}}
- <table class="table table-sm table-responsive">
+<table class="table table-sm table-responsive">
 	<thead class="thead-default">
 		<tr>
 			<th>Ke</th>
@@ -37,6 +37,7 @@
 	</tbody>
 </table> 
 
+@include ('pengajuan.survei.create')
 
 {{---FORM SURVEI---}}
 @foreach($survei as $k => $v)
