@@ -16,7 +16,7 @@
 					{!! Form::bsText('Kemampuan Angsur', 'kemampuan_angsur', null, ['class' => 'form-control', 'placeholder' => 'masukkan kemampuan angsur']) !!}
 				</div>
 				<div class="col-3">
-					{!! Form::bsText('Bunga per Bulan', 'bunga_per_bulan', null, ['class' => 'form-control', 'placeholder' => 'masukkan bunga per bulan']) !!}
+					{!! Form::bsText('Bunga per Tahun', 'bunga_per_tahun', null, ['class' => 'form-control', 'placeholder' => 'masukkan bunga per tahun']) !!}
 				</div>
 				<div class="col-3" style="padding-top:23px;">
 					{!! Form::bsSubmit('Hitung', ['class' => 'btn btn-primary float-left']) !!}
@@ -100,10 +100,10 @@
 					</div>
 					<div class="row text-justify">
 						<div class="col-6 text-left">
-							Bunga Per Bulan
+							Bunga Per Tahun
 						</div> 
 						<div class="col-6 text-right">
-							{{$rincian['bunga_per_bulan']}} % 
+							{{$rincian['bunga_per_tahun']}} % 
 						</div> 
 					</div>
 					<div class="row text-justify">
