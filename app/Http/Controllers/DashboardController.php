@@ -13,10 +13,17 @@ class DashboardController extends Controller
 {
 	public function home() 
 	{
+		$is_holder 				= false;
+
+		foreach ($this->kantor as $key => $value) {
+			if($value['tipe']=='holding'){
+				$is_holder 		= true;
+			}
+		}
 		//atur menu scopes
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 		
-		$this->layout->pages 	= view('dashboard.overview');
+		$this->layout->pages 	= view('dashboard.overview', compact('is_holder'));
 		return $this->layout;
 	}
 

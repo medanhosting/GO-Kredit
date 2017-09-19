@@ -26,7 +26,7 @@ class Controller extends BaseController
 		$penempatan 	= PenempatanKaryawan::where('orang_id', $this->me['id'])->active($hari_ini)->get(['kantor_id'])->toArray();
 		$ids 			= array_column($penempatan, 'kantor_id');
 
-		$this->kantor 		= Kantor::WhereIn('id', $ids)->get(['id', 'nama', 'jenis']);
+		$this->kantor 		= Kantor::WhereIn('id', $ids)->get(['id', 'nama', 'jenis', 'tipe']);
 		$this->kantor_aktif	= Kantor::find(request()->get('kantor_aktif_id'));
 
 		//////////////////

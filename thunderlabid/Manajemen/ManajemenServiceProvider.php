@@ -22,6 +22,10 @@ class ManajemenServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\AssignIDKantor');
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\SavingKantor');
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorUpdating', 'Thunderlabid\Manajemen\Listeners\SavingKantor');
+
+		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\HanyaSatuHolding');
+		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorUpdating', 'Thunderlabid\Manajemen\Listeners\HanyaSatuHolding');
+
 		Event::listen('Thunderlabid\Manajemen\Events\MobileApi\MobileApiCreating', 'Thunderlabid\Manajemen\Listeners\SavingMobileApi');
 		Event::listen('Thunderlabid\Manajemen\Events\MobileApi\MobileApiUpdating', 'Thunderlabid\Manajemen\Listeners\SavingMobileApi');
 		

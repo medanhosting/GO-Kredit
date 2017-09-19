@@ -7,7 +7,7 @@
 				</h4>
 			</div>
 		</div>
-		{!! Form::open(['url' => route('simulasi', ['mode' => 'pa', 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'GET']) !!}
+		{!! Form::open(['url' => route('simulasi', ['mode' => $mode, 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'GET']) !!}
 			<div class="row">
 				<div class="col-3">
 					{!! Form::bsText('Pokok Pinjaman', 'pokok_pinjaman', null, ['class' => 'form-control', 'placeholder' => 'masukkan pokok pinjaman']) !!}
@@ -20,9 +20,18 @@
 				</div>
 				<div class="col-3" style="padding-top:23px;">
 					{!! Form::bsSubmit('Hitung', ['class' => 'btn btn-primary float-left']) !!}
+					&nbsp;
+					&nbsp;
+					&nbsp;
+					@if($mode=='pa')
+						<a href="{{route('simulasi', ['mode' => 'pt', 'kantor_aktif_id' => $kantor_aktif_id])}}" class="btn btn-primary">Ganti Mode PT</a>
+					@else
+						<a href="{{route('simulasi', ['mode' => 'pa', 'kantor_aktif_id' => $kantor_aktif_id])}}" class="btn btn-primary">Ganti Mode PA</a>
+					@endif
 				</div>
 			</div>
 			{!! Form::hidden('kantor_aktif_id', $kantor_aktif['id']) !!}
+
 			<!-- <div class="row">
 				<div class="col-4">
 					{!! Form::bsText('Provisi', 'provisi', null, ['class' => 'form-control', 'placeholder' => 'masukkan provisi']) !!}
@@ -147,4 +156,8 @@
 	  		</div>
 		@endif
 	</div>
+@endpush
+
+@push('submenu')
+	@include('templates.submenu.submenu')
 @endpush

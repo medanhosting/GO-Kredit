@@ -21,8 +21,9 @@ Route::domain('localhost')->group(function(){
 	Route::post('/forget_password', 		['as'	=> 'forget_password.post', 			'uses' => 'LoginController@post_forget_password']);
 
 	Route::middleware('auth')->group( function() {
-		Route::get('/home',				['as'	=> 'home', 				'uses' => 'DashboardController@home']);
-		Route::get('/simulasi/{mode}',	['as'	=> 'simulasi', 			'uses' => 'DashboardController@simulasi']);
+		Route::get('/home',					['as'	=> 'home',			'uses' => 'DashboardController@home']);
+		Route::get('/simulasi/{mode}',		['as'	=> 'simulasi',		'uses' => 'DashboardController@simulasi']);
+		Route::get('/download/{filename}',	['as' 	=> 'download', 		'uses' => 'DownloadController@download']);
 	
 		Route::prefix('pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
 
@@ -35,13 +36,18 @@ Route::domain('localhost')->group(function(){
 			
 			Route::get('/realisasi/{id}/print/{mode}',		['as'	=> 'pengajuan.print', 	'uses' => 'PengajuanController@print', 'middleware' => 'scope:realisasi']);
 		});
+		
+		Route::prefix('manajemen')->namespace('Manajemen')->as('manajemen.')->group( function() {
+			Route::resource('kantor', 		'KantorController');
+			Route::post('kantor/batch', 	['uses' => 'KantorController@batch', 'as' => 'kantor.batch']);
+		});
 
 		Route::any('regensi',	['uses' => 'HelperController@getRegensi', 		'as' => 'regensi.index']);
 		Route::any('distrik',	['uses'	=> 'HelperController@getDistrik',		'as' => 'distrik.index']);
 		Route::any('desa',		['uses' => 'HelperController@getDesa',			'as' => 'desa.index']);
 		
-		Route::any('upload/image', 				['as' => 'upload.image.store',				'uses' => 'HelperController@storeGambar']);
-		Route::any('remove/image',				['as' => 'upload.image.destroy',			'uses' => 'HelperController@destroyGambar']);
+		Route::any('upload/image', 		['as' => 'upload.image.store',		'uses' => 'HelperController@storeGambar']);
+		Route::any('remove/image',		['as' => 'upload.image.destroy',	'uses' => 'HelperController@destroyGambar']);
 	});
 });
 

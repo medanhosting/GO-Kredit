@@ -95,6 +95,7 @@ class Kantor extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
+		$rules['kantor_id']						= ['exists:m_kantor,id'];
 		$rules['nama']							= ['required', 'string'];
 		$rules['alamat'] 						= ['required', 'json'];
 		$rules['geolocation']['latitude'] 		= ['required'];
