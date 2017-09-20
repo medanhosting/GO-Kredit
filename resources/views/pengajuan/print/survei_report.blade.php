@@ -34,7 +34,7 @@
 				</div> 
 				<div class="col-xs-3" style="border:1px solid;">
 					<p style="padding:15px;margin:0px;">
-						{{$realisasi['isi']['pengajuan_id']}} / {{$realisasi['isi']['id']}}
+						{{$realisasi['isi']['survei']['pengajuan_id']}} / {{$realisasi['isi']['survei']['id']}}
 					</p>
 				</div>
 			</div> 
@@ -49,7 +49,7 @@
 								CHARACTER
 							</div>
 						</div>
-						@foreach($realisasi['isi']['character']['dokumen_survei']['character'] as $k => $v )
+						@foreach($realisasi['isi']['survei']['character']['dokumen_survei']['character'] as $k => $v )
 							@if(is_array($v))
 								@foreach($v as $k2 => $v2)
 									<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
@@ -80,7 +80,7 @@
 								CONDITION
 							</div>
 						</div>
-						@foreach($realisasi['isi']['condition']['dokumen_survei']['condition'] as $k => $v )
+						@foreach($realisasi['isi']['survei']['condition']['dokumen_survei']['condition'] as $k => $v )
 							@if(is_array($v))
 								@foreach($v as $k2 => $v2)
 									<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
@@ -112,7 +112,7 @@
 							</div>
 						</div>
 						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
-							@foreach($realisasi['isi']['capacity']['dokumen_survei']['capacity'] as $k => $v )
+							@foreach($realisasi['isi']['survei']['capacity']['dokumen_survei']['capacity'] as $k => $v )
 								<div class="col-xs-6 text-left">
 									@if(is_array($v))
 										<strong>{{strtoupper(str_replace('_', ' ', $k))}}</strong>
@@ -160,7 +160,7 @@
 							</div>
 						</div>
 						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
-							@foreach($realisasi['isi']['capital']['dokumen_survei']['capital'] as $k => $v )
+							@foreach($realisasi['isi']['survei']['capital']['dokumen_survei']['capital'] as $k => $v )
 								<div class="col-xs-6 text-left">
 									<strong>{{strtoupper(str_replace('_', ' ', $k))}}</strong>
 									@foreach((array)$v as $k2 => $v2)
@@ -202,7 +202,7 @@
 				</div> 
 				<div class="col-xs-3" style="border:1px solid;">
 					<p style="padding:15px;margin:0px;">
-						{{$realisasi['isi']['pengajuan_id']}} / {{$realisasi['isi']['id']}}
+						{{$realisasi['isi']['survei']['pengajuan_id']}} / {{$realisasi['isi']['survei']['id']}}
 					</p>
 				</div>
 			</div> 
@@ -218,7 +218,7 @@
 							</div>
 						</div>
 						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
-						@foreach($realisasi['isi']['collateral'] as $k0 => $v0 )
+						@foreach($realisasi['isi']['survei']['collateral'] as $k0 => $v0 )
 							@foreach($v0['dokumen_survei']['collateral'] as $k => $v )
 								@if(!str_is($k, 'jenis'))
 								<div class="col-xs-6 text-left">
@@ -276,7 +276,7 @@
 						Tanggal 
 					</div>
 					<div class="col-xs-4 text-right">
-						{{$realisasi['isi']['tanggal']}}
+						{{$realisasi['isi']['survei']['tanggal']}}
 					</div>
 				</div>
 				<div class="row">
@@ -284,7 +284,7 @@
 						Nama 
 					</div>
 					<div class="col-xs-4 text-right">
-						{{$realisasi['isi']['surveyor']['nama']}}
+						{{$realisasi['isi']['survei']['surveyor']['nama']}}
 					</div>
 				</div>
 				<div class="row">

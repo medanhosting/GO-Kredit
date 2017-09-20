@@ -22,6 +22,7 @@ class CreatePutusanTable extends Migration
 			$table->double('plafon_pinjaman');
 			$table->float('suku_bunga');
 			$table->integer('jangka_waktu');
+			$table->integer('perc_provisi');
 			$table->double('provisi');
 			$table->double('administrasi');
 			$table->double('legal');

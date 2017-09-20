@@ -18,6 +18,8 @@ use Thunderlabid\Pengajuan\Models\Analisa;
 use Thunderlabid\Pengajuan\Models\Putusan;
 use Thunderlabid\Survei\Models\Survei;
 
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+
 class GenerateLegalitasRealisasi
 {
 	/**
@@ -46,25 +48,15 @@ class GenerateLegalitasRealisasi
 				$data['jenis']			= $k;
 				$data['pengajuan_id']	= $model->pengajuan['id'];
 
+				$data['isi']['pengajuan']	= Pengajuan::where('id', $model->pengajuan_id)->orderby('created_at', 'desc')->with(['jaminan'])->first()->toArray();
+				$data['isi']['survei']		= Survei::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capital', 'capacity', 'collateral', 'pengajuan', 'foto'])->first()->toArray();
+				$data['isi']['analisa']		= Analisa::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first()->toArray();
+				$data['isi']['putusan']		= Putusan::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first()->toArray();
+				$data['isi']['pimpinan']	= PenempatanKaryawan::where('kantor_id', $model->pengajuan->kode_kantor)->where('role', 'pimpinan')->active(Carbon::createFromFormat('d/m/Y H:i', $model->tanggal))->with(['orang', 'kantor'])->first()->toArray();
+				$data['nomor']	= $model->pengajuan['id'];
+			
 				switch ($k) {
-					case 'permohonan_kredit':
-						$data['isi']	= Pengajuan::where('id', $model->pengajuan_id)->orderby('created_at', 'desc')->with(['jaminan'])->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'survei_report':
-						$data['isi']	= Survei::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capital', 'capacity', 'collateral', 'pengajuan', 'foto'])->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'persetujuan_komite':
-						$data['isi']	= Putusan::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'pernyataan_analis':
-						$data['isi']	= Analisa::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
 					case 'perjanjian_kredit':
-						$data['isi']		= Analisa::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first();
 						if(strtolower($data['isi']['jenis_pinjaman'])=='pa')
 						{
 							$data['jenis']	= $k.'_angsuran';
@@ -73,43 +65,6 @@ class GenerateLegalitasRealisasi
 						{
 							$data['jenis']	= $k.'_musiman';
 						}
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'pengakuan_hutang':
-						$data['isi']	= Putusan::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'penggantian_jaminan':
-						$data['isi']	= Putusan::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'skmht_apht':
-						$data['isi']	= Survei::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->with(['collateral'])->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'feo':
-						$data['isi']	= Survei::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->with(['collateral'])->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'surat_persetujuan_keluarga':
-						$data['isi']	= Pengajuan::where('id', $model->pengajuan_id)->orderby('created_at', 'desc')->with(['jaminan'])->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'surat_persetujuan_plang':
-						$data['isi']	= Putusan::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'pernyataan_belum_balik_nama':
-						$data['isi']	= Survei::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->with(['collateral'])->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'kuasa_pembebanan_feo':
-						$data['isi']	= Survei::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->with(['collateral'])->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
-						break;
-					case 'kuasa_menjual_dan_menarik_jaminan':
-						$data['isi']	= Survei::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->with(['collateral'])->first()->toArray();
-						$data['nomor']	= $model->pengajuan['id'];
 						break;
 				}
 

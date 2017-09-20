@@ -40,6 +40,8 @@ class Analisa extends Model
 	protected $errors;
 	protected $latest_analysis;
 
+	protected $appends 	= ['total_angsuran'];
+
 	protected $events 	= [
 		'creating' 	=> AnalisaCreating::class,
 		'created' 	=> AnalisaCreated::class,
@@ -184,6 +186,11 @@ class Analisa extends Model
 	public function getAngsuranBungaAttribute($variable)
 	{
 		return $this->formatMoneyTo($this->attributes['angsuran_bunga']);
+	}
+
+	public function getTotalAngsuranAttribute($variable)
+	{
+		return $this->formatMoneyTo($this->attributes['angsuran_pokok'] + $this->attributes['angsuran_bunga']);
 	}
 
 	public function getErrorsAttribute()

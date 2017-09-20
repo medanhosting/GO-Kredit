@@ -27,6 +27,7 @@ use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleted;
 ////////////
 use Thunderlabid\Pengajuan\Traits\IDRTrait;
 use Thunderlabid\Pengajuan\Traits\TanggalTrait;
+use Thunderlabid\Pengajuan\Traits\WaktuTrait;
 use Thunderlabid\Pengajuan\Traits\NIKTrait;
 
 class Pengajuan extends Model
@@ -36,6 +37,7 @@ class Pengajuan extends Model
 	use NIKTrait;
 	use IDRTrait;
 	use TanggalTrait;
+	use WaktuTrait;
 
 	protected $table	= 'p_pengajuan';
 	protected $fillable	= ['pokok_pinjaman', 'kemampuan_angsur', 'is_mobile', 'nasabah', 'dokumen_pelengkap', 'kode_kantor', 'ao'];
@@ -45,6 +47,7 @@ class Pengajuan extends Model
 	protected $rules	= [];
 	protected $errors;
 	protected $latest_analysis;
+	protected $appends 	= ['tanggal'];
 
 	protected $keyType  	= 'string';
     public $incrementing 	= false;
@@ -243,6 +246,11 @@ class Pengajuan extends Model
 	public function getPokokPinjamanAttribute($variable)
 	{
 		return $this->formatMoneyTo($this->attributes['pokok_pinjaman']);
+	}
+
+	public function getTanggalAttribute($variable)
+	{
+		return $this->formatDateTimeTo($this->attributes['created_at']);
 	}
 
 	public function getNasabahAttribute($variable)

@@ -33,7 +33,7 @@
 					<h3>PERMOHONAN KREDIT</h3>
 				</div> 
 				<div class="col-xs-3" style="border:1px solid;">
-					<p style="padding:15px;margin:0px;">{{$realisasi['isi']['id']}}</p>
+					<p style="padding:15px;margin:0px;">{{$realisasi['isi']['pengajuan']['id']}}</p>
 				</div>
 			</div> 
 
@@ -49,7 +49,7 @@
 					Pengajuan Kredit
 				</div> 
 				<div class="col-xs-8 text-right">
-					{{$realisasi['isi']['pokok_pinjaman']}}
+					{{$realisasi['isi']['pengajuan']['pokok_pinjaman']}}
 				</div> 
 			</div> 
 			<div class="row text-justify" style="border-bottom:1px solid #aaa;padding:5px;">
@@ -57,7 +57,7 @@
 					Kemampuan Angsur
 				</div> 
 				<div class="col-xs-8 text-right">
-					{{$realisasi['isi']['kemampuan_angsur']}}
+					{{$realisasi['isi']['pengajuan']['kemampuan_angsur']}}
 				</div> 
 			</div> 
 
@@ -68,7 +68,7 @@
 							DATA PRIBADI
 						</div>
 					</div>
-					@foreach($realisasi['isi']['nasabah'] as $k => $v )
+					@foreach($realisasi['isi']['pengajuan']['nasabah'] as $k => $v )
 						@if($k!='keluarga' && $k!='alamat')
 							<div class="row text-justify" style="margin:10px 0px @if($k=='penghasilan_bersih') -1px @else 10px @endif -15px;border-bottom:1px solid #aaa;">
 								<div class="col-xs-6 text-left">
@@ -83,7 +83,7 @@
 				</div> 
 				
 				<div class="col-xs-6 text-center">
-					@foreach($realisasi['isi']['nasabah']['keluarga'] as $k => $v )
+					@foreach($realisasi['isi']['pengajuan']['nasabah']['keluarga'] as $k => $v )
 						<div class="row" style="background-color:#aaa;padding:5px;">
 							<div class="col">
 								DATA {{strtoupper(str_replace('_', ' ', $v['hubungan']))}}
@@ -110,7 +110,7 @@
 					</div>
 					<div class="row text-justify" style="margin:10px -15px 10px 0px;border-bottom:1px solid #aaa;">
 						<div class="col-xs-12 text-left">
-							@foreach($realisasi['isi']['nasabah']['alamat'] as $k => $v )
+							@foreach($realisasi['isi']['pengajuan']['nasabah']['alamat'] as $k => $v )
 								{{str_replace('_', ' ', $k)}} {{str_replace('_', ' ', $v)}}
 							@endforeach
 						</div> 
@@ -120,7 +120,7 @@
 			</div> 
 
 			<div class="row text-justify">
-				@foreach($realisasi['isi']['jaminan'] as $k => $v)
+				@foreach($realisasi['isi']['pengajuan']['jaminan'] as $k => $v)
 					<div class="col-xs-6 text-center">
 						<div class="row" style="background-color:#aaa;padding:5px;">
 							<div class="col-xs-12">
@@ -161,7 +161,7 @@
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-xs-12 text-left">
-					{{$kantor_aktif['alamat']['kota']}}, {{Carbon\Carbon::parse($realisasi['isi']['created_at'])->format('d/m/Y')}}
+					{{$kantor_aktif['alamat']['kota']}}, {{Carbon\Carbon::parse($realisasi['isi']['pengajuan']['created_at'])->format('d/m/Y')}}
 				</div>
 			</div>
 			<div class="clearfix">&nbsp;</div>
@@ -171,24 +171,24 @@
 					<br/>
 					<br/>
 					<br/>
-					{{$realisasi['isi']['nasabah']['nama']}}
+					{{$realisasi['isi']['pengajuan']['nasabah']['nama']}}
 				</div>
 				<div class="col-xs-4 text-center">
-					@if(!is_null($realisasi['isi']['nasabah']['keluarga'][0]))
-						{{ucwords(str_replace('_',' ',$realisasi['isi']['nasabah']['keluarga'][0]['hubungan']))}}
+					@if(!is_null($realisasi['isi']['pengajuan']['nasabah']['keluarga'][0]))
+						{{ucwords(str_replace('_',' ',$realisasi['isi']['pengajuan']['nasabah']['keluarga'][0]['hubungan']))}}
 						<br/>
 						<br/>
 						<br/>
-						{{$realisasi['isi']['nasabah']['keluarga'][0]['nama']}}
+						{{$realisasi['isi']['pengajuan']['nasabah']['keluarga'][0]['nama']}}
 					@endif
 				</div>
 				<div class="col-xs-4 text-center">
-					@if(!is_null($realisasi['isi']['ao']['nama']))
+					@if(!is_null($realisasi['isi']['pengajuan']['ao']['nama']))
 						Referensi
 						<br/>
 						<br/>
 						<br/>
-						{{$realisasi['isi']['ao']['nama']}}
+						{{$realisasi['isi']['pengajuan']['ao']['nama']}}
 					@endif
 				</div>
 			</div>

@@ -22,6 +22,7 @@ class PutusanTableSeeder extends Seeder
 	public function run()
 	{
 		DB::table('p_putusan')->truncate();
+		DB::table('p_legal_realisasi')->truncate();
 		
 		//INIT VARIABLE HELPER
 		$faker		= \Faker\Factory::create();
@@ -43,7 +44,8 @@ class PutusanTableSeeder extends Seeder
 			$data['plafon_pinjaman']			= $value['kredit_diusulkan'];
 			$data['suku_bunga']		= $value['suku_bunga'];
 			$data['jangka_waktu']	= $value['jangka_waktu'];
-			$data['provisi']		= $this->formatMoneyTo(rand(1,10)*1000);
+			$data['perc_provisi']	= (rand(100,200)/100);
+			$data['provisi']		= $this->formatMoneyTo(($this->formatMoneyFrom($data['plafon_pinjaman'])*$data['perc_provisi'])/100);
 			$data['administrasi']	= $this->formatMoneyTo(rand(1,10)*1000);
 			$data['legal']			= $this->formatMoneyTo(rand(10,50)*10000);
 			$data['is_baru']		= rand(0,1);

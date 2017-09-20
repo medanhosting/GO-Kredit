@@ -51,22 +51,15 @@ class AnalisaTableSeeder extends Seeder
 			$k_angs 		= $this->formatMoneyFrom($value['kemampuan_angsur']);
 			$p_pinjaman 	= $this->formatMoneyFrom($value['pokok_pinjaman']);
 
-			$angs_bunga  	= $p_pinjaman * $suku_bunga;
-			$angs_bulan 	= $k_angs - $angs_bunga;
-
-			$bulan 			= ceil($p_pinjaman/$k_angs);
+			//bunga tahunan
+			$total_bunga  	= $p_pinjaman * $suku_bunga;
+			$bulan 			= ceil(($p_pinjaman + $total_bunga)/$k_angs);
 
 			//kredit diusulkan
 			$kredit_update 	= $bulan * $k_angs;
-			$total_bunga 	= $kredit_update - $p_pinjaman;
-			$perc_bunga 	= round((($p_pinjaman / max($total_bunga, 1))/100), 2); 
-			if($total_bunga==0)
-			{
-				$perc_bunga = 0;
-			}
 
 			$data['jangka_waktu']		= $bulan;
-			$data['suku_bunga']			= $perc_bunga;
+			$data['suku_bunga']			= $suku_bunga;
 			$data['limit_angsuran']		= $this->formatMoneyTo($k_angs);
 			$data['limit_jangka_waktu']	= $bulan;
 			$data['kredit_diusulkan']	= $this->formatMoneyTo($kredit_update - $total_bunga);

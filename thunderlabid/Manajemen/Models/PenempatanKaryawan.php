@@ -64,6 +64,11 @@ class PenempatanKaryawan extends Model
 	{
 		return $this->belongsTo(Kantor::class, 'kantor_id');
 	}
+	
+	public function orang()
+	{
+		return $this->belongsTo(Orang::class, 'orang_id');
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION

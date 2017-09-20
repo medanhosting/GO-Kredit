@@ -32,7 +32,7 @@ class Putusan extends Model
 	use IDRTrait;
 
 	protected $table	= 'p_putusan';
-	protected $fillable	= ['pengajuan_id', 'pembuat_keputusan', 'tanggal', 'is_baru', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal', 'checklists', 'putusan', 'catatan'];
+	protected $fillable	= ['pengajuan_id', 'pembuat_keputusan', 'tanggal', 'is_baru', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'perc_provisi', 'provisi', 'administrasi', 'legal', 'checklists', 'putusan', 'catatan'];
 	protected $hidden	= [];
 	protected $dates	= [];
 
@@ -131,6 +131,7 @@ class Putusan extends Model
 		$rules['plafon_pinjaman']	= ['required', 'numeric'];
 		$rules['suku_bunga']		= ['required', 'numeric'];
 		$rules['jangka_waktu']		= ['required', 'numeric'];
+		$rules['perc_provisi']		= ['required', 'numeric'];
 		$rules['provisi']			= ['required', 'numeric'];
 		$rules['administrasi']		= ['required', 'numeric'];
 		$rules['legal']				= ['required', 'numeric'];
@@ -203,24 +204,24 @@ class Putusan extends Model
 		return json_decode($this->attributes['checklists'], true);
 	}
 
-	public function getLimitAngsuranAttribute($variable)
+	public function getPlafonPinjamanAttribute($variable)
 	{
-		return $this->formatMoneyTo($this->attributes['limit_angsuran']);
+		return $this->formatMoneyTo($this->attributes['plafon_pinjaman']);
 	}
 
-	public function getKreditDiusulkanAttribute($variable)
+	public function getProvisiAttribute($variable)
 	{
-		return $this->formatMoneyTo($this->attributes['kredit_diusulkan']);
+		return $this->formatMoneyTo($this->attributes['provisi']);
 	}
 
-	public function getAngsuranPokokAttribute($variable)
+	public function getAdministrasiAttribute($variable)
 	{
-		return $this->formatMoneyTo($this->attributes['angsuran_pokok']);
+		return $this->formatMoneyTo($this->attributes['administrasi']);
 	}
 
-	public function getAngsuranBungaAttribute($variable)
+	public function getLegalAttribute($variable)
 	{
-		return $this->formatMoneyTo($this->attributes['angsuran_bunga']);
+		return $this->formatMoneyTo($this->attributes['legal']);
 	}
 
 	public function getErrorsAttribute()
