@@ -3,12 +3,12 @@
 		<div class="row">
 			<div class="col">
 				<h4 class='mb-4 text-style text-secondary'>
-					<span class="text-uppercase">Daftar {{($status)}} Kredit</span> 
+					<span class="text-uppercase">Daftar {{ ($status) }} Kredit</span> 
 					<small><small>@if($pengajuan->currentPage() > 1) Halaman {{$pengajuan->currentPage()}} @endif</small></small>
 				</h4>
 				<div class="row">
 					<div class="col-5">
-						<a href="{{ route('pengajuan.permohonan.create', ['kantor_aktif_id' => $kantor_aktif_id]) }}" class="btn btn-primary text-capitalize text-style mb-2">pengajuan baru</a>
+						<a href="{{ route('pengajuan.permohonan.create', ['kantor_aktif_id' => $kantor_aktif_id]) }}" class="btn btn-outline-primary text-capitalize text-style mb-2">pengajuan baru</a>
 					</div>
 					<div class="col-4">
 						<form action="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status]))}}" method="GET">
@@ -59,34 +59,34 @@
 	  					<div class="card" style="background-color:#fff;border:none;border-radius:0">
 	    					<div class="card-header" role="tab" id="heading{{$k}}" style="background-color:#fff;border-bottom:1px solid #eee">
 	    						<div class="row text-left">
-									<div class="col-1">{{(($pengajuan->currentPage() - 1) * $pengajuan->perPage()) + $k + 1}}</div>
+									<div class="col-1">{{ (($pengajuan->currentPage() - 1) * $pengajuan->perPage()) + $loop->iteration }}</div>
 									<div class="col-3">
-										{{$v['id']}} 
-										@if($v['is_mobile']) 
+										{{ $v['id'] }} 
+										@if ($v['is_mobile']) 
 											<span class="badge badge-primary"><small>Mobile</small></span> 
 										@endif
 									</div>
-									<div class="col-2">{{$v['status_permohonan']['tanggal']}}</div>
-									<div class="col-2">{{$v['pokok_pinjaman']}}</div>
+									<div class="col-2">{{ $v['status_permohonan']['tanggal'] }}</div>
+									<div class="col-2">{{ $v['pokok_pinjaman'] }}</div>
 									<div class="col-2">
-										{{$v['nasabah']['nama']}}
+										{{ $v['nasabah']['nama'] }}
 									</div>
 									<div class="col-2">
 			    						<div class="row text-center">
 											<div class="col-4">
-												<a href="{{ route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]) }}"><i class="fa fa-eye"></i></a>
+												<a href="{{ route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}"><i class="fa fa-eye"></i></a>
 											</div>
 											<div class="col-4">
-												<a href="#" data-toggle="modal" data-target="#delete"><i class="fa fa-trash"></i></a>
+												<a href="#" data-toggle="modal" data-target="#delete" data-url="http://tes"><i class="fa fa-trash"></i></a>
 											</div>
 											<div class="col-4">
-												<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{$k}}" aria-expanded="false" aria-controls="collapse{{$k}}"><i class="fa fa-arrow-down"></i></a>
+												<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $loop->index }}" aria-expanded="false" aria-controls="collapse{{ $loop->index }}"><i class="fa fa-arrow-down"></i></a>
 											</div>
 										</div>
 									</div>
 								</div>
 						    </div>
-							<div id="collapse{{$k}}" class="collapse" role="tabpanel" aria-labelledby="heading{{$k}}">
+							<div id="collapse{{ $loop->index }}" class="collapse" role="tabpanel" aria-labelledby="heading{{ $loop->index }}">
 								<div class="card-block" style="border-bottom:1px solid #bbb;padding-bottom:20px;">
 									<div class="row">
 										<div class="col-1">
@@ -230,24 +230,6 @@
 			</div>
 		</div>
 	</div>
-
-	@component ('bootstrap.modal', ['id' => 'delete'])
-		{!! Form::open() !!}
-		@slot ('title')
-			Hapus Data
-		@endslot
-
-		@slot ('body')
-			<p>Untuk menghapus data ini, silahkan masukkan password dibawah!</p>
-			{!! Form::bsPassword(null, 'password', ['placeholder' => 'Password']) !!}
-		@endslot
-
-		@slot ('footer')
-			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-			<a href="#" class="btn btn-danger btn-outline">Tambahkan</a>
-		@endslot
-		{!! Form::close() !!}
-	@endcomponent
 @endpush
 
 @push('submenu')
@@ -261,4 +243,7 @@
 			</div>
 		</div>
 	</div>
+@endpush
+
+@push ('js')
 @endpush

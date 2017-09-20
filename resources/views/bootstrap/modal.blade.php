@@ -1,6 +1,10 @@
 <div class="modal fade" id="{{ $id }}">
 	<div class="modal-dialog " role="document">
 		<div class="modal-content">
+			@isset ($form)
+				{!! Form::open(['method' => $method ? $method : 'post']) !!}
+			@endisset
+
 			@if ($title || $body || $footer)
 				@if ($title)
 					<div class="modal-header">
@@ -26,6 +30,10 @@
 			@endif
 
 			{!! $slot !!}
+
+			@isset ($form)
+				{!! Form::close() !!}
+			@endisset
 		</div>
 	</div>
 </div>

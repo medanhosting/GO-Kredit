@@ -25,14 +25,14 @@
 				@stack('menu_sidebar')
 				<div class="card text-left">
 					<div class="card-body">
-						<h4 class="card-title">Menu Permohonan</h4>
+						<h4 class="card-title">Menu</h4>
 						<nav class="nav flex-column" role="tablist">
-							<a href="#overview" class="nav-link active" role="tab" data-toggle="tab" arial-controls="overview" aria-expanded="true">Overview</a>
-							<a href="#keluarga" class="nav-link" role="tab" data-toggle="tab" arial-controls="keluarga">Kerabat/Keluarga</a>
-							<a href="#survei" class="nav-link" role="tab" data-toggle="tab" arial-controls="survei">Survei</a>
-							<a href="#analisa" class="nav-link" role="tab" data-toggle="tab" arial-controls="analisa">Analisa</a>
-							<a href="#keputusan" class="nav-link" role="tab" data-toggle="tab" arial-controls="keputusan">Keputusan</a>
-							<a href="#realisasi" class="nav-link" role="tab" data-toggle="tab" arial-controls="realisasi">Realisasi</a>
+							<a href="#" class="nav-link active" data-toggle="paneltab" data-target="#overview">Overview</a>
+							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#keluarga">Kerabat/Keluarga</a>
+							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#survei">Survei</a>
+							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#analisa">Analisa</a>
+							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#keputusan">Keputusan</a>
+							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#realisasi">Realisasi</a>
 						</nav>
 					</div>
 				</div>
@@ -40,20 +40,20 @@
 			<div class="col">
 				<div class="row mt-4">
 					<div class="col">
-						<div class="tab-content">
-							<div class="tab-pane fade show active" id="overview" role="tabpanel">
+						<div class="tab-content paneltab-content">
+							<div class="tab-pane paneltab-pane show active" id="overview" role="tabpanel">
 								@include ('pengajuan.permohonan.show.overview')
 							</div>
-							<div class="tab-pane fade" id="keluarga" role="tabpanel">
+							<div class="tab-pane paneltab-pane" id="keluarga" role="tabpanel">
 								@include ('pengajuan.permohonan.show.keluarga')
 							</div>
-							<div class="tab-pane fade" id="survei" role="tabpanel">
+							<div class="tab-pane paneltab-pane" id="survei" role="tabpanel">
 								@include ('pengajuan.survei.show')
 							</div>
-							<div class="tab-pane fade" id="analisa" role="tabpanel">
+							<div class="tab-pane paneltab-pane" id="analisa" role="tabpanel">
 								@include ('pengajuan.permohonan.show.analisa')
 							</div>
-							<div class="tab-pane fade" id="keputusan" role="tabpanel">
+							<div class="tab-pane paneltab-pane" id="keputusan" role="tabpanel">
 								@include ('pengajuan.permohonan.show.keputusan')
 							</div>
 						</div>
@@ -97,4 +97,36 @@
 @endpush
 
 @push ('js')
+	<script>
+		function togglePanelTab (parent, target, className) {
+			$(parent).find(className).hide();
+			$(parent).find(target).fadeIn();
+		}
+		function toggleActiveClass (parent, target) {
+			$(parent).find('.active').removeClass('active');
+			$(parent).find('a[data-target="'+ target +'"]').addClass('active');
+		}
+
+		$(document).on('click', 'a[data-toggle="paneltab"]', function (event){
+			event.preventDefault();
+
+			selectorTarget = $(this).attr('data-target');
+			elementParentNode = this.parentNode;
+			targetParentNode = $(selectorTarget)[0].parentNode;
+
+			toggleActiveClass (elementParentNode, selectorTarget);
+			togglePanelTab (targetParentNode, selectorTarget, '.paneltab-pane');
+		})
+
+		$(document).on('click', 'a[data-toggle="panel-toggle"]', function (event) {
+			event.preventDefault();
+
+			selectorTarget = $(this).attr('data-target');
+			targetParentNode = $(selectorTarget)[0].parentNode;
+
+			togglePanelTab (targetParentNode, selectorTarget, '.panel-toggle-pane');
+
+			$(this).closest('.row').hide();
+		})
+	</script>
 @endpush

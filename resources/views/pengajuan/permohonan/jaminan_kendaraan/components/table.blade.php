@@ -1,9 +1,9 @@
-@php
-	// dd($permohonan['jaminan']);
-@endphp
 @isset($title)
 	<p class="text-secondary mb-1"><strong><u>Kendaraan</u></strong></p>
 @endisset
+
+<a href="#" class="btn btn-primary btn-sm btn-link mb-1" data-toggle="modal" data-target="#jaminan-kendaraan"><i class="fa fa-plus"></i> Jaminan Kendaraan</a>
+
 <table class="table table-sm table-responsive">
 	<thead class="thead-default">
 		<tr>
@@ -53,7 +53,4 @@
 		{{-- @endempty --}}
 	</tbody>
 </table>
-<div class="clearfix">&nbsp;</div>
-<a href="#" class="btn btn-primary btn-sm btn-link" data-toggle="modal" data-target="#jaminan-kendaraan">Tambah Jaminan Kendaraan</a>
-<div class="clearfix">&nbsp;</div>
 <div class="clearfix">&nbsp;</div>

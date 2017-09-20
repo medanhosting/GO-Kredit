@@ -92,6 +92,7 @@
 		{!! Form::bsSelect('status usaha', '[capital][usaha][status_usaha]', ['' => 'pilih', 'kerja_sama_bagi_hasil' => 'kerja sama bagi hasil', 'milik_keluarga' => 'milik keluarga', 'milik_sendiri' => 'milik sendiri'], null, ['class' => 'custom-select form-control', 'placeholder' => '']) !!}
 	</div>
 </div>
+
 {{-- khusus status bagi hasil --}}
 	<div class="row">
 		<div class="col-auto col-md-6">
@@ -99,3 +100,9 @@
 		</div>
 	</div>
 {{-- khusus status bagi hasil --}}
+
+<div class="row">
+		<div class="col-auto col-md-6">
+			{!! Form::bsText('nilai aset usaha', '[capital][usaha][nilai_aset]', null, ['class' => 'form-control', 'placeholder' => 'harga nilai aset']) !!}
+		</div>
+	</div>

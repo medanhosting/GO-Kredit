@@ -1,6 +1,8 @@
 @isset ($title)
 	<p class="text-secondary mb-1"><strong><u>Tanah &amp; Bangunan</u></strong></p>
 @endif
+<a href="#" class="btn btn-primary btn-sm btn-link mb-1" data-toggle="modal" data-target="#jaminan-tanah-bangunan"><i class="fa fa-plus"></i> Jaminan Tanah &amp; Bangunan</a>
+
 <table class="table table-sm table-responsive">
 	<thead class="thead-default">
 		<tr>
@@ -56,7 +58,4 @@
 		{{-- @endempty --}}
 	</tbody>
 </table>
-<div class="clearfix">&nbsp;</div>
-<a href="#" class="btn btn-primary btn-sm btn-link" data-toggle="modal" data-target="#jaminan-tanah-bangunan">Tambah Jaminan Tanah &amp; Bangunan</a>
-<div class="clearfix">&nbsp;</div>
 <div class="clearfix">&nbsp;</div>

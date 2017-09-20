@@ -1,43 +1,26 @@
 <div class="row">
 	<div class="col">
-		<h5 class="pb-4">Survei</h5>
+		<h5 class="pb-3 title">Survei</h5>
 	</div>
 </div>
+
 {{-- isi data survei seperti table dibawah --}}
-<table class="table table-sm table-responsive">
-	<thead class="thead-default">
-		<tr>
-			<th>Ke</th>
-			<th>Petugas</th>
-			<th>Tanggal</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@isset ($survei)
-			@foreach($survei as $k => $v)
-				<tr>
-					<td>{{ ($k+1) }}</td>
-					<td>{{ $v['surveyor']['nama'] }}</td>
-					<td>{{ $v['tanggal'] }}</td>
-					<td>
-						<a href="#">
-							<i class="fa fa-eye"></i>
-						</a>
-					</td>
-				</tr>
-			@endforeach
-		@endisset
+<div class="row mb-2">
+	<div class="col" role="tablist">
+		<a href="#" class="btn btn-outline-primary btn-sm data-panel active" data-toggle="panel-toggle" data-target="#form" ><i class="fa fa-plus"></i> survei</a>
+	</div>
+</div>
 
-		@empty ($survei)
-			<tr>
-				<td class="text-center" colspan="4">Belum ada data survei</td>
-			</tr>
-		@endempty
-	</tbody>
-</table> 
-
-@include ('pengajuan.survei.create')
+<div class="row">
+	<div class="col tab-content panel-content">
+		<div class="panel-toggle-pane " id="table" role="tabpanel" style="display: block;">
+			@include ('pengajuan.survei.components.table')
+		</div>
+		<div class="panel-toggle-pane" id="form" style="display: none;">
+			@include ('pengajuan.survei.create')
+		</div>
+	</div>
+</div>
 
 {{---FORM SURVEI---}}
 @foreach($survei as $k => $v)

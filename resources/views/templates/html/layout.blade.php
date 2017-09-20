@@ -62,7 +62,25 @@
 					</div>
 				</div>
 			</div>
-		</footer>		
+		</footer>
+
+		{{-- modal delete --}}
+		@component ('bootstrap.modal', ['id' => 'delete', 'form' => true, 'method' => 'delete'])
+			@slot ('title')
+				Hapus Data
+			@endslot
+
+			@slot ('body')
+				<p>Untuk menghapus data ini, silahkan masukkan password dibawah!</p>
+				{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
+				{!! Form::bsTextarea('catatan', 'catatan', null, ['class' => 'form-control', 'placeholder' => 'catatan', 'style' => 'resize:none;', 'rows' => 5]) !!}
+			@endslot
+
+			@slot ('footer')
+				<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
+				<a href="#" class="btn btn-outline-danger">Hapus</a>
+			@endslot
+		@endcomponent	
 
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
@@ -94,6 +112,13 @@
 					);
 				}
 
+			});
+
+			$('#delete').on('show.bs.modal', function(element) {
+				urlDelete = $(element.relatedTarget).attr('data-url');
+				
+				$(this).find('form')
+					.attr('action', urlDelete);
 			});
 		</script>
 		

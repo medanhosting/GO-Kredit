@@ -177,10 +177,7 @@ var formValidation = function(){
 	this.init = function() {
 		// validate inputs on form submit
 		$(document).on( "submit", document.getElementsByClassName(target_form_class), function(e) {
-			alert($(e.target).attr(target_validate_on_submit_attribute));
-			alert(target_validate_on_submit_attribute);
 			if($(e.target).attr(target_validate_on_submit_attribute) && $(e.target).attr(target_validate_on_submit_attribute) != false){
-			alert(1);
 				e.preventDefault();
 
 				// validate, if everything good, continue posting
@@ -233,7 +230,8 @@ var formValidation = function(){
 
 		// handling hidden
 		if(validate_on_hidden == false){
-			if(el.css('display') == 'none' || el.attr('type') == 'hidden' || el.closest('.form-group').css('display') == 'none' || el.closest('.form-group').attr('type') == 'hidden'){
+			// if(el.css('display') == 'none' || el.attr('type') == 'hidden' || el.closest('.form-group').css('display') == 'none' || el.closest('.form-group').attr('type') == 'hidden'){
+			if(el.attr('type') == 'hidden' || el.closest('.form-group').css('display') == 'none' || el.closest('.form-group').attr('type') == 'hidden'){
 				return true;
 			}
 		}		

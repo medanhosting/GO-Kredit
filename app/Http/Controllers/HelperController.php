@@ -88,4 +88,9 @@ Class HelperController extends Controller
 
 		return JSend::error(['File tidak ada!'])->asArray();
 	}
+
+	public function variable_list_select ()
+	{
+		
+	}
 }

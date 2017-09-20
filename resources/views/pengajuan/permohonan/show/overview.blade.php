@@ -3,21 +3,21 @@
 		<h4 class="pb-4">Overview</h4>
 	</div>
 </div>
-<nav class="nav ">
-	<a href="#pinjaman" class="nav-item nav-link " >Pinjaman</a>
-	<a href="#jaminan" class="nav-item nav-link" >Jaminan</a>
-	<a href="#nasabah" class="nav-item nav-link" >Nasabah</a>
+<nav class="nav nav-tabs">
+	<a href="#pinjaman" class="nav-item nav-link active" role="tab" data-toggle="tab" aria-expanded="true">Pinjaman</a>
+	<a href="#jaminan" class="nav-item nav-link" role="tab" data-toggle="tab">Jaminan</a>
+	<a href="#nasabah" class="nav-item nav-link" role="tab" data-toggle="tab">Nasabah</a>
 </nav>
 <div class="row">
 	<div class="col">
-		<div class="" >
+		<div class="tab-content">
 			{{-- div pinjaman --}}
-			<div class="mb-4" id="pinjaman">
+			<div class="tab-pane fade show active mb-4" id="pinjaman" role="tabpanel">
 				@component ('bootstrap.field_value', ['field' => 'Pokok Pinjaman', 'value' => $permohonan['pokok_pinjaman'] ? $permohonan['pokok_pinjaman'] : '', 'class_row' => 'mt-4']) @endcomponent
 				@component ('bootstrap.field_value', ['field' => 'Kemampuan Angsur', 'value' => $permohonan['kemampuan_angsur'] ? $permohonan['kemampuan_angsur'] : '']) @endcomponent
 			</div>
 			{{-- div jaminan --}}
-			<div class="" id="jaminan">
+			<div class="tab-pane fade" id="jaminan" role="tabpanel">
 				<div class="row mt-4">
 					<div class="col"><h6 class="text-capitalize"><u>Kendaraan</u></h6></div>
 				</div>
@@ -36,7 +36,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="" id="nasabah">
+			<div class="tab-pane fade" id="nasabah" role="tabpanel">
 				<div class="row mt-4">
 					<div class="col">
 						@isset ($permohonan['nasabah'])
