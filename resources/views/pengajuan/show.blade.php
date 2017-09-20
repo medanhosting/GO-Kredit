@@ -11,10 +11,10 @@
 			<div class="col p-0">
 				<ol class="breadcrumb" style="border-radius:0;">
 					@foreach($breadcrumb as $k => $v)
-						@if(count($breadcrumb)-1 ==$k)
-							<li class="breadcrumb-item active">{{ucwords($v['title'])}}</li>
+						@if ($loop->count - 1 == $k)
+							<li class="breadcrumb-item active">{{ ucwords($v['title']) }}</li>
 						@else
-							<li class="breadcrumb-item"><a href="{{$v['route']}}">{{ucwords($v['title'])}}</a></li>
+							<li class="breadcrumb-item"><a href="{{ $v['route'] }}">{{ ucwords($v['title']) }}</a></li>
 						@endif
 					@endforeach
 				</ol>
@@ -48,7 +48,7 @@
 								@include ('pengajuan.permohonan.show.keluarga')
 							</div>
 							<div class="tab-pane paneltab-pane" id="survei" role="tabpanel">
-								@include ('pengajuan.survei.show')
+								@include ('pengajuan.survei.index')
 							</div>
 							<div class="tab-pane paneltab-pane" id="analisa" role="tabpanel">
 								@include ('pengajuan.permohonan.show.analisa')
@@ -63,24 +63,6 @@
 		</div>
 		<div class="clearfix">&nbsp;</div>
 	</div>
-
-	@component ('bootstrap.modal', ['id' => 'delete'])
-		{!! Form::open() !!}
-		@slot ('title')
-			Hapus Data
-		@endslot
-
-		@slot ('body')
-			<p>Untuk menghapus data ini, silahkan masukkan password dibawah!</p>
-			{!! Form::bsPassword(null, 'password', ['placeholder' => 'Password']) !!}
-		@endslot
-
-		@slot ('footer')
-			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-			<a href="#" class="btn btn-danger btn-outline">Tambahkan</a>
-		@endslot
-		{!! Form::close() !!}
-	@endcomponent
 @endpush
 
 @push('submenu')
@@ -125,8 +107,6 @@
 			targetParentNode = $(selectorTarget)[0].parentNode;
 
 			togglePanelTab (targetParentNode, selectorTarget, '.panel-toggle-pane');
-
-			$(this).closest('.row').hide();
 		})
 	</script>
 @endpush

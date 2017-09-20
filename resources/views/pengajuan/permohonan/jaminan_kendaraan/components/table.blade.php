@@ -1,5 +1,5 @@
 @isset($title)
-	<p class="text-secondary mb-1"><strong><u>Kendaraan</u></strong></p>
+	<p class="text-secondary mb-4"><strong><u>Kendaraan</u></strong></p>
 @endisset
 
 <a href="#" class="btn btn-primary btn-sm btn-link mb-1" data-toggle="modal" data-target="#jaminan-kendaraan"><i class="fa fa-plus"></i> Jaminan Kendaraan</a>

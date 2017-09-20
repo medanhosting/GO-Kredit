@@ -21,10 +21,10 @@
 </div>
 <div class="row">
 	<div class="col-auto col-md-4 tanah">
-		{!! Form::bsText('luas tanah', 'luas_tanah', null, ['class' => 'form-control'], true, null, null, 'M<sup>2</sup>') !!}
+		{!! Form::bsText('luas tanah', 'luas_tanah', null, ['class' => 'form-control mask-number'], true, null, null, 'M<sup>2</sup>') !!}
 	</div>
 	<div class="col-auto col-md-4 tanah_bangunan">
-		{!! Form::bsText('luas bangunan', 'luas_bangunan', null, ['class' => 'form-control'], true, null, null, 'M<sup>2</sup>') !!}
+		{!! Form::bsText('luas bangunan', 'luas_bangunan', null, ['class' => 'form-control mask-number'], true, null, null, 'M<sup>2</sup>') !!}
 	</div>
 </div>
 <div class="row">
@@ -62,11 +62,11 @@
 </div>
 <div class="row">
 	<div class="col-auto col-md-6">
-		{!! Form::bsText('Nilai Jaminan', 'nilai_jaminan', null, ['class' => 'form-control']) !!}
+		{!! Form::bsText('Nilai Jaminan', 'nilai_jaminan', null, ['class' => 'form-control mask-money']) !!}
 	</div>
 </div>
 <div class="row">
 	<div class="col-auto col-md-6">
-		{!! Form::bsText('Tahun Perolehan', 'tahun_perolehan', null, ['class' => 'form-control']) !!}
+		{!! Form::bsText('Tahun Perolehan', 'tahun_perolehan', null, ['class' => 'form-control mask-year']) !!}
 	</div>
 </div>

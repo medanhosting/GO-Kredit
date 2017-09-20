@@ -74,7 +74,7 @@
 									<div class="col-2">
 			    						<div class="row text-center">
 											<div class="col-4">
-												<a href="{{ route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}"><i class="fa fa-eye"></i></a>
+												<a href="{{ route('pengajuan.pengajuan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}"><i class="fa fa-eye"></i></a>
 											</div>
 											<div class="col-4">
 												<a href="#" data-toggle="modal" data-target="#delete" data-url="http://tes"><i class="fa fa-trash"></i></a>

@@ -16,6 +16,6 @@
 </div>
 <div class="row">
 	<div class="col-auto col-md-4">
-		{!! Form::bsText('No. Telepon', 'telepon', null, ['class' => 'form-control']) !!}
+		{!! Form::bsText('No. Telepon', 'telepon', null, ['class' => 'form-contro mask-no-telepon']) !!}
 	</div>
 </div>
