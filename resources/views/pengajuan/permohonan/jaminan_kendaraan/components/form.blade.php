@@ -16,7 +16,7 @@
 </div>
 <div class="row">
 	<div class="col-auto col-md-4">
-		{!! Form::bsText('tahun', 'tahun', null, ['class' => 'form-control']) !!}
+		{!! Form::bsText('tahun', 'tahun', null, ['class' => 'form-control mask-year']) !!}
 	</div>
 </div>
 <div class="row">
@@ -31,11 +31,11 @@
 </div>
 <div class="row">
 	<div class="col-auto col-md-6">
-		{!! Form::bsText('Nilai Jaminan', 'nilai_jaminan', null, ['class' => 'form-control']) !!}
+		{!! Form::bsText('Nilai Jaminan', 'nilai_jaminan', null, ['class' => 'form-control mask-money']) !!}
 	</div>
 </div>
 <div class="row">
 	<div class="col-auto col-md-4">
-		{!! Form::bsText('Tahun Perolehan', 'tahun_perolehan', null, ['class' => 'form-control']) !!}
+		{!! Form::bsText('Tahun Perolehan', 'tahun_perolehan', null, ['class' => 'form-control mask-year']) !!}
 	</div>
 </div>

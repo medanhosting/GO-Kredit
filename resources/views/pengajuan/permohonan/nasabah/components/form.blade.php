@@ -30,7 +30,7 @@
 	{!! Form::bsText('Tempat lahir', 'nasabah[tempat_lahir]', null, ['class' => 'form-control', 'placeholder' => 'masukkan tempat lahir']) !!}
 </div>
 <div class="col-auto col-md-3">
-	{!! Form::bsText('Tanggal lahir', 'nasabah[tanggal_lahir]', null, ['class' => 'form-control', 'placeholder' => 'masukkan tanggal dd/mm/yyyy']) !!}
+	{!! Form::bsText('Tanggal lahir', 'nasabah[tanggal_lahir]', null, ['class' => 'form-control mask-date', 'placeholder' => 'masukkan tanggal dd/mm/yyyy']) !!}
 </div>
 <div class="col-auto col-md-2">
 	{!! Form::bsSelect('Jenis Kelamin', 'nasabah[jenis_kelamin]', ['' => 'pilih', 'laki-laki' => 'Laki-Laki', 'perempuan' => 'perempuan'], null, ['class' => 'custom-select form-control']) !!}
@@ -40,12 +40,12 @@
 </div>
 <div class="clearfix">&nbsp;</div>
 
-<h6 class="text-secondary ml-3"><strong><u>Pekerjaan</u></strong></h6>
+<h6 class="text-secondary"><strong><u>Pekerjaan</u></strong></h6>
 <div class="col-auto col-md-4">
 	{!! Form::bsSelect('Pekerjaan', 'nasabah[pekerjaan]', array_merge(['' => 'pilih'], $jenis_pekerjaan), null, ['class' => 'custom-select form-control', 'placeholder' => '']) !!}
 </div>
 <div class="col-auto col-md-4">
-	{!! Form::bsText('Penghasilan Bersih', 'nasabah[penghasilan_bersih]', null, ['class' => 'form-control', 'placeholder' => 'masukkan penghasilan bersih']) !!}
+	{!! Form::bsText('Penghasilan Bersih', 'nasabah[penghasilan_bersih]', null, ['class' => 'form-control mask-money', 'placeholder' => 'masukkan penghasilan bersih']) !!}
 </div>
 <div class="clearfix">&nbsp;</div>
 
@@ -55,10 +55,10 @@
 </div>
 <div class="row ml-0 mr-0">
 	<div class="col-auto col-md-2">
-		{!! Form::bsText('RT', 'nasabah[alamat][rt]', null, ['class' => 'form-control', 'placeholder' => '']) !!}
+		{!! Form::bsText('RT', 'nasabah[alamat][rt]', null, ['class' => 'form-control mask-rt-rw', 'placeholder' => '']) !!}
 	</div>
 	<div class="col-auto col-md-2">
-		{!! Form::bsText('RW', 'nasabah[alamat][rw]', null, ['class' => 'form-control', 'placeholder' => '']) !!}
+		{!! Form::bsText('RW', 'nasabah[alamat][rw]', null, ['class' => 'form-control mask-rt-rw', 'placeholder' => '']) !!}
 	</div>
 </div>
 <div class="col-auto col-md-4">
@@ -74,10 +74,10 @@
 
 <h6 class="text-secondary ml-3"><strong><u>Kontak</u></strong></h6>
 <div class="col-auto col-md-3">
-	{!! Form::bsText('No. Telp', 'nasabah[telepon]', null, ['class' => 'form-control', 'placeholder' => 'masukkan no. telp']) !!}
+	{!! Form::bsText('No. Telp', 'nasabah[telepon]', null, ['class' => 'form-control mask-no-telepon', 'placeholder' => 'masukkan no. telp']) !!}
 </div>	
 <div class="col-auto col-md-3">
-	{!! Form::bsText('No. Whatsapp', 'nasabah[nomor_whatsapp]', null, ['class' => 'form-control', 'placeholder' => 'masukkan no. whatsapp']) !!}
+	{!! Form::bsText('No. Whatsapp', 'nasabah[nomor_whatsapp]', null, ['class' => 'form-control mask-no-handphone', 'placeholder' => 'masukkan no. whatsapp']) !!}
 </div>
 <div class="col-auto col-md-4">
 	{!! Form::bsText('Email', 'nasabah[email]', null, ['class' => 'form-control', 'placeholder' => 'masukkan email']) !!}

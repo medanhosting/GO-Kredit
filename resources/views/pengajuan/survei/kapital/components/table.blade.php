@@ -1,10 +1,11 @@
 @isset ($add)
 	<div class="row mb-2">
 		<div class="col" role="tablist">
-			<a href="#" class="btn btn-outline-primary data-panel" data-toggle="panel-toggle" data-target="#form" ><i class="fa fa-plus"></i> survei</a>
+			<a href="#" class="btn btn-outline-primary data-panel" data-toggle="panel-toggle" data-target="#form" ><i class="fa fa-plus"></i> Kapital rumah</a>
 		</div>
 	</div>
 @endisset
+
 <table class="table table-sm table-responsive">
 	<thead class="thead-default">
 		<tr>

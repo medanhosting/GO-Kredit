@@ -33,7 +33,11 @@
 						<!-- data kredit -->
 						<div class="tab-pane fade show active" id="kredit" role="tabpanel">
 							<h5 class="text-gray mb-4 pl-3">Data Kredit</h5>
-							@include ('pengajuan.permohonan.kredit.form')
+							<div class="row">
+								<div class="col">
+									@include ('pengajuan.permohonan.kredit.form')
+								</div>
+							</div>
 							<div class="clearfix">&nbsp;</div>
 							<div class="clearfix">&nbsp;</div>
 							<a href="#nasabah" class="btn btn-primary float-right mr-3" data-toggle="tab" role="tab" aria-controls="nasabah" aria-expanded="true">Selanjutnya</a>
@@ -41,7 +45,7 @@
 
 						<!-- data nasabah -->
 						<div class="tab-pane fade" id="nasabah" role="tabpanel">
-							<h5 class="text-gray mb-4 pl-3">Data Nasabah &amp; Keluarga</h5>
+							<h5 class="text-gray mb-4 pl-3">Data Nasabah</h5>
 							@include ('pengajuan.permohonan.nasabah.form')
 
 							<div class="clearfix">&nbsp;</div>
@@ -53,8 +57,12 @@
 						<!-- data keluarga -->
 						 <div class="tab-pane fade" id="kerabat-keluarga" role="tabpanel">
 							<h5 class="text-gray mb-4 pl-3">Data Kerabat/Keluarga</h5>
-							<!-- table keluarga -->
-							@include ('pengajuan.permohonan.keluarga.components.table')
+							<div class="row ml-0 mr-0">
+								<div class="col">
+									<!-- table keluarga -->
+									@include ('pengajuan.permohonan.keluarga.components.table')
+								</div>
+							</div>
 
 							<div class="clearfix">&nbsp;</div>
 							<div class="clearfix">&nbsp;</div>
@@ -64,11 +72,15 @@
 
 						<div class="tab-pane fade" id="jaminan" role="tabpanel">
 							<h5 class="text-gray mb-4 pl-3">Data Jaminan</h5>
-							<!-- table jaminan kendaraan -->
-							@include ('pengajuan.permohonan.jaminan_kendaraan.components.table', ['title' => true])
-
-							<!-- table jaminan tanah bangunan -->
-							@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table', ['title' => true])
+							<div class="row ml-0 mr-0">
+								<div class="col">
+									<!-- table jaminan kendaraan -->
+									@include ('pengajuan.permohonan.jaminan_kendaraan.components.table', ['title' => true])
+									<div class="clearfix">&nbsp;</div>
+									<!-- table jaminan tanah bangunan -->
+									@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table', ['title' => true])
+								</div>
+							</div>
 							
 							<div class="clearfix">&nbsp;</div>
 							<div class="clearfix">&nbsp;</div>
