@@ -32,6 +32,7 @@
 
 			Route::get('/{status}',				['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);
 			Route::get('/{status}/{id}/show',	['as'	=> 'pengajuan.show', 	'uses' => 'PengajuanController@show']);
+			Route::delete('/{status}/{id}',		['as'	=> 'pengajuan.destroy', 'uses' => 'PengajuanController@destroy']);
 			
 			Route::middleware('scope:permohonan')->group( function() {
 				Route::resource('permohonan', 		'PermohonanController');

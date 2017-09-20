@@ -12,11 +12,11 @@ class ScopeMiddleware
 	public function handle($request, Closure $next, $scope)
 	{
 		$active_u	= Auth::user();
-		$active_p 	= PenempatanKaryawan::where('kantor_id', $request->get('kantor_aktif_id'))->where('orang_id', $active_u['id'])->active(Carbon::now())->first();
+		$active_p 	= PenempatanKaryawan::where('kantor_id', $request->get('kantor_aktif_id'))->where('orang_id', $active_u['id'])->first();
 
 		if(!$active_p)
 		{
-			throw new Exception("Forbidden", 403);
+			return redirect()->back()->withErrors('Forbidden!');
 		}
 
 		if(in_array($scope, $active_p['scopes']))
@@ -24,6 +24,7 @@ class ScopeMiddleware
 			return $next($request);
 		}
 
+		return redirect()->back()->withErrors('Forbidden!');
 		throw new Exception("Forbidden", 403);
 	}
 }

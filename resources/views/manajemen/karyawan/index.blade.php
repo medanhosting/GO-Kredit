@@ -82,7 +82,7 @@
 												<a href="{{ route('manajemen.karyawan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]) }}"><i class="fa fa-eye"></i></a>
 											</div> -->
 											<div class="col-4">
-												<a href="#" data-toggle="modal" data-target="#delete"><i class="fa fa-trash"></i></a>
+												<a href="#" data-toggle="modal" data-target="#delete" data-url="{{route('manajemen.karyawan.destroy', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i class="fa fa-trash"></i></a>
 											</div>
 											<div class="col-4">
 												<a href="{{ route('manajemen.karyawan.edit', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']]) }}"><i class="fa fa-pencil"></i></a>
@@ -177,24 +177,6 @@
 			</div>
 		</div>
 	</div>
-
-	@component ('bootstrap.modal', ['id' => 'delete'])
-		{!! Form::open(['url' => '#', 'method' => 'destroy']) !!}
-		@slot ('title')
-			Hapus Data
-		@endslot
-
-		@slot ('body')
-			<p>Untuk menghapus data ini, silahkan masukkan password dibawah!</p>
-			{!! Form::bsPassword(null, 'password', ['placeholder' => 'Password']) !!}
-		@endslot
-
-		@slot ('footer')
-			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-			<a href="#" class="btn btn-danger btn-outline">Tambahkan</a>
-		@endslot
-		{!! Form::close() !!}
-	@endcomponent
 
 	@component ('bootstrap.modal', ['id' => 'resign'])
 		{!! Form::open(['url' => '#', 'method' => 'post']) !!}

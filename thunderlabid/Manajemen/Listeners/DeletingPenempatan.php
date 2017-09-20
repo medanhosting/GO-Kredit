@@ -12,7 +12,7 @@ use Thunderlabid\Manajemen\Exceptions\AppException;
 ///////////////
 use Hash;
 
-class DeletingOrang
+class DeletingPenempatan
 {
 	/**
 	 * Create the event listener.
@@ -33,9 +33,8 @@ class DeletingOrang
 	{
 		$model = $event->data;
 
-		if (!$model->is_deletable) 
-		{
-			throw new AppException($model->errors, AppException::DATA_VALIDATION);
+		foreach ($model->penempatan as $k => $v) {
+			$v->delete();
 		}
 	}
 }

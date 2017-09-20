@@ -20,6 +20,7 @@ class PengajuanServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdating', 'Thunderlabid\Pengajuan\Listeners\SavingPengajuan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreating', 'Thunderlabid\Pengajuan\Listeners\BatasanPengajuan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdating', 'Thunderlabid\Pengajuan\Listeners\BatasanPengajuan');
+		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleting', 'Thunderlabid\Pengajuan\Listeners\HanyaProsesPermohonan');
 
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreating', 'Thunderlabid\Pengajuan\Listeners\SavingJaminan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdating', 'Thunderlabid\Pengajuan\Listeners\SavingJaminan');

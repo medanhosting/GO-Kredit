@@ -19,7 +19,7 @@ use Thunderlabid\Manajemen\Events\Kantor\KantorCreating;
 // use Thunderlabid\Manajemen\Events\Kantor\KantorCreated;
 use Thunderlabid\Manajemen\Events\Kantor\KantorUpdating;
 // use Thunderlabid\Manajemen\Events\Kantor\KantorUpdated;
-// use Thunderlabid\Manajemen\Events\Kantor\KantorDeleting;
+use Thunderlabid\Manajemen\Events\Kantor\KantorDeleting;
 // use Thunderlabid\Manajemen\Events\Kantor\KantorDeleted;
 
 class Kantor extends Model
@@ -46,7 +46,7 @@ class Kantor extends Model
         // 'updated' 	=> KantorUpdated::class,
         'updating' 	=> KantorUpdating::class,
         // 'deleted' 	=> KantorDeleted::class,
-        // 'deleting' 	=> KantorDeleting::class,
+        'deleting' 	=> KantorDeleting::class,
     ];
 	
 	// ------------------------------------------------------------------------------------------------------------

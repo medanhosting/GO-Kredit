@@ -15,6 +15,7 @@ class ManajemenServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Manajemen\Events\Orang\OrangCreating', 'Thunderlabid\Manajemen\Listeners\SavingOrang');
 		Event::listen('Thunderlabid\Manajemen\Events\Orang\OrangUpdating', 'Thunderlabid\Manajemen\Listeners\SavingOrang');
 		Event::listen('Thunderlabid\Manajemen\Events\Orang\OrangDeleting', 'Thunderlabid\Manajemen\Listeners\DeletingOrang');
+		Event::listen('Thunderlabid\Manajemen\Events\Orang\OrangDeleting', 'Thunderlabid\Manajemen\Listeners\DeletingPenempatan');
 		
 		//Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanCreating', 'Thunderlabid\Manajemen\Listeners\SavingPenempatanKaryawan');
 		//Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating', 'Thunderlabid\Manajemen\Listeners\SavingPenempatanKaryawan');
@@ -22,6 +23,9 @@ class ManajemenServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\AssignIDKantor');
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\SavingKantor');
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorUpdating', 'Thunderlabid\Manajemen\Listeners\SavingKantor');
+
+		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorDeleting', 'Thunderlabid\Manajemen\Listeners\DeletingPenempatan');
+
 
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreating', 'Thunderlabid\Manajemen\Listeners\HanyaSatuHolding');
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorUpdating', 'Thunderlabid\Manajemen\Listeners\HanyaSatuHolding');

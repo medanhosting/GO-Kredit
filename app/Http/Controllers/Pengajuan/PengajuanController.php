@@ -18,10 +18,17 @@ class PengajuanController extends Controller
 {
 	protected $view_dir = 'pengajuan.';
 
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->middleware('scope:'.request()->segment(2));
+		
+		$this->middleware('required_password')->only('destroy');
+	}
+
 	public function index ($status) 
 	{
-		$this->middleware('scope:'.$status);
-
 		$order 		= 'Tanggal ';
 		$urut 		= 'asc';
 
@@ -66,8 +73,6 @@ class PengajuanController extends Controller
 
 	public function show($status, $id)
 	{
-		$this->middleware('scope:'.$status);
-		
 		try {
 			$permohonan		= Pengajuan::where('id', $id)->status($status)->kantor(request()->get('kantor_aktif_id'))->with('jaminan', 'riwayat_status', 'status_terakhir')->first();
 
@@ -105,6 +110,28 @@ class PengajuanController extends Controller
 
 		} catch (Exception $e) {
 			return redirect(route('pengajuan.pengajuan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
+		}
+	}
+
+	public function destroy($status, $id)
+	{
+		try {
+			$permohonan		= Pengajuan::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan')->first();
+			if (!$permohonan)
+			{
+				throw new Exception("Data tidak ada!", 1);
+			}
+
+			foreach ($permohonan->jaminan as $key => $value)
+			{
+				$value->delete();
+			}
+
+			$permohonan->delete();
+
+			return redirect(route('pengajuan.pengajuan.index', ['status' => $status, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]));
+		} catch (Exception $e) {
+			return redirect(route('pengajuan.pengajuan.index', ['status' => $status, 'id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
 		}
 	}
 

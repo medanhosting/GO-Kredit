@@ -20,6 +20,8 @@ class KaryawanController extends Controller
 		parent::__construct();
 		
 		$this->middleware('scope:karyawan');
+		
+		$this->middleware('required_password')->only('destroy');
 	}
 
 	public function index () 
@@ -162,15 +164,11 @@ class KaryawanController extends Controller
 				throw new Exception("Data tidak ada!", 1);
 			}
 
-			foreach ($karyawan->penempatan as $k => $v) {
-				$v->delete();
-			}
-
 			$karyawan->delete();
 
-			return redirect(route('manajemen.kantor.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]));
+			return redirect(route('manajemen.karyawan.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]));
 		} catch (Exception $e) {
-			return redirect(route('manajemen.kantor.index', ['id' => $id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
+			return redirect(route('manajemen.karyawan.index', ['id' => $id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
 		}
 	}
 

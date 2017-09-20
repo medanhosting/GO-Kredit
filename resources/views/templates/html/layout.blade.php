@@ -80,7 +80,7 @@
 
 			@slot ('footer')
 				<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-				<a href="#" class="btn btn-outline-danger">Hapus</a>
+				{!! Form::submit('Hapus', ['class' => 'btn btn-outline-danger']) !!}
 			@endslot
 		@endcomponent	
 
