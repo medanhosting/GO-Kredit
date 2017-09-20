@@ -19,6 +19,8 @@ class KantorController extends Controller
 		parent::__construct();
 		
 		$this->middleware('scope:kantor');
+		
+		$this->middleware('required_password')->only('destroy');
 	}
 
 	public function index () 
@@ -117,7 +119,7 @@ class KantorController extends Controller
 
 			return redirect(route('manajemen.kantor.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]));
 		} catch (Exception $e) {
-			return redirect(route('manajemen.kantor.show', ['id' => $id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
+			return redirect(route('manajemen.kantor.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
 		}
 	}
 

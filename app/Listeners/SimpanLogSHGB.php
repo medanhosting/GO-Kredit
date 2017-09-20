@@ -54,9 +54,13 @@ class SimpanLogSHGB
 				$old_SHGB 				= new SHGB;
 				$data_o_n 				= $find->toArray();
 				unset($data_o_n['tahun_perolehan']);
+				unset($data_o_n['id']);
 				$data_o_n['parent_id']	= $find->id;
+				$old_SHGB->fill($data_o_n);
+				$old_SHGB->save();
 
 				$data_n_n				= $model->dokumen_jaminan['shgb'];
+				unset($data_n_n['tahun_perolehan']);
 				$find->fill($data_n_n);
 				$find->save();
 			}

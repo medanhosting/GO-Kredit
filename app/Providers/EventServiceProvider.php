@@ -44,6 +44,13 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanCreated', 'App\Listeners\GenerateLegalitasRealisasi');
 		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanUpdated', 'App\Listeners\GenerateLegalitasRealisasi');
 
+		//DELETE PENGAJUAN
+		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleted', 'App\Listeners\SimpanStatusDoneVoid');
+
+		//DELETE KANTOR
+		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorDeleting', 'App\Listeners\BukanHolding');
+		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorDeleting', 'App\Listeners\TidakAdaKredit');
+
 		//LISTEN LOG
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreated', 'App\Listeners\SimpanLogNasabah');
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdated', 'App\Listeners\SimpanLogNasabah');
@@ -61,5 +68,8 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdated', 'App\Listeners\SimpanLogKredit');
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated', 'App\Listeners\SimpanLogKreditViaJaminan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated', 'App\Listeners\SimpanLogKreditViaJaminan');
+
+
+		Event::listen('App\Events\PengajuanExpired', 'App\Listeners\SimpanStatusDoneExpire');
 	}
 }

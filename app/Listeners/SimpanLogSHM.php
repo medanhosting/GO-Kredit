@@ -54,9 +54,13 @@ class SimpanLogSHM
 				$old_SHM 				= new SHM;
 				$data_o_n 				= $find->toArray();
 				unset($data_o_n['tahun_perolehan']);
+				unset($data_o_n['id']);
 				$data_o_n['parent_id']	= $find->id;
+				$old_SHM->fill($data_o_n);
+				$old_SHM->save();
 
 				$data_n_n				= $model->dokumen_jaminan['shm'];
+				unset($data_n_n['tahun_perolehan']);
 				$find->fill($data_n_n);
 				$find->save();
 			}

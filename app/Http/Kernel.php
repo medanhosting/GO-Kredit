@@ -58,6 +58,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'scope' => \App\Http\Middleware\ScopeMiddleware::class,
+        'required_password' => \App\Http\Middleware\RequiredPasswordMiddleware::class,
         'device' => \App\Http\Middleware\API\ApiMiddleware::class,
     ];
 }

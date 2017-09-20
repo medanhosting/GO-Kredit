@@ -35,16 +35,6 @@ class SimpanLogKreditViaJaminan
 	public function handle($event)
 	{
 		$model 	= $event->data;
-		
-		$find 	= Kredit::where('pengajuan_id', $model->id)->delete();
-
-		$nasabah_id 	= null;
-
-		if(isset($model->nasabah['nik']))
-		{
-			$nasabah_id 	= $model->nasabah['nik'];
-		}
-
 
 		switch ($model->jenis) {
 			case 'bpkb':
@@ -57,12 +47,21 @@ class SimpanLogKreditViaJaminan
 				$jaminan_id 	= $model->dokumen_jaminan['shgb']['nomor_sertifikat'];
 				break;
 		}
+		
+		$find 	= Kredit::where('pengajuan_id', $model->pengajuan_id)->where('jaminan_id', $jaminan_id)->delete();
+
+		$nasabah_id 		= null;
+
+		if(isset($model->pengajuan->nasabah['nik']))
+		{
+			$nasabah_id 	= $model->pengajuan->nasabah['nik'];
+		}
 
 		$jaminan_tipe 		= $model->jenis;
 
-		$kredit  	= new Kredit;
+		$kredit  			= new Kredit;
 		$kredit->fill([
-			'pengajuan_id'	=> $model->id,
+			'pengajuan_id'	=> $model->pengajuan_id,
 			'nasabah_id'	=> $nasabah_id,
 			'jaminan_id'	=> $jaminan_id,
 			'jaminan_tipe'	=> $jaminan_tipe,

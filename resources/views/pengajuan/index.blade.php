@@ -77,7 +77,7 @@
 												<a href="{{ route('pengajuan.pengajuan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}"><i class="fa fa-eye"></i></a>
 											</div>
 											<div class="col-4">
-												<a href="#" data-toggle="modal" data-target="#delete" data-url="http://tes"><i class="fa fa-trash"></i></a>
+												<a href="#" data-toggle="modal" data-target="#delete" data-url="{{route('pengajuan.pengajuan.destroy', ['id' => $v['id'], 'status' => $status, 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i class="fa fa-trash"></i></a>
 											</div>
 											<div class="col-4">
 												<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $loop->index }}" aria-expanded="false" aria-controls="collapse{{ $loop->index }}"><i class="fa fa-arrow-down"></i></a>

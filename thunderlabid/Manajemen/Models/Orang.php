@@ -92,6 +92,13 @@ class Orang extends Authenticatable
 	// ------------------------------------------------------------------------------------------------------------
 	public function getIsDeletableAttribute()
 	{
+		if(!is_null($this->attributes['nip']))
+		{
+			$this->errors = ['Tidak dapat menghapus karyawan.'];
+
+			return false;
+		}
+
 		return true;
 	}
 

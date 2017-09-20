@@ -17,7 +17,7 @@ class CreatePengajuanStatusTable extends Migration
 			$table->increments('id');
 			$table->string('pengajuan_id');
 			$table->datetime('tanggal');
-			$table->enum('status', ['permohonan', 'survei', 'analisa', 'tolak', 'setuju', 'realisasi', 'expired']);
+			$table->string('status');
 			$table->enum('progress', ['perlu', 'sedang', 'sudah']);
 			$table->text('catatan')->nullable();
 			$table->text('karyawan')->nullable();

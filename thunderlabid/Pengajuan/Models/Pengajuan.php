@@ -19,8 +19,8 @@ use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreating;
 use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreated;
 use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdating;
 use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdated;
-// use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleting;
-// use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleted;
+use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleting;
+use Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleted;
 
 ////////////
 // TRAITS //
@@ -54,8 +54,8 @@ class Pengajuan extends Model
 		'created' 	=> PengajuanCreated::class,
 		'updating' 	=> PengajuanUpdating::class,
 		'updated' 	=> PengajuanUpdated::class,
-		// 'deleted' 	=> PengajuanDeleted::class,
-		// 'deleting' 	=> PengajuanDeleting::class,
+		'deleting' 	=> PengajuanDeleting::class,
+		'deleted' 	=> PengajuanDeleted::class,
 	];
 	
 	// ------------------------------------------------------------------------------------------------------------

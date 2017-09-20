@@ -1,18 +1,18 @@
 <?php
 
-namespace Thunderlabid\Manajemen\Listeners;
+namespace App\Listeners;
 
 ///////////////
 // Exception //
 ///////////////
-use Thunderlabid\Manajemen\Exceptions\AppException;
+use Thunderlabid\Survei\Exceptions\AppException;
 
 ///////////////
 // Framework //
 ///////////////
-use Hash;
+use Carbon\Carbon, Auth;
 
-class DeletingOrang
+class BukanHolding
 {
 	/**
 	 * Create the event listener.
@@ -26,16 +26,16 @@ class DeletingOrang
 
 	/**
 	 * Handle event
-	 * @param  OrangCreated $event [description]
+	 * @param  KantorCreated $event [description]
 	 * @return [type]             [description]
 	 */
 	public function handle($event)
 	{
-		$model = $event->data;
-
-		if (!$model->is_deletable) 
+		$model 			= $event->data;
+		
+		if ($model->tipe=='holding') 
 		{
-			throw new AppException($model->errors, AppException::DATA_VALIDATION);
+			throw new AppException('Tidak dapat menghapus holding', AppException::DATA_VALIDATION);
 		}
 	}
 }
