@@ -53,10 +53,5 @@ class BatasanJaminan
 				}
 				break;
 		}
-
-		if(count($cari))
-		{
-			throw new AppException("Duplikasi jaminan dengan pengajuan nomor ".$cari->first()['pengajuan_id'], AppException::DATA_VALIDATION);
-		}
 	}
 }

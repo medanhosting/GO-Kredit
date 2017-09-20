@@ -54,9 +54,13 @@ class SimpanLogBPKB
 				$old_BPKB 				= new BPKB;
 				$data_o_n 				= $find->toArray();
 				unset($data_o_n['tahun_perolehan']);
+				unset($data_o_n['id']);
 				$data_o_n['parent_id']	= $find->id;
+				$old_BPKB->fill($data_o_n);
+				$old_BPKB->save();
 
 				$data_n_n				= $model->dokumen_jaminan['bpkb'];
+				unset($data_n_n['tahun_perolehan']);
 				$find->fill($data_n_n);
 				$find->save();
 			}

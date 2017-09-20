@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(SurveiTableSeeder::class);
 		$this->call(AnalisaTableSeeder::class);
 		$this->call(PutusanTableSeeder::class);
+		$this->call(PengajuanDuplicateTableSeeder::class);
 		// $this->call(IndonesiaTableSeeder::class);
 	}
 }

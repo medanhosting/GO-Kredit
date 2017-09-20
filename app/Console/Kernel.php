@@ -13,10 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\IGTrackFollowerCount::class,
-        \App\Console\Commands\IGAddPokeList::class,
-        \App\Console\Commands\IGAnalyzeMedia::class,
-        \App\Console\Commands\IGAnalyzeTag::class,
+        \App\Console\Commands\PengajuanExpiredChecker::class,
     ];
 
     /**
@@ -27,11 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(Commands\IGTrackFollowerCount::class)->dailyAt('23:00');
-        $schedule->command(Commands\IGAddPokeList::class)->hourly();
-        $schedule->command(Commands\IGAnalyzeMedia::class)->dailyAt('01:00');
-        $schedule->command(Commands\IGAnalyzeMedia::class)->dailyAt('13:00');
-        $schedule->command(Commands\IGAnalyzeTag::class)->dailyAt('02:00');
+        $schedule->command(Commands\PengajuanExpiredChecker::class)->dailyAt('01:00');
     }
 
     /**

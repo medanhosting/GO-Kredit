@@ -68,5 +68,8 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdated', 'App\Listeners\SimpanLogKredit');
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated', 'App\Listeners\SimpanLogKreditViaJaminan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated', 'App\Listeners\SimpanLogKreditViaJaminan');
+
+
+		Event::listen('App\Events\PengajuanExpired', 'App\Listeners\SimpanStatusDoneExpire');
 	}
 }
