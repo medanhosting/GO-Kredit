@@ -24,17 +24,17 @@ class ApiMiddleware
 
 			if(!$device)
 			{
-				return Response::json(['status' => 'gagal', 'data' => [], 'pesan' =>  ['Unauthorized.']]);
+				return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Unauthorized.']]);
 			}
 
 			if(!Hash::check($credentials[2], $device->secret))
 			{
-				return Response::json(['status' => 'gagal', 'data' => [], 'pesan' =>  ['Unauthorized.']]);
+				return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Unauthorized.']]);
 			}
 
 			if(!in_array($credentials[1], $salt))
 			{
-				return Response::json(['status' => 'gagal', 'data' => [], 'pesan' =>  ['Unauthorized.']]);
+				return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Unauthorized.']]);
 			}
 
 			if(count($credentials)==5)
