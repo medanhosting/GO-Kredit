@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Jaminan;
 
+use App\Http\Service\UI\UploadedGambar;
+
 use Exception;
 use Session;
 use MessageBag;
@@ -64,8 +66,20 @@ class PermohonanController extends Controller
 			$data_input 				= request()->all();
 			$data_input['kode_kantor']	= request()->get('kantor_aktif_id');
 			$data_input['is_mobile'] 	= false;
-			$data_input['dokumen_pelengkap']['ktp'] = 'http://koperasipro.dev/2017/09/05/ktp-000847600-1504576351.jpeg';
-			$data_input['dokumen_pelengkap']['kk'] = 'http://koperasipro.dev/2017/09/05/ktp-000847600-1504576351.jpeg';
+
+			if(isset(request()->file('dokumen_pelengkap')['ktp']))
+			{
+				$data_ktp	= new UploadedGambar('ktp', request()->file('dokumen_pelengkap')['ktp']);
+				$data_ktp 	= $data_ktp->handle();
+				$data_input['dokumen_pelengkap']['ktp'] = $data_ktp['url'];
+			}
+
+			if(isset(request()->file('dokumen_pelengkap')['kk']))
+			{
+				$data_kk	= new UploadedGambar('kk', request()->file('dokumen_pelengkap')['kk']);
+				$data_kk 	= $data_kk->handle();
+				$data_input['dokumen_pelengkap']['kk'] = $data_kk['url'];
+			}
 
 			if (isset($data_input['nasabah']['nik'])) {
 				$data_input['nasabah']['nik'] = '35-' . $data_input['nasabah']['nik'];

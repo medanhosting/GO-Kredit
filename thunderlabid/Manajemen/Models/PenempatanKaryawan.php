@@ -60,6 +60,10 @@ class PenempatanKaryawan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
+	public function kantor()
+	{
+		return $this->belongsTo(Kantor::class, 'kantor_id');
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
@@ -110,8 +114,8 @@ class PenempatanKaryawan extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['kantor_id']	= ['required'];
-		$rules['orang_id']	= ['required'];
+		$rules['kantor_id']	= ['required', 'exists:m_kantor,id'];
+		$rules['orang_id']	= ['required', 'exists:m_orang,id'];
 		$rules['role']		= ['required'];
 		$rules['scopes']	= ['required', 'json'];
 		$rules['policies']	= ['json'];
@@ -148,6 +152,11 @@ class PenempatanKaryawan extends Model
 
 	public function getTanggalKeluarAttribute($value)
 	{
+		if(is_null($value))
+		{
+			return null;
+		}
+		
 		return $this->formatDateTimeTo($value);
 	}
 

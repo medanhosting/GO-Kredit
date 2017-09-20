@@ -7,14 +7,48 @@ use Carbon\Carbon;
 
 use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
+use App\Http\Service\Policy\PerhitunganBunga;
+
 class DashboardController extends Controller
 {
 	public function home() 
 	{
+		$is_holder 				= false;
+
+		foreach ($this->kantor as $key => $value) {
+			if($value['tipe']=='holding'){
+				$is_holder 		= true;
+			}
+		}
 		//atur menu scopes
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 		
-		$this->layout->pages 	= view('dashboard.overview');
+		$this->layout->pages 	= view('dashboard.overview', compact('is_holder'));
+		return $this->layout;
+	}
+
+	public function simulasi($mode) 
+	{
+		//atur menu scopes
+		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+
+		$rincian 	= [];
+
+		if(request()->has('kemampuan_angsur') && request()->has('pokok_pinjaman'))
+		{
+			if($mode=='pa')
+			{
+				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/12);
+				$rincian 	= $rincian->pa();
+			}
+			elseif($mode=='pt')
+			{
+				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/12);
+				$rincian 	= $rincian->pt();
+			}
+		}
+		
+		$this->layout->pages 	= view('dashboard.simulasi', compact('mode', 'rincian'));
 		return $this->layout;
 	}
 }

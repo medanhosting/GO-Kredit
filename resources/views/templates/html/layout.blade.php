@@ -35,6 +35,8 @@
 							<span class='d-sm-none'><i class='fa fa-user'></i></span>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="{{ route('password.get', ['kantor_aktif_id' => $kantor_aktif['id']]) }}">Ganti Password</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
 						</div>
 					</li>
@@ -142,18 +144,18 @@
 							@foreach ($kantor as $x)
 								@if (in_array(strtolower($x['jenis']), ['bpr', 'koperasi']))
 									@php
-										$all['kantor_aktif_id'] = '1709.0002';
+										$all['kantor_aktif_id'] = $x['id'];
 									@endphp
 									<div class="col-6 col-sm-4 col-lg-3">
 										<a href="{{request()->url().'?'.http_build_query($all)}}" class="btn 
 
-											@if($kantor_aktif['id']==$x['id']) btn-info disabled @else btn-primary @endif">
+											@if($kantor_aktif['id']==$x['id']) btn-info disabled @else btn-primary @endif col-12">
 											{{ $x['nama'] }}
 										</a>
 									</div>
 								@else
 									<div class="col-6 col-sm-4 col-lg-3">
-										<a href="{{route('home', ['kantor_aktif_id' => $x['id']])}}" class="btn btn-primary">
+										<a href="{{route('home', ['kantor_aktif_id' => $x['id']])}}" class="btn btn-primary col-12">
 											{{ $x['nama'] }}
 										</a>
 									</div>
@@ -163,17 +165,17 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						@if($is_holder)
+						<!-- @if($is_holder)
 							<a href="{{ route('home') }}" class="btn btn-primary">
 								<i class='fa fa-plus'></i> 
 								Kantor Baru
 							</a>
 						@else
-							<!-- <a href="#" class="btn btn-disabled">
+							<a href="#" class="btn btn-disabled">
 								<i class='fa fa-plus'></i> 
 								Kantor Baru
-							</a> -->
-						@endif
+							</a>
+						@endif -->
 					</div>
 				</div>
 			</div>

@@ -60,6 +60,10 @@ class Kantor extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
+	public function penempatan()
+	{
+		return $this->hasMany(PenempatanKaryawan::class, 'kantor_id');
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
@@ -95,6 +99,7 @@ class Kantor extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
+		$rules['kantor_id']						= ['exists:m_kantor,id'];
 		$rules['nama']							= ['required', 'string'];
 		$rules['alamat'] 						= ['required', 'json'];
 		$rules['geolocation']['latitude'] 		= ['required'];

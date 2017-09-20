@@ -20,32 +20,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //LOGIN API
 
 Route::group(['namespace' => 'API'], function(){
-	Route::post('/check/device',	['uses' => 'LoginController@post_login_device']);
-	Route::post('/check/user',		['uses' => 'LoginController@post_login_with_username']);
-	Route::post('/permohonan',		['uses' => 'PermohonanController@store', 'middleware' => 'device']);
-
-	// Route::get('/pengaturan', function (Request $request) 
-	// {
-	// 	if($request->has('nip_karyawan'))
-	// 	{
-	// 		return \App\Service\Helpers\API\JSend::success(['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1])->asArray();
-	// 	}
-
-	// 	$mobile_id  = $request->get('id');
-
-	// 	$total 		= \App\Domain\Pengajuan\Models\Pengajuan::whereHas('hp', function($q)use($mobile_id){$q->where('mobile_id', $mobile_id);})->status('pengajuan')->count();
-
-	// 	return \App\Service\Helpers\API\JSend::success(['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => (3 - $total)])->asArray();
-	// });
+	Route::any('/check/device',					['uses' => 'LoginController@post_login_device']);
+	Route::any('/check/user',					['uses' => 'LoginController@post_login_with_username']);
+	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi', 'middleware' => 'device']);
+	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store', 'middleware' => 'device']);
+	Route::any('/permohonan/index',				['uses' => 'PermohonanController@index', 'middleware' => 'device']);
+	Route::any('/foto/survei/{pengajuan_id}',	['uses' => 'SurveiController@upload_foto', 'middleware' => 'device']);
 });
 
-
-Route::get('/pengaturan', function (Request $request) 
+Route::any('/pengaturan', function (Request $request) 
 {
 	if($request->has('nip_karyawan'))
 	{
-		return Response::json(['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1]);
+		return Response::json(['status' => 1, 'data' => ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1]]);
 	}
 
-	return Response::json(['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 3]);
+	$phone 			= $request->get('mobile');
+	$jlh_pengajuan	= \Thunderlabid\Pengajuan\Models\Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->count();
+
+	return Response::json(['status' => 1, 'data' => ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'minimum_bpkb' => Carbon\Carbon::now()->subYears(25)->format('Y'), 'remain_pengajuan' => (3 - $jlh_pengajuan), 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3]]);
 });

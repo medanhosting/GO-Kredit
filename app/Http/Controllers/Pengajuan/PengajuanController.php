@@ -20,6 +20,8 @@ class PengajuanController extends Controller
 
 	public function index ($status) 
 	{
+		$this->middleware('scope:'.$status);
+
 		$order 		= 'Tanggal ';
 		$urut 		= 'asc';
 
@@ -64,6 +66,8 @@ class PengajuanController extends Controller
 
 	public function show($status, $id)
 	{
+		$this->middleware('scope:'.$status);
+		
 		try {
 			$permohonan		= Pengajuan::where('id', $id)->status($status)->kantor(request()->get('kantor_aktif_id'))->with('jaminan', 'riwayat_status', 'status_terakhir')->first();
 

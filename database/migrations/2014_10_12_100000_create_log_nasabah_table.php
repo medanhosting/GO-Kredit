@@ -16,17 +16,17 @@ class CreateLogNasabahTable extends Migration
 		Schema::create('l_nasabah', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('parent_id')->nullable();
-			$table->string('nik');
-			$table->string('nama');
-			$table->date('tanggal_lahir');
-			$table->string('tempat_lahir');
-			$table->enum('jenis_kelamin', ['laki-laki', 'perempuan']);
-			$table->string('telepon');
-			$table->string('status_perkawinan');
-			$table->string('pekerjaan');
-			$table->double('penghasilan_bersih');
-			$table->text('alamat');
-			$table->text('keluarga');
+			$table->string('nik')->nullable();
+			$table->string('nama')->nullable();
+			$table->date('tanggal_lahir')->nullable();
+			$table->string('tempat_lahir')->nullable();
+			$table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
+			$table->string('telepon')->nullable();
+			$table->string('status_perkawinan')->nullable();
+			$table->string('pekerjaan')->nullable();
+			$table->double('penghasilan_bersih')->nullable();
+			$table->text('alamat')->nullable();
+			$table->text('keluarga')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});

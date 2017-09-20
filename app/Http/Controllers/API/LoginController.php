@@ -28,18 +28,18 @@ class LoginController extends BaseController
 
 		if(!$device)
 		{
-			return Response::json(['status' => 'gagal', 'data' => [], 'pesan' =>  ['Aplikasi tidak terdaftar.']]);
+			return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Aplikasi tidak terdaftar.']]);
 		}
 
 		if(!Hash::check($secret, $device->secret))
 		{
-			return Response::json(['status' => 'gagal', 'data' => [], 'pesan' =>  ['Secret tidak cocok.']]);
+			return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Secret tidak cocok.']]);
 		}
 		$salt 		= explode(',', env('APP_SALT', 'ABC,ACB'));
 
 		$token 		= base64_encode($key.'::'.$salt[rand(0,3)].'::'.$secret);
 	
-		return Response::json(['status' => 'sukses', 'data' => ['token' => $token]]);
+		return Response::json(['status' => 1, 'data' => ['token' => $token]]);
 	}
 
 
@@ -51,12 +51,12 @@ class LoginController extends BaseController
 
 		if(!$device)
 		{
-			return Response::json(['status' => 'gagal', 'data' => [], 'pesan' =>  ['Aplikasi tidak terdaftar.']]);
+			return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Aplikasi tidak terdaftar.']]);
 		}
 
 		if(!Hash::check($secret, $device->secret))
 		{
-			return Response::json(['status' => 'gagal', 'data' => [], 'pesan' =>  ['Secret tidak cocok.']]);
+			return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Secret tidak cocok.']]);
 		}
 	
 		$nip 		= request()->input('nip');
@@ -70,7 +70,7 @@ class LoginController extends BaseController
 
 			if(!$penempatan)
 			{
-				return Response::json(['status' => 'gagal', 'data' => [], 'pesan' =>  ['Harap menghubungi HOLDING untuk mendaftarkan akses Anda.']]);
+				return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Harap menghubungi HOLDING untuk mendaftarkan akses Anda.']]);
 			}
 
 			$salt 		= explode(',', env('APP_SALT', 'ABC,ACB'));
@@ -78,11 +78,11 @@ class LoginController extends BaseController
 			$kode_kantor= $penempatan['kantor_id'];
 
 			$token 		= base64_encode($key.'::'.$salt[rand(0,3)].'::'.$secret.'::'.$nip.'::'.$kode_kantor);
-			return Response::json(['status' => 'sukses', 'data' => ['token' => $token, 'nip' => $nip]]);
+			return Response::json(['status' => 1, 'data' => ['token' => $token, 'nip' => $nip]]);
 		}
 		else
 		{
-			return Response::json(['status' => 'gagal', 'data' => [], 'pesan' =>  ['NIP/Password Invalid.']]);
+			return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['NIP/Password Invalid.']]);
 		}
 	}
 }

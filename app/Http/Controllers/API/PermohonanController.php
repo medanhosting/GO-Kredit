@@ -8,7 +8,10 @@ use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Jaminan;
 use Thunderlabid\Manajemen\Models\Kantor;
 
-use Exception, Response;
+use App\Http\Service\UI\UploadBase64Gambar;
+use App\Http\Service\Policy\PerhitunganBunga;
+
+use Exception, Response, DB, Carbon\Carbon;
 
 class PermohonanController extends BaseController
 {
@@ -21,7 +24,7 @@ class PermohonanController extends BaseController
 				$data_input['kode_kantor']	= request()->get('kode_kantor');
 			}
 			else{
-				$location 			= request()->get('lokasi');
+				$location 			= request()->get('geolocation');
 				$semua_koperasi		= Kantor::whereIn('jenis', ['bpr', 'koperasi'])->get();
 				$min_distance 		= null;
 
@@ -41,10 +44,32 @@ class PermohonanController extends BaseController
 			$data_input['kemampuan_angsur'] 	= request()->get('kemampuan_angsur');
 			$data_input['is_mobile'] 			= true;
 			$data_input['nasabah']				= request()->get('nasabah'); 
-			$data_input['dokumen_pelengkap']	= request()->get('dokumen_pelengkap'); 
+
+			if(request()->has('dokumen_pelengkap'))
+			{
+				$data_input['dokumen_pelengkap']	= request()->get('dokumen_pelengkap'); 
+
+				//upload ktp
+				$ktp		= base64_decode($data_input['dokumen_pelengkap']['ktp']);
+				$data_ktp	= new UploadBase64Gambar('ktp', ['image' => $ktp]);
+				$data_ktp	= $data_ktp->handle();
+
+				$data_input['dokumen_pelengkap']['ktp']				= $data_ktp['url'];
+
+				//upload spesimen ttd
+				$ttd		= base64_decode($data_input['dokumen_pelengkap']['tanda_tangan']);
+				$data_ttd	= new UploadBase64Gambar('tanda_tangan', ['image' => $ttd]);
+				$data_ttd	= $data_ttd->handle();
+
+				$data_input['dokumen_pelengkap']['tanda_tangan']	= $data_ttd['url'];
+			}
+
+			//get data jaminan
 			$data_jaminan		= request()->get('jaminan');
 
 			//!!!!!!!CHECK AO!!!!!!!//
+			DB::beginTransaction();
+
 			$pengajuan 			= new Pengajuan;
 			$pengajuan->fill($data_input);
 			$pengajuan->save();
@@ -57,11 +82,53 @@ class PermohonanController extends BaseController
 				$jaminan->save();
 			}
 
-			return Response::json(['Sukses']);
+			DB::commit();
+
+			return Response::json(['status' => 1, 'data' => $pengajuan->toArray()]);
 		} catch (Exception $e) {
-			return Response::json($e->getMessage());
+			DB::rollback();
+			return Response::json(['status' => 0, 'data' => [], 'pesan' => $e->getMessage()]);
+		}
+	}
+
+	public function index()
+	{
+		try {
+			//1. find pengajuan
+			if(request()->has('nip_karyawan')){
+				$pengajuan	= Pengajuan::status('permohonan')->where('ao->nip', request()->get('nip_karyawan'))->get();
+			}
+			else{
+				$phone		= request()->get('mobile');
+				$pengajuan	= Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->get();
+			}
+
+			return Response::json(['status' => 1, 'data' => $pengajuan->toArray()]);
+
+		} catch (Exception $e) {
+			return Response::json(['status' => 0, 'data' => [], 'pesan' => $e->getMessage()]);
+		}
+	}
+
+	public function simulasi($mode)
+	{
+		$rincian 	= [];
+
+		if(request()->has('kemampuan_angsur') && request()->has('pokok_pinjaman'))
+		{
+			if($mode=='pa')
+			{
+				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/12);
+				$rincian 	= $rincian->pa();
+			}
+			elseif($mode=='pt')
+			{
+				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/12);
+				$rincian 	= $rincian->pt();
+			}
 		}
 
+		return Response::json(['status' => 1, 'data' => $rincian]);
 	}
 
 	private function count_distance($delta_lat, $delta_lon)
