@@ -113,16 +113,26 @@ class Jaminan extends Model
 		$rules['dokumen_jaminan.shm.tipe']				= ['required_if:jenis,shm', 'max:255', 'in:tanah,tanah_dan_bangunan'];
 		$rules['dokumen_jaminan.shm.nomor_sertifikat']	= ['required_if:jenis,shm', 'max:255'];
 		$rules['dokumen_jaminan.shm.atas_nama']			= ['required_if:jenis,shm', 'max:255'];
-		$rules['dokumen_jaminan.shm.luas_tanah']		= ['required_if:jenis,shm', 'numeric'];
-		$rules['dokumen_jaminan.shm.luas_bangunan']		= ['numeric', 'required_if:dokumen_jaminan.shm.tipe,tanah_dan_bangunan'];
+		
+		//HERE AGAIN
+		// $rules['dokumen_jaminan.shm.luas_tanah']		= ['required_if:jenis,shm', 'numeric'];
+		// $rules['dokumen_jaminan.shm.luas_bangunan']		= ['numeric', 'required_if:dokumen_jaminan.shm.tipe,tanah_dan_bangunan'];
+		$rules['dokumen_jaminan.shm.luas_tanah']		= ['numeric'];
+		$rules['dokumen_jaminan.shm.luas_bangunan']		= ['numeric'];
+		
 		$rules['dokumen_jaminan.shm.alamat']			= ['required_if:jenis,shm', 'array'];
 
 		$rules['dokumen_jaminan.shgb.tipe']						= ['required_if:jenis,shgb', 'max:255', 'in:tanah_dan_bangunan'];
 		$rules['dokumen_jaminan.shgb.nomor_sertifikat']			= ['required_if:jenis,shgb', 'max:255'];
 		$rules['dokumen_jaminan.shgb.masa_berlaku_sertifikat']	= ['required_if:jenis,shgb', 'max:255', 'date_format:"Y"'];
 		$rules['dokumen_jaminan.shgb.atas_nama']				= ['required_if:jenis,shgb', 'max:255'];
-		$rules['dokumen_jaminan.shgb.luas_tanah']				= ['required_if:jenis,shgb', 'numeric'];
-		$rules['dokumen_jaminan.shgb.luas_bangunan']			= ['numeric', 'required_if:dokumen_jaminan.shgb.tipe,tanah_dan_bangunan'];
+		
+		//HERE AGAIN
+		// $rules['dokumen_jaminan.shgb.luas_tanah']				= ['required_if:jenis,shgb', 'numeric'];
+		// $rules['dokumen_jaminan.shgb.luas_bangunan']			= ['numeric', 'required_if:dokumen_jaminan.shgb.tipe,tanah_dan_bangunan'];
+		$rules['dokumen_jaminan.shgb.luas_tanah']		= ['numeric'];
+		$rules['dokumen_jaminan.shgb.luas_bangunan']		= ['numeric'];
+		
 		$rules['dokumen_jaminan.shgb.alamat']					= ['required_if:jenis,shgb', 'array'];
 
 		$rules['pengajuan_id']		= ['required'];
