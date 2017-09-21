@@ -225,7 +225,7 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.collateral.bpkb.tipe']			= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
 		$rules['dokumen_survei.collateral.bpkb.nomor_polisi']	= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
 		$rules['dokumen_survei.collateral.bpkb.warna']			= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
-		$rules['dokumen_survei.collateral.bpkb.tahun']			= ['required_if:dokumen_survei.collateral.jenis,bpkb', 'date_format:"Y"', 'before:'.date('Y')];
+		$rules['dokumen_survei.collateral.bpkb.tahun']			= ['required_if:dokumen_survei.collateral.jenis,bpkb', 'date_format:"Y"', 'before:'.date('Y', strtotime('now'))];
 		$rules['dokumen_survei.collateral.bpkb.atas_nama']		= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
 		$rules['dokumen_survei.collateral.bpkb.alamat']			= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
 		$rules['dokumen_survei.collateral.bpkb.nomor_bpkb']		= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
