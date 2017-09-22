@@ -12,7 +12,7 @@
 				<div class="card text-center border-0" style="height: 100px;">
 					<div class="card-body p-2">
 						<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'permohonan', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style">
-							<i class="d-block fa fa-gear fa-2x"></i>
+							<i class="d-block fa fa-pencil-square-o fa-2x"></i>
 							Permohonan
 						</a>
 					</div>
@@ -23,7 +23,7 @@
 				<div class="card text-center border-0" style="height: 100px;">
 					<div class="card-body p-2">
 						<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'survei', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style">
-							<i class="d-block fa fa-home fa-2x"></i>
+							<i class="d-block fa fa-pencil-square-o fa-2x"></i>
 							Survei
 						</a>
 					</div>
@@ -34,7 +34,7 @@
 				<div class="card text-center border-0" style="height: 100px;">
 					<div class="card-body p-2">
 						<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'analisa', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style">
-							<i class="d-block fa fa-home fa-2x"></i>
+							<i class="d-block fa fa-pencil-square-o fa-2x"></i>
 							Analisa
 						</a>
 					</div>
@@ -45,7 +45,7 @@
 				<div class="card text-center border-0" style="height: 100px;">
 					<div class="card-body p-2">
 						<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'analisa', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style">
-							<i class="d-block fa fa-home fa-2x"></i>
+							<i class="d-block fa fa-pencil-square-o fa-2x"></i>
 							Keputusan
 						</a>
 					</div>
@@ -58,7 +58,7 @@
 						<div class="card text-center border-0" style="height: 100px;">
 							<div class="card-body p-2">
 								<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'setuju', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style">
-									<i class="d-block fa fa-home fa-2x"></i>
+									<i class="d-block fa fa-pencil-square-o fa-2x"></i>
 									Setujui
 								</a>
 							</div>
@@ -69,7 +69,7 @@
 						<div class="card text-center border-0" style="height: 100px;">
 							<div class="card-body p-2">
 								<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'tolak', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style">
-									<i class="d-block fa fa-home fa-2x"></i>
+									<i class="d-block fa fa-pencil-square-o fa-2x"></i>
 									Tolak
 								</a>
 							</div>
@@ -84,7 +84,7 @@
 						<div class="card text-center border-0" style="height: 100px;">
 							<div class="card-body p-2">
 								<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'realisasi', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style">
-									<i class="d-block fa fa-home fa-2x"></i>
+									<i class="d-block fa fa-pencil-square-o fa-2x"></i>
 									Realisasi
 								</a>
 							</div>
