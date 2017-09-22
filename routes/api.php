@@ -25,18 +25,21 @@ Route::group(['namespace' => 'API'], function(){
 	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi', 'middleware' => 'device']);
 	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store', 'middleware' => 'device']);
 	Route::any('/permohonan/index',				['uses' => 'PermohonanController@index', 'middleware' => 'device']);
+	Route::any('/survei/index',					['uses' => 'SurveiController@index', 'middleware' => 'device']);
 	Route::any('/foto/survei/{pengajuan_id}',	['uses' => 'SurveiController@upload_foto', 'middleware' => 'device']);
 });
 
-Route::any('/pengaturan', function (Request $request) 
-{
-	if($request->has('nip_karyawan'))
+Route::middleware('device')->group( function() {
+	Route::any('/pengaturan', function (Request $request) 
 	{
-		return Response::json(['status' => 1, 'data' => ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1]]);
-	}
+		if($request->has('nip_karyawan'))
+		{
+			return Response::json(['status' => 1, 'data' => ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1, 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3]]);
+		}
 
-	$phone 			= $request->get('mobile');
-	$jlh_pengajuan	= \Thunderlabid\Pengajuan\Models\Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->count();
+		$phone 			= $request->get('mobile');
+		$jlh_pengajuan	= \Thunderlabid\Pengajuan\Models\Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->count();
 
-	return Response::json(['status' => 1, 'data' => ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'minimum_bpkb' => Carbon\Carbon::now()->subYears(25)->format('Y'), 'remain_pengajuan' => (3 - $jlh_pengajuan), 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3]]);
+		return Response::json(['status' => 1, 'data' => ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'minimum_bpkb' => Carbon\Carbon::now()->subYears(25)->format('Y'), 'remain_pengajuan' => (3 - $jlh_pengajuan), 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3]]);
+	});
 });

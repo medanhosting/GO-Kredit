@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Routing\Controller as BaseController;
 
+use Thunderlabid\Pengajuan\Models\Pengajuan;
+
 use Thunderlabid\Survei\Models\Survei;
 use Thunderlabid\Survei\Models\SurveiFoto;
 use App\Http\Service\UI\UploadBase64Gambar;
@@ -36,6 +38,24 @@ class SurveiController extends BaseController
 			}
 
 			return Response::json(['status' => 1, 'data' => []]);
+		} catch (Exception $e) {
+			return Response::json(['status' => 0, 'data' => [], 'pesan' => $e->getMessage()]);
+		}
+	}
+
+	public function index()
+	{
+		try {
+			//1. find pengajuan
+			if(request()->has('nip_karyawan')){
+				$pengajuan	= Pengajuan::status('survei')->where('ao->nip', request()->get('nip_karyawan'))->get();
+			}
+			else{
+				throw new Exception("Harus login sebagai karyawan", 1);
+			}
+
+			return Response::json(['status' => 1, 'data' => $pengajuan->toArray()]);
+
 		} catch (Exception $e) {
 			return Response::json(['status' => 0, 'data' => [], 'pesan' => $e->getMessage()]);
 		}
