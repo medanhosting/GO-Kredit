@@ -42,6 +42,8 @@ class SurveiDetail extends Model
 	protected $errors;
 	protected $latest_analysis;
 
+	protected $appends 	= ['has_foto'];
+
 	public static $types	= ['character', 'condition', 'capacity', 'capital', 'collateral'];
     
 	protected $events 	= [
@@ -67,6 +69,11 @@ class SurveiDetail extends Model
 	public function survei()
 	{
 		return $this->belongsTo(Survei::class, 'survei_id');
+	}
+
+	public function foto()
+	{
+		return $this->hasMany(SurveiFoto::class, 'survei_id');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -398,6 +405,16 @@ class SurveiDetail extends Model
 		}
 
 		return $variable;
+	}
+
+	public function getHasFotoAttribute()
+	{
+		if(count($this->foto))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	public function getErrorsAttribute()

@@ -48,7 +48,7 @@ class SurveiController extends BaseController
 		try {
 			//1. find pengajuan
 			if(request()->has('nip_karyawan')){
-				$pengajuan	= Pengajuan::status('survei')->where('ao->nip', request()->get('nip_karyawan'))->get();
+				$pengajuan	= Survei::wherehas('pengajuan', function($q){$q->status('survei');})->where('surveyor->nip', request()->get('nip_karyawan'))->with(['collateral', 'collateral.foto'])->get();
 			}
 			else{
 				throw new Exception("Harus login sebagai karyawan", 1);
