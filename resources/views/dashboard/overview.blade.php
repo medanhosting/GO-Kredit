@@ -95,7 +95,7 @@
 						<div class="card text-center border-0" style="height: 100px;">
 							<div class="card-body p-2">
 								<a href="{{ route('pengajuan.pengajuan.index', ['status' => 'expired', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style">
-									<i class="d-block fa fa-home fa-2x"></i></h4>
+									<i class="d-block fa fa-pencil-square-o fa-2x"></i>
 									Expired
 								</a>
 							</div>
