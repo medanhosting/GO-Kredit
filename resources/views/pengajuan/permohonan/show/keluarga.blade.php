@@ -19,7 +19,7 @@
 		@isset ($permohonan['nasabah']['keluarga'])
 			@foreach ($permohonan['nasabah']['keluarga'] as $k => $v)
 				<tr>
-					<td>{{ $k }}</td>
+					<td>{{ $k + 1 }}</td>
 					@foreach ($v as $k2 => $v2)
 						<td class="text-capitalize">{{ $v2 }}</td>
 					@endforeach

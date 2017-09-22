@@ -81,11 +81,11 @@ class PengajuanController extends Controller
 			$breadcrumb 	= [
 				[
 					'title'	=> $status,
-					'route' => route('pengajuan.pengajuan.index', ['status' => $status])
+					'route' => route('pengajuan.pengajuan.index', ['status' => $status, 'kantor_aktif_id' => request()->get('kantor_aktif_id')])
 				], 
 				[
 					'title'	=> $id,
-					'route' => route('pengajuan.pengajuan.index', ['status' => $status, 'id' => $id])
+					'route' => route('pengajuan.pengajuan.index', ['status' => $status, 'id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')])
 				]
 			];
 
@@ -95,8 +95,8 @@ class PengajuanController extends Controller
 			}
 			
 			$survei 		= Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'collateral'])->get()->toArray();
-			$analisa 		= Analisa::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->get()->toArray();
-			$putusan 		= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->get()->toArray();
+			$analisa 		= Analisa::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
+			$putusan 		= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
 
 			$r_nasabah 		= $this->riwayat_kredit_nasabah($permohonan['nasabah']['nik'], $id);
 			$r_jaminan 		= $this->riwayat_kredit_jaminan($permohonan['jaminan_kendaraan'], $permohonan['jaminan_tanah_bangunan'], $id);

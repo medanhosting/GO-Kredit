@@ -15,6 +15,13 @@ use Exception, Response, DB, Carbon\Carbon;
 
 class PermohonanController extends BaseController
 {
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->middleware('scope:permohonan');
+	}
+
 	public function store()
 	{
 		try {

@@ -12,7 +12,18 @@
 				</div>
 			</div>
 
-			@include ('pengajuan.survei.components.table', ['add' => true])
+			@if($permohonan['status_terakhir']['status']=='survei')
+				@include ('pengajuan.survei.components.table', ['add' => true])
+			@else
+				<div class="row mb-2">
+					<div class="col" role="tablist">
+						<a href="{{route('pengajuan.survei.assign', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}" class="btn btn-outline-primary data-panel">
+							assign survei
+						</a>
+					</div>
+				</div>
+				@include ('pengajuan.survei.components.table')
+			@endif
 		</div>
 		<div class="panel-toggle-pane" id="form" style="display: none;">
 			<div class="row mb-3">

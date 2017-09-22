@@ -32,6 +32,7 @@ class EventServiceProvider extends ServiceProvider
 
 		Event::listen('Thunderlabid\Survei\Events\SurveiDetail\SurveiDetailCreated', 'App\Listeners\SimpanStatusDoingSurvei');
 		Event::listen('Thunderlabid\Survei\Events\SurveiDetail\SurveiDetailUpdated', 'App\Listeners\SimpanStatusDoingSurvei');
+		Event::listen('Thunderlabid\Survei\Events\Survei\SurveiCreated', 'App\Listeners\SimpanStatusTodoSurvei');
 
 		Event::listen('Thunderlabid\Survei\Events\SurveiFoto\SurveiFotoCreated', 'App\Listeners\SimpanStatusDoingSurvei');
 		Event::listen('Thunderlabid\Survei\Events\SurveiFoto\SurveiFotoUpdated', 'App\Listeners\SimpanStatusDoingSurvei');

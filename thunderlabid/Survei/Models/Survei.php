@@ -16,13 +16,14 @@ use Thunderlabid\Survei\Exceptions\AppException;
 // EVENTS //
 ////////////
 use Thunderlabid\Survei\Events\Survei\SurveiCreating;
-// use Thunderlabid\Survei\Events\Survei\SurveiCreated;
+use Thunderlabid\Survei\Events\Survei\SurveiCreated;
 use Thunderlabid\Survei\Events\Survei\SurveiUpdating;
 // use Thunderlabid\Survei\Events\Survei\SurveiUpdated;
 // use Thunderlabid\Survei\Events\Survei\SurveiDeleting;
 // use Thunderlabid\Survei\Events\Survei\SurveiDeleted;
 
 use Thunderlabid\Survei\Traits\WaktuTrait;
+use Thunderlabid\Pengajuan\Models\Pengajuan;
 
 class Survei extends Model
 {
@@ -40,7 +41,7 @@ class Survei extends Model
     
 	protected $events 	= [
 		'creating' 	=> SurveiCreating::class,
-		// 'created' 	=> SurveiCreated::class,
+		'created' 	=> SurveiCreated::class,
 		'updating' 	=> SurveiUpdating::class,
 		// 'updated' 	=> SurveiUpdated::class,
 		// 'deleted' 	=> SurveiDeleted::class,
@@ -95,7 +96,7 @@ class Survei extends Model
 
 	public function pengajuan()
 	{
-		return $this->belongsTo(SurveiFoto::class, 'pengajuan_id');
+		return $this->belongsTo(Pengajuan::class, 'pengajuan_id');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

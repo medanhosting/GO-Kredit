@@ -56,6 +56,9 @@
 							<div class="tab-pane paneltab-pane" id="keputusan" role="tabpanel">
 								@include ('pengajuan.permohonan.show.keputusan')
 							</div>
+							<div class="tab-pane paneltab-pane" id="realisasi" role="tabpanel">
+								@include ('pengajuan.permohonan.show.realisasi')
+							</div>
 						</div>
 					</div>
 				</div>

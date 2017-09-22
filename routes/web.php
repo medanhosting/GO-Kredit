@@ -34,10 +34,27 @@
 			Route::get('/{status}/{id}/show',	['as'	=> 'pengajuan.show', 	'uses' => 'PengajuanController@show']);
 			Route::delete('/{status}/{id}',		['as'	=> 'pengajuan.destroy', 'uses' => 'PengajuanController@destroy']);
 			
+			
 			Route::middleware('scope:permohonan')->group( function() {
 				Route::resource('permohonan', 		'PermohonanController');
 			});
+			Route::middleware('scope:survei')->group( function() {
+				Route::resource('survei', 			'SurveiController');
+				Route::get('/survei/{id}/assign',	['as'	=> 'survei.assign', 	'uses' => 'SurveiController@assign']);
+			});
+
+			Route::middleware('scope:analisa')->group( function() {
+				Route::resource('analisa', 			'AnalisaController');
+			});
+
+			Route::middleware('scope:keputusan')->group( function() {
+				Route::resource('keputusan', 		'PutusanController');
+			});
 			
+			Route::middleware('scope:realisasi')->group( function() {
+				Route::get('/realisasi/{id}/done',	['as'	=> 'realisasi.done', 	'uses' => 'RealisasiController@done']);
+			});
+
 			Route::get('/realisasi/{id}/print/{mode}',		['as'	=> 'pengajuan.print', 	'uses' => 'PengajuanController@print', 'middleware' => 'scope:realisasi']);
 		});
 		
