@@ -17,9 +17,9 @@ class PermohonanController extends BaseController
 {
 	public function __construct()
 	{
-		parent::__construct();
+		// parent::__construct();
 
-		$this->middleware('scope:permohonan');
+		// $this->middleware('scope:permohonan');
 	}
 
 	public function store()

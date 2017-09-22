@@ -139,13 +139,5 @@
 @endpush
 
 @push('submenu')
-	<div class="container-fluid bg-light" style="background-color: #eee !important;">
-		<div class="row">
-			<div class="col">
-				<nav class="nav">
-					<a href="#" class="nav-link text-secondary">Simulasi Kredit</a>
-				</nav>
-			</div>
-		</div>
-	</div>
+	@include('template.submenu.submenu')
 @endpush

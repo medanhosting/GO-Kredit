@@ -78,7 +78,8 @@ class LoginController extends BaseController
 			$kode_kantor= $penempatan['kantor_id'];
 
 			$token 		= base64_encode($key.'::'.$salt[rand(0,3)].'::'.$secret.'::'.$nip.'::'.$kode_kantor);
-			return Response::json(['status' => 1, 'data' => ['token' => $token, 'nip' => $nip]]);
+			
+			return Response::json(['status' => 1, 'data' => ['token' => $token, 'nip' => $nip, 'scopes' => $penempatan['scopes']]]);
 		}
 		else
 		{
