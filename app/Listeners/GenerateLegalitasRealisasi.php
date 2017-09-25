@@ -49,7 +49,7 @@ class GenerateLegalitasRealisasi
 				$data['pengajuan_id']	= $model->pengajuan['id'];
 
 				$data['isi']['pengajuan']	= Pengajuan::where('id', $model->pengajuan_id)->orderby('created_at', 'desc')->with(['jaminan'])->first()->toArray();
-				$data['isi']['survei']		= Survei::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capital', 'capacity', 'collateral', 'pengajuan', 'foto'])->first()->toArray();
+				$data['isi']['survei']		= Survei::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capital', 'capacity', 'collateral', 'pengajuan'])->first()->toArray();
 				$data['isi']['analisa']		= Analisa::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first()->toArray();
 				$data['isi']['putusan']		= Putusan::where('pengajuan_id', $model->pengajuan_id)->orderby('tanggal', 'desc')->first()->toArray();
 				$data['isi']['pimpinan']	= PenempatanKaryawan::where('kantor_id', $model->pengajuan->kode_kantor)->where('role', 'pimpinan')->active(Carbon::createFromFormat('d/m/Y H:i', $model->tanggal))->with(['orang', 'kantor'])->first()->toArray();

@@ -333,10 +333,10 @@ class SurveiTableSeeder extends Seeder
 
 			foreach ($s_survei_c5 as $keys5 => $values5) 
 			{
-				$values5['survei_id']				= $saved_survei['id'];
-				$s_survei_foto[$keys5]['survei_id']	= $saved_survei['id'];
-				
-				SurveiDetail::create($values5);
+				$values5['survei_id']	= $saved_survei['id'];
+				$s_detail				= SurveiDetail::create($values5);
+
+				$s_survei_foto[$keys5]['survei_detail_id']	= $s_detail['id'];
 				SurveiFoto::create($s_survei_foto[$keys5]);
 			}
 		}
@@ -520,8 +520,8 @@ class SurveiTableSeeder extends Seeder
 
 	private function survei_foto($paket_foto)
 	{
-		$survei_foto['arsip_foto']['foto'][0]	= $paket_foto[rand(0,2)];
-		$survei_foto['arsip_foto']['foto'][1]	= $paket_foto[rand(0,2)];
+		$survei_foto['arsip_foto'][0]	= $paket_foto[rand(0,2)];
+		$survei_foto['arsip_foto'][1]	= $paket_foto[rand(0,2)];
 
 		return $survei_foto;
 	}

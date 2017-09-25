@@ -73,7 +73,7 @@ class SurveiDetail extends Model
 
 	public function foto()
 	{
-		return $this->hasMany(SurveiFoto::class, 'survei_id');
+		return $this->hasOne(SurveiFoto::class, 'survei_detail_id');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

@@ -15,7 +15,7 @@ class CreateSurveiFotoTable extends Migration
 	{
 		Schema::create('s_survei_foto', function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('survei_id');
+			$table->integer('survei_detail_id');
 			$table->text('arsip_foto');
 			$table->timestamps();
 			$table->softDeletes();

@@ -30,7 +30,7 @@ class SurveiFoto extends Model
 	use WaktuTrait;
 
 	protected $table	= 's_survei_foto';
-	protected $fillable	= ['survei_id', 'arsip_foto'];
+	protected $fillable	= ['survei_detail_id', 'arsip_foto'];
 	protected $hidden	= [];
 	protected $dates	= [];
 
@@ -58,9 +58,9 @@ class SurveiFoto extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
-	public function survei()
+	public function surveidetail()
 	{
-		return $this->belongsTo(Survei::class, 'survei_id');
+		return $this->belongsTo(SurveiDetail::class, 'survei_detail_id');
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------
@@ -92,8 +92,8 @@ class SurveiFoto extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['arsip_foto.foto.*.url']			= ['required', 'url'];
-		// $rules['arsip_foto.foto.*.keterangan']	= ['required'];
+		$rules['arsip_foto.*.url']			= ['required', 'url'];
+		// $rules['arsip_foto.*.keterangan']	= ['required'];
 
 		$data 				= $this->attributes;
 		$data['arsip_foto']	= json_decode($data['arsip_foto'], true);

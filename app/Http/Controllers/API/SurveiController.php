@@ -7,34 +7,34 @@ use Illuminate\Routing\Controller as BaseController;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 
 use Thunderlabid\Survei\Models\Survei;
+use Thunderlabid\Survei\Models\SurveiDetail;
 use Thunderlabid\Survei\Models\SurveiFoto;
-use App\Http\Service\UI\UploadBase64Gambar;
 
 use Exception, Response;
 
 class SurveiController extends BaseController
 {
-	public function upload_foto($pengajuan_id)
+	public function simpan_foto($pengajuan_id, $survei_detail_id)
 	{
 		try {
 			//1. find latest survei
 			if(request()->has('nip_karyawan'))
 			{
-				$survei		= Survei::where('pengajuan_id', $pengajuan_id)->orderby('tanggal', 'desc')->first();
+				$survei			= Survei::where('pengajuan_id', $pengajuan_id)->orderby('tanggal', 'desc')->first();
+				$survei_detail 	= SurveiDetail::where('survei_id', $survei['id'])->where('id', $survei_detail_id)->firstorfail();
 
-				$data_foto 	= request()->get('foto');
-				$fotos 		= [];
+				$fotos 		= request()->get('foto');
 
-				foreach ($data_foto as $k => $v) {
-					//upload
-					$survei		= base64_decode($v);
-					$fotos[$k]	= new UploadBase64Gambar('survei', $survei);
-					$fotos[$k]	= $fotos[$k]->handle();
+				$s_foto 	= SurveiFoto::where('survei_detail_id', $survei_detail_id)->first();
+
+				if(!$s_foto)
+				{
+					$s_foto = new SurveiFoto;
 				}
 
-				$foto				= new SurveiFoto;
-				$foto->survei_id 	= $survei['id'];
-				$foto->arsip_foto 	= ['foto' => $fotos];
+				$s_foto->survei_detail_id 	= $survei_detail_id;
+				$s_foto->arsip_foto 		= $fotos;
+				$s_foto->save();
 			}
 
 			return Response::json(['status' => 1, 'data' => []]);

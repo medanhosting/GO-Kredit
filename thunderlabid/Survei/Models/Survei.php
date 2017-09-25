@@ -99,11 +99,6 @@ class Survei extends Model
 		return $this->hasMany(SurveiDetail::class, 'survei_id')->where('jenis', 'collateral')->whereIn('dokumen_survei->collateral->jenis', ['shm', 'shgb']);
 	}
 
-	public function foto()
-	{
-		return $this->hasMany(SurveiFoto::class, 'survei_id');
-	}
-
 	public function pengajuan()
 	{
 		return $this->belongsTo(Pengajuan::class, 'pengajuan_id');
