@@ -288,7 +288,7 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.collateral.shgb.nomor_sertifikat']		= ['required_if:dokumen_survei.collateral.jenis,shm'];
 		$rules['dokumen_survei.collateral.shgb.masa_berlaku_sertifikat']= ['required_if:jenis,collateral', 'date_format:"Y-m-d"'];
 		$rules['dokumen_survei.collateral.shgb.alamat']		= ['required_if:jenis,collateral'];
-		$rules['dokumen_survei.collateral.shgb.tipe']		= ['required_if:jenis,collateral', 'in:tanah_dan_bangunan'];
+		$rules['dokumen_survei.collateral.shgb.tipe']		= ['required_if:jenis,collateral', 'in:tanah,tanah_dan_bangunan'];
 		$rules['dokumen_survei.collateral.shgb.luas_tanah']	= ['required_if:jenis,collateral'];
 		$rules['dokumen_survei.collateral.shgb.panjang_tanah']		= ['required_if:jenis,collateral'];
 		$rules['dokumen_survei.collateral.shgb.lebar_tanah']		= ['required_if:jenis,collateral'];
