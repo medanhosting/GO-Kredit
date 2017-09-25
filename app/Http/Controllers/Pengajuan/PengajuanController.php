@@ -62,7 +62,7 @@ class PengajuanController extends Controller
 			});
 		}
 
-		$pengajuan 				= $pengajuan->orderby('created_at', $urut)->paginate();
+		$pengajuan 				= $pengajuan->orderby('p_pengajuan.created_at', $urut)->paginate();
 
 		view()->share('pengajuan', $pengajuan);
 		view()->share('status', $status);
@@ -76,7 +76,7 @@ class PengajuanController extends Controller
 	public function show($status, $id)
 	{
 		try {
-			$permohonan		= Pengajuan::where('id', $id)->status($status)->kantor(request()->get('kantor_aktif_id'))->with('jaminan_kendaraan', 'jaminan_tanah_bangunan', 'riwayat_status', 'status_terakhir')->first();
+			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->status($status)->kantor(request()->get('kantor_aktif_id'))->with('jaminan_kendaraan', 'jaminan_tanah_bangunan', 'riwayat_status', 'status_terakhir')->first();
 
 			$breadcrumb 	= [
 				[
@@ -93,8 +93,8 @@ class PengajuanController extends Controller
 			{
 				throw new Exception("Data tidak ada!", 1);
 			}
-			
 			$survei 		= Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_tanah_bangunan'])->get()->toArray();
+
 			$analisa 		= Analisa::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
 			$putusan 		= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
 			$r_nasabah 		= $this->riwayat_kredit_nasabah($permohonan['nasabah']['nik'], $id);
@@ -113,7 +113,7 @@ class PengajuanController extends Controller
 			return $this->layout;
 
 		} catch (Exception $e) {
-			return redirect(route('pengajuan.pengajuan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
+			return redirect(route('pengajuan.pengajuan.index', ['status' => $status, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
 		}
 	}
 

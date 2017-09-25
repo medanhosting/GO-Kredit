@@ -24,7 +24,7 @@
 				<nav class="nav nav-tabs mb-5 border" role="tablist" style="background-color: #fafafa;">
 					<a href="#kredit" class="nav-item nav-link active w-25 text-primary rounded-0" data-toggle="tab" role="tab" aria-controls="kredit" aria-expanded="true"><h6 class="mb-0">1 &nbsp;kredit</h6></a>
 					<a href="#nasabah" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="nasabah" aria-expanded="true"><h6 class="mb-0">2 &nbsp;nasabah</h6></a>
-					<a href="#kerabat-keluarga" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="kerabat-keluarga" aria-expanded="true"><h6 class="mb-0">3 &nbsp;kerabat/keluarga</h6></a>
+					<a href="#keluarga" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="kerabat-keluarga" aria-expanded="true"><h6 class="mb-0">3 &nbsp;kerabat/keluarga</h6></a>
 					<a href="#jaminan" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="jaminan" aria-expanded="true"><h6 class="mb-0">4 &nbsp;jaminan</h6></a>
 				</nav>
 
@@ -51,11 +51,11 @@
 							<div class="clearfix">&nbsp;</div>
 							<div class="clearfix">&nbsp;</div>
 							<a href="#kredit" class="btn btn-primary btn-outline float-left ml-3" data-toggle="tab" role="tab" aria-controls="kredit" aria-expanded="true">Sebelumnya</a>
-							<a href="#jaminan" class="btn btn-primary float-right mr-3" data-toggle="tab" role="tab" aria-controls="keraba-keluarga" aria-expanded="true">Selanjutnya</a>
+							<a href="#keluarga" class="btn btn-primary float-right mr-3" data-toggle="tab" role="tab" aria-controls="keluarga" aria-expanded="true">Selanjutnya</a>
 						</div>
 
 						<!-- data keluarga -->
-						 <div class="tab-pane fade" id="kerabat-keluarga" role="tabpanel">
+						 <div class="tab-pane fade" id="keluarga" role="tabpanel">
 							<h5 class="text-gray mb-4 pl-3">Data Kerabat/Keluarga</h5>
 							<div class="row ml-0 mr-0">
 								<div class="col">
@@ -66,7 +66,7 @@
 
 							<div class="clearfix">&nbsp;</div>
 							<div class="clearfix">&nbsp;</div>
-							<a href="#kredit" class="btn btn-primary btn-outline float-left ml-3" data-toggle="tab" role="tab" aria-controls="nasabah" aria-expanded="true">Sebelumnya</a>
+							<a href="#nasabah" class="btn btn-primary btn-outline float-left ml-3" data-toggle="tab" role="tab" aria-controls="nasabah" aria-expanded="true">Sebelumnya</a>
 							<a href="#jaminan" class="btn btn-primary float-right mr-3" data-toggle="tab" role="tab" aria-controls="jaminan" aria-expanded="true">Selanjutnya</a>
 						</div>	
 
@@ -75,16 +75,16 @@
 							<div class="row ml-0 mr-0">
 								<div class="col">
 									<!-- table jaminan kendaraan -->
-									@include ('pengajuan.permohonan.jaminan_kendaraan.components.table', ['title' => true])
+									@include ('pengajuan.permohonan.jaminan_kendaraan.components.fill', ['title' => true])
 									<div class="clearfix">&nbsp;</div>
 									<!-- table jaminan tanah bangunan -->
-									@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table', ['title' => true])
+									@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.fill', ['title' => true])
 								</div>
 							</div>
 							
 							<div class="clearfix">&nbsp;</div>
 							<div class="clearfix">&nbsp;</div>
-							<a href="#nasabah" class="btn btn-primary float-left ml-4" data-toggle="tab" role="tab" aria-controls="kerabat-keluarga" aria-expanded="true">Sebelumnya</a>
+							<a href="#keluarga" class="btn btn-primary float-left ml-4" data-toggle="tab" role="tab" aria-controls="keluarga" aria-expanded="true">Sebelumnya</a>
 							{!! Form::bsSubmit('Ajukan Permohonan', ['class' => 'btn btn-primary float-right mr-3']) !!}
 						</div>
 					</div>

@@ -21,6 +21,10 @@ class ScopeMiddleware
 			return redirect()->back()->withErrors('Forbidden!');
 		}
 
+		if(str_is($scope, 'setuju') || str_is($scope, 'tolak'))
+		{
+			$scope 	= 'keputusan';
+		}
 		if(in_array($scope, $active_p['scopes']))
 		{
 			return $next($request);

@@ -21,7 +21,7 @@
 	</div>
 </div>
 <div class="col-auto col-md-9 pb-3">
-	{!! Form::bsCheckbox('Nasabah menggunakan E-kTP', 'nasabah[is_ktp]', null, ['class' => 'form-check-input'], true) !!}
+	{!! Form::bsCheckbox('Nasabah menggunakan e-KTP', 'nasabah[is_ktp]', null, ['class' => 'form-check-input'], true) !!}
 </div>
 <div class="col-auto col-md-6">
 	{!! Form::bsText('Nama', 'nasabah[nama]', null, ['class' => 'form-control', 'placeholder' => 'masukkan nama lengkap']) !!}

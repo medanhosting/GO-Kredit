@@ -27,8 +27,7 @@
 					<div class="card-body">
 						<h4 class="card-title">Menu</h4>
 						<nav class="nav flex-column" role="tablist">
-							<a href="#" class="nav-link active" data-toggle="paneltab" data-target="#overview">Overview</a>
-							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#keluarga">Kerabat/Keluarga</a>
+							<a href="#" class="nav-link active" data-toggle="paneltab" data-target="#overview">Permohonan</a>
 							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#survei">Survei</a>
 							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#analisa">Analisa</a>
 							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#keputusan">Keputusan</a>
@@ -43,9 +42,6 @@
 						<div class="tab-content paneltab-content">
 							<div class="tab-pane paneltab-pane show active" id="overview" role="tabpanel">
 								@include ('pengajuan.permohonan.show.overview')
-							</div>
-							<div class="tab-pane paneltab-pane" id="keluarga" role="tabpanel">
-								@include ('pengajuan.permohonan.show.keluarga')
 							</div>
 							<div class="tab-pane paneltab-pane" id="survei" role="tabpanel">
 								@include ('pengajuan.survei.index')

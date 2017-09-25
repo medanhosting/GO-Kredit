@@ -36,7 +36,7 @@ class BatasanPengajuan
 		$model = $event->data;
 
 		//check duplikasi Pengajuan
-		$exists_pengajuan	= Pengajuan::status('permohonan')->where('id', '<>', $model->id)->where('nasabah->telepon', $model->nasabah['telepon'])->count();
+		$exists_pengajuan	= Pengajuan::status('permohonan')->where('p_pengajuan.id', '<>', $model->id)->where('nasabah->telepon', $model->nasabah['telepon'])->count();
 
 		if($exists_pengajuan > 2)
 		{

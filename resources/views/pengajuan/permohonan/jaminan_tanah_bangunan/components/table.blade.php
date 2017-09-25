@@ -1,61 +1,66 @@
-@isset ($title)
-	<p class="text-secondary mb-4"><strong><u>Tanah &amp; Bangunan</u></strong></p>
-@endif
-<a href="#" class="btn btn-primary btn-sm btn-link mb-1" data-toggle="modal" data-target="#jaminan-tanah-bangunan"><i class="fa fa-plus"></i> Jaminan Tanah &amp; Bangunan</a>
-
-<table class="table table-sm table-responsive">
+@if(count($jaminan_tanah_bangunan))
+<p class="text-secondary text-capitalize mb-1">tanah &amp; bangunan</p>
+<table class="table table-sm table-bordered">
 	<thead class="thead-default">
 		<tr>
-			<th>#</th>
-			<th>Tipe</th>
-			<th>Jenis</th>
-			<th class="text-center">No. Sertifikat</th>
-			<th>Model</th>
-			<th class="text-center">Luas Bangunan/ Luas Tanah </th>
-			<th>Atas Nama</th>
-			<th class="text-center">Nilai Jaminan</th>
-			<th class="text-center">Tahun Perolehan</th>
-			<th></th>
+			<th style="border:1px #aaa solid;vertical-align:middle;" class="text-center" rowspan="2">#</th>
+			<th style="border:1px #aaa solid" class="text-center" colspan="4">Sertifikat</th>
+			<th style="border:1px #aaa solid;vertical-align:middle;" class="text-center" rowspan="2">Tahun Perolehan</th>
+			<th style="border:1px #aaa solid;vertical-align:middle;" class="text-center" rowspan="2">Harga Jaminan (*)</th>
+		</tr>
+		<tr>
+			<th style="border:1px #aaa solid">Jenis [Masa Berlaku]</th>
+			<th style="border:1px #aaa solid">Nomor</th>
+			<th style="border:1px #aaa solid">Tipe</th>
+			<th style="border:1px #aaa solid">Luas</th>
 		</tr>
 	</thead>
-	<tbody id="content-tanah-bangunan">
-		{{-- @isset ($permohonan['jaminan']) --}}
-
-		{{-- @endisset --}}
-
-		{{-- @empty ($permohonan['jaminan']) --}}
-			<tr id="content-tanah-bangunan-default">
-				<td colspan="10" class="text-center">Belum ada jaminan tanah &amp; bangunan</td>
+	<tbody>
+		@forelse($jaminan_tanah_bangunan as $kj => $vj)
+		<tr>
+			<td style="border:1px #aaa solid" class="text-center">{{$kj+1}}</td>
+			<td style="border:1px #aaa solid">{{strtoupper($vj['jenis'])}} </td>
+			<td style="border:1px #aaa solid">
+				{{$vj['dokumen_jaminan'][$vj['jenis']]['nomor_sertifikat']}}
+				@if(isset($vj['dokumen_jaminan'][$vj['jenis']]['masa_berlaku_sertifikat']))
+					[{{$vj['dokumen_jaminan'][$vj['jenis']]['masa_berlaku_sertifikat']}}]
+				@endif
+			</td>
+			<td style="border:1px #aaa solid">{{str_replace('_', ' ', $vj['dokumen_jaminan'][$vj['jenis']]['tipe'])}}</td>
+			<td style="border:1px #aaa solid">
+				Luas Tanah : {{$vj['dokumen_jaminan'][$vj['jenis']]['luas_tanah']}}M<sup>2</sup>
+				<br/>
+				@if(isset($vj['dokumen_jaminan'][$vj['jenis']]['luas_bangunan']))
+					Luas Bangunan : {{$vj['dokumen_jaminan'][$vj['jenis']]['luas_bangunan']}}M<sup>2</sup>
+				@endif
+			</td>
+			<td style="border:1px #aaa solid" class="text-right">{{$vj['tahun_perolehan']}}</td>
+			<td style="border:1px #aaa solid" class="text-right">{{$vj['nilai_jaminan']}}</td>
+		</tr>
+		@empty
+			<tr>
+				<td style="border:1px #aaa solid" colspan="7" class="text-center"><i class="text-secondary">tidak ada data</i></td>
 			</tr>
-			<tr id="clone-tanah-bangunan" style="display: none;">
-				<td class="nomor"></td>
-				<td class="tipe text-capitalize"></td>
-				<td class="jenis_sertifikat text-capitalize"></td>
-				<td class="nomor_sertifikat text-capitalize text-center"></td>
-				<td class="model text-capitalize"></td>
-				<td class="luas_tanah text-capitalize text-center"></td>
-				<td class="atas_nama text-capitalize"></td>
-				<td class="nilai_jaminan text-capitalize text-right"></td>
-				<td class="tahun_perolehan text-center"></td>
-				<td class="action"></td>
-
-				{!! Form::hidden('jenis', null, ['disabled' => true]) !!}
-				{!! Form::hidden('tipe', null, ['disabled' => true]) !!}
-				{!! Form::hidden('nomor_sertifikat', null, ['disabled' => true]) !!}
-				{!! Form::hidden('luas_tanah', null, ['disabled' => true]) !!}
-				{!! Form::hidden('luas_bangunan', null, ['disabled' => true]) !!}
-				{!! Form::hidden('atas_nama', null, ['disabled' => true]) !!}
-				{!! Form::hidden('nilai_jaminan', null, ['disabled' => true]) !!}
-				{!! Form::hidden('tahun_perolehan', null, ['disabled' => true]) !!}
-				{!! Form::hidden('alamat[alamat]', null, ['disabled' => true]) !!}
-				{!! Form::hidden('alamat[rw]', null, ['disabled' => true]) !!}
-				{!! Form::hidden('alamat[rt]', null, ['disabled' => true]) !!}
-				{!! Form::hidden('alamat[kota]', null, ['disabled' => true]) !!}
-				{!! Form::hidden('alamat[kecamatan]', null, ['disabled' => true]) !!}
-				{!! Form::hidden('alamat[kelurahan]', null, ['disabled' => true]) !!}
-				{!! Form::hidden('tahun_perolehan', null, ['disabled' => true]) !!}
-			</tr>
-		{{-- @endempty --}}
+		@endforelse
+		@if(isset($allow_add) && $allow_add)
+		<tr>
+			<td style="border:1px #aaa solid" colspan="7" class="text-right">
+				<a href="#" class="btn btn-primary btn-sm btn-link mb-1" data-toggle="modal" data-target="#jaminan-tanah-bangunan"><i class="fa fa-plus"></i> Jaminan Tanah &amp; Bangunan</a>
+			</td>
+		</tr>
+		@else
+		<tr>
+			<td style="border:1px #aaa solid" colspan="7" class="text-right">
+				<small>
+					<i class="text-secondary">* menurut nasabah</i>
+				</small>
+			</td>
+		</tr>
+		@endif
 	</tbody>
 </table>
 <div class="clearfix">&nbsp;</div>
+@elseif(isset($allow_add) && $allow_add)
+	<a href="#" class="btn btn-primary btn-sm btn-link mb-1" data-toggle="modal" data-target="#jaminan-tanah-bangunan"><i class="fa fa-plus"></i> Jaminan Tanah &amp; Bangunan</a>
+	<div class="clearfix">&nbsp;</div>
+@endif

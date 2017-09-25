@@ -1,40 +1,34 @@
 <div class="row">
 	<div class="col">
-		<h4 class="pb-4">Overview</h4>
+		<h4 class="pb-4">Permohonan</h4>
 	</div>
 </div>
 <nav class="nav nav-tabs">
-	<a href="#pinjaman" class="nav-item nav-link active" role="tab" data-toggle="tab" aria-expanded="true">Pinjaman</a>
-	<a href="#jaminan" class="nav-item nav-link" role="tab" data-toggle="tab">Jaminan</a>
+	<a href="#pinjaman" class="nav-item nav-link active" role="tab" data-toggle="tab" aria-expanded="true">Kredit</a>
 	<a href="#nasabah" class="nav-item nav-link" role="tab" data-toggle="tab">Nasabah</a>
+	<a href="#keluarga" class="nav-item nav-link" role="tab" data-toggle="tab">Keluarga</a>
+	<a href="#jaminan" class="nav-item nav-link" role="tab" data-toggle="tab">Jaminan</a>
 </nav>
 <div class="row">
 	<div class="col">
 		<div class="tab-content">
-			{{-- div pinjaman --}}
+			{{-- div Kredit --}}
 			<div class="tab-pane fade show active mb-4" id="pinjaman" role="tabpanel">
-				@component ('bootstrap.field_value', ['field' => 'Pokok Pinjaman', 'value' => $permohonan['pokok_pinjaman'] ? $permohonan['pokok_pinjaman'] : '', 'class_row' => 'mt-4']) @endcomponent
-				@component ('bootstrap.field_value', ['field' => 'Kemampuan Angsur', 'value' => $permohonan['kemampuan_angsur'] ? $permohonan['kemampuan_angsur'] : '']) @endcomponent
-			</div>
-			{{-- div jaminan --}}
-			<div class="tab-pane fade" id="jaminan" role="tabpanel">
-				<div class="row mt-4">
-					<div class="col"><h6 class="text-capitalize"><u>Kendaraan</u></h6></div>
-				</div>
-				<div class="row">
-					<div class="col">
-						@include ('pengajuan.permohonan.jaminan_kendaraan.components.table')
-					</div>
-				</div>
 				<div class="clearfix">&nbsp;</div>
 				<div class="row">
-					<div class="col"><h6 class="text-capitalize"><u>Tanah &amp; bangunan</u></h6></div>
+					<div class="col"><h6 class="text-capitalize"><u>pinjaman</u></h6></div>
 				</div>
+
+				@component ('bootstrap.field_value', ['field' => 'Pokok Pinjaman', 'value' => $permohonan['pokok_pinjaman'] ? $permohonan['pokok_pinjaman'] : '', 'class_row' => 'mt-4']) @endcomponent
+				@component ('bootstrap.field_value', ['field' => 'Kemampuan Angsur', 'value' => $permohonan['kemampuan_angsur'] ? $permohonan['kemampuan_angsur'] : '']) @endcomponent
+
+				@if(isset($permohonan['ao']['nama']))
+				<div class="clearfix">&nbsp;</div>
 				<div class="row">
-					<div class="col">
-						@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table')
-					</div>
+					<div class="col"><h6 class="text-capitalize"><u>referensi</u></h6></div>
 				</div>
+				@component ('bootstrap.field_value', ['field' => 'AO', 'value' => $permohonan['ao']['nama'] ? $permohonan['ao']['nama'] : '']) @endcomponent
+				@endif
 			</div>
 			<div class="tab-pane fade" id="nasabah" role="tabpanel">
 				<div class="row mt-4">
@@ -44,8 +38,9 @@
 								<div class="col"><h6 class="text-capitalize"><u>pribadi</u></h6></div>
 							</div>
 							{{-- NIK --}}
-							<div class="row">
-								<div class="col-4">
+							@component ('bootstrap.field_value', ['field' => 'nik', 'value' => ($permohonan['nasabah']['nik'] ? $permohonan['nasabah']['nik'] : '').(isset($permohonan['nasabah']['is_ktp']) ? '&nbsp;<span class="badge badge-info">E-KTP</span>' : '')]) @endcomponent
+							<!-- <div class="row">
+								<div class="col-4 text-right">
 									<p class="text-secondary text-uppercase">nik</p>
 								</div>
 								<div class="col">
@@ -56,7 +51,7 @@
 										@endisset
 									</p>
 								</div>
-							</div>
+							</div> -->
 							{{-- Nama --}}
 							@component ('bootstrap.field_value', ['field' => 'nama', 'value' => $permohonan['nasabah']['nama'] ? $permohonan['nasabah']['nama'] : '']) @endcomponent
 							
@@ -73,7 +68,8 @@
 							@component ('bootstrap.field_value', ['field' => 'status perkawinan', 'value' => $permohonan['nasabah']['status_perkawinan'] ? $permohonan['nasabah']['status_perkawinan'] : '']) @endcomponent
 							
 							{{-- alamat --}}
-							<div class="row">
+							@component ('bootstrap.field_value', ['field' => 'alamat', 'value' => $permohonan['nasabah']['alamat'] ? implode(', ', $permohonan['nasabah']['alamat']) : '']) @endcomponent
+							<!-- <div class="row">
 								<div class="col-4">
 									<p class="text-secondary text-capitalize">alamat</p>
 								</div>
@@ -104,7 +100,7 @@
 										<p class="mb-1">Alamat belum diinputkan</p>
 									@endempty
 								</div>
-							</div>
+							</div> -->
 
 							<div class="clearfix">&nbsp;</div>
 							<div class="row">
@@ -130,6 +126,24 @@
 							{{-- penghasilan bersih --}}
 							@component ('bootstrap.field_value', ['field' => 'penghasilan bersih', 'value' => $permohonan['nasabah']['penghasilan_bersih'] ? $permohonan['nasabah']['penghasilan_bersih'] : '']) @endcomponent
 						@endisset
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="keluarga" role="tabpanel">
+				@include ('pengajuan.permohonan.show.keluarga')
+			</div>
+			{{-- div jaminan --}}
+			<div class="tab-pane fade" id="jaminan" role="tabpanel">
+				<div class="row">
+					<div class="col">
+						<div class="clearfix">&nbsp;</div>
+						@include ('pengajuan.permohonan.jaminan_kendaraan.components.table', ['jaminan_kendaraan' => $permohonan['jaminan_kendaraan'], 'allow_add' => true])
+					</div>
+				</div>
+				<div class="clearfix">&nbsp;</div>
+				<div class="row">
+					<div class="col">
+						@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table', ['jaminan_tanah_bangunan' => $permohonan['jaminan_tanah_bangunan'], 'allow_add' => true])
 					</div>
 				</div>
 			</div>

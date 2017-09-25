@@ -128,51 +128,41 @@ class Pengajuan extends Model
 	{
 		$query 	= $query->select('p_pengajuan.*');
 
-		return $query->whereHas('status_terakhir', function($q)use($variable){$q->status($variable);});
-		// if(!is_array($variable))
-		// {
+		// return $query->whereHas('status_terakhir', function($q)use($variable){$q->status($variable);});
+		if(!is_array($variable))
+		{
 			return $query
 			 ->join('p_status', function ($join) use($variable) 
 			 {
 									$join->on ( 'p_status.pengajuan_id', '=', 'p_pengajuan.id' )
-									// ->on(DB::raw('(p_status.id = (select id from p_status as tl2 where tl2.pengajuan_id = p_status.pengajuan_id desc limit 1))'), DB::raw(''), DB::raw(''))
-									// ->where('p_status.status', '=', $variable)
-									// ->wherenull('p_status.deleted_at')
+									->where('p_status.status', '=', $variable)
+									->wherenull('p_status.deleted_at')
 									;
 			})
-			;
-		// }
-		// else
-		// {
-		// 	return $query
-		// 	 ->join('p_status', function ($join) use($variable) 
-		// 	 {
-		// 							$join->on ( 'p_status.pengajuan_id', '=', 'p_pengajuan.id' )
-		// 							->on(DB::raw('(p_status.id = (select id from p_status as tl2 where tl2.pengajuan_id = p_status.pengajuan_id and tl2.deleted_at is null order by tl2.tanggal desc limit 1))'), DB::raw(''), DB::raw(''))
-		// 							->whereIn('p_status.status', $variable)
-		// 							->wherenull('p_status.deleted_at')
-		// 							;
-		// 	})
-		// 	;
-		// }
-
-
-
-		if(is_array($variable))
-		{
-			$to_string 				= [];
-			foreach ($variable as $key => $value) 
-			{
-				$to_string[$key] 	= '"'.$value.'"';
-			}
-			$status 				= implode(',', $to_string);
-
-			return $query->selectraw('p_pengajuan.*')->whereraw(DB::raw('(IFNULL((select p_status_now.status from p_status as p_status_now join p_status on p_status.id = p_status_now.id order by p_status_now.tanggal desc limit 1), "permohonan")) in ('.$status.')'));
+			 ->leftJoin(DB::raw('p_status as p_status_now'), function ($join) use($variable) 
+			 {
+									$join->on ( 'p_status_now.pengajuan_id', '=', 'p_pengajuan.id' )
+									->on ( 'p_status.tanggal', '<', 'p_status_now.tanggal' )
+									->wherenull('p_status_now.deleted_at')
+									;
+			})->wherenull('p_status_now.tanggal')->groupby('p_pengajuan.id');
 		}
 
-//(p_status.id = (select id from p_status as tl2 where tl2.pengajuan_id = p_status.pengajuan_id and tl2.deleted_at is null order by tl2.tanggal desc limit 1))
-		$query= $query->selectraw('p_pengajuan.*')->selectraw(DB::raw('(IFNULL((select p_status.status from p_status join p_pengajuan on p_pengajuan.id = p_status.pengajuan_id and p_status.id = (IFNULL((select p_status_now.id from p_status as p_status_now join p_status on p_status.id = p_status_now.id order by p_status_now.tanggal desc limit 1), "123")) limit 1), "permohonan")) '));
-		dD($query->skip(30)->first());
+		return $query
+		 ->join('p_status', function ($join) use($variable) 
+		 {
+								$join->on ( 'p_status.pengajuan_id', '=', 'p_pengajuan.id' )
+								->whereIn('p_status.status', $variable)
+								->wherenull('p_status.deleted_at')
+								;
+		})
+		 ->leftJoin(DB::raw('p_status as p_status_now'), function ($join) use($variable) 
+		 {
+								$join->on ( 'p_status_now.pengajuan_id', '=', 'p_pengajuan.id' )
+								->on ( 'p_status.tanggal', '<', 'p_status_now.tanggal' )
+								->wherenull('p_status_now.deleted_at')
+								;
+		})->wherenull('p_status_now.tanggal')->groupby('p_pengajuan.id');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

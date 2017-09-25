@@ -12,7 +12,14 @@
 				<a href="{{ route('simulasi', ['mode' => 'pa', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style" style="color:#fff">
 					<div class="frontpage_square">
 						<i class="d-block fa fa-calculator fa-2x" style="padding-bottom:5px;"></i>
-						SIMULASI
+						SIMULASI KREDIT PA
+					</div>
+				</a>
+
+				<a href="{{ route('simulasi', ['mode' => 'pt', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style" style="color:#fff">
+					<div class="frontpage_square">
+						<i class="d-block fa fa-calculator fa-2x" style="padding-bottom:5px;"></i>
+						SIMULASI KREDIT PT
 					</div>
 				</a>
 			</div>
@@ -191,80 +198,64 @@
 
 		<div class="row align-items-center">
 			<div class="col">
-				<div class="card text-center border-0" style="height: 100px;">
-					<div class="card-body p-2">
-						@if(in_array('kantor', $holder_scopes['scopes']))
-							<a href="{{ route('manajemen.kantor.create', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
-								<div class="frontpage_square">
-									<i class="d-block fa fa-building-o fa-2x"></i>
-									KANTOR BARU
-								</div>
-							</a>
-						@else
-							<div class="frontpage_square_disabled">
-								<i class="d-block fa fa-building-o fa-2x"></i>
-								KANTOR BARU
-							</div>
-						@endif
+				@if(in_array('kantor', $holder_scopes['scopes']))
+					<a href="{{ route('manajemen.kantor.create', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
+						<div class="frontpage_square">
+							<i class="d-block fa fa-building-o fa-2x"></i>
+							KANTOR BARU
+						</div>
+					</a>
+				@else
+					<div class="frontpage_square_disabled">
+						<i class="d-block fa fa-building-o fa-2x"></i>
+						KANTOR BARU
 					</div>
-				</div>
+				@endif
 			</div>
 			<div class="col">
-				<div class="card text-center border-0" style="height: 100px;">
-					<div class="card-body p-2">
-						@if(in_array('kantor', $holder_scopes['scopes']))
-							<a href="{{ route('manajemen.kantor.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
-								<div class="frontpage_square">
-									<i class="d-block fa fa-building fa-2x"></i>
-									SEMUA KANTOR
-								</div>
-							</a>
-						@else
-							<div class="frontpage_square_disabled">
-								<i class="d-block fa fa-building fa-2x"></i>
-								SEMUA KANTOR
-							</div>
-						@endif
+				@if(in_array('kantor', $holder_scopes['scopes']))
+					<a href="{{ route('manajemen.kantor.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
+						<div class="frontpage_square">
+							<i class="d-block fa fa-building fa-2x"></i>
+							SEMUA KANTOR
+						</div>
+					</a>
+				@else
+					<div class="frontpage_square_disabled">
+						<i class="d-block fa fa-building fa-2x"></i>
+						SEMUA KANTOR
 					</div>
-				</div>
+				@endif
 			</div>
 			<div class="col">
-				<div class="card text-center border-0" style="height: 100px;">
-					<div class="card-body p-2">
-						@if(in_array('karyawan', $holder_scopes['scopes']))
-							<a href="{{ route('manajemen.karyawan.create', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
-								<div class="frontpage_square">
-									<i class="d-block fa fa-user-o fa-2x"></i>
-									KARYAWAN BARU
-								</div>
-							</a>
-						@else
-							<div class="frontpage_square_disabled">
-								<i class="d-block fa fa-user-o fa-2x"></i>
-								KARYAWAN BARU
-							</div>
-						@endif
+				@if(in_array('karyawan', $holder_scopes['scopes']))
+					<a href="{{ route('manajemen.karyawan.create', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
+						<div class="frontpage_square">
+							<i class="d-block fa fa-user-o fa-2x"></i>
+							KARYAWAN BARU
+						</div>
+					</a>
+				@else
+					<div class="frontpage_square_disabled">
+						<i class="d-block fa fa-user-o fa-2x"></i>
+						KARYAWAN BARU
 					</div>
-				</div>
+				@endif
 			</div>
 			<div class="col">
-				<div class="card text-center border-0" style="height: 100px;">
-					<div class="card-body p-2">
-						@if(in_array('karyawan', $holder_scopes['scopes']))
-							<a href="{{ route('manajemen.karyawan.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
-								<div class="frontpage_square">
-									<i class="d-block fa fa-users fa-2x"></i>
-									SEMUA KARYAWAN
-								</div>
-							</a>
-						@else
-							<div class="frontpage_square_disabled">
-								<i class="d-block fa fa-users fa-2x"></i>
-								SEMUA KARYAWAN
-							</div>
-						@endif
+				@if(in_array('karyawan', $holder_scopes['scopes']))
+					<a href="{{ route('manajemen.karyawan.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
+						<div class="frontpage_square">
+							<i class="d-block fa fa-users fa-2x"></i>
+							SEMUA KARYAWAN
+						</div>
+					</a>
+				@else
+					<div class="frontpage_square_disabled">
+						<i class="d-block fa fa-users fa-2x"></i>
+						SEMUA KARYAWAN
 					</div>
-				</div>
+				@endif
 			</div>
 		</div>
 	</div>

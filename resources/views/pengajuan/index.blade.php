@@ -8,7 +8,9 @@
 				</h4>
 				<div class="row">
 					<div class="col-5">
+					@if(str_is($status, 'permohonan'))
 						<a href="{{ route('pengajuan.permohonan.create', ['kantor_aktif_id' => $kantor_aktif_id]) }}" class="btn btn-outline-primary text-capitalize text-style mb-2">pengajuan baru</a>
+					@endif
 					</div>
 					<div class="col-4">
 						<form action="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status]))}}" method="GET">
@@ -34,6 +36,7 @@
 								</button>
 								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 									<a class="dropdown-item" href="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-asc']))}}">Tanggal terbaru &nbsp;&nbsp;&nbsp;&nbsp;</a>
+									<a class="dropdown-item" href="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-desc']))}}">Tanggal terlama &nbsp;&nbsp;&nbsp;&nbsp;</a>
 									<!-- <a class="dropdown-item" href="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-desc']))}}">Tanggal Z - A</a> -->
 								</div>
 							</div>
@@ -77,7 +80,13 @@
 												<a href="{{ route('pengajuan.pengajuan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}"><i class="fa fa-eye"></i></a>
 											</div>
 											<div class="col-4">
-												<a href="#" data-toggle="modal" data-target="#delete" data-url="{{route('pengajuan.pengajuan.destroy', ['id' => $v['id'], 'status' => $status, 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i class="fa fa-trash"></i></a>
+												@if(str_is($status, 'permohonan'))
+													<a href="#" data-toggle="modal" data-target="#delete" data-url="{{route('pengajuan.pengajuan.destroy', ['id' => $v['id'], 'status' => $status, 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i class="fa fa-trash"></i></a>
+												@else
+												<span class="text-muted">
+													<i class="fa fa-trash"></i>
+												</span>
+												@endif
 											</div>
 											<div class="col-4">
 												<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $loop->index }}" aria-expanded="false" aria-controls="collapse{{ $loop->index }}"><i class="fa fa-arrow-down"></i></a>
@@ -114,97 +123,9 @@
 												</div>
 											</div>
 
-											<p class="text-secondary text-capitalize mb-1">kendaraan</p>
-											<table class="table table-sm table-bordered" style="">
-												<thead class="thead-default">
-													<tr>
-														<th class="text-center">#</th>
-														<th class="text-center">Jenis</th>
-														<th class="text-center">No. BPKB</th>
-														<th>Merk</th>
-														<th>Tipe [Tahun]</th>
-														<th class="text-center">Tahun Perolehan</th>
-														<th class="text-center">Harga Jaminan (*)</th>
-													</tr>
-												</thead> 
-												<tbody>
-													@forelse ($v['jaminan_kendaraan'] as $kj => $vj)
-													<tr>
-														<td class="text-center">{{ ($kj + 1) }}</td>
-														<td class="text-center">{{ ucwords(str_replace('_', ' ', $vj['dokumen_jaminan']['bpkb']['tipe'])) }}</td>
-														<td class="text-center">{{ $vj['dokumen_jaminan']['bpkb']['nomor_bpkb'] }}</td>
-														<td>{{ ucwords($vj['dokumen_jaminan']['bpkb']['merk']) }}</td>
-														<td>{{ $vj['dokumen_jaminan']['bpkb']['jenis'] }} [{{ $vj['dokumen_jaminan']['bpkb']['tahun'] }}]</td>
-														<td class="text-center">{{ $vj['tahun_perolehan'] }}</td>
-														<td class="text-right">{{ $vj['nilai_jaminan'] }}</td>
-													</tr>
-													@empty
-														<tr>
-															<td colspan="7" class="text-center"><i class="text-secondary">tidak ada data</i></td>
-														</tr>
-													@endforelse
-													<tr>
-														<td colspan="7" class="text-right" style="border:0">
-															<small>
-																<i class="text-secondary">* menurut nasabah</i>
-															</small>
-														</td>
-													</tr>
-												</tbody>
-											</table>
+											@include ('pengajuan.permohonan.jaminan_kendaraan.components.table', ['jaminan_kendaraan' => $v['jaminan_kendaraan']])
 
-											<p class="text-secondary text-capitalize mb-1">tanah &amp; bangunan</p>
-											<table class="table table-sm table-bordered" style="border-color: #eee;">
-												<thead class="thead-default">
-													<tr>
-														<th class="text-center" rowspan="2" style="vertical-align:middle;">#</th>
-														<th class="text-center" colspan="4">Sertifikat</th>
-														<th class="text-center" rowspan="2" style="vertical-align:middle;">Tahun Perolehan</th>
-														<th class="text-center" rowspan="2" style="vertical-align:middle;">Harga Jaminan (*)</th>
-													</tr>
-													<tr>
-														<th>Jenis [Masa Berlaku]</th>
-														<th>Nomor</th>
-														<th>Tipe</th>
-														<th>Luas</th>
-													</tr>
-												</thead>
-												<tbody>
-													@forelse($v['jaminan_tanah_bangunan'] as $kj => $vj)
-													<tr>
-														<td class="text-center">{{$kj+1}}</td>
-														<td>{{strtoupper($vj['jenis'])}} </td>
-														<td>
-															{{$vj['dokumen_jaminan'][$vj['jenis']]['nomor_sertifikat']}}
-															@if(isset($vj['dokumen_jaminan'][$vj['jenis']]['masa_berlaku_sertifikat']))
-																[{{$vj['dokumen_jaminan'][$vj['jenis']]['masa_berlaku_sertifikat']}}]
-															@endif
-														</td>
-														<td>{{str_replace('_', ' ', $vj['dokumen_jaminan'][$vj['jenis']]['tipe'])}}</td>
-														<td>
-															Luas Tanah : {{$vj['dokumen_jaminan'][$vj['jenis']]['luas_tanah']}}M<sup>2</sup>
-															<br/>
-															@if(isset($vj['dokumen_jaminan'][$vj['jenis']]['luas_bangunan']))
-																Luas Bangunan : {{$vj['dokumen_jaminan'][$vj['jenis']]['luas_bangunan']}}M<sup>2</sup>
-															@endif
-														</td>
-														<td class="text-right">{{$vj['tahun_perolehan']}}</td>
-														<td class="text-right">{{$vj['nilai_jaminan']}}</td>
-													</tr>
-													@empty
-														<tr>
-															<td colspan="7" class="text-center"><i class="text-secondary">tidak ada data</i></td>
-														</tr>
-													@endforelse
-													<tr>
-														<td colspan="7" class="text-right" style="border:0">
-															<small>
-																<i class="text-secondary">* menurut nasabah</i>
-															</small>
-														</td>
-													</tr>
-												</tbody>
-											</table>
+											@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table', ['jaminan_kendaraan' => $v['jaminan_tanah_bangunan']])
 										</div>
 									</div>
 								</div>
