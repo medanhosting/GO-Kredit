@@ -9,11 +9,50 @@
 		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 		@stack('css')
+		<style type="text/css">
+		.frontpage_square{
+			position:relative;
+			overflow:hidden;
+			padding-bottom:12.5%;
+			width: 50% !important;
+			margin-left: 12.5%;
+			padding-top: 12.5%;
+			/*padding-left: 12.5%;*/
+			background-color:#00c69b;
+			color: #fff;
+			text-align: center;
+		}
+		.frontpage_square_disabled{
+			position:relative;
+			overflow:hidden;
+			padding-bottom:12.5%;
+			width: 50% !important;
+			margin-left: 12.5%;
+			padding-top: 12.5%;
+			/*padding-left: 12.5%;*/
+			background-color:#ccc;
+			color: #000;
+			text-align: center;
+		}
+		/*.frontpage_square:after {
+		    content:'';
+		    position: absolute;
+		    z-index: 100;
+		    top: 0%;
+		    left: 100%;
+		    margin-left: -10px;
+		    width: 0;
+		    height: 0;
+		    border-left: solid 57.5px #00c69b;
+		    border-top: solid 57.5px transparent;
+		    border-bottom: solid 57.5px transparent;
+		}*/
+		</style>
 	</head>
 	<body class=''>
 		<nav class="navbar navbar-expand navbar-dark bg-success text-white main">
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-				<a class="navbar-brand" href="{{ route('home') }}">{{ config('app.name') }}</a>
+				<a class="navbar-brand" href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}">{{ config('app.name') }}</a>
 				<ul class="navbar-nav mr-auto mt-lg-0">
 					<li class="nav-item btn btn-outline-primary {{ str_is('dashboard', $active_menu) ? 'active' : '' }}">
 						<a class="nav-link" href="#" data-toggle='modal' data-target='#select_social_media'>

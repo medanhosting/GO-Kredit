@@ -13,17 +13,20 @@ class DashboardController extends Controller
 {
 	public function home() 
 	{
-		$is_holder 				= false;
+		$hari_ini 			= Carbon::now();
+		$is_holder			= false;
+		$holder_scopes		= [];
 
 		foreach ($this->kantor as $key => $value) {
 			if($value['tipe']=='holding'){
 				$is_holder 		= true;
+				$holder_scopes	= PenempatanKaryawan::where('orang_id', $this->me['id'])->active($hari_ini)->where('kantor_id', $value['id'])->first();
 			}
 		}
 		//atur menu scopes
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 		
-		$this->layout->pages 	= view('dashboard.overview', compact('is_holder'));
+		$this->layout->pages 	= view('dashboard.overview', compact('is_holder', 'holder_scopes'));
 		return $this->layout;
 	}
 

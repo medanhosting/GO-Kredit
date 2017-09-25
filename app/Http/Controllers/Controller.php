@@ -28,6 +28,7 @@ class Controller extends BaseController
 
 		$this->kantor 		= Kantor::WhereIn('id', $ids)->get(['id', 'nama', 'jenis', 'tipe']);
 		$this->kantor_aktif	= Kantor::find(request()->get('kantor_aktif_id'));
+		$this->scopes 		= PenempatanKaryawan::where('orang_id', $this->me['id'])->active($hari_ini)->where('kantor_id', request()->get('kantor_aktif_id'))->first();
 
 		//////////////////
 		// General Info //
@@ -35,6 +36,7 @@ class Controller extends BaseController
 		view()->share('me', $this->me);
 		view()->share('kantor', $this->kantor);
 		view()->share('kantor_aktif', $this->kantor_aktif);
+		view()->share('scopes', $this->scopes);
 
 		$this->layout 	= view('templates.html.layout');
 		$this->layout->html['title'] = 'GO-KREDIT.COM';

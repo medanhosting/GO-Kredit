@@ -11,8 +11,10 @@ class ScopeMiddleware
 {
 	public function handle($request, Closure $next, $scope)
 	{
+		$hari_ini 	= Carbon::now();
+		
 		$active_u	= Auth::user();
-		$active_p 	= PenempatanKaryawan::where('kantor_id', $request->get('kantor_aktif_id'))->where('orang_id', $active_u['id'])->first();
+		$active_p 	= PenempatanKaryawan::where('kantor_id', $request->get('kantor_aktif_id'))->where('orang_id', $active_u['id'])->active($hari_ini)->first();
 
 		if(!$active_p)
 		{

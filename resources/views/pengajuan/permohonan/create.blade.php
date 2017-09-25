@@ -147,7 +147,7 @@
 @endpush
 
 @push('submenu')
-	@include('template.submenu.submenu')
+	@include('templates.submenu.submenu')
 @endpush
 
 @push ('js')
