@@ -24,16 +24,19 @@ class ApiMiddleware
 
 			if(!$device)
 			{
+				\Log::info('device 1 : '.$decoder);
 				return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Unauthorized.']]);
 			}
 
 			if(!Hash::check($credentials[2], $device->secret))
 			{
+				\Log::info('device 2 : '.$decoder);
 				return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Unauthorized.']]);
 			}
 
 			if(!in_array($credentials[1], $salt))
 			{
+				\Log::info('device 3 : '.$decoder);
 				return Response::json(['status' => 0, 'data' => [], 'pesan' =>  ['Unauthorized.']]);
 			}
 
