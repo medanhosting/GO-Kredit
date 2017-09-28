@@ -1,14 +1,14 @@
 <div class="col-auto col-md-12">
-	{!! Form::vText('Jalan', $prefix.'[alamat]'.$suffix, $alamat['alamat'], ['class' => $class.' alamat form-control inline-edit', 'placeholder' => 'masukkan alamat lengkap']) !!}
+	{!! Form::vText('Jalan', $prefix.'[alamat]'.$suffix, $alamat['alamat'], ['class' => $class.' alamat form-control inline-edit', 'placeholder' => 'JL. Adi Sucipto Gang 2 Nomor 11']) !!}
 </div>
 <div class="col-auto col-md-12">
-	{!! Form::vText('RT', $prefix.'[rt]'.$suffix, $alamat['rt'], ['class' => $class.' rt form-control inline-edit mask-rt-rw', 'placeholder' => '']) !!}
+	{!! Form::vText('RT', $prefix.'[rt]'.$suffix, $alamat['rt'], ['class' => $class.' rt form-control inline-edit mask-rt-rw', 'placeholder' => '001']) !!}
 </div>
 <div class="col-auto col-md-12">
-	{!! Form::vText('RW', $prefix.'[rw]'.$suffix, $alamat['rw'], ['class' => $class.' rw form-control inline-edit mask-rt-rw', 'placeholder' => '']) !!}
+	{!! Form::vText('RW', $prefix.'[rw]'.$suffix, $alamat['rw'], ['class' => $class.' rw form-control inline-edit mask-rt-rw', 'placeholder' => '002']) !!}
 </div>
 <div class="col-auto col-md-12">
-	{!! Form::vText('Desa/Dusun', $prefix.'[kelurahan]'.$suffix, $alamat['kelurahan'], ['class' => $class.' kelurahan form-control inline-edit', 'placeholder' => 'nama desa']) !!}
+	{!! Form::vText('Desa/Dusun', $prefix.'[kelurahan]'.$suffix, $alamat['kelurahan'], ['class' => $class.' kelurahan form-control inline-edit', 'placeholder' => 'MERGAN']) !!}
 </div>
 
 <div class="col-auto col-md-12">

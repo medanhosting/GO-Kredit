@@ -1,5 +1,5 @@
 <div class="col-auto col-md-10">
-	{!! Form::bsText('Jalan', $prefix.'[alamat]'.$suffix, $alamat['alamat'], ['class' => 'alamat form-control '.$inline, 'placeholder' => 'JL Blimbing 1']) !!}
+	{!! Form::bsText('Jalan', $prefix.'[alamat]'.$suffix, $alamat['alamat'], ['class' => 'alamat form-control '.$inline, 'placeholder' => 'JL. Adi Sucipto Gang 2 Nomor 11']) !!}
 </div>
 <div class="row ml-0 mr-0">
 	<div class="col-auto col-md-5">
@@ -11,7 +11,7 @@
 </div>
 
 <div class="col-auto col-md-10">
-	{!! Form::bsText('Desa/Dusun', $prefix.'[kelurahan]'.$suffix, $alamat['kelurahan'], ['class' => 'kelurahan form-control '.$inline, 'placeholder' => 'Lebak']) !!}
+	{!! Form::bsText('Desa/Dusun', $prefix.'[kelurahan]'.$suffix, $alamat['kelurahan'], ['class' => 'kelurahan form-control '.$inline, 'placeholder' => 'MERGAN']) !!}
 </div>
 
 <div class="col-auto col-md-10">

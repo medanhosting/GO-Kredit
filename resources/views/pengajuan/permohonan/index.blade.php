@@ -94,9 +94,13 @@
 									<p style="margin:5px;" class="text-secondary">CATATAN</p>
 									<p style="margin:5px;">
 										@if(!$v['is_complete'])
-											Data Belum Lengkap. <a href="{{route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i>Lengkapi Sekarang</i></a>
+											Data Belum Lengkap. 
+											<a href="{{route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i>Lengkapi Sekarang</i></a>
 										@elseif($v['nasabah']['is_lama'])
-											Nasabah Lama. <i>Lanjutkan Analisa</i>
+											Nasabah Lama. 
+											<a href="{{route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i>Lanjutkan Analisa</i></a>
+
+											<i>Lanjutkan Analisa</i>
 										@else
 											Data Sudah Lengkap. <i>Assign Untuk Survei</i>
 										@endif

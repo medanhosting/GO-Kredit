@@ -222,7 +222,8 @@ class Pengajuan extends Model
 		$rules['pokok_pinjaman']				= ['required', 'numeric'];
 		$rules['kemampuan_angsur']				= ['required', 'numeric'];
 		$rules['is_mobile']						= ['boolean'];
-		$rules['dokumen_pelengkap.ktp']			= ['required', 'url'];
+		$rules['dokumen_pelengkap.ktp']			= ['url'];
+		// $rules['dokumen_pelengkap.ktp']			= ['required', 'url'];
 		// $rules['dokumen_pelengkap.kk']			= ['required_with:nasabah.keluarga', 'url'];
 		$rules['dokumen_pelengkap.kk']			= ['url'];
 		$rules['kode_kantor']					= ['required_if:is_mobile,false'];
@@ -235,7 +236,8 @@ class Pengajuan extends Model
 		$rules['nasabah.status_perkawinan']		= ['required_if:is_mobile,false', 'in:belum_kawin,kawin,cerai,cerai_mati'];
 		$rules['nasabah.pekerjaan']				= ['required_if:is_mobile,false', 'max:255'];
 		$rules['nasabah.penghasilan_bersih']	= ['required_if:is_mobile,false', 'numeric'];
-		$rules['nasabah.telepon']				= ['required', 'max:40'];
+		$rules['nasabah.telepon']				= ['max:40'];
+		// $rules['nasabah.telepon']				= ['required', 'max:40'];
 		$rules['nasabah.nomor_whatsapp']		= ['max:255'];
 		$rules['nasabah.email']					= ['max:40'];
 		$rules['nasabah.alamat']				= ['required_if:is_mobile,false', 'array'];

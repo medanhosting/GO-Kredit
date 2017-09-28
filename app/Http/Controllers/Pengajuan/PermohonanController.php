@@ -29,7 +29,7 @@ class PermohonanController extends Controller
 	public function index ($status = 'permohonan') 
 	{
 		$order 		= 'Tanggal ';
-		$urut 		= 'asc';
+		$urut 		= 'desc';
 
 		if (request()->has('order'))
 		{
@@ -74,39 +74,79 @@ class PermohonanController extends Controller
 	{
 		try {
 			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->status($status)->kantor(request()->get('kantor_aktif_id'))->with('jaminan_kendaraan', 'jaminan_tanah_bangunan', 'riwayat_status', 'status_terakhir')->first();
+			
+			if(!is_null($id))
+			{
+				$breadcrumb 	= [
+					[
+						'title'	=> $status,
+						'route' => route('pengajuan.permohonan.index', ['status' => $status, 'kantor_aktif_id' => request()->get('kantor_aktif_id')])
+					], 
+					[
+						'title'	=> $id,
+						'route' => '#'
+					]
+				];
 
-			$breadcrumb 	= [
-				[
-					'title'	=> $status,
-					'route' => route('pengajuan.permohonan.index', ['status' => $status, 'kantor_aktif_id' => request()->get('kantor_aktif_id')])
-				], 
-				[
-					'title'	=> $id,
-					'route' => route('pengajuan.permohonan.index', ['status' => $status, 'id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')])
-				]
-			];
+				$title 	= 'KREDIT '.$id;
+			}
+			else
+			{
+				$breadcrumb 	= [
+					[
+						'title'	=> $status,
+						'route' => route('pengajuan.permohonan.index', ['status' => $status, 'kantor_aktif_id' => request()->get('kantor_aktif_id')])
+					], 
+					[
+						'title'	=> 'Baru',
+						'route' => '#'
+					]
+				];
+				$title 	= 'KREDIT BARU';
+			}
 
-			if (!$permohonan)
+			if (!$permohonan && !is_null($id))
 			{
 				throw new Exception("Data tidak ada!", 1);
 			}
 
 			$checker 	= [];
-			//checker nasabah
-			$rule_n 	= Nasabah::rule_of_valid();
-			$total 		= count($rule_n);
 			$complete 	= 0;
+			$total 		= 3;
 
-			$validator 	= Validator::make($permohonan['nasabah'], $rule_n);
-			if ($validator->fails())
+			//checker kredit
+			if(is_null($permohonan['pokok_pinjaman']))
 			{
-				$complete 				= $complete + $total - count($validator->messages());
-				$checker['nasabah'] 	= false;
+				$checker['kredit']	= false;
+				$complete 			= 0;
 			}
 			else
 			{
-				$complete 				= $complete + count($rule_n);
-				$checker['nasabah'] 	= true;
+				$checker['kredit']	= true;
+				$complete 			= 3;
+			}
+
+			//checker nasabah
+			$rule_n 	= Nasabah::rule_of_valid();
+			$total 		= $total + count($rule_n);
+
+			if(count($permohonan['nasabah']))
+			{
+				$validator 	= Validator::make($permohonan['nasabah'], $rule_n);
+				if ($validator->fails())
+				{
+					$complete 				= $complete + (count($rule_n) - count($validator->messages()));
+					$checker['nasabah'] 	= false;
+				}
+				else
+				{
+					$complete 				= $complete + count($rule_n);
+					$checker['nasabah'] 	= true;
+				}
+			}
+			else
+			{
+				$checker['nasabah'] 	= false;
 			}
 
 			//checker keluarga
@@ -118,7 +158,7 @@ class PermohonanController extends Controller
 					$validator 	= Validator::make($kv, $rule_k);
 					if ($validator->fails())
 					{
-						$complete 				= $complete + $total - count($validator->messages());
+						$complete 				= $complete + (count($kv) - count($validator->messages()));
 						$checker['keluarga'] 	= false;
 					}
 					else
@@ -153,7 +193,7 @@ class PermohonanController extends Controller
 			view()->share('status', $status);
 			$this->variable_to_view();
 
-			$this->layout->pages 	= view('pengajuan.permohonan.show', compact('checker', 'permohonan', 'percentage'));
+			$this->layout->pages 	= view('pengajuan.permohonan.show', compact('checker', 'permohonan', 'percentage', 'title'));
 			return $this->layout;
 
 		} catch (Exception $e) {
@@ -163,8 +203,9 @@ class PermohonanController extends Controller
 
 	public function create ($id = null)
 	{
+		return $this->show($id);
 		try {
-			$permohonan 			= Pengajuan::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan')->first();
+			$permohonan 			= Pengajuan::where('p_pengajuan.id', $id)->status('permohonan')->kantor(request()->get('kantor_aktif_id'))->with('jaminan')->first();
 			if (!$permohonan && is_null($id))
 			{
 				$permohonan 		= new Pengajuan;
@@ -198,8 +239,10 @@ class PermohonanController extends Controller
 			$permohonan 				= Pengajuan::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan')->first();
 			if (!$permohonan)
 			{
-				$data_input['is_mobile'] 	= false;
-				$permohonan 				= new Pengajuan;
+				$data_input['is_mobile'] 						= false;
+				$data_input['nasabah']['is_lama'] 				= false;
+				$data_input['dokumen_pelengkap']['permohonan'] 	= true;
+				$permohonan 			= new Pengajuan;
 			}
 			else
 			{
@@ -302,7 +345,7 @@ class PermohonanController extends Controller
 	
 			DB::commit();
 
-			return redirect(route($this->view_dir . 'show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]));
+			return redirect(route($this->view_dir . 'show', ['id' => $permohonan['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => 'permohonan']));
 		} catch (Exception $e) {
 			DB::rollback();
 
