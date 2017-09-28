@@ -336,8 +336,9 @@ class SurveiTableSeeder extends Seeder
 				$values5['survei_id']	= $saved_survei['id'];
 				$s_detail				= SurveiDetail::create($values5);
 
-				$s_survei_foto[$keys5]['survei_detail_id']	= $s_detail['id'];
-				SurveiFoto::create($s_survei_foto[$keys5]);
+				//disable seeding survei (temporary)
+				// $s_survei_foto[$keys5]['survei_detail_id']	= $s_detail['id'];
+				// SurveiFoto::create($s_survei_foto[$keys5]);
 			}
 		}
 	}
