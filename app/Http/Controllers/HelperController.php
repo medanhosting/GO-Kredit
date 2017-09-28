@@ -9,6 +9,7 @@ use Thunderlabid\Territorial\Models\Regensi;
 use Thunderlabid\Territorial\Models\Distrik;
 use Thunderlabid\Territorial\Models\Desa;
 
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 /**
  * Class HelperController
  * Description: digunakan untuk membantu UI untuk mengambil data
@@ -23,14 +24,10 @@ Class HelperController extends Controller
 	 */
 	public function getRegensi()
 	{
-		$id 			= request()->input('id');
-		// get data regensi
-		$regensi		= collect(Regensi::where('territorial_provinsi_id', $id)->get());
-		// sort data city by 'nama'
-		$regensi 		= $regensi->sortBy('nama');
-		// $regensi 		= $regensi->pluck('nama', 'id');
+		$nama 		= request()->get('q');
+		$regensi 	= Regensi::where('nama', 'like', '%'.$nama.'%')->where('territorial_provinsi_id', 'like', '35%')->get();
 
-        return response()->json($regensi->pluck('nama', 'id'));
+		return response()->json($regensi);
 	}
 
 	/**
@@ -39,12 +36,8 @@ Class HelperController extends Controller
 	 */
 	public function getDistrik()
 	{
-		$id 			= request()->input('id');
-		// get data distrik for regensi 'id'
-		$distrik 		= collect(Distrik::where('territorial_regensi_id', $id)->get());
-		// sort data distrik by 'nama'
-		$distrik 		= $distrik->sortBy('nama');
-		$distrik 		= $distrik->pluck('nama', 'id');
+		$nama 		= request()->get('q');
+		$distrik 	= Distrik::where('nama', 'like', '%'.$nama.'%')->where('territorial_regensi_id', 'like', '35%')->with(['kota'])->get();
 
 		return response()->json($distrik);
 	}
@@ -55,13 +48,48 @@ Class HelperController extends Controller
 	 */
 	public function getDesa()
 	{
-		$id 			= request()->input('id');
+		$id 		= request()->input('id');
 		// get data desa dari distrik 'nama';
 		$desa 		= collect(Desa::where('territorial_distrik_id', $id)->get());// sort data desa by 'nama'
 		$desa 		= $desa->sortBy('nama');
 		$desa 		= $desa->pluck('nama', 'id');
 
 		return response()->json($desa);
+	}
+
+	public function jabatan()
+	{
+		$jabatan 	= new PenempatanKaryawan;
+
+		if(request()->has('kantor_aktif_id'))
+		{
+			$jabatan 	= $jabatan->where('kantor_id', request()->get('kantor_aktif_id'));
+		}
+		$jabatan 	= $jabatan->groupby('role')->get(['role'])->toArray();
+
+		return response()->json($jabatan);
+	}
+
+	public function scopes()
+	{
+		$scopes 	= new PenempatanKaryawan;
+
+		if(request()->has('role'))
+		{
+			$scopes = $scopes->where('role', request()->get('role'));
+		}
+		$scopes 	= $scopes->select('scopes')->orderby('tanggal_keluar', 'desc')->first();
+
+		if(!$scopes)
+		{
+			$scopes = explode(',', env('SU_SCOPES', 'pengajuan,permohonan,survei,analisa,keputusan,realisasi,kantor,karyawan'));
+		}
+		else
+		{
+			$scopes = $scopes->toArray()['scopes'];
+		}
+
+		return response()->json($scopes);
 	}
 
 	public function storeGambar(Request $request)

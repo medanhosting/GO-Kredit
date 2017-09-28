@@ -22,6 +22,8 @@ class CreateLogShmTable extends Migration
 			$table->integer('luas_tanah')->nullable();
 			$table->integer('luas_bangunan')->nullable();
 			$table->string('alamat')->nullable();
+			$table->string('tahun_perolehan')->nullable();
+			$table->double('nilai')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});

@@ -5,7 +5,7 @@
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
+| Here is where you can register web routes for your appication. These
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
@@ -30,8 +30,8 @@
 	
 		Route::prefix('pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
 
-			Route::get('/{status}',				['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);
-			Route::get('/{status}/{id}/show',	['as'	=> 'pengajuan.show', 	'uses' => 'PengajuanController@show']);
+			// Route::get('/{status}',				['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);
+			// Route::get('/{status}/{id}/show',	['as'	=> 'pengajuan.show', 	'uses' => 'PengajuanController@show']);
 			Route::delete('/{status}/{id}',		['as'	=> 'pengajuan.destroy', 'uses' => 'PengajuanController@destroy']);
 			
 			
@@ -61,6 +61,7 @@
 		Route::prefix('manajemen')->namespace('Manajemen')->as('manajemen.')->group( function() {
 			Route::resource('kantor', 		'KantorController');
 			Route::post('kantor/batch', 	['uses' => 'KantorController@batch', 	'as' => 'kantor.batch']);
+			Route::get('kantor/index/ajax', ['uses' => 'KantorController@ajax', 	'as' => 'kantor.ajax']);
 			
 			Route::resource('karyawan', 	'KaryawanController');
 			Route::post('karyawan/batch',		 	['uses' => 'KaryawanController@batch', 	'as' => 'karyawan.batch']);
@@ -70,6 +71,9 @@
 		Route::any('regensi',	['uses' => 'HelperController@getRegensi', 		'as' => 'regensi.index']);
 		Route::any('distrik',	['uses'	=> 'HelperController@getDistrik',		'as' => 'distrik.index']);
 		Route::any('desa',		['uses' => 'HelperController@getDesa',			'as' => 'desa.index']);
+	
+		Route::any('jabatan',	['uses' => 'HelperController@jabatan',			'as' => 'jabatan.index']);
+		Route::any('scopes',	['uses' => 'HelperController@scopes',			'as' => 'scopes.index']);
 		
 		Route::any('upload/image', 		['as' => 'upload.image.store',		'uses' => 'HelperController@storeGambar']);
 		Route::any('remove/image',		['as' => 'upload.image.destroy',	'uses' => 'HelperController@destroyGambar']);

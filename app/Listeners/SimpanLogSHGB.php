@@ -43,7 +43,8 @@ class SimpanLogSHGB
 			{
 				$SHGB 					= new SHGB;
 				$data_n_n				= $model->dokumen_jaminan['shgb'];
-				unset($data_n_n['tahun_perolehan']);
+				$data_n_n['tahun_perolehan']	= $model->tahun_perolehan;
+				$data_n_n['nilai']				= $model->nilai_jaminan;
 				$data_n_n['parent_id']	= null;
 				$SHGB->fill($data_n_n);
 				$SHGB->save();
@@ -53,14 +54,14 @@ class SimpanLogSHGB
 				//simpan versioning
 				$old_SHGB 				= new SHGB;
 				$data_o_n 				= $find->toArray();
-				unset($data_o_n['tahun_perolehan']);
 				unset($data_o_n['id']);
 				$data_o_n['parent_id']	= $find->id;
 				$old_SHGB->fill($data_o_n);
 				$old_SHGB->save();
 
 				$data_n_n				= $model->dokumen_jaminan['shgb'];
-				unset($data_n_n['tahun_perolehan']);
+				$data_n_n['tahun_perolehan']	= $model->tahun_perolehan;
+				$data_n_n['nilai']				= $model->nilai_jaminan;
 				$find->fill($data_n_n);
 				$find->save();
 			}

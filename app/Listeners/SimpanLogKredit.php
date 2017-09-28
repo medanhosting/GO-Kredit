@@ -47,7 +47,7 @@ class SimpanLogKredit
 
 		if($model->jaminan()->count())
 		{
-			foreach ((array)$model->jaminan as $key => $value) 
+			foreach ($model->jaminan as $key => $value) 
 			{
 				switch ($value->jenis) {
 					case 'bpkb':

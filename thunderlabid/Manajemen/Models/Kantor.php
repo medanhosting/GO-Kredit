@@ -65,6 +65,11 @@ class Kantor extends Model
 		return $this->hasMany(PenempatanKaryawan::class, 'kantor_id');
 	}
 
+	public function pusat()
+	{
+		return $this->belongsto(Kantor::class, 'kantor_id');
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------

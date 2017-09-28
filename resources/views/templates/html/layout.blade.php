@@ -35,18 +35,31 @@
 			text-align: center;
 		}
 		/*.frontpage_square:after {
-		    content:'';
-		    position: absolute;
-		    z-index: 100;
-		    top: 0%;
-		    left: 100%;
-		    margin-left: -10px;
-		    width: 0;
-		    height: 0;
-		    border-left: solid 57.5px #00c69b;
-		    border-top: solid 57.5px transparent;
-		    border-bottom: solid 57.5px transparent;
+			content:'';
+			position: absolute;
+			z-index: 100;
+			top: 0%;
+			left: 100%;
+			margin-left: -10px;
+			width: 0;
+			height: 0;
+			border-left: solid 57.5px #00c69b;
+			border-top: solid 57.5px transparent;
+			border-bottom: solid 57.5px transparent;
 		}*/
+		.results tr[visible='false'],
+		.no-result{
+		  display:none;
+		}
+
+		.results tr[visible='true']{
+		  display:table-row;
+		}
+
+		.counter{
+		  padding:8px; 
+		  color:#ccc;
+		}
 		</style>
 	</head>
 	<body class=''>
@@ -99,7 +112,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col text-center">
-					  	{{ config('app.name') }}.com &copy; {{ date('Y') }} - Developed by <a href='http://thunderlab.id' target='_blank'>Thunderlab.id</a>
+						{{ config('app.name') }}.com &copy; {{ date('Y') }} - Developed by <a href='http://thunderlab.id' target='_blank'>Thunderlab.id</a>
 					</div>
 				</div>
 			</div>
@@ -180,45 +193,89 @@
 							@php
 								$all = request()->all();
 							@endphp
-							@foreach ($kantor as $x)
-								@if (in_array(strtolower($x['jenis']), ['bpr', 'koperasi']))
-									@php
-										$all['kantor_aktif_id'] = $x['id'];
-									@endphp
-									<div class="col-6 col-sm-4 col-lg-3">
-										<a href="{{request()->url().'?'.http_build_query($all)}}" class="btn 
 
-											@if($kantor_aktif['id']==$x['id']) btn-info disabled @else btn-primary @endif col-12">
-											{{ $x['nama'] }}
-										</a>
-									</div>
-								@else
-									<div class="col-6 col-sm-4 col-lg-3">
-										<a href="{{route('home', ['kantor_aktif_id' => $x['id']])}}" class="btn btn-primary col-12">
-											{{ $x['nama'] }}
-										</a>
-									</div>
-									@php $is_holder = true; @endphp
-								@endif
-							@endforeach
+							<div class="form-group pull-right">
+								<input type="text" class="search form-control" placeholder="Cari Koperasi">
+							</div>
+							<span class="counter pull-right"></span>
+							<table class="table table-hover table-bordered results">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th class="col-md-5 col-xs-5">Nama</th>
+									</tr>
+									<tr class="warning no-result">
+										<td colspan="2"><i class="fa fa-warning"></i> No result</td>
+									</tr>
+							  	</thead>
+								<tbody>
+								@foreach ($kantor as $k => $x)
+									@if (in_array(strtolower($x['jenis']), ['bpr', 'koperasi']))
+										@php
+											$all['kantor_aktif_id'] = $x['id'];
+										@endphp
+											<tr>
+												<td scope="row">{{$k+1}}</td>
+										 		<td>
+										 			@if($kantor_aktif['id']==$x['id'])
+														{{ $x['nama'] }}
+													@else 
+												  		<a href="{{request()->url().'?'.http_build_query($all)}}">
+															{{ $x['nama'] }}
+														</a>
+										 			@endif
+												</td>
+											</tr>
+									@else
+										<tr>
+											<td scope="row">{{$k+1}}</td>
+									 		<td>
+										 		@if($kantor_aktif['id']==$x['id'])
+													{{ $x['nama'] }}
+												@else 
+													<a href="{{route('home', ['kantor_aktif_id' => $x['id']])}}">
+														{{ $x['nama'] }}
+													</a>
+												@endif
+											</td>
+										</tr>
+									@endif
+								@endforeach
+								</tbody>
+							</table>
 						</div>
-					</div>
-					<div class="modal-footer">
-						<!-- @if($is_holder)
-							<a href="{{ route('home') }}" class="btn btn-primary">
-								<i class='fa fa-plus'></i> 
-								Kantor Baru
-							</a>
-						@else
-							<a href="#" class="btn btn-disabled">
-								<i class='fa fa-plus'></i> 
-								Kantor Baru
-							</a>
-						@endif -->
 					</div>
 				</div>
 			</div>
 		</div>
 
+		<script type="text/javascript">
+			$(document).ready(function() {
+			  $(".search").keyup(function () {
+				var searchTerm = $(".search").val();
+				var listItem = $('.results tbody').children('tr');
+				var searchSplit = searchTerm.replace(/ /g, "'):containsi('")
+				
+			  $.extend($.expr[':'], {'containsi': function(elem, i, match, array){
+					return (elem.textContent || elem.innerText || '').toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+				}
+			  });
+				
+			  $(".results tbody tr").not(":containsi('" + searchSplit + "')").each(function(e){
+				$(this).attr('visible','false');
+			  });
+
+			  $(".results tbody tr:containsi('" + searchSplit + "')").each(function(e){
+				$(this).attr('visible','true');
+			  });
+
+			  var jobCount = $('.results tbody tr[visible="true"]').length;
+				$('.counter').text(jobCount + ' item');
+
+			  if(jobCount == '0') {$('.no-result').show();}
+				else {$('.no-result').hide();}
+					  });
+			});
+		</script>
 	</body>
 </html>

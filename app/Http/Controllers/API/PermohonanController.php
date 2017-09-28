@@ -47,10 +47,22 @@ class PermohonanController extends BaseController
 				}
 			}
 
-			$data_input['pokok_pinjaman'] 		= request()->get('pokok_pinjaman');
-			$data_input['kemampuan_angsur'] 	= request()->get('kemampuan_angsur');
-			$data_input['is_mobile'] 			= true;
-			$data_input['nasabah']				= request()->get('nasabah'); 
+			if(request()->has('pokok_pinjaman'))
+			{
+				$data_input['pokok_pinjaman'] 		= request()->get('pokok_pinjaman');
+				$data_input['kemampuan_angsur'] 	= request()->get('kemampuan_angsur');
+				$data_input['is_mobile'] 			= true;
+			}
+
+			if(request()->has('nasabah'))
+			{
+				$data_input['nasabah']				= request()->get('nasabah'); 
+			}
+
+			if(request()->has('keluarga'))
+			{
+				$data_input['nasabah']['keluarga']	= request()->get('keluarga'); 
+			}
 
 			if(request()->has('dokumen_pelengkap'))
 			{

@@ -60,7 +60,12 @@ class Distrik extends Model
 		return $this->hasMany(Desa::class, 'territorial_regensi_id');
 	}
 
- 	public function distrik()
+ 	public function regensi()
+	{
+		return $this->belongsto(Regensi::class, 'territorial_regensi_id');
+	}
+
+ 	public function kota()
 	{
 		return $this->belongsto(Regensi::class, 'territorial_regensi_id');
 	}

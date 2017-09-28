@@ -64,7 +64,9 @@
 	    						<div class="row text-left">
 									<div class="col-1">{{ (($pengajuan->currentPage() - 1) * $pengajuan->perPage()) + $loop->iteration }}</div>
 									<div class="col-3">
-										{{ $v['id'] }} 
+			    						<a href="{{ route('pengajuan.pengajuan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}">
+											{{ $v['id'] }} 
+										</a>
 										@if ($v['is_mobile']) 
 											<span class="badge badge-primary"><small>Mobile</small></span> 
 										@endif
@@ -75,11 +77,11 @@
 										{{ $v['nasabah']['nama'] }}
 									</div>
 									<div class="col-2">
-			    						<div class="row text-center">
-											<div class="col-4">
+			    						<div class="row text-right">
+											<!-- <div class="col-4">
 												<a href="{{ route('pengajuan.pengajuan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}"><i class="fa fa-eye"></i></a>
-											</div>
-											<div class="col-4">
+											</div> -->
+											<!-- <div class="col-4">
 												@if(str_is($status, 'permohonan'))
 													<a href="#" data-toggle="modal" data-target="#delete" data-url="{{route('pengajuan.pengajuan.destroy', ['id' => $v['id'], 'status' => $status, 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i class="fa fa-trash"></i></a>
 												@else
@@ -87,9 +89,9 @@
 													<i class="fa fa-trash"></i>
 												</span>
 												@endif
-											</div>
-											<div class="col-4">
-												<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $loop->index }}" aria-expanded="false" aria-controls="collapse{{ $loop->index }}"><i class="fa fa-arrow-down"></i></a>
+											</div> -->
+											<div class="col-12">
+												<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ $loop->index }}" aria-expanded="false" aria-controls="collapse{{ $loop->index }}"><i class="fa fa-chevron-down"></i></a>
 											</div>
 										</div>
 									</div>
@@ -125,7 +127,7 @@
 
 											@include ('pengajuan.permohonan.jaminan_kendaraan.components.table', ['jaminan_kendaraan' => $v['jaminan_kendaraan']])
 
-											@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table', ['jaminan_kendaraan' => $v['jaminan_tanah_bangunan']])
+											@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table', ['jaminan_tanah_bangunan' => $v['jaminan_tanah_bangunan']])
 										</div>
 									</div>
 								</div>

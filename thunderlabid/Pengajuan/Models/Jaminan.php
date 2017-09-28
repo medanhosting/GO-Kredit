@@ -107,12 +107,12 @@ class Jaminan extends Model
 		$rules['dokumen_jaminan.bpkb.merk']				= ['required_if:jenis,bpkb', 'max:255'];
 		$rules['dokumen_jaminan.bpkb.tahun']			= ['required_if:jenis,bpkb', 'date_format:"Y"', 'before:'.date('Y', strtotime('now'))];
 		$rules['dokumen_jaminan.bpkb.nomor_bpkb']		= ['required_if:jenis,bpkb', 'max:255'];
-		$rules['dokumen_jaminan.bpkb.atas_nama']		= ['required_if:jenis,bpkb', 'max:255'];
+		// $rules['dokumen_jaminan.bpkb.atas_nama']		= ['required_if:jenis,bpkb', 'max:255'];
 		$rules['dokumen_jaminan.bpkb.tipe']				= ['required_if:jenis,bpkb', 'max:255'];
 
 		$rules['dokumen_jaminan.shm.tipe']				= ['required_if:jenis,shm', 'max:255', 'in:tanah,tanah_dan_bangunan'];
 		$rules['dokumen_jaminan.shm.nomor_sertifikat']	= ['required_if:jenis,shm', 'max:255'];
-		$rules['dokumen_jaminan.shm.atas_nama']			= ['required_if:jenis,shm', 'max:255'];
+		// $rules['dokumen_jaminan.shm.atas_nama']			= ['required_if:jenis,shm', 'max:255'];
 		
 		//HERE AGAIN
 		// $rules['dokumen_jaminan.shm.luas_tanah']		= ['required_if:jenis,shm', 'numeric'];
@@ -125,7 +125,7 @@ class Jaminan extends Model
 		$rules['dokumen_jaminan.shgb.tipe']						= ['required_if:jenis,shgb', 'max:255', 'in:tanah,tanah_dan_bangunan'];
 		$rules['dokumen_jaminan.shgb.nomor_sertifikat']			= ['required_if:jenis,shgb', 'max:255'];
 		$rules['dokumen_jaminan.shgb.masa_berlaku_sertifikat']	= ['required_if:jenis,shgb', 'max:255', 'date_format:"Y"'];
-		$rules['dokumen_jaminan.shgb.atas_nama']				= ['required_if:jenis,shgb', 'max:255'];
+		// $rules['dokumen_jaminan.shgb.atas_nama']				= ['required_if:jenis,shgb', 'max:255'];
 		
 		//HERE AGAIN
 		// $rules['dokumen_jaminan.shgb.luas_tanah']				= ['required_if:jenis,shgb', 'numeric'];

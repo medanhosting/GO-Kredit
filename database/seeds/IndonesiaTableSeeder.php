@@ -62,6 +62,7 @@ class IndonesiaTableSeeder extends Seeder
 			}
 			fclose($handle);
 		}
+		exit;
 
 		// village
 		if (($handle = fopen(database_path().'/seeds/csv/villages.csv', "r")) !== FALSE) 

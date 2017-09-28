@@ -32,7 +32,7 @@ class Nasabah extends Model
 	use IDRTrait;
 
 	protected $table	= 'l_nasabah';
-	protected $fillable	= ['parent_id', 'nik', 'nama', 'tanggal_lahir', 'tempat_lahir', 'jenis_kelamin', 'telepon', 'status_perkawinan', 'pekerjaan', 'penghasilan_bersih', 'alamat', 'keluarga'];
+	protected $fillable	= ['parent_id', 'nik', 'nama', 'tanggal_lahir', 'tempat_lahir', 'jenis_kelamin', 'telepon', 'nomor_whatsapp', 'email', 'status_perkawinan', 'pekerjaan', 'penghasilan_bersih', 'alamat', 'keluarga'];
 
 	protected $hidden	= [];
 	protected $dates	= [];
@@ -164,5 +164,37 @@ class Nasabah extends Model
 	public function getErrorsAttribute()
 	{
 		return $this->errors;
+	}
+
+	public static function rule_of_valid()
+	{
+		$rules['nik']					= ['required'];
+		$rules['nama']					= ['required'];
+		$rules['tanggal_lahir']			= ['required'];
+		$rules['tempat_lahir']			= ['required'];
+		$rules['jenis_kelamin']			= ['required'];
+		$rules['status_perkawinan']		= ['required'];
+		$rules['pekerjaan']				= ['required'];
+		$rules['penghasilan_bersih']	= ['required'];
+		$rules['telepon']				= ['required'];
+		$rules['nomor_whatsapp']		= ['required'];
+		$rules['email']					= ['required'];
+		$rules['alamat']['alamat']		= ['required'];
+		$rules['alamat']['rt']			= ['required'];
+		$rules['alamat']['rw']			= ['required'];
+		$rules['alamat']['kecamatan']	= ['required'];
+		$rules['alamat']['kota']		= ['required'];
+
+		return $rules;
+	}
+
+	public static function rule_of_valid_family()
+	{
+		$rules['nik']				= ['required'];
+		$rules['nama']				= ['required'];
+		$rules['hubungan']			= ['required'];
+		$rules['telepon']			= ['required'];
+
+		return $rules;
 	}
 }

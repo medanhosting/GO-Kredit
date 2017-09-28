@@ -2,142 +2,134 @@
 	<div class="container bg-white bg-shadow p-4">
 		<div class="row">
 			<div class="col">
-				<h4 class='mb-4 text-style text-uppercase text-secondary'>
-					Daftar Permohonan Kredit
+				<h4 class='mb-4 text-style text-secondary'>
+					<span class="text-uppercase">Daftar {{ ($status) }} Kredit</span> 
+					<small><small>@if($pengajuan->currentPage() > 1) Halaman {{$pengajuan->currentPage()}} @endif</small></small>
 				</h4>
-				<a href="{{ route('pengajuan.permohonan.create') }}" class="btn btn-primary text-capitalize text-style mb-2">tambah baru</a>
-			  	<table class="table table-responsive table-bordered">
-			  		<thead class="thead-default">
-			  			<tr>
-			  				<th>#</th>
-			  				<th>No. Pengajuan</th>
-			  				<th>Tgl Pengajuan</th>
-			  				<th>Jummlah Pinjaman</th>
-			  				<th>Nasabah</th>
-			  				<th></th>
-			  			</tr>
-			  		</thead>
-			  		<tbody>
-			  			<tr>
-			  				<td rowspan="2">1</td>
-			  				<td>000000</td>
-			  				<td>23/09/2017</td>
-			  				<td>20.000.000</td>
-			  				<td>Suhento Mommi</td>
-			  				<td rowspan="2"><a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#delete">Action</a></td>
-			  			</tr>
-			  			<tr>
-			  				<td colspan="4">
-			  					<p>Jaminan :</p>
-		  						<p class="text-secondary text-capitalize mb-1">kendaraan</p>
-			  					<table class="table table-sm bg-white no-border">
-			  						{{-- <thead>
-			  							<tr>
-			  								<th>#</th>
-			  								<th>Jenis</th>
-			  								<th>No. BPKB</th>
-			  								<th>Merk</th>
-			  								<th>Tipe</th>
-			  								<th>Tahun</th>
-			  								<th>Harga Jaminan Customer</th>
-			  							</tr>
-			  						</thead> --}}
-			  						<tbody>
-				  						<tr>
-				  							<td class="text-center">1.</td>
-				  							<td>Roda 4</td>
-				  							<td>D-8903249</td>
-				  							<td>Mitsubishi</td>
-				  							<td>L300</td>
-				  							<td class="text-center">2009</td>
-				  							<td class="text-right">Rp. 98.000.000</td>
-				  						</tr>
-				  						<tr>
-				  							<td class="text-center">2.</td>
-				  							<td>Roda 2</td>
-				  							<td>D-8903249</td>
-				  							<td>Honda</td>
-				  							<td>Beat Sporty</td>
-				  							<td class="text-center">2009</td>
-				  							<td class="text-right">Rp. 98.000.000</td>
-				  						</tr>
-				  					</tbody>
-			  					</table>
+				<div class="row">
+					<div class="col-8">
+						<form action="{{route('pengajuan.permohonan.index', array_merge(request()->all(), ['status' => $status]))}}" method="GET">
+							 <div class="input-group">
+								@foreach(request()->all() as $k => $v)
+									@if(!str_is($k, 'q'))
+										<input type="hidden" name="{{$k}}" value="{{$v}}">
+									@endif
+								@endforeach
+								<input type="text" name="q" class="form-control" placeholder="cari nama nasabah atau nomor pengajuan" value="{{request()->get('q')}}" style="padding:15px;">
+								<span class="input-group-btn">
+									<button class="btn btn-secondary" type="submit" style="background-color:#fff;color:#aaa;border-color:#ccc;border-radius:0px;padding:15px">Go!</button>
+								</span>
+							</div>
+						</form>
+					</div>
+					<div class="col-2 text-right">
+						<label style="border:0px;padding:10px;">Urut Berdasarkan</label>
+					</div>
+					<div class="col-2 text-right">
+						<div class="input-group" style="float:right;">
+							<div class="dropdown" style="width:100%;">
+								<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background-color:#fff;color:#aaa;border-color:#ccc;border-radius:0px;padding:15px;">
+									{{$order}}
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="{{route('pengajuan.permohonan.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-asc']))}}">Tanggal terbaru &nbsp;&nbsp;&nbsp;&nbsp;</a>
+									<a class="dropdown-item" href="{{route('pengajuan.permohonan.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-desc']))}}">Tanggal terlama &nbsp;&nbsp;&nbsp;&nbsp;</a>
+									<!-- <a class="dropdown-item" href="{{route('pengajuan.permohonan.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-desc']))}}">Tanggal Z - A</a> -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-4 text-right">
+						<a href="{{ route('pengajuan.permohonan.create', ['kantor_aktif_id' => $kantor_aktif_id]) }}" class="btn btn-outline-primary text-capitalize text-style mb-2" style="border-radius:0px;">PENGAJUAN BARU</a>
+					</div> -->
+				</div>
+				<div class="clearfix">&nbsp;</div>
 
-			  					<p class="text-secondary text-capitalize mb-1">tanah &amp; bangunan</p>
-			  					<table class="table table-sm bg-white no-border">
-			  						{{-- <thead>
-			  							<tr>
-			  								<th>#</th>
-			  								<th>Jenis</th>
-			  								<th>No. BPKB</th>
-			  								<th>Merk</th>
-			  								<th>Tipe</th>
-			  								<th>Tahun</th>
-			  								<th>Harga Jaminan Customer</th>
-			  							</tr>
-			  						</thead> --}}
-			  						<tbody>
-				  						<tr>
-				  							<td class="text-center">1.</td>
-				  							<td>Tanah &amp; Bangunan</td>
-				  							<td>HGB (2020)</td>
-				  							<td>98804</td>
-				  							<td>60 M<sup>2</sup> / 120 M<sup>2</sup></td>
-				  							<td class="text-right">Rp. 98.000.000</td>
-				  						</tr>
-				  						<tr>
-				  							<td class="text-center">2.</td>
-				  							<td>Tanah &amp; Bangunan</td>
-				  							<td>SHM</td>
-				  							<td>98804</td>
-				  							<td>36 M<sup>2</sup> / 60 M<sup>2</sup></td>
-				  							<td class="text-right">Rp. 98.000.000</td>
-				  						</tr>
-				  						<tr>
-				  							<td class="text-center">3.</td>
-				  							<td>Tanah</td>
-				  							<td>SHM</td>
-				  							<td>98804</td>
-				  							<td>60 M<sup>2</sup></td>
-				  							<td class="text-right">Rp. 98.000.000</td>
-				  						</tr>
-				  					</tbody>
-			  					</table>
-		  						{{-- <ol class="pl-3">
-		  							<li class="text-capitalize">(roda 4) mitsubishi colt l300 th 2010 dengan harga Rp. 100.000.000</li>
-		  							<li class="text-capitalize">(roda 2) yamaha mio th 2009 dengan harga Rp. 9.000.000</li>
-		  						</ol> --}}
-			  				</td>
-			  			</tr>
-			  		</tbody>
-			  	</table>
+				@forelse($pengajuan as $k => $v)
+					<div class="card" style="border-radius:0px">
+						<div class="card-header">
+							<div class="row">
+								<div class="col-sm-3">
+									<p style="margin:5px;" class="text-secondary">NO.PENGAJUAN</p>
+									<p style="margin:5px;">
+										{{$v['id']}}
+										@if($v['is_mobile'])
+											<span class="badge badge-success">mobile</span>
+										@endif
+									</p>
+								</div>
+								<div class="col-sm-4">
+									<p style="margin:5px;" class="text-secondary">POKOK PINJAMAN</p>
+									<p style="margin:5px;">{{$v['pokok_pinjaman']}}</p>
+								</div>
+								<div class="col-sm-3">
+									<p style="margin:5px;" class="text-secondary">TANGGAL PENGAJUAN</p>
+									<p style="margin:5px;">{{$v['status_terakhir']['tanggal']}}</p>
+								</div>
+								<div class="col-sm-2 text-center" style="vertical-align:middle;padding-top:10px;">
+									@if(!$v['is_complete'])
+										<h5 class="text-danger" style="padding:5px;"><i class="fa fa-exclamation-triangle"></i></h5>
+									@else
+										<a href="#"><p style="padding:5px;border:1px solid;">PRINT</p></a>
+									@endif
+								</div>
+							</div>
+						</div>
+						<div class="card-block">
+							<div class="row" style="padding:15px">
+								<div class="col-sm-3">
+									<p style="margin:5px;" class="text-secondary">NASABAH</p>
+									<p style="margin:5px;">{{$v['nasabah']['nama']}}</p>
+								</div>
+								<div class="col-sm-4">
+									<p style="margin:5px;" class="text-secondary">JAMINAN</p>
+									@foreach($v['jaminan_kendaraan'] as $jk)
+										<p style="margin:5px;">{{strtoupper($jk['jenis'])}} Nomor : {{strtoupper($jk['dokumen_jaminan'][$jk['jenis']]['nomor_bpkb'])}}</p>
+									@endforeach
+									@foreach($v['jaminan_tanah_bangunan'] as $jtk)
+										<p style="margin:5px;">{{strtoupper($jtk['jenis'])}} Nomor : {{strtoupper($jtk['dokumen_jaminan'][$jtk['jenis']]['nomor_sertifikat'])}}</p>
+									@endforeach
+								</div>
+								<div class="col-sm-5">
+									<p style="margin:5px;" class="text-secondary">CATATAN</p>
+									<p style="margin:5px;">
+										@if(!$v['is_complete'])
+											Data Belum Lengkap. <a href="{{route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i>Lengkapi Sekarang</i></a>
+										@elseif($v['nasabah']['is_lama'])
+											Nasabah Lama. <i>Lanjutkan Analisa</i>
+										@else
+											Data Sudah Lengkap. <i>Assign Untuk Survei</i>
+										@endif
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix">&nbsp;</div>
+				@empty
+					<div class="card" style="background-color:#fff;border:none;border-radius:0">
+						<div class="card-header" role="tab" style="background-color:#fff;border-bottom:1px solid #eee">
+							<div class="row text-center">
+								<div class="col-12"><p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p></div>
+							</div>
+						</div>
+					</div>
+				@endforelse
+
+				<div class="clearfix">&nbsp;</div>
+				<div class="row">
+					<div class="col">
+						{{$pengajuan->appends(request()->all())}}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-	
-	<!--///////////////////////
-	/// MODAL 		///////
- 	/////////////////////// -->
-
-	<!-- jaminan kendaraan -->
-	@component ('bootstrap.modal', ['id' => 'delete'])
-		@slot ('title')
-			Hapus Data
-		@endslot
-
-		@slot ('body')
-			<p>Untuk menghapus data ini, silahkan masukkan password dibawah!</p>
-			{!! Form::bsPassword(null, 'password', ['placeholder' => 'Password']) !!}
-		@endslot
-
-		@slot ('footer')
-			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-			<a href="#" class="btn btn-danger btn-outline">Tambahkan</a>
-		@endslot
-	@endcomponent
 @endpush
 
 @push('submenu')
-	@include('template.submenu.submenu')
+	@include('templates.submenu.submenu')
+@endpush
+
+@push ('js')
 @endpush

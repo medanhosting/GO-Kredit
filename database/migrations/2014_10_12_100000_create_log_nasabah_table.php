@@ -21,10 +21,12 @@ class CreateLogNasabahTable extends Migration
 			$table->date('tanggal_lahir')->nullable();
 			$table->string('tempat_lahir')->nullable();
 			$table->enum('jenis_kelamin', ['laki-laki', 'perempuan'])->nullable();
-			$table->string('telepon')->nullable();
 			$table->string('status_perkawinan')->nullable();
 			$table->string('pekerjaan')->nullable();
 			$table->double('penghasilan_bersih')->nullable();
+			$table->string('telepon')->nullable();
+			$table->string('email')->nullable();
+			$table->string('nomor_whatsapp')->nullable();
 			$table->text('alamat')->nullable();
 			$table->text('keluarga')->nullable();
 			$table->timestamps();

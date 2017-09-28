@@ -22,7 +22,7 @@
 					Permohonan Kredit Baru
 				</h4>
 				<nav class="nav nav-tabs mb-5 border" role="tablist" style="background-color: #fafafa;">
-					<a href="#kredit" class="nav-item nav-link active w-25 text-primary rounded-0" data-toggle="tab" role="tab" aria-controls="kredit" aria-expanded="true"><h6 class="mb-0">1 &nbsp;kredit</h6></a>
+					<a href="#kredit" class="nav-item nav-link active w-25" data-toggle="tab" role="tab" aria-controls="kredit" aria-expanded="true"><h6 class="mb-0">1 &nbsp;kredit</h6></a>
 					<a href="#nasabah" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="nasabah" aria-expanded="true"><h6 class="mb-0">2 &nbsp;nasabah</h6></a>
 					<a href="#keluarga" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="kerabat-keluarga" aria-expanded="true"><h6 class="mb-0">3 &nbsp;kerabat/keluarga</h6></a>
 					<a href="#jaminan" class="nav-item nav-link  w-25" data-toggle="tab" role="tab" aria-controls="jaminan" aria-expanded="true"><h6 class="mb-0">4 &nbsp;jaminan</h6></a>

@@ -23,14 +23,16 @@ use Thunderlabid\Log\Events\BPKB\BPKBUpdating;
 // use Thunderlabid\Log\Events\BPKB\BPKBDeleted;
 
 use Thunderlabid\Log\Traits\WaktuTrait;
+use Thunderlabid\Log\Traits\IDRTrait;
 
 class BPKB extends Model
 {
 	use SoftDeletes;
 	use WaktuTrait;
+	use IDRTrait;
 
 	protected $table	= 'l_bpkb';
-	protected $fillable	= ['parent_id', 'tipe', 'merk', 'tahun', 'nomor_bpkb', 'atas_nama', 'jenis'];
+	protected $fillable	= ['parent_id', 'tipe', 'merk', 'tahun', 'nomor_bpkb', 'atas_nama', 'jenis', 'tahun_perolehan', 'nilai'];
 
 	protected $hidden	= [];
 	protected $dates	= [];
@@ -72,6 +74,10 @@ class BPKB extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
 	// ------------------------------------------------------------------------------------------------------------
+	public function setNilaiAttribute($variable)
+	{
+		$this->attributes['nilai']		= $this->formatMoneyFrom($variable);
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
@@ -92,6 +98,8 @@ class BPKB extends Model
 		$rules['nomor_bpkb']	= ['required', 'max:255'];
 		$rules['atas_nama']		= ['required', 'max:255'];
 		$rules['jenis']			= ['required', 'max:255'];
+		$rules['tahun_perolehan']	= ['required', 'date_format:"Y"', 'before:'.date('Y')];
+		$rules['nilai']			= ['required', 'numeric'];
 
 		//////////////
 		// Validate //
@@ -107,6 +115,11 @@ class BPKB extends Model
 			$this->errors = null;
 			return true;
 		}
+	}
+
+	public function getNilaiAttribute()
+	{
+		return $this->formatMoneyTo($this->attributes['nilai'], true);
 	}
 
 	public function getErrorsAttribute()

@@ -20,25 +20,30 @@ Class LogController extends Controller
 {
 	public function nasabah()
 	{
-		$nasabah	= Nasabah::where('nik', request()->get('nik'))->wherenull('parent_id')->first();
+		$nasabah	= Nasabah::where('nik', request()->get('q'))->wherenull('parent_id')->first();
 
         return response()->json($nasabah);
 	}
 
 	public function bpkb()
 	{
-		$bpkb		= BPKB::where('nomor_bpkb', request()->get('nomor_bpkb'))->wherenull('parent_id')->first();
+		$bpkb		= BPKB::where('nomor_bpkb', request()->get('q'))->wherenull('parent_id')->first();
 
         return response()->json($bpkb);
 	}
 
 	public function sertifikat()
 	{
-		$sertifikat	= SHM::where('nomor_sertifikat', request()->get('nomor_sertifikat'))->wherenull('parent_id')->first();
+		$sertifikat	= SHM::where('nomor_sertifikat', request()->get('q'))->wherenull('parent_id')->first();
 
 		if(!$sertifikat)
 		{
-			$sertifikat		= SHGB::where('nomor_sertifikat', request()->get('nomor_sertifikat'))->wherenull('parent_id')->first();
+			$sertifikat				= SHGB::where('nomor_sertifikat', request()->get('q'))->wherenull('parent_id')->first();
+			$sertifikat['jenis']	= 'shgb';
+		}
+		else
+		{
+			$sertifikat['jenis']	= 'shm';
 		}
 
         return response()->json($sertifikat);

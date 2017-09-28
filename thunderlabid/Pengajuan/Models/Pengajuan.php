@@ -47,7 +47,7 @@ class Pengajuan extends Model
 	protected $rules	= [];
 	protected $errors;
 	protected $latest_analysis;
-	protected $appends 	= ['tanggal'];
+	protected $appends 	= ['tanggal', 'is_complete'];
 
 	protected $keyType  	= 'string';
     public $incrementing 	= false;
@@ -223,7 +223,8 @@ class Pengajuan extends Model
 		$rules['kemampuan_angsur']				= ['required', 'numeric'];
 		$rules['is_mobile']						= ['boolean'];
 		$rules['dokumen_pelengkap.ktp']			= ['required', 'url'];
-		$rules['dokumen_pelengkap.kk']			= ['required_with:nasabah.keluarga', 'url'];
+		// $rules['dokumen_pelengkap.kk']			= ['required_with:nasabah.keluarga', 'url'];
+		$rules['dokumen_pelengkap.kk']			= ['url'];
 		$rules['kode_kantor']					= ['required_if:is_mobile,false'];
 
 		$rules['nasabah.nik']					= ['required_if:is_mobile,false', 'max:255'];
@@ -308,6 +309,21 @@ class Pengajuan extends Model
 	public function getDokumenPelengkapAttribute($variable)
 	{
 		return json_decode($this->attributes['dokumen_pelengkap'], true);
+	}
+
+	public function getIsCompleteAttribute($variable)
+	{
+		if(!count($this->jaminan_kendaraan) && !count($this->jaminan_tanah_bangunan))
+		{
+			return false;
+		}
+
+		if(!count($this->nasabah['keluarga']))
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	public function getErrorsAttribute()

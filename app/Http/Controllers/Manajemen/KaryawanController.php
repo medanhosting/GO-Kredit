@@ -72,9 +72,8 @@ class KaryawanController extends Controller
 		}
 
 		$karyawan		= Orang::findornew($id);
-		$scopes 		= explode(',', env('SU_SCOPES', 'pengajuan,permohonan,survei,analisa,keputusan,realisasi,kantor,karyawan'));
 
-		$this->layout->pages 	= view($this->view_dir . '.karyawan.create', compact('karyawan', 'title', 'scopes'));
+		$this->layout->pages 	= view($this->view_dir . '.karyawan.create', compact('karyawan', 'title'));
 		return $this->layout;
 	}
 
@@ -92,14 +91,13 @@ class KaryawanController extends Controller
 		try {
 			if(is_null($id))
 			{
-				$orang	= request()->only('nama', 'email', 'telepon', 'telepon', 'password', 'confirm_password');
+				$orang	= request()->only('nama', 'email', 'telepon', 'telepon', 'alamat', 'password', 'confirm_password');
 			}
 			else
 			{
-				$orang	= request()->only('nama', 'email', 'telepon', 'telepon');
+				$orang	= request()->only('nama', 'email', 'telepon', 'telepon', 'alamat');
 			}
-
-			$orang['alamat']	= ['alamat' => request()->get('alamat')];
+dd($orang);
 			$penempatan 		= request()->get('kantor');
 
 			DB::beginTransaction();

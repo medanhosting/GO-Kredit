@@ -182,4 +182,23 @@ class KantorController extends Controller
 			return Redirect::back()->withInput()->withErrors($e->getMessage());
 		}
 	}
+
+	public function ajax () 
+	{
+		$kantor 	= new Kantor;
+
+		if (request()->has('q'))
+		{
+			$cari 		= request()->get('q');
+			$kantor 	= $kantor->where(function($q)use($cari){				
+							$q
+							->where('nama', 'like', '%'.$cari.'%')
+							->orwhere('id', 'like', '%'.$cari.'%');
+						});
+		}
+
+		$kantor 	= $kantor->orderby('nama', 'asc')->get(['id', 'nama']);
+
+		return response()->json($kantor);
+	}
 }

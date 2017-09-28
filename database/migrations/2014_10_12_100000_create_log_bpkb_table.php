@@ -22,6 +22,8 @@ class CreateLogBpkbTable extends Migration
 			$table->string('nomor_bpkb')->nullable();
 			$table->string('atas_nama')->nullable();
 			$table->string('jenis')->nullable();
+			$table->string('tahun_perolehan')->nullable();
+			$table->double('nilai')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});

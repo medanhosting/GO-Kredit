@@ -25,14 +25,8 @@
 				@stack('menu_sidebar')
 				<div class="card text-left">
 					<div class="card-body">
-						<h4 class="card-title">Menu</h4>
-						<nav class="nav flex-column" role="tablist">
-							<a href="#" class="nav-link active" data-toggle="paneltab" data-target="#overview">Permohonan</a>
-							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#survei">Survei</a>
-							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#analisa">Analisa</a>
-							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#keputusan">Keputusan</a>
-							<a href="#" class="nav-link" data-toggle="paneltab" data-target="#realisasi">Realisasi</a>
-						</nav>
+						<h4 class="card-title">KREDIT</h4>
+						
 					</div>
 				</div>
 			</div>

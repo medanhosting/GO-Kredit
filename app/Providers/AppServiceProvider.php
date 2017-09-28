@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
 
 		//
 		Form::component('bsText'       	, 'bootstrap.form.text'				, ['label' => null, 'name', 'value' => null, 'attributes' => [], 'show_error' => true, 'helper_text' => null, 'prepend' => null, 'append' => null]);
+		Form::component('vText'       	, 'bootstrap.form.vtext'				, ['label' => null, 'name', 'value' => null, 'attributes' => [], 'show_error' => true, 'helper_text' => null, 'prepend' => null, 'append' => null]);
+		Form::component('vSelect'      , 'bootstrap.form.vselect'			, ['label' => null, 'name', 'options' => [], 'value' => null, 'attributes' => [], 'show_error' => true]);
 		Form::component('bsSelect'      , 'bootstrap.form.select'			, ['label' => null, 'name', 'options' => [], 'value' => null, 'attributes' => [], 'show_error' => true]);
 		Form::component('bsCheckbox'	, 'bootstrap.form.checkbox'			, ['label' => null, 'name', 'value' => null, 'is_checked' => null, 'attributes' => []]);
 		Form::component('bsTextarea'	, 'bootstrap.form.textarea'			, ['label' => null, 'name', 'value' => null, 'attributes' => [], 'show_error' => true, 'helper_text' => null]);

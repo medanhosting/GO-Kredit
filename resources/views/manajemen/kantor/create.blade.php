@@ -56,7 +56,7 @@
 						<label class="text-sm">Kode Pusat</label>
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-10">
-								{!! Form::text('kantor_id', $kantor['kantor_id'], ['class' => 'form-control required', 'placeholder' => 'Masukkan kode pusat']) !!}			
+								@include('manajemen.kantor.ajax-kode-pusat')
 							</div>
 						</div>
 					</fieldset>

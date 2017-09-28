@@ -23,14 +23,16 @@ use Thunderlabid\Log\Events\SHM\SHMUpdating;
 // use Thunderlabid\Log\Events\SHM\SHMDeleted;
 
 use Thunderlabid\Log\Traits\WaktuTrait;
+use Thunderlabid\Log\Traits\IDRTrait;
 
 class SHM extends Model
 {
 	use SoftDeletes;
 	use WaktuTrait;
+	use IDRTrait;
 
 	protected $table	= 'l_shm';
-	protected $fillable	= ['parent_id', 'tipe', 'nomor_sertifikat', 'atas_nama', 'luas_tanah', 'luas_bangunan', 'alamat'];
+	protected $fillable	= ['parent_id', 'tipe', 'nomor_sertifikat', 'atas_nama', 'luas_tanah', 'luas_bangunan', 'alamat', 'nilai', 'tahun_perolehan'];
 
 	protected $hidden	= [];
 	protected $dates	= [];
@@ -77,6 +79,10 @@ class SHM extends Model
 		$this->attributes['alamat']		= json_encode($variable);
 	}
 	
+	public function setNilaiAttribute($variable)
+	{
+		$this->attributes['nilai']		= $this->formatMoneyFrom($variable);
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
 	// ------------------------------------------------------------------------------------------------------------
@@ -96,6 +102,8 @@ class SHM extends Model
 		$rules['luas_tanah']		= ['required', 'numeric'];
 		$rules['luas_bangunan']		= ['required_if:tipe,tanah_dan_bangunan', 'numeric'];
 		$rules['alamat']			= ['required', 'array'];
+		$rules['tahun_perolehan']	= ['required', 'date_format:"Y"', 'before:'.date('Y')];
+		$rules['nilai']				= ['required', 'numeric'];
 
 		//////////////
 		// Validate //
@@ -114,6 +122,11 @@ class SHM extends Model
 			$this->errors = null;
 			return true;
 		}
+	}
+
+	public function getNilaiAttribute()
+	{
+		return $this->formatMoneyTo($this->attributes['nilai'], true);
 	}
 
 	public function getAlamatAttribute($variable)

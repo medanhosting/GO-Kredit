@@ -4,7 +4,7 @@
 		<label class="mb-1">NIK</label>
 		<div class="input-group">
 			<div class="input-group-addon">35-</div>
-			{!! Form::text('nasabah[nik]', null, ['class' => 'form-control', 'placeholder' => 'masukkan NIK']) !!}
+			{!! Form::text('nasabah[nik]', null, ['class' => 'form-control mask-id-card', 'placeholder' => 'masukkan NIK']) !!}
 			<div class="input-group-addon bg-white border-0 invisible">
 				<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
 				<span class="hidden-xs">Memeriksa NIK</span>
@@ -49,29 +49,15 @@
 </div>
 <div class="clearfix">&nbsp;</div>
 
-<h6 class="text-secondary ml-3"><strong><u>Alamat</u></strong></h6>
+<h6 class="text-secondary"><strong><u>Alamat</u></strong></h6>
 <div class="col-auto col-md-6">
-	{!! Form::bsText('Jalan', 'nasabah[alamat][alamat]', null, ['class' => 'form-control', 'placeholder' => 'masukkan alamat lengkap']) !!}
-</div>
-<div class="row ml-0 mr-0">
-	<div class="col-auto col-md-2">
-		{!! Form::bsText('RT', 'nasabah[alamat][rt]', null, ['class' => 'form-control mask-rt-rw', 'placeholder' => '']) !!}
+	<div class="row"> 
+		@include('templates.alamat.ajax-alamat', ['kecamatan' => $kantor_aktif['alamat']['kecamatan'], 'prefix' => 'nasabah[alamat]'])
 	</div>
-	<div class="col-auto col-md-2">
-		{!! Form::bsText('RW', 'nasabah[alamat][rw]', null, ['class' => 'form-control mask-rt-rw', 'placeholder' => '']) !!}
-	</div>
-</div>
-<div class="col-auto col-md-4">
-	{!! Form::bsSelect('Kota/Kabupaten', 'nasabah[alamat][kota]', array_merge(['' => 'pilih'], $list_kota), null, ['class' => 'custom-select form-control', 'placeholder' => '']) !!}
-</div>
-<div class="col-auto col-md-4">
-	{!! Form::bsSelect('Kecamatan', 'nasabah[alamat][kecamatan]', array_merge(['' => 'pilih'], $list_kecamatan), null, ['class' => 'custom-select form-control', 'placeholder' => '']) !!}
-</div>
-<div class="col-auto col-md-4">
-	{!! Form::bsText('Desa/Dusun', 'nasabah[alamat][kelurahan]', null, ['class' => 'form-control', 'placeholder' => '']) !!}
 </div>
 <div class="clearfix">&nbsp;</div>
 
+<div class="clearfix">&nbsp;</div>
 <h6 class="text-secondary ml-3"><strong><u>Kontak</u></strong></h6>
 <div class="col-auto col-md-3">
 	{!! Form::bsText('No. Telp', 'nasabah[telepon]', null, ['class' => 'form-control mask-no-telepon', 'placeholder' => 'masukkan no. telp']) !!}
@@ -83,7 +69,6 @@
 	{!! Form::bsText('Email', 'nasabah[email]', null, ['class' => 'form-control', 'placeholder' => 'masukkan email']) !!}
 </div>
 <div class="clearfix">&nbsp;</div>
-
 <h6 class="text-secondary ml-3"><strong><u>Dokumen Pelengkap</u></strong></h6>
 <div class="col-auto col-md-5">
 	<div class="form-group">

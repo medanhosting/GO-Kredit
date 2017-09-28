@@ -49,6 +49,13 @@ window.formInputMask = {
 		var selector = $('.mask-date');
 		date.mask(selector);
 	},
+	datetime: function () {
+		var date = new Inputmask({
+			alias: 'dd/mm/yyyy hh:mm'
+		});
+		var selector = $('.mask-date-time');
+		date.mask(selector);
+	},
 	year: function () {
 		var year = new Inputmask({
 			mask: "y",
@@ -95,7 +102,7 @@ window.formInputMask = {
 		yearAfter.mask(selector);
 	},
 	idKTP: function () {
-		var idKTP = new Inputmask('99-99-999999-9999');
+		var idKTP = new Inputmask('35-99-99-999999-9999');
 		var selector = $('.mask-id-card');
 		idKTP.mask(selector);
 	},

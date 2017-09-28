@@ -141,8 +141,15 @@ class PengajuanController extends Controller
 
 	public function print($id, $mode)
 	{
-		$realisasi 				= LegalRealisasi::where('pengajuan_id', $id)->where('jenis', $mode)->first()->toArray();
-
+		$realisasi 		= LegalRealisasi::where('pengajuan_id', $id)->where('jenis', $mode)->first();
+		if($realisasi)
+		{
+			$realisasi 	= $realisasi->toArray();
+		}
+		else
+		{
+			$realisasi['isi']['pengajuan']	= Pengajuan::where('id', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->first()->toArray();
+		}
 		return view('pengajuan.print.'.$mode, compact('realisasi'));
 	}
 

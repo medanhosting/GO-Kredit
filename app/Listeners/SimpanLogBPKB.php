@@ -43,7 +43,8 @@ class SimpanLogBPKB
 			{
 				$bpkb 					= new BPKB;
 				$data_n_n				= $model->dokumen_jaminan['bpkb'];
-				unset($data_n_n['tahun_perolehan']);
+				$data_n_n['tahun_perolehan']	= $model->tahun_perolehan;
+				$data_n_n['nilai']				= $model->nilai_jaminan;
 				$data_n_n['parent_id']	= null;
 				$bpkb->fill($data_n_n);
 				$bpkb->save();
@@ -53,14 +54,14 @@ class SimpanLogBPKB
 				//simpan versioning
 				$old_BPKB 				= new BPKB;
 				$data_o_n 				= $find->toArray();
-				unset($data_o_n['tahun_perolehan']);
 				unset($data_o_n['id']);
 				$data_o_n['parent_id']	= $find->id;
 				$old_BPKB->fill($data_o_n);
 				$old_BPKB->save();
 
 				$data_n_n				= $model->dokumen_jaminan['bpkb'];
-				unset($data_n_n['tahun_perolehan']);
+				$data_n_n['tahun_perolehan']	= $model->tahun_perolehan;
+				$data_n_n['nilai']				= $model->nilai_jaminan;
 				$find->fill($data_n_n);
 				$find->save();
 			}

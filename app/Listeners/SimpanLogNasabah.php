@@ -41,7 +41,7 @@ class SimpanLogNasabah
 
 			if(!$find)
 			{
-				$nasabah 		= new Nasabah;
+				$nasabah 				= new Nasabah;
 				$data_n_n				= $model->nasabah;
 				$data_n_n['parent_id']	= null;
 				$nasabah->fill($data_n_n);
