@@ -36,11 +36,11 @@
 			
 			
 			Route::middleware('scope:permohonan')->group( function() {
-				Route::resource('permohonan', 		'PermohonanController');
+				Route::resource('permohonan', 					'PermohonanController');
+				Route::post('/permohonan/assign/survei/{id}',	['as'	=> 'permohonan.assign_survei', 	'uses' => 'PermohonanController@assign_survei']);
 			});
 			Route::middleware('scope:survei')->group( function() {
-				Route::resource('survei', 			'SurveiController');
-				Route::get('/survei/{id}/assign',	['as'	=> 'survei.assign', 	'uses' => 'SurveiController@assign']);
+				Route::resource('survei', 				'SurveiController');
 			});
 
 			Route::middleware('scope:analisa')->group( function() {
@@ -66,6 +66,7 @@
 			Route::resource('karyawan', 	'KaryawanController');
 			Route::post('karyawan/batch',		 	['uses' => 'KaryawanController@batch', 	'as' => 'karyawan.batch']);
 			Route::get('karyawan/batch/upload', 	['uses' => 'KaryawanController@upload', 'as' => 'karyawan.upload']);
+			Route::any('karyawan/index/ajax',		['uses' => 'KaryawanController@ajax', 	'as' => 'karyawan.ajax']);
 		});
 
 		Route::any('regensi',	['uses' => 'HelperController@getRegensi', 		'as' => 'regensi.index']);

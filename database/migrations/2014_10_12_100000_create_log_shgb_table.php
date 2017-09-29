@@ -22,7 +22,7 @@ class CreateLogShgbTable extends Migration
 			$table->string('atas_nama')->nullable();
 			$table->integer('luas_tanah')->nullable();
 			$table->integer('luas_bangunan')->nullable();
-			$table->string('alamat')->nullable();
+			$table->text('alamat')->nullable();
 			$table->string('tahun_perolehan')->nullable();
 			$table->double('nilai')->nullable();
 			$table->timestamps();

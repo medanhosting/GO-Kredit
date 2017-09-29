@@ -60,6 +60,37 @@
 		  padding:8px; 
 		  color:#ccc;
 		}
+
+		/* Make an input blend into its parent */
+		.inline-edit{
+		  /* Eliminate borders and padding */
+		  border: none;
+		  padding: 0;
+		  margin: 0;
+
+		  /* Inherit the parent element's typography */
+		  font: inherit;
+		  color: inherit;
+		  line-height: inherit;
+		  font-size: inherit;
+		  text-align: inherit;
+
+		  /* Seems to help alignment in headers */
+		  vertical-align: top;
+		}
+
+		/* Add interaction cues on hover and focus */
+		.inline-edit:hover,
+		.inline-edit:focus{
+		  /* Change the background to a light yellow */
+		  background-color: #FFD;
+
+		  /* A subtle transition never hurts */
+		  -webkit-transition: background-color 0.5s;
+			 -moz-transition: background-color 0.5s;
+			  -ie-transition: background-color 0.5s;
+				  transition: background-color 0.5s;
+		}
 		</style>
 	</head>
 	<body class=''>

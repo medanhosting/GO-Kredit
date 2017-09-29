@@ -37,7 +37,7 @@ class SimpanStatusDonePutusan
 		
 		if(Auth::check())
 		{
-			$karyawan 	= ['nip' => Auth::user()['nip']];
+			$karyawan 	= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 		}
 		else
 		{

@@ -7,23 +7,8 @@
 	@else
 	<div class="form-group">
 	@endif
-	@if ($append || $prepend)
-		<div class='input-group'>
-	@endif
 
-	@if ($prepend)
-		<div class="input-group-addon">{!! $prepend !!}</div>
-	@endif
-
-	{!! Form::text($name, $value, array_merge(['class' => 'form-control ' . ($errors->has($name)  && $show_error ? 'is-invalid' : '')], ($attributes ? $attributes : []))) !!}
-
-	@if ($append)
-		<div class="input-group-addon">{!! $append !!}</div>
-	@endif
-			
-	@if ($append || $prepend)
-		</div>
-	@endif
+	{!! Form::textarea($name, $value, array_merge(['class' => 'form-control ' . ($errors->has($name)  && $show_error ? 'is-invalid' : '')], ($attributes ? $attributes : []))) !!}
 
 	@if ($helper_text)
 		<small class="form-text text-muted">{!! $helper_text !!}</small>

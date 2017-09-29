@@ -8,6 +8,7 @@ use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Survei\Models\Survei;
 use Thunderlabid\Survei\Models\SurveiFoto;
 use Thunderlabid\Survei\Models\SurveiDetail;
+use Thunderlabid\Survei\Models\AssignedSurveyor;
 
 use Thunderlabid\Survei\Traits\IDRTrait;
 
@@ -27,6 +28,8 @@ class SurveiTableSeeder extends Seeder
 		DB::table('s_survei')->truncate();
 		DB::table('s_survei_detail')->truncate();
 		DB::table('s_survei_foto')->truncate();
+		DB::table('s_survei_lokasi')->truncate();
+		DB::table('s_assigned_surveyor')->truncate();
 		
 		$char_kenal 		= ['dikenal', 'kurang_dikenal', 'tidak_dikenal'];
 		$char_watak 		= ['baik', 'cukup_baik', 'tidak_baik'];
@@ -184,8 +187,11 @@ class SurveiTableSeeder extends Seeder
 		{
 			//character
 			$survei['tanggal']		= Carbon::now()->addHours(rand(1,12))->format('d/m/Y H:i');
-			$survei['surveyor']		= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
+			$survei['kode_kantor']	= $value['kode_kantor'];
 			$survei['pengajuan_id'] = $value['id'];
+
+			$surveyor[0] 			= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
+			$surveyor[1] 			= ['nip' => Orang::skip(1)->first()['nip'], 'nama' => Orang::skip(1)->first()['nama']];
 
 			$s_survei_c1['jenis']	= 'character';
 			$s_survei_c1['dokumen_survei']['character']['lingkungan_tinggal']	= $char_kenal[rand(0,2)];
@@ -321,6 +327,9 @@ class SurveiTableSeeder extends Seeder
 			}
 
 			$saved_survei 				= Survei::create($survei);
+			foreach ($surveyor as $ks => $vs) {
+				$a_s 	= AssignedSurveyor::create(['nip' => $vs['nip'], 'nama' => $vs['nama'], 'survei_id' => $saved_survei['id']]);
+			}
 			$s_survei_c1['survei_id']	= $saved_survei['id'];
 			$s_survei_c2['survei_id']	= $saved_survei['id'];
 			$s_survei_c3['survei_id']	= $saved_survei['id'];
@@ -333,10 +342,31 @@ class SurveiTableSeeder extends Seeder
 
 			foreach ($s_survei_c5 as $keys5 => $values5) 
 			{
-				$values5['survei_id']	= $saved_survei['id'];
-				$s_detail				= SurveiDetail::create($values5);
+				if($values5['dokumen_survei']['collateral']['jenis']=='bpkb')
+				{
+					$s_detail 	= SurveiDetail::where('survei_id', $saved_survei['id'])->where('jenis', 'collateral')
+					->where('dokumen_survei->collateral->bpkb->nomor_bpkb', $values5['dokumen_survei']['collateral']['bpkb']['nomor_bpkb'])->first();
 
-				//disable seeding survei (temporary)
+					$bpkb	= array_merge($s_detail->dokumen_survei['collateral']['bpkb'], $values5['dokumen_survei']['collateral']['bpkb']);
+					$values5['dokumen_survei']['collateral']['bpkb'] 	= $bpkb;
+				}
+				elseif($values5['dokumen_survei']['collateral']['jenis']=='shm')
+				{
+					$s_detail 		= SurveiDetail::where('survei_id', $saved_survei['id'])->where('jenis', 'collateral')
+					->where('dokumen_survei->collateral->shm->nomor_sertifikat', $values5['dokumen_survei']['collateral']['shm']['nomor_sertifikat'])->first();
+					$shm	= array_merge($s_detail->dokumen_survei['collateral']['shm'], $values5['dokumen_survei']['collateral']['shm']);
+					$values5['dokumen_survei']['collateral']['shm'] 	= $shm;
+				}
+				else
+				{
+					$s_detail 		= SurveiDetail::where('survei_id', $saved_survei['id'])->where('jenis', 'collateral')
+					->where('dokumen_survei->collateral->shgb->nomor_sertifikat', $values5['dokumen_survei']['collateral']['shgb']['nomor_sertifikat'])->first();
+					$shgb	= array_merge($s_detail->dokumen_survei['collateral']['shgb'], $values5['dokumen_survei']['collateral']['shgb']);
+					$values5['dokumen_survei']['collateral']['shgb'] 	= $shgb;
+				}
+
+				$s_detail->fill($values5);
+				$s_detail->save();
 				// $s_survei_foto[$keys5]['survei_detail_id']	= $s_detail['id'];
 				// SurveiFoto::create($s_survei_foto[$keys5]);
 			}
@@ -421,8 +451,7 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c5['dokumen_survei']['collateral']['shm']['lantai_bangunan']		= $this->lantai_bangunan[rand(0,1)];
 			$s_survei_c5['dokumen_survei']['collateral']['shm']['dinding']				= $this->dinding[rand(0,1)];
 			$s_survei_c5['dokumen_survei']['collateral']['shm']['listrik']				= $this->listrik[rand(0,1)];
-			$s_survei_c5['dokumen_survei']['collateral']['shm']['air']					= $this->air[rand(0,1)];
-			$s_survei_c5['dokumen_survei']['collateral']['shm']['lain_lain']			= $this->lain_lain[rand(0,1)];
+			$s_survei_c5['dokumen_survei']['collateral']['shm']['catatan']				= $this->lain_lain[rand(0,1)];
 			
 			$njop_bangunan 		= rand(5,10) * 100000;
 			$nilai_bangunan 	= $jaminan['dokumen_jaminan']['shm']['luas_bangunan'] * $njop_bangunan;
@@ -430,9 +459,10 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c5['dokumen_survei']['collateral']['shm']['nilai_bangunan']		= $this->formatMoneyTo($nilai_bangunan);
 		}
 
+		$s_survei_c5['dokumen_survei']['collateral']['shm']['air']							= $this->air[rand(0,1)];
 		$s_survei_c5['dokumen_survei']['collateral']['shm']['jalan']						= $this->jalan[rand(0,2)];
 		$s_survei_c5['dokumen_survei']['collateral']['shm']['letak_lokasi_terhadap_jalan']	= $this->lltj[rand(0,2)];
-		$s_survei_c5['dokumen_survei']['collateral']['shm']['lingkungan']					= $this->lltj[rand(0,5)];
+		$s_survei_c5['dokumen_survei']['collateral']['shm']['lingkungan']					= $this->ling[rand(0,5)];
 		$s_survei_c5['dokumen_survei']['collateral']['shm']['ajb']							= $this->y_n[rand(0,1)];
 		$s_survei_c5['dokumen_survei']['collateral']['shm']['pbb_terakhir']					= $this->y_n[rand(0,1)];
 		$s_survei_c5['dokumen_survei']['collateral']['shm']['imb']							= $this->y_n[rand(0,1)];
@@ -487,8 +517,7 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c5['dokumen_survei']['collateral']['shgb']['lantai_bangunan']		= $this->lantai_bangunan[rand(0,1)];
 			$s_survei_c5['dokumen_survei']['collateral']['shgb']['dinding']				= $this->dinding[rand(0,1)];
 			$s_survei_c5['dokumen_survei']['collateral']['shgb']['listrik']				= $this->listrik[rand(0,1)];
-			$s_survei_c5['dokumen_survei']['collateral']['shgb']['air']					= $this->air[rand(0,1)];
-			$s_survei_c5['dokumen_survei']['collateral']['shgb']['lain_lain']			= $this->lain_lain[rand(0,1)];
+			$s_survei_c5['dokumen_survei']['collateral']['shgb']['catatan']				= $this->lain_lain[rand(0,1)];
 			
 			$njop_bangunan 		= rand(5,10) * 100000;
 			$nilai_bangunan 	= $jaminan['dokumen_jaminan']['shgb']['luas_bangunan'] * $njop_bangunan;
@@ -496,9 +525,11 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c5['dokumen_survei']['collateral']['shgb']['nilai_bangunan']	= $this->formatMoneyTo($nilai_bangunan);
 		}
 
+		$s_survei_c5['dokumen_survei']['collateral']['shgb']['air']					= $this->air[rand(0,1)];
+
 		$s_survei_c5['dokumen_survei']['collateral']['shgb']['jalan']						= $this->jalan[rand(0,2)];
 		$s_survei_c5['dokumen_survei']['collateral']['shgb']['letak_lokasi_terhadap_jalan']	= $this->lltj[rand(0,2)];
-		$s_survei_c5['dokumen_survei']['collateral']['shgb']['lingkungan']					= $this->lltj[rand(0,5)];
+		$s_survei_c5['dokumen_survei']['collateral']['shgb']['lingkungan']					= $this->ling[rand(0,5)];
 		$s_survei_c5['dokumen_survei']['collateral']['shgb']['ajb']							= $this->y_n[rand(0,1)];
 		$s_survei_c5['dokumen_survei']['collateral']['shgb']['pbb_terakhir']				= $this->y_n[rand(0,1)];
 		$s_survei_c5['dokumen_survei']['collateral']['shgb']['imb']							= $this->y_n[rand(0,1)];

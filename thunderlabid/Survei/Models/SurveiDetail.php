@@ -119,20 +119,20 @@ class SurveiDetail extends Model
 		}
 
 
-		if(str_is($this->jenis, 'collateral') && str_is($variable['collateral']['jenis'], 'bpkb'))
+		if(str_is($this->jenis, 'collateral') && str_is($variable['collateral']['jenis'], 'bpkb') && isset($variable['collateral']['bpkb']['harga_taksasi']))
 		{
 			$variable['collateral']['bpkb']['harga_taksasi']		= $this->formatMoneyFrom($variable['collateral']['bpkb']['harga_taksasi']);
 			$variable['collateral']['bpkb']['harga_bank']			= $this->formatMoneyFrom($variable['collateral']['bpkb']['harga_bank']);
 			$variable['collateral']['bpkb']['masa_berlaku_stnk']	= $this->formatDateFrom($variable['collateral']['bpkb']['masa_berlaku_stnk']);
 		}
 
-		if(str_is($this->jenis, 'collateral') && str_is($variable['collateral']['jenis'], 'shm'))
+		if(str_is($this->jenis, 'collateral') && str_is($variable['collateral']['jenis'], 'shm') && isset($variable['collateral']['shm']['njop_tanah']))
 		{
 			if(isset($variable['collateral']['shm']['njop_bangunan']))
 			{
 				$variable['collateral']['shm']['njop_bangunan']		= $this->formatMoneyFrom($variable['collateral']['shm']['njop_bangunan']);
 			}
-			if(isset($variable['collateral']['shm']['njop_bangunan']))
+			if(isset($variable['collateral']['shm']['nilai_bangunan']))
 			{
 				$variable['collateral']['shm']['nilai_bangunan']	= $this->formatMoneyFrom($variable['collateral']['shm']['nilai_bangunan']);
 			}
@@ -142,10 +142,17 @@ class SurveiDetail extends Model
 			
 		}
 
-		if(str_is($this->jenis, 'collateral') && str_is($variable['collateral']['jenis'], 'shgb'))
+		if(str_is($this->jenis, 'collateral') && str_is($variable['collateral']['jenis'], 'shgb') && isset($variable['collateral']['shgb']['njop_tanah']))
 		{
-			$variable['collateral']['shgb']['njop_bangunan']	= $this->formatMoneyFrom($variable['collateral']['shgb']['njop_bangunan']);
-			$variable['collateral']['shgb']['nilai_bangunan']	= $this->formatMoneyFrom($variable['collateral']['shgb']['nilai_bangunan']);
+			if(isset($variable['collateral']['shgb']['njop_bangunan']))
+			{
+				$variable['collateral']['shgb']['njop_bangunan']		= $this->formatMoneyFrom($variable['collateral']['shgb']['njop_bangunan']);
+			}
+			if(isset($variable['collateral']['shgb']['nilai_bangunan']))
+			{
+				$variable['collateral']['shgb']['nilai_bangunan']	= $this->formatMoneyFrom($variable['collateral']['shgb']['nilai_bangunan']);
+			}
+			;
 			$variable['collateral']['shgb']['njop_tanah']		= $this->formatMoneyFrom($variable['collateral']['shgb']['njop_tanah']);
 			$variable['collateral']['shgb']['nilai_tanah']		= $this->formatMoneyFrom($variable['collateral']['shgb']['nilai_tanah']);
 			$variable['collateral']['shgb']['harga_taksasi']	= $this->formatMoneyFrom($variable['collateral']['shgb']['harga_taksasi']);			
@@ -285,11 +292,11 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.collateral.shm.harga_taksasi']		= ['required_if:dokumen_survei.collateral.jenis,shm', 'numeric'];
 
 		$rules['dokumen_survei.collateral.shgb.atas_nama_sertifikat']	= ['required_if:jenis,collateral'];
-		$rules['dokumen_survei.collateral.shgb.nomor_sertifikat']		= ['required_if:dokumen_survei.collateral.jenis,shm'];
-		$rules['dokumen_survei.collateral.shgb.masa_berlaku_sertifikat']= ['required_if:jenis,collateral', 'date_format:"Y-m-d"'];
-		$rules['dokumen_survei.collateral.shgb.alamat']		= ['required_if:jenis,collateral'];
-		$rules['dokumen_survei.collateral.shgb.tipe']		= ['required_if:jenis,collateral', 'in:tanah,tanah_dan_bangunan'];
-		$rules['dokumen_survei.collateral.shgb.luas_tanah']	= ['required_if:jenis,collateral'];
+		$rules['dokumen_survei.collateral.shgb.nomor_sertifikat']		= ['required_if:dokumen_survei.collateral.jenis,shgb'];
+		$rules['dokumen_survei.collateral.shgb.masa_berlaku_sertifikat']= ['required_if:jenis,collateral', 'date_format:"Y"'];
+		$rules['dokumen_survei.collateral.shgb.alamat']				= ['required_if:jenis,collateral'];
+		$rules['dokumen_survei.collateral.shgb.tipe']				= ['required_if:jenis,collateral', 'in:tanah,tanah_dan_bangunan'];
+		$rules['dokumen_survei.collateral.shgb.luas_tanah']			= ['required_if:jenis,collateral'];
 		$rules['dokumen_survei.collateral.shgb.panjang_tanah']		= ['required_if:jenis,collateral'];
 		$rules['dokumen_survei.collateral.shgb.lebar_tanah']		= ['required_if:jenis,collateral'];
 		$rules['dokumen_survei.collateral.shgb.luas_bangunan']		= ['required_if:dokumen_survei.collateral.shgb.tipe,tanah_dan_bangunan'];
@@ -420,5 +427,144 @@ class SurveiDetail extends Model
 	public function getErrorsAttribute()
 	{
 		return $this->errors;
+	}
+
+	public static function rule_of_valid_character()
+	{
+		$rules['lingkungan_tinggal']	= ['required'];
+		$rules['lingkungan_kerja']		= ['required'];
+		$rules['watak']					= ['required'];
+		$rules['pola_hidup']			= ['required'];
+
+		return $rules;
+	}
+
+	public static function rule_of_valid_condition()
+	{
+		$rules['persaingan_usaha']			= ['required'];
+		$rules['prospek_usaha']				= ['required'];
+		$rules['perputaran_usaha']			= ['required'];
+		$rules['pengalaman_usaha']			= ['required'];
+		$rules['resiko_usaha_kedepan']		= ['required'];
+		$rules['jumlah_pelanggan_harian']	= ['required'];
+
+		return $rules;
+	}
+
+	public static function rule_of_valid_capital()
+	{
+		$rules['rumah.status']			= ['required'];
+		$rules['rumah.lama_menempati']	= ['required'];
+		$rules['rumah.luas_rumah']		= ['required'];
+		$rules['rumah.nilai_rumah']		= ['required'];
+		
+		$rules['kendaraan.jumlah_kendaraan_roda_4']	= ['required'];
+		$rules['kendaraan.jumlah_kendaraan_roda_2']	= ['required'];
+		$rules['kendaraan.nilai_kendaraan']			= ['required'];
+
+		$rules['usaha.nama_usaha']		= ['required'];
+		$rules['usaha.bidang_usaha']	= ['required'];
+		$rules['usaha.lama_usaha']		= ['required'];
+		$rules['usaha.status_usaha']	= ['required'];
+		$rules['usaha.bagi_hasil']		= ['required'];
+		$rules['usaha.nilai_aset']		= ['required'];
+		$rules['usaha.omzet_bulanan']	= ['required'];
+
+		$rules['hutang.*.nama_bank']		= ['required'];
+		$rules['hutang.*.jumlah_pinjaman']	= ['required'];
+		$rules['hutang.*.jumlah_angsuran']	= ['required'];
+		$rules['hutang.*.jangka_waktu']		= ['required'];
+
+		return $rules;
+	}
+
+	public static function rule_of_valid_capacity()
+	{
+		$rules['manajemen_usaha']				= ['required'];
+		$rules['penghasilan.utama']				= ['required'];
+		$rules['penghasilan.pasangan']			= ['required'];
+		$rules['penghasilan.usaha']				= ['required'];
+		$rules['penghasilan.rincian']			= ['required'];
+		$rules['pengeluaran.biaya_rutin']		= ['required'];
+		$rules['pengeluaran.angsuran_kredit']	= ['required'];
+		$rules['pengeluaran.rincian']			= ['required'];
+		$rules['tanggungan_keluarga']			= ['required'];
+
+		return $rules;
+	}
+
+	public static function rule_of_valid_collateral_bpkb()
+	{
+		$rules['merk']				= ['required'];
+		$rules['tipe']				= ['required'];
+		$rules['nomor_polisi']		= ['required'];
+		$rules['warna']				= ['required'];
+		$rules['tahun']				= ['required'];
+		$rules['atas_nama']			= ['required'];
+		$rules['alamat']			= ['required'];
+		$rules['nomor_bpkb']		= ['required'];
+		$rules['nomor_mesin']		= ['required'];
+		$rules['nomor_rangka']		= ['required'];
+		$rules['masa_berlaku_stnk']	= ['required'];
+		$rules['fungsi_sehari_hari']= ['required'];
+		$rules['faktur']			= ['required'];
+		$rules['kwitansi_jual_beli']= ['required'];
+		$rules['kwitansi_kosong']	= ['required'];
+		$rules['ktp_an_bpkb']		= ['required'];
+		$rules['kondisi_kendaraan']	= ['required'];
+		$rules['status_kepemilikan']= ['required'];
+		$rules['asuransi']			= ['required'];
+		$rules['harga_taksasi']		= ['required'];
+		$rules['persentasi_bank']	= ['required'];
+		$rules['harga_bank']		= ['required'];
+
+		return $rules;
+	}
+
+	public static function rule_of_valid_collateral_sertifikat($jenis, $tipe)
+	{
+		$rules['atas_nama_sertifikat']			= ['required'];
+		$rules['nomor_sertifikat']				= ['required'];
+
+		if($jenis=='shgb')
+		{
+			$rules['masa_berlaku_sertifikat']	= ['required'];
+		}
+
+		$rules['alamat']			= ['required'];
+		$rules['tipe']				= ['required'];
+		$rules['luas_tanah']		= ['required'];
+		$rules['panjang_tanah']		= ['required'];
+		$rules['lebar_tanah']		= ['required'];
+
+		if($tipe=='tanah_dan_bangunan')
+		{
+			$rules['luas_bangunan']			= ['required'];
+			$rules['panjang_bangunan']		= ['required'];
+			$rules['lebar_bangunan']		= ['required'];
+			$rules['fungsi_bangunan']		= ['required'];
+			$rules['bentuk_bangunan']		= ['required'];
+			$rules['konstruksi_bangunan']	= ['required'];
+			$rules['lantai_bangunan']		= ['required'];
+			$rules['dinding']				= ['required'];
+			$rules['listrik']				= ['required'];
+			$rules['nilai_bangunan']		= ['required'];
+			$rules['njop_bangunan']			= ['required'];
+		}
+
+		$rules['air']						= ['required'];
+		$rules['jalan']						= ['required'];
+		$rules['letak_lokasi_terhadap_jalan']	= ['required'];
+		$rules['lingkungan']		= ['required'];
+		$rules['ajb']				= ['required'];
+		$rules['pbb_terakhir']		= ['required'];
+		$rules['imb']				= ['required'];
+		$rules['asuransi']			= ['required'];
+		$rules['nilai_tanah']		= ['required'];
+		$rules['njop_tanah']		= ['required'];
+		$rules['persentasi_taksasi']			= ['required'];
+		$rules['harga_taksasi']		= ['required'];
+
+		return $rules;
 	}
 }

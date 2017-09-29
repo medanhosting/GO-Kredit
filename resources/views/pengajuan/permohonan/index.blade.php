@@ -99,10 +99,9 @@
 										@elseif($v['nasabah']['is_lama'])
 											Nasabah Lama. 
 											<a href="{{route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i>Lanjutkan Analisa</i></a>
-
-											<i>Lanjutkan Analisa</i>
 										@else
-											Data Sudah Lengkap. <i>Assign Untuk Survei</i>
+											Data Sudah Lengkap. 
+											<a class="modal_assign text-success" data-toggle="modal" data-target="#assign-survei" data-action="{{route('pengajuan.permohonan.assign_survei', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}"><i>Assign Untuk Survei</i></a>
 										@endif
 									</p>
 								</div>
@@ -129,6 +128,31 @@
 			</div>
 		</div>
 	</div>
+
+	@component ('bootstrap.modal', ['id' => 'assign-survei', 'form' => true, 'method' => 'post', 'url' => route('pengajuan.permohonan.assign_survei', ['kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])])
+		@slot ('title')
+			Assign Survei
+		@endslot
+
+		@slot ('body')
+			<p>Untuk assign survei, harap melengkapi data berikut!</p>
+
+			<div class="form-group">
+				{!! Form::label('', 'SURVEYOR', ['class' => 'text-uppercase mb-1']) !!}
+				<select class="ajax-karyawan custom-select form-control required" name="surveyor[nip][]" multiple="multiple" style="width:100%">
+					<option value="">Pilih</option>
+				</select>
+			</div>
+			<!-- {!! Form::bsText('Tanggal', 'tanggal', null, ['class' => 'mask-date form-control', 'placeholder' => 'dd/mm/yyyy']) !!} -->
+			<!-- {!! Form::bsTextarea('catatan', 'catatan', null, ['class' => 'form-control', 'placeholder' => 'catatan', 'style' => 'resize:none;', 'rows' => 5]) !!} -->
+			{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
+		@endslot
+
+		@slot ('footer')
+			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
+			{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
+		@endslot
+	@endcomponent
 @endpush
 
 @push('submenu')
@@ -136,4 +160,41 @@
 @endpush
 
 @push ('js')
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+	
+	<script type="text/javascript">
+	//SELECT2 UNTUK SURVEYOR//
+
+	$(".ajax-karyawan").select2({
+		ajax: {
+			url: "{{route('manajemen.karyawan.ajax')}}",
+			data: function (params) {
+					return {
+						q: params.term, // search term
+						kantor_aktif_id: "{{$kantor_aktif['id']}}", // search term
+						scope: 'survei'
+					};
+				},
+			processResults: function (data, params) {
+				return {
+					results:  $.map(data, function (karyawan) {
+						return {
+							text: karyawan.orang.nama,
+							id: karyawan.orang.nip
+						}
+					})
+				};
+			},
+		}
+	});
+	
+	//MODAL PARSE DATA ATTRIBUTE//
+	$("a.modal_assign").on("click", parsingDataAttributeModalAssign);
+
+	function parsingDataAttributeModalAssign(){
+		$('#assign-survei').find('form').attr('action', $(this).attr("data-action"));
+	}
+	</script>
+
 @endpush

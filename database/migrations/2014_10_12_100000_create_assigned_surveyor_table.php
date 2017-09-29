@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSurveiTable extends Migration
+class CreateAssignedSurveyorTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -13,12 +13,11 @@ class CreateSurveiTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('s_survei', function (Blueprint $table) {
+		Schema::create('s_assigned_surveyor', function (Blueprint $table) {
 			$table->increments('id');
-			$table->datetime('tanggal')->nullable();
-			$table->string('pengajuan_id');
-			$table->string('kode_kantor');
-			$table->boolean('is_lengkap')->default(false);
+			$table->string('survei_id');
+			$table->string('nip');
+			$table->string('nama')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});
@@ -31,6 +30,6 @@ class CreateSurveiTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('s_survei');
+		Schema::dropIfExists('s_assigned_surveyor');
 	}
 }

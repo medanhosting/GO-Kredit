@@ -320,4 +320,31 @@ dd($orang);
 			return Redirect::back()->withInput()->withErrors($e->getMessage());
 		}
 	}
+
+	public function ajax () 
+	{
+		$hari_ini 	= Carbon::now();
+
+		$gawe 		= PenempatanKaryawan::active($hari_ini);
+
+		if (request()->has('kantor_aktif_id')){
+			$gawe 	= $gawe->where('kantor_id', request()->get('kantor_aktif_id'));
+		}
+
+		if (request()->has('scope')){
+			$gawe 	= $gawe->where('scopes', 'like', '%'.request()->get('scope').'%');
+		}
+
+		if (request()->has('q'))
+		{
+			$cari 	= request()->get('q');
+			$gawe 	= $gawe->whereHas('orang',function($q)use($cari){				
+							$q->where('nama', 'like', '%'.$cari.'%');
+						});
+		}
+
+		$gawe 	= $gawe->with(['orang'])->get();
+
+		return response()->json($gawe);
+	}
 }

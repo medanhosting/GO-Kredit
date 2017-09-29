@@ -229,18 +229,18 @@ class Pengajuan extends Model
 		$rules['kode_kantor']					= ['required_if:is_mobile,false'];
 
 		$rules['nasabah.nik']					= ['required_if:is_mobile,false', 'max:255'];
-		$rules['nasabah.nama']					= ['required_if:is_mobile,false', 'max:255'];
-		$rules['nasabah.tanggal_lahir']			= ['required_if:is_mobile,false', 'date_format:"Y-m-d"'];
-		$rules['nasabah.tempat_lahir']			= ['required_if:is_mobile,false', 'max:255'];
-		$rules['nasabah.jenis_kelamin']			= ['required_if:is_mobile,false', 'in:laki-laki,perempuan'];
-		$rules['nasabah.status_perkawinan']		= ['required_if:is_mobile,false', 'in:belum_kawin,kawin,cerai,cerai_mati'];
-		$rules['nasabah.pekerjaan']				= ['required_if:is_mobile,false', 'max:255'];
-		$rules['nasabah.penghasilan_bersih']	= ['required_if:is_mobile,false', 'numeric'];
-		$rules['nasabah.telepon']				= ['max:40'];
+		$rules['nasabah.nama']					= ['required_with:nasabah.nik', 'max:255'];
+		$rules['nasabah.tanggal_lahir']			= ['required_with:nasabah.nik', 'date_format:"Y-m-d"'];
+		$rules['nasabah.tempat_lahir']			= ['required_with:nasabah.nik', 'max:255'];
+		$rules['nasabah.jenis_kelamin']			= ['required_with:nasabah.nik', 'in:laki-laki,perempuan'];
+		$rules['nasabah.status_perkawinan']		= ['required_with:nasabah.nik', 'in:belum_kawin,kawin,cerai,cerai_mati'];
+		$rules['nasabah.pekerjaan']				= ['required_with:nasabah.nik', 'max:255'];
+		$rules['nasabah.penghasilan_bersih']	= ['required_with:nasabah.nik', 'numeric'];
+		$rules['nasabah.telepon']				= ['required_with:nasabah.nik', 'max:40'];
 		// $rules['nasabah.telepon']				= ['required', 'max:40'];
 		$rules['nasabah.nomor_whatsapp']		= ['max:255'];
 		$rules['nasabah.email']					= ['max:40'];
-		$rules['nasabah.alamat']				= ['required_if:is_mobile,false', 'array'];
+		$rules['nasabah.alamat']				= ['required_with:nasabah.nik', 'array'];
 		$rules['nasabah.keluarga']				= ['array'];
 
 		$data 						= $this->attributes;
@@ -321,6 +321,11 @@ class Pengajuan extends Model
 		}
 
 		if(!count($this->nasabah['keluarga']))
+		{
+			return false;
+		}
+
+		if(is_null($this->nasabah['nik']))
 		{
 			return false;
 		}

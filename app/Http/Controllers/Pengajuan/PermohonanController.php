@@ -7,11 +7,16 @@ use App\Http\Controllers\Controller;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Jaminan;
 
+use Thunderlabid\Survei\Models\Survei;
+use Thunderlabid\Survei\Models\AssignedSurveyor;
+
 use Thunderlabid\Log\Models\Nasabah;
+
+use Thunderlabid\Manajemen\Models\Orang;
 
 use App\Http\Service\UI\UploadedGambar;
 
-use Exception, Session, MessageBag, Validator, DB;
+use Exception, Session, MessageBag, Validator, DB, Carbon\Carbon;
 
 class PermohonanController extends Controller
 {
@@ -23,7 +28,7 @@ class PermohonanController extends Controller
 
 		$this->middleware('scope:permohonan');
 		
-		$this->middleware('required_password')->only('destroy');
+		$this->middleware('required_password')->only(['destroy', 'assign_survei']);
 	}
 
 	public function index ($status = 'permohonan') 
@@ -390,6 +395,39 @@ class PermohonanController extends Controller
 			return redirect(route('permohonan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
 		}
 	}
+
+	public function assign_survei($id = null)
+	{
+		try {
+			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->status('permohonan')->kantor(request()->get('kantor_aktif_id'))->first();
+
+			if(!$permohonan)
+			{
+				throw new Exception("Permohonan Kredit tidak ditemukan", 1);
+			}
+
+			DB::BeginTransaction();
+
+			$survei 				= new Survei;
+			$survei->pengajuan_id 	= $permohonan['id'];
+			$survei->kode_kantor 	= $permohonan['kode_kantor'];
+			$survei->save();
+			foreach (request()->get('surveyor')['nip'] as $k => $v) {
+				$assign_survei 				= new AssignedSurveyor;
+				$assign_survei->survei_id 	= $survei->id;
+				$assign_survei->nip			= $v;
+				$assign_survei->nama		= Orang::where('nip', $v)->first()['nama'];
+				$assign_survei->save();
+			}
+
+			DB::commit();
+			return redirect(route('pengajuan.permohonan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => 'permohonan']));
+		} catch (Exception $e) {
+			DB::rollback();
+			return redirect()->back()->withErrors($e->getMessage());
+		}
+
+ 	}
 
 	private function variable_to_view () 
 	{

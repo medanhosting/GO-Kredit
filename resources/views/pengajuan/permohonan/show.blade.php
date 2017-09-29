@@ -27,17 +27,19 @@
 					<div class="card-body">
 						<h6 class="card-title">PERMOHONAN KREDIT</h6>
 
+						<br/>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
+						</div>
+						<hr/>
 						@if(!is_null($permohonan['ao']))
 						<h7 class="text-secondary">AO</h7>
 						<br/>
 						<h7>{{$permohonan['ao']['nama']}}</h7>
 						<br/>
-						<br/>
 						@endif
-						<div class="progress">
-							<div class="progress-bar" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
-						</div>
 						<hr/>
+						
 						@if(!is_null($permohonan['dokumen_pelengkap']['tanda_tangan']))
 						<h7 class="text-secondary">SPESIMEN TTD</h7>
 						<br/>
@@ -461,36 +463,7 @@
 
 @push('css')
 	<style type="text/css">
-		/* Make an input blend into its parent */
-		.inline-edit{
-		  /* Eliminate borders and padding */
-		  border: none;
-		  padding: 0;
-		  margin: 0;
-
-		  /* Inherit the parent element's typography */
-		  font: inherit;
-		  color: inherit;
-		  line-height: inherit;
-		  font-size: inherit;
-		  text-align: inherit;
-
-		  /* Seems to help alignment in headers */
-		  vertical-align: top;
-		}
-
-		/* Add interaction cues on hover and focus */
-		.inline-edit:hover,
-		.inline-edit:focus{
-		  /* Change the background to a light yellow */
-		  background-color: #FFD;
-
-		  /* A subtle transition never hurts */
-		  -webkit-transition: background-color 0.5s;
-			 -moz-transition: background-color 0.5s;
-			  -ie-transition: background-color 0.5s;
-				  transition: background-color 0.5s;
-		}
+	
 		.clonedKeluarga { padding: 10px; border-radius: 5px; margin-bottom: 10px; }
 
 		.clonedKeluarga div { margin: 5px; }

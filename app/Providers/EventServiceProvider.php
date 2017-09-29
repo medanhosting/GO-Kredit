@@ -32,7 +32,8 @@ class EventServiceProvider extends ServiceProvider
 
 		Event::listen('Thunderlabid\Survei\Events\SurveiDetail\SurveiDetailCreated', 'App\Listeners\SimpanStatusDoingSurvei');
 		Event::listen('Thunderlabid\Survei\Events\SurveiDetail\SurveiDetailUpdated', 'App\Listeners\SimpanStatusDoingSurvei');
-		Event::listen('Thunderlabid\Survei\Events\Survei\SurveiCreated', 'App\Listeners\SimpanStatusTodoSurvei');
+		Event::listen('Thunderlabid\Survei\Events\AssignedSurveyor\AssignedSurveyorCreated', 'App\Listeners\SimpanStatusTodoSurvei');
+		Event::listen('Thunderlabid\Survei\Events\AssignedSurveyor\AssignedSurveyorUpdated', 'App\Listeners\SimpanStatusTodoSurvei');
 
 		Event::listen('Thunderlabid\Survei\Events\SurveiFoto\SurveiFotoCreated', 'App\Listeners\UpdatingSurveiDetail');
 		Event::listen('Thunderlabid\Survei\Events\SurveiFoto\SurveiFotoUpdated', 'App\Listeners\UpdatingSurveiDetail');
@@ -44,6 +45,8 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanUpdated', 'App\Listeners\SimpanStatusDonePutusan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanCreated', 'App\Listeners\GenerateLegalitasRealisasi');
 		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanUpdated', 'App\Listeners\GenerateLegalitasRealisasi');
+		
+		Event::listen('App\Events\PengajuanExpired', 'App\Listeners\SimpanStatusDoneExpire');
 
 		//DELETE PENGAJUAN
 		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanDeleted', 'App\Listeners\SimpanStatusDoneVoid');
@@ -70,7 +73,11 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated', 'App\Listeners\SimpanLogKreditViaJaminan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated', 'App\Listeners\SimpanLogKreditViaJaminan');
 
+		//SURVEILOKASI
+		Event::listen('Thunderlabid\Survei\Events\Survei\SurveiCreated', 'App\Listeners\UpdateSurveiLokasi');
+		Event::listen('Thunderlabid\Survei\Events\Survei\SurveiUpdated', 'App\Listeners\UpdateSurveiLokasi');
 
-		Event::listen('App\Events\PengajuanExpired', 'App\Listeners\SimpanStatusDoneExpire');
+		//SURVEI DETAIL COLLATERAL AUTO CREATE
+		Event::listen('Thunderlabid\Survei\Events\Survei\SurveiCreated', 'App\Listeners\CreateCollateralSurveiDetail');
 	}
 }
