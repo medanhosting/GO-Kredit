@@ -179,17 +179,66 @@ class PermohonanController extends Controller
 				$checker['keluarga'] 		= false;
 			}
 
-			$total 		= $total + 1;
-			//checker jaminan_kendaraan
-			if(count($permohonan['jaminan_kendaraan']) || count($permohonan['jaminan_tanah_bangunan']))
-			{
-				$complete 			= $complete + 1;
-				$checker['jaminan']	= true;
+			//checker jaminan
+			$flag_jam 			= true;
+			if(count($permohonan['jaminan_kendaraan'])){
+				foreach ($permohonan['jaminan_kendaraan'] as $k => $v) {
+					$c_col 		= Jaminan::rule_of_valid_jaminan_bpkb();
+					$total 		= $total + count($c_col);
+
+					$validator 	= Validator::make($v['dokumen_jaminan'][$v['jenis']], $c_col);
+					if ($validator->fails())
+					{
+						$complete 				= $complete + (count($c_col) - count($validator->messages()));
+						$checker['jaminan'] 	= false;
+						$permohonan['jaminan_kendaraan'][$k]['is_lengkap'] = false;
+					}
+					else
+					{
+						$complete 				= $complete + count($c_col);
+						if(is_null($checker['jaminan']) || $checker['jaminan'])
+						{
+							$checker['jaminan'] 	= true;
+						}
+						$permohonan['jaminan_kendaraan'][$k]['is_lengkap'] = true;
+					}
+
+					if(!$v['dokumen_jaminan'][$v['jenis']]['is_lama'])
+					{
+						$flag_jam 	= false;
+					}
+				}
 			}
-			else
-			{
-				$checker['jaminan']	= false;
+
+			if(count($permohonan['jaminan_tanah_bangunan'])){
+				foreach ($permohonan['jaminan_tanah_bangunan'] as $k => $v) {
+					$c_col 		= Jaminan::rule_of_valid_jaminan_sertifikat($v['jenis'], $v['dokumen_jaminan'][$v['jenis']]['jenis']);
+					$total 		= $total + count($c_col);
+
+					$validator 	= Validator::make($v['dokumen_jaminan'][$v['jenis']], $c_col);
+					if ($validator->fails())
+					{
+						$complete 				= $complete + (count($c_col) - count($validator->messages()));
+						$checker['jaminan'] 	= false;
+						$permohonan['jaminan_tanah_bangunan'][$k]['is_lengkap'] = false;
+					}
+					else
+					{
+						$complete 				= $complete + count($c_col);
+						if(is_null($checker['jaminan']) || $checker['jaminan'])
+						{
+							$checker['jaminan'] 	= true;
+						}
+						$permohonan['jaminan_tanah_bangunan'][$k]['is_lengkap'] = true;
+					}
+
+					if(!$v['dokumen_jaminan'][$v['jenis']]['is_lama'])
+					{
+						$flag_jam 	= false;
+					}
+				}
 			}
+
 
 			$percentage 	= floor(($complete / max($total, 1)) * 100);
 
@@ -198,7 +247,7 @@ class PermohonanController extends Controller
 			view()->share('status', $status);
 			$this->variable_to_view();
 
-			$this->layout->pages 	= view('pengajuan.permohonan.show', compact('checker', 'permohonan', 'percentage', 'title'));
+			$this->layout->pages 	= view('pengajuan.permohonan.show', compact('checker', 'permohonan', 'percentage', 'title', 'flag_jam'));
 			return $this->layout;
 
 		} catch (Exception $e) {
@@ -410,6 +459,7 @@ class PermohonanController extends Controller
 
 			$survei 				= new Survei;
 			$survei->pengajuan_id 	= $permohonan['id'];
+			$survei->tanggal 		= Carbon::now()->format('d/m/Y H:i');
 			$survei->kode_kantor 	= $permohonan['kode_kantor'];
 			$survei->save();
 			foreach (request()->get('surveyor')['nip'] as $k => $v) {
@@ -426,7 +476,6 @@ class PermohonanController extends Controller
 			DB::rollback();
 			return redirect()->back()->withErrors($e->getMessage());
 		}
-
  	}
 
 	private function variable_to_view () 

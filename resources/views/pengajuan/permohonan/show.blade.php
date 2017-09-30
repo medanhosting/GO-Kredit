@@ -43,19 +43,24 @@
 						@if(!is_null($permohonan['dokumen_pelengkap']['tanda_tangan']))
 						<h7 class="text-secondary">SPESIMEN TTD</h7>
 						<br/>
-						<img src="{{$permohonan['dokumen_pelengkap']['tanda_tangan']}}" class="img-fluid" alt="Responsive image">
+						<img src="{{$permohonan['dokumen_pelengkap']['tanda_tangan']}}" class="img-fluid" alt="Foto KTP">
 						<hr/>
 						@endif
 						<p>Form Pengajuan</p>
 						<a href="{{route('pengajuan.pengajuan.print', ['id' => $permohonan['id'], 'mode' => 'permohonan_kredit', 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" style="width:100%" class="btn btn-primary btn-sm">
 							Print
 						</a>
+						@if($percentage==100)
 						<hr/>
 						<p>Data Sudah Lengkap</p>
-						<a href="#" class="btn btn-primary btn-sm" style="width:100%">Lanjutkan Survei</a>
+						<a data-toggle="modal" data-target="#assign-survei" data-action="{{route('pengajuan.permohonan.assign_survei', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_assign btn btn-primary btn-sm text-white" style="width:100%">Assign Untuk Survei</a>
+						@endif
+
+						@if($percentage==100 && $v['nasabah']['is_lama'] && $flag_jam)
 						<hr/>
-						<p>Nasabah Lama</p>
-						<a href="#" class="btn btn-primary btn-sm" style="width:100%">Assign Analisa</a>
+						<p>Nasabah & Jaminan Lama</p>
+						<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $survei['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm text-white" style="width:100%">Lanjutkan Analisa</a>
+						@endif
 					</div>
 				</div>
 			</div>
@@ -145,7 +150,6 @@
 										@endif
 									</div>
 									{!! Form::bsCheckbox('Nasabah menggunakan e-KTP', 'nasabah[is_ektp]', $permohonan['nasabah']['is_ektp'], ['class' => 'nis_ektp form-check-input inline-edit'], true) !!}
-									{!! Form::hidden('nasabah[is_lama]', $permohonan['nasabah']['is_lama'], ['class' => 'nis_lama']) !!}
 									{!! Form::bsText('Nama', 'nasabah[nama]', $permohonan['nasabah']['nama'], ['class' => 'nnama form-control inline-edit', 'placeholder' => 'Tukimin']) !!}
 									{!! Form::bsText('Tempat lahir', 'nasabah[tempat_lahir]', $permohonan['nasabah']['tempat_lahir'], ['class' => 'ntempat_lahir form-control inline-edit', 'placeholder' => 'Malang']) !!}
 									{!! Form::bsText('Tanggal lahir', 'nasabah[tanggal_lahir]', $permohonan['nasabah']['tanggal_lahir'], ['class' => 'ntanggal_lahir form-control inline-edit mask-date', 'placeholder' => 'dd/mm/yyyy']) !!}
@@ -455,6 +459,33 @@
 		</div>
 		<div class="clearfix">&nbsp;</div>
 	</div>
+
+	@component ('bootstrap.modal', ['id' => 'assign-survei', 'form' => true, 'method' => 'post', 'url' => route('pengajuan.permohonan.assign_survei', ['kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])])
+		@slot ('title')
+			Assign Survei
+		@endslot
+
+		@slot ('body')
+			<p>Untuk assign survei, harap melengkapi data berikut!</p>
+
+			<div class="form-group">
+				{!! Form::label('', 'SURVEYOR', ['class' => 'text-uppercase mb-1']) !!}
+				<select class="ajax-karyawan custom-select form-control required" name="surveyor[nip][]" multiple="multiple" style="width:100%">
+					<option value="">Pilih</option>
+				</select>
+			</div>
+			<!-- {!! Form::bsText('Tanggal', 'tanggal', null, ['class' => 'mask-date form-control', 'placeholder' => 'dd/mm/yyyy']) !!} -->
+			<!-- {!! Form::bsTextarea('catatan', 'catatan', null, ['class' => 'form-control', 'placeholder' => 'catatan', 'style' => 'resize:none;', 'rows' => 5]) !!} -->
+			{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
+		@endslot
+
+		@slot ('footer')
+			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
+			{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
+		@endslot
+	@endcomponent
+
+	@include('pengajuan.ajax.modal_analisa')
 @endpush
 
 @push('submenu')
@@ -687,13 +718,9 @@
 			   	data: {
 					q: $(this).val()
 				},
-			   	error: function(data) {
-					form.find('.nis_lama').val('false');
-			   },
 			   	success: function(data) {
 			   		if(Object.keys(data).length > 1) {
 						form.find('.nis_ektp').val(data.is_ektp);
-						form.find('.nis_lama').val('true');
 						form.find('.nnama').val(data.nama);
 						form.find('.ntempat_lahir').val(data.tempat_lahir);
 						form.find('.ntanggal_lahir').val(data.tanggal_lahir);
@@ -710,8 +737,6 @@
 						form.find('.kelurahan').val(data.alamat.kelurahan);
 						form.find('.kecamatan').val(data.alamat.kecamatan);
 						form.find('.kota').val(data.alamat.kota);
-					}else{
-						form.find('.nis_lama').val('false');
 					}
 			   },
 			   type: 'GET'
@@ -752,5 +777,35 @@
 			$(this).hide();
 		}
 
+		//ASSIGN SURVEYOR
+		$(".ajax-karyawan").select2({
+			ajax: {
+				url: "{{route('manajemen.karyawan.ajax')}}",
+				data: function (params) {
+						return {
+							q: params.term, // search term
+							kantor_aktif_id: "{{$kantor_aktif['id']}}", // search term
+							scope: 'survei'
+						};
+					},
+				processResults: function (data, params) {
+					return {
+						results:  $.map(data, function (karyawan) {
+							return {
+								text: karyawan.orang.nama,
+								id: karyawan.orang.nip
+							}
+						})
+					};
+				},
+			}
+		});
+		
+		//MODAL PARSE DATA ATTRIBUTE//
+		$("a.modal_assign").on("click", parsingDataAttributeModalAssign);
+
+		function parsingDataAttributeModalAssign(){
+			$('#assign-survei').find('form').attr('action', $(this).attr("data-action"));
+		}
 	</script>
 @endpush

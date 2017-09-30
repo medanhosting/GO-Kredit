@@ -141,7 +141,7 @@ class Survei extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['tanggal']			= ['required', 'date_format:"Y-m-d"'];
+		$rules['tanggal']			= ['required', 'date_format:"Y-m-d H:i:s"'];
 		$rules['pengajuan_id']		= ['required', 'exists:p_pengajuan,id'];
 		$rules['kode_kantor']		= ['required', 'exists:m_kantor,id'];
 		$rules['is_lengkap']		= ['boolean'];

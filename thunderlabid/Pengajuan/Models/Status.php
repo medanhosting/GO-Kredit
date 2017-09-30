@@ -16,9 +16,9 @@ use Thunderlabid\Pengajuan\Exceptions\AppException;
 // EVENTS //
 ////////////
 use Thunderlabid\Pengajuan\Events\Status\StatusCreating;
-// use Thunderlabid\Pengajuan\Events\Status\StatusCreated;
+use Thunderlabid\Pengajuan\Events\Status\StatusCreated;
 use Thunderlabid\Pengajuan\Events\Status\StatusUpdating;
-// use Thunderlabid\Pengajuan\Events\Status\StatusUpdated;
+use Thunderlabid\Pengajuan\Events\Status\StatusUpdated;
 // use Thunderlabid\Pengajuan\Events\Status\StatusDeleting;
 // use Thunderlabid\Pengajuan\Events\Status\StatusDeleted;
 
@@ -42,9 +42,9 @@ class Status extends Model
 
 	protected $events 		= [
 		'creating' 	=> StatusCreating::class,
-		// 'created' 	=> StatusCreated::class,
+		'created' 	=> StatusCreated::class,
 		'updating' 	=> StatusUpdating::class,
-		// 'updated' 	=> StatusUpdated::class,
+		'updated' 	=> StatusUpdated::class,
 		// 'deleted' 	=> StatusDeleted::class,
 		// 'deleting' 	=> StatusDeleting::class,
 	];

@@ -169,4 +169,41 @@ class Jaminan extends Model
 	{
 		return $this->errors;
 	}
+
+	public static function rule_of_valid_jaminan_bpkb()
+	{
+		$rules['jenis']		= ['required'];
+		$rules['merk']		= ['required'];
+		$rules['tahun']		= ['required'];
+		$rules['nomor_bpkb']= ['required'];
+		$rules['tipe']		= ['required'];
+	
+		return $rules;
+	}
+
+	public static function rule_of_valid_jaminan_sertifikat($jenis, $tipe)
+	{
+		$rules['nomor_sertifikat']				= ['required'];
+
+		if($jenis=='shgb')
+		{
+			$rules['masa_berlaku_sertifikat']	= ['required'];
+		}
+
+		$rules['tipe']				= ['required'];
+		$rules['alamat.alamat']		= ['required'];
+		$rules['alamat.rt']			= ['required'];
+		$rules['alamat.rw']			= ['required'];
+		$rules['alamat.kelurahan']	= ['required'];
+		$rules['alamat.kecamatan']	= ['required'];
+		$rules['alamat.kota']		= ['required'];
+		$rules['luas_tanah']		= ['required'];
+
+		if($tipe=='tanah_dan_bangunan')
+		{
+			$rules['luas_bangunan']			= ['required'];
+		}
+
+		return $rules;
+	}
 }

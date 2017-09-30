@@ -73,9 +73,21 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated', 'App\Listeners\SimpanLogKreditViaJaminan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated', 'App\Listeners\SimpanLogKreditViaJaminan');
 
+		//UPDATING IS LAMA JAMINAN
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanCreated', 'App\Listeners\UpdatingJaminanIsLama');
+		Event::listen('Thunderlabid\Pengajuan\Events\Jaminan\JaminanUpdated', 'App\Listeners\UpdatingJaminanIsLama');
+		//UPDATING IS LAMA NASABAH
+		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanCreated', 'App\Listeners\UpdatingNasabahIsLama');
+		Event::listen('Thunderlabid\Pengajuan\Events\Pengajuan\PengajuanUpdated', 'App\Listeners\UpdatingNasabahIsLama');
+
+
 		//SURVEILOKASI
 		Event::listen('Thunderlabid\Survei\Events\Survei\SurveiCreated', 'App\Listeners\UpdateSurveiLokasi');
 		Event::listen('Thunderlabid\Survei\Events\Survei\SurveiUpdated', 'App\Listeners\UpdateSurveiLokasi');
+	
+		//REMOVE SURVEI LOKASI ONCE STATUS CREATED
+		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusCreated', 'App\Listeners\RemoveSurveiLokasi');
+		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusUpdated', 'App\Listeners\RemoveSurveiLokasi');
 
 		//SURVEI DETAIL COLLATERAL AUTO CREATE
 		Event::listen('Thunderlabid\Survei\Events\Survei\SurveiCreated', 'App\Listeners\CreateCollateralSurveiDetail');

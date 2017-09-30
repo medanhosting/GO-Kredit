@@ -32,8 +32,9 @@
 
 			// Route::get('/{status}',				['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);
 			// Route::get('/{status}/{id}/show',	['as'	=> 'pengajuan.show', 	'uses' => 'PengajuanController@show']);
-			Route::delete('/{status}/{id}',		['as'	=> 'pengajuan.destroy', 'uses' => 'PengajuanController@destroy']);
-			
+			Route::delete('/{status}/{id}',					['as'	=> 'pengajuan.destroy', 'uses' => 'PengajuanController@destroy']);
+			Route::post('/pengajuan/assign/analisa/{id}',	['as'	=> 'pengajuan.assign_analisa', 	'uses' => 'PengajuanController@assign_analisa']);
+			Route::post('/pengajuan/assign/putusan/{id}',	['as'	=> 'pengajuan.assign_putusan', 	'uses' => 'PengajuanController@assign_putusan']);
 			
 			Route::middleware('scope:permohonan')->group( function() {
 				Route::resource('permohonan', 					'PermohonanController');

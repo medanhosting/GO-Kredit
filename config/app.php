@@ -180,6 +180,7 @@ return [
 
         Thunderlabid\Manajemen\ManajemenServiceProvider::class,
         Thunderlabid\Pengajuan\PengajuanServiceProvider::class,
+        Thunderlabid\Survei\SurveiServiceProvider::class,
 
     ],
 

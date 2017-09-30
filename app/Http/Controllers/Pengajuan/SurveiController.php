@@ -72,63 +72,91 @@ class SurveiController extends Controller
 	public function store($id = null)
 	{
 		try {
-			$survei 			= Survei::where('pengajuan_id', $id)->wherehas('pengajuan', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->with(['character', 'condition', 'capacity', 'capital', 'collateral'])->orderby('tanggal', 'desc')->first();
+			$survei 			= Survei::where('id', $id)->wherehas('pengajuan', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->with(['character', 'condition', 'capacity', 'capital', 'collateral'])->orderby('tanggal', 'desc')->first();
 
 			if(!$survei)
 			{
 				throw new Exception("Dokumen ini tidak diijinkan untuk survei", 1);
 			}
+			if(request()->has('tanggal_survei'))
+			{
+				$survei->tanggal 	= request()->get('tanggal_survei');
+				$survei->save();
+			}
 
 			if(request()->has('character'))
 			{
-				$survei->character->delete();
+				$character 			= SurveiDetail::where('survei_id', $id)->where('jenis', 'character')->first();
+				if(!$character){
+					$character 		= new SurveiDetail;
+				}
 
-				$character 			= new SurveiDetail;
-				$character->fill(request()->get('character'));
-				$character->survei_id 	= $survei['id'];
+				$character->survei_id 		= $id;
+				$character->jenis 			= 'character';
+				$character->dokumen_survei 	= request()->only('character');
 				$character->save();
 			}
 	
 			if(request()->has('condition'))
 			{
-				$survei->condition->delete();
+				$condition 					= SurveiDetail::where('survei_id', $id)->where('jenis', 'condition')->first();
+				if(!$condition){
+					$condition 				= new SurveiDetail;
+				}
 
-				$condition 			= new SurveiDetail;
-				$condition->fill(request()->get('condition'));
-				$condition->survei_id 	= $survei['id'];
+				$condition->survei_id 		= $id;
+				$condition->jenis 			= 'condition';
+				$condition->dokumen_survei 	= request()->only('condition');
 				$condition->save();
-			}
-
-			if(request()->has('collateral'))
-			{
-				$survei->collateral->delete();
-
-				$collateral 			= new SurveiDetail;
-				$collateral->fill(request()->get('collateral'));
-				$collateral->survei_id 	= $survei['id'];
-				$collateral->save();
 			}
 
 			if(request()->has('capacity'))
 			{
-				$survei->capacity->delete();
+				$capacity 					= SurveiDetail::where('survei_id', $id)->where('jenis', 'capacity')->first();
+				if(!$capacity){
+					$capacity 				= new SurveiDetail;
+				}
 
-				$capacity 			= new SurveiDetail;
-				$capacity->fill(request()->get('capacity'));
-				$capacity->survei_id 	= $survei['id'];
+				$capacity->survei_id 		= $id;
+				$capacity->jenis 			= 'capacity';
+				$capacity->dokumen_survei 	= request()->only('capacity');
 				$capacity->save();
 			}
 
 			if(request()->has('capital'))
 			{
-				$survei->capital->delete();
+				$capital 					= SurveiDetail::where('survei_id', $id)->where('jenis', 'capital')->first();
+				if(!$capital){
+					$capital 				= new SurveiDetail;
+				}
 
-				$capital 			= new SurveiDetail;
-				$capital->fill(request()->get('capital'));
-				$capital->survei_id 	= $survei['id'];
+				$capital->survei_id 		= $id;
+				$capital->jenis 			= 'capital';
+				$capital->dokumen_survei 	= request()->only('capital');
+
 				$capital->save();
 			}
-			return redirect(route('pengajuan.pengajuan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => 'survei']));
+
+			if(request()->has('collateral'))
+			{
+				$collateral 				= SurveiDetail::where('survei_id', $id)->where('id', request()->get('survei_detail_id'))->where('jenis', 'collateral')->first();
+				if(!$collateral){
+					throw new Exception("Jaminan tidak terdaftar!", 1);
+				}
+
+				$collateral->survei_id 		= $id;
+				$collateral->jenis 			= 'collateral';
+				$key 	= key(request()->get('collateral'));
+
+				$ds_all = $collateral->dokumen_survei;
+				$ds		= array_merge($collateral->dokumen_survei['collateral'][$key], request()->get('collateral')[$key]);
+
+				$ds_all['collateral'][$key] = $ds;
+				$collateral->dokumen_survei = $ds_all;
+				$collateral->save();
+			}
+
+			return redirect(route('pengajuan.survei.show', ['id' => request()->get('lokasi_id'), 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => 'survei']));
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());
 		}
@@ -270,11 +298,16 @@ class SurveiController extends Controller
 					{
 						$complete 				= $complete + (count($c_col) - count($validator->messages()));
 						$checker['collateral'] 	= false;
+						$survei['jaminan_kendaraan'][$k]['is_lengkap'] = false;
 					}
 					else
 					{
 						$complete 				= $complete + count($c_col);
-						$checker['collateral'] 	= true;
+						if(is_null($checker['collateral']) || $checker['collateral'])
+						{
+							$checker['collateral'] 	= true;
+						}
+						$survei['jaminan_kendaraan'][$k]['is_lengkap'] = true;
 					}
 				}
 			}
@@ -289,11 +322,16 @@ class SurveiController extends Controller
 					{
 						$complete 				= $complete + (count($c_col) - count($validator->messages()));
 						$checker['collateral'] 	= false;
+						$survei['jaminan_tanah_bangunan'][$k]['is_lengkap'] = false;
 					}
 					else
 					{
 						$complete 				= $complete + count($c_col);
-						$checker['collateral'] 	= true;
+						if(is_null($checker['collateral']) || $checker['collateral'])
+						{
+							$checker['collateral'] 	= true;
+						}
+						$survei['jaminan_tanah_bangunan'][$k]['is_lengkap'] = true;
 					}
 				}
 			}
@@ -311,4 +349,37 @@ class SurveiController extends Controller
 			return redirect(route('pengajuan.survei.index', ['status' => $status, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
 		}
 	}
+
+	public function assign_survei($id = null)
+	{
+		try {
+			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->status('permohonan')->kantor(request()->get('kantor_aktif_id'))->first();
+
+			if(!$permohonan)
+			{
+				throw new Exception("Permohonan Kredit tidak ditemukan", 1);
+			}
+
+			DB::BeginTransaction();
+
+			$survei 				= new Survei;
+			$survei->pengajuan_id 	= $permohonan['id'];
+			$survei->kode_kantor 	= $permohonan['kode_kantor'];
+			$survei->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$survei->save();
+			foreach (request()->get('surveyor')['nip'] as $k => $v) {
+				$assign_survei 				= new AssignedSurveyor;
+				$assign_survei->survei_id 	= $survei->id;
+				$assign_survei->nip			= $v;
+				$assign_survei->nama		= Orang::where('nip', $v)->first()['nama'];
+				$assign_survei->save();
+			}
+
+			DB::commit();
+			return redirect(route('pengajuan.permohonan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => 'permohonan']));
+		} catch (Exception $e) {
+			DB::rollback();
+			return redirect()->back()->withErrors($e->getMessage());
+		}
+ 	}
 }

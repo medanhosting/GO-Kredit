@@ -83,11 +83,18 @@
 								</div>
 								<div class="col-sm-4">
 									<p style="margin:5px;" class="text-secondary">JAMINAN</p>
+									@php $flag_j = true @endphp
 									@foreach($v['jaminan_kendaraan'] as $jk)
 										<p style="margin:5px;">{{strtoupper($jk['jenis'])}} Nomor : {{strtoupper($jk['dokumen_jaminan'][$jk['jenis']]['nomor_bpkb'])}}</p>
+										@if($jk['dokumen_jaminan'][$jk['jenis']]['is_lama']==false)
+											@php $flag_j 	= false @endphp
+										@endif
 									@endforeach
 									@foreach($v['jaminan_tanah_bangunan'] as $jtk)
 										<p style="margin:5px;">{{strtoupper($jtk['jenis'])}} Nomor : {{strtoupper($jtk['dokumen_jaminan'][$jtk['jenis']]['nomor_sertifikat'])}}</p>
+										@if($jk['dokumen_jaminan'][$jk['jenis']]['is_lama']==false)
+											@php $flag_j 	= false @endphp
+										@endif
 									@endforeach
 								</div>
 								<div class="col-sm-5">
@@ -96,9 +103,9 @@
 										@if(!$v['is_complete'])
 											Data Belum Lengkap. 
 											<a href="{{route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i>Lengkapi Sekarang</i></a>
-										@elseif($v['nasabah']['is_lama'])
-											Nasabah Lama. 
-											<a href="{{route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i>Lanjutkan Analisa</i></a>
+										@elseif($v['nasabah']['is_lama'] && $flag_j)
+											Nasabah & Jaminan Lama. 
+											<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa  text-success"><i>Lanjutkan Analisa</i></a>
 										@else
 											Data Sudah Lengkap. 
 											<a class="modal_assign text-success" data-toggle="modal" data-target="#assign-survei" data-action="{{route('pengajuan.permohonan.assign_survei', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}"><i>Assign Untuk Survei</i></a>
@@ -153,16 +160,16 @@
 			{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
 		@endslot
 	@endcomponent
+
+	@include('pengajuan.ajax.modal_analisa')
+
 @endpush
 
 @push('submenu')
 	@include('templates.submenu.submenu')
 @endpush
 
-@push ('js')
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-	
+@push ('js')	
 	<script type="text/javascript">
 	//SELECT2 UNTUK SURVEYOR//
 

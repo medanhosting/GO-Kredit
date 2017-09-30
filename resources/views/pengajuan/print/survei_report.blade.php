@@ -272,28 +272,34 @@
 				</div> 
 				<div class="clearfix">&nbsp;</div>
 				<div class="row">
-					<div class="col-xs-2 text-left">
-						Tanggal 
+				@foreach($realisasi['isi']['survei']['surveyor'] as $k => $v)
+					<div class="col-sm-6">
+						<div class="row">
+							<div class="col-xs-4 text-left">
+								Tanggal 
+							</div>
+							<div class="col-xs-8 text-right">
+								{{$realisasi['isi']['survei']['tanggal']}}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-4 text-left">
+								Nama 
+							</div>
+							<div class="col-xs-8 text-right">
+								{{$v['nama']}}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-4 text-left">
+								Paraf 
+							</div>
+							<div class="col-xs-8 text-right">
+								
+							</div>
+						</div>
 					</div>
-					<div class="col-xs-4 text-right">
-						{{$realisasi['isi']['survei']['tanggal']}}
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-2 text-left">
-						Nama 
-					</div>
-					<div class="col-xs-4 text-right">
-						{{$realisasi['isi']['survei']['surveyor']['nama']}}
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-2 text-left">
-						Paraf 
-					</div>
-					<div class="col-xs-4 text-right">
-						
-					</div>
+				@endforeach
 				</div>
 			</div>
 			<div class="clearfix">&nbsp;</div>

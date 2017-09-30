@@ -135,6 +135,7 @@ class Analisa extends Model
 		$rules['jangka_waktu']		= ['required', 'numeric'];
 		$rules['limit_angsuran']	= ['required', 'numeric'];
 		$rules['limit_jangka_waktu']= ['required', 'numeric'];
+		
 		$rules['kredit_diusulkan']	= ['required', 'numeric'];
 		$rules['angsuran_pokok']	= ['required', 'numeric'];
 		$rules['angsuran_bunga']	= ['required', 'numeric'];

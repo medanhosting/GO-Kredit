@@ -43,15 +43,34 @@
 						@endif
 						<hr/>
 
+						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
+						<div class="row">
+							<div class="col">
+								{!! Form::bsText('Tanggal Survei', 'tanggal_survei', $survei['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								{!! Form::bsSubmit('Ubah Tanggal', ['class' => 'btn btn-primary', 'style' => "width:100%"]) !!}
+								{!! Form::close() !!}
+							</div>
+						</div>
+						<hr/>
+
 						<h7 class="text-secondary">NASABAH</h7>
 						<p>{{$lokasi['nama']}}</p>
 						<p><i class="fa fa-phone"></i>&nbsp;{{$lokasi['telepon']}}</p>
 						<p><i class="fa fa-map-marker"></i>&nbsp;{{$lokasi['alamat']}}</p>
 						<hr/>
 						<p>Form Survei</p>
-						<a href="{{route('pengajuan.pengajuan.print', ['id' => $permohonan['id'], 'mode' => 'survei_report', 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" style="width:100%" class="btn btn-primary btn-sm">
+						<a href="{{route('pengajuan.pengajuan.print', ['id' => $survei['pengajuan_id'], 'mode' => 'survei_report', 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" style="width:100%" class="btn btn-primary btn-sm">
 							Print
 						</a>
+						@if($percentage==100)
+						<hr/>
+						<p>Survei Sudah Lengkap</p>
+							<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $survei['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm text-white" style="width:100%">Lanjutkan Analisa</a>
+						@endif
 					</div>
 				</div>
 			</div>
@@ -59,7 +78,7 @@
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs" role="tablist">
 					<li class="nav-item">
-						<a class="nav-link active" data-toggle="tab" href="#character" role="tab">
+						<a class="nav-link @if($lokasi['agenda']=='nasabah') active @endif" data-toggle="tab" href="#character" role="tab">
 							Character @if(!$checker['character']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
 						</a>
 					</li>
@@ -79,7 +98,7 @@
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-toggle="tab" href="#collateral" role="tab">
+						<a class="nav-link @if($lokasi['agenda']=='jaminan') active @endif " data-toggle="tab" href="#collateral" role="tab">
 							Collateral @if(!$checker['collateral']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
 						</a>
 					</li>
@@ -87,10 +106,10 @@
 
 				<!-- Tab panes -->
 				<div class="tab-content">
-					<div class="tab-pane active" id="character" role="tabpanel">
+					<div class="tab-pane @if($lokasi['agenda']=='nasabah') active @endif" id="character" role="tabpanel">
 						<div class="clearfix">&nbsp;</div>
 						<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
-						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 						<div class="row">
 							<div class="col">
 								{!! Form::vSelect('Lingkungan Tinggal', 'character[lingkungan_tinggal]', ['dikenal' => 'Dikenal', 'kurang_dikenal' => 'Kurang Dikenal', 'tidak_dikenal' => 'Tidak Dikenal'], $survei['character']['dokumen_survei']['character']['lingkungan_tinggal'], ['class' => 'clingkungantinggal form-control text-info inline-edit'], true) !!}
@@ -139,7 +158,7 @@
 					<div class="tab-pane" id="condition" role="tabpanel">
 						<div class="clearfix">&nbsp;</div>
 						<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
-						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 						<div class="row">
 							<div class="col">
 								{!! Form::vSelect('Persaingan Usaha', 'condition[persaingan_usaha]', ['padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['persaingan_usaha'], ['class' => 'copersainganusaha form-control text-info inline-edit'], true) !!}
@@ -177,7 +196,7 @@
 					<div class="tab-pane" id="capacity" role="tabpanel">
 						<div class="clearfix">&nbsp;</div>
 						<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
-						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 						<div class="row">
 							<div class="col">
 								{!! Form::vSelect('Manajemen Usaha', 'capacity[manajemen_usaha]', ['baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik'], $survei['capacity']['dokumen_survei']['capacity']['manajemen_usaha'], ['class' => 'camanajemenusaha form-control text-info inline-edit'], true) !!}
@@ -207,7 +226,7 @@
 						<h6 class="text-secondary"><strong><u>Pengeluaran</u></strong></h6>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Biaya Rutin', 'capacity[pengeluaran][rutin]', $survei['capacity']['dokumen_survei']['capacity']['pengeluaran']['biaya_rutin'], ['class' => 'cabiayarutin mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 3.000.000'], true) !!}
+								{!! Form::vText('Biaya Rutin', 'capacity[pengeluaran][biaya_rutin]', $survei['capacity']['dokumen_survei']['capacity']['pengeluaran']['biaya_rutin'], ['class' => 'cabiayarutin mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 3.000.000'], true) !!}
 							</div>
 						</div>
 						<div class="row">
@@ -232,7 +251,7 @@
 					<div class="tab-pane" id="capital" role="tabpanel">
 						<div class="clearfix">&nbsp;</div>
 						<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
-						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 						<h6 class="text-secondary"><strong><u>Rumah</u></strong></h6>
 						<div class="row">
 							<div class="col">
@@ -341,16 +360,16 @@
 								@forelse($survei['capital']['dokumen_survei']['capital']['hutang'] as $k => $v)
 									<tr id="clonedHutang{{$k+1}}" class="clonedHutang">
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'hutang['.($k+1).'][nama_bank]', $v['nama_bank'], ['class' => 'knamabank form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][nama_bank]', $v['nama_bank'], ['class' => 'knamabank form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'hutang['.($k+1).'][jumlah_pinjaman]', $v['jumlah_pinjaman'], ['class' => 'kjumlahpinjaman mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 40.000.000', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jumlah_pinjaman]', $v['jumlah_pinjaman'], ['class' => 'kjumlahpinjaman mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 40.000.000', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'hutang['.($k+1).'][jumlah_angsuran]', $v['jumlah_angsuran'], ['class' => 'kjumlahangsuran mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 2.000.000', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jumlah_angsuran]', $v['jumlah_angsuran'], ['class' => 'kjumlahangsuran mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 2.000.000', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'hutang['.($k+1).'][jangka_waktu]', $v['jangka_waktu'], ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1 Tahun', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jangka_waktu]', $v['jangka_waktu'], ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1 Tahun', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="padding-top:12px;border:1px #aaa solid">
 											<a class="cloneHutang text-info" style="font-size:16px;padding:5px;"><i class="fa fa-copy"></i></a> 
@@ -362,16 +381,16 @@
 								@empty
 									<tr id="clonedHutang1" class="clonedHutang">
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'hutang[1][nama_bank]', null, ['class' => 'knamabank form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang][1][nama_bank]', null, ['class' => 'knamabank form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'hutang[1][jumlah_pinjaman]', null, ['class' => 'kjumlahpinjaman form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 60.000.000', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang][1][jumlah_pinjaman]', null, ['class' => 'kjumlahpinjaman form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 60.000.000', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'hutang[1][jumlah_angsuran]', null, ['class' => 'kjumlahangsuran form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 2.000.000', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang][1][jumlah_angsuran]', null, ['class' => 'kjumlahangsuran form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 2.000.000', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'hutang[1][jangka_waktu]', null, ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1 Tahun', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang][1][jangka_waktu]', null, ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1 Tahun', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="padding-top:12px;border:1px #aaa solid">
 											<a class="cloneHutang text-info" style="font-size:16px;padding:5px;"><i class="fa fa-copy"></i></a> 
@@ -387,7 +406,7 @@
 						{!! Form::close() !!}
 					</div>
 
-					<div class="tab-pane" id="collateral" role="tabpanel">
+					<div class="tab-pane @if($lokasi['agenda']=='jaminan') active @endif" id="collateral" role="tabpanel">
 						<div class="clearfix">&nbsp;</div>
 						<div class="row">
 							<div class="col-sm-3">
@@ -404,13 +423,20 @@
 														</small>
 														<br/>
 														{{strtoupper($v['dokumen_survei']['collateral']['bpkb']['merk'])}}
+														@if(!$v['is_lengkap'])
+															<span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span>
+														@endif
 													</a>
 												</li>
 											@endforeach
 											@foreach($survei['jaminan_tanah_bangunan'] as $k => $v)
 												<li class="nav-item">
-													<a class="nav-link" href="#jaminan{{$v['id']}}" role="tab" data-toggle="tab">
+													@php similar_text(implode(' ', $v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['alamat']), $lokasi['alamat'], $perc[$k]) @endphp
+													<a class="nav-link @if($lokasi['agenda']=='jaminan' && $perc[$k]==100) active @endif " href="#jaminan{{$v['id']}}" role="tab" data-toggle="tab">
 														{{strtoupper($v['dokumen_survei']['collateral']['jenis'])}}
+														@if(!$v['is_lengkap'])
+															<span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span>
+														@endif
 														<br/>
 														<small>
 															<!-- {{strtoupper($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['tipe'])}}
@@ -432,7 +458,7 @@
 								<div class="tab-content">
 									@foreach($survei['jaminan_kendaraan'] as $k => $v)
 										<div class="tab-pane" id="jaminan{{$v['id']}}" role="tabpanel">
-											{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
+											{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
 												<div class="row">
 													<div class="col">
 														{!! Form::vLabel('Merk', 'collateral[bpkb][merk]', $v['dokumen_survei']['collateral']['bpkb']['merk'], ['class' => 'form-control inline-edit text-info'], true) !!}
@@ -563,8 +589,8 @@
 									@endforeach
 									@foreach($survei['jaminan_tanah_bangunan'] as $k => $v)
 										@php $jenis = $v['dokumen_survei']['collateral']['jenis'] @endphp
-										<div class="tab-pane" id="jaminan{{$v['id']}}" role="tabpanel">
-											{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
+										<div class="tab-pane  @if($lokasi['agenda']=='jaminan' && $perc[$k]==100) active @endif" id="jaminan{{$v['id']}}" role="tabpanel">
+											{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
 											<h6 class="text-secondary"><strong><u>Alamat</u></strong></h6>
 											<div class="row">
 												<div class="col">
@@ -783,6 +809,8 @@
 		</div>
 		<div class="clearfix">&nbsp;</div>
 	</div>
+
+	@include('pengajuan.ajax.modal_analisa')
 @endpush
 
 @push('submenu')

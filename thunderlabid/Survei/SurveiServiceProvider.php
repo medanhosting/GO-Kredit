@@ -26,6 +26,10 @@ class SurveiServiceProvider extends ServiceProvider
 
 		Event::listen('Thunderlabid\Survei\Events\AssignedSurveyor\AssignedSurveyorCreating', 'Thunderlabid\Survei\Listeners\SavingAssignedSurveyor');
 		Event::listen('Thunderlabid\Survei\Events\AssignedSurveyor\AssignedSurveyorUpdating', 'Thunderlabid\Survei\Listeners\SavingAssignedSurveyor');
+
+		Event::listen('Thunderlabid\Survei\Events\SurveiDetail\SurveiDetailCreated', 'Thunderlabid\Survei\Listeners\UpdateSurveiIsLengkap');
+		Event::listen('Thunderlabid\Survei\Events\SurveiDetail\SurveiDetailUpdated', 'Thunderlabid\Survei\Listeners\UpdateSurveiIsLengkap');
+
 	}
 
 	public function register()

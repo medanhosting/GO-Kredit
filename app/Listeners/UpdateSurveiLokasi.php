@@ -39,11 +39,25 @@ class UpdateSurveiLokasi
 		$find 	= Pengajuan::where('id', $model->pengajuan_id)->first();
 
 		//hapus semua
-		$prev_survei 	= SurveiLokasi::where('survei_id', $model->id)->delete();
+		// $prev_survei 	= SurveiLokasi::where('survei_id', $model->id)->delete();
 
-		$alamat_nasabah = implode(' ', $find->nasabah['alamat']);
+		$alamat_nasabah 	= implode(' ', $find->nasabah['alamat']);
 
-		$sl_nasabah 				= new SurveiLokasi;
+		$sl_nasabah 		= SurveiLokasi::where('survei_id', $model->id)
+		->where('kelurahan', $find->nasabah['alamat']['kelurahan'])
+		->where('kecamatan', $find->nasabah['alamat']['kecamatan'])
+		->where('kota', $find->nasabah['alamat']['kota'])
+		->where('agenda', 'nasabah')
+		->where('alamat', $alamat_nasabah)
+		->where('nama', $find->nasabah['nama'])
+		->where('telepon', $find->nasabah['telepon'])->first();
+
+		if(!$sl_nasabah)
+		{
+			$prev_survei 	= SurveiLokasi::where('survei_id', $model->id)->where('agenda', 'nasabah')->delete();
+			$sl_nasabah 	= new SurveiLokasi;
+		}
+
 		$sl_nasabah->survei_id		= $model->id;
 		$sl_nasabah->kelurahan 		= $find->nasabah['alamat']['kelurahan'];
 		$sl_nasabah->kecamatan 		= $find->nasabah['alamat']['kecamatan'];
@@ -65,7 +79,21 @@ class UpdateSurveiLokasi
 
 			if($percent < 85)
 			{
-				$survei_lokasi 					= new SurveiLokasi;
+				$survei_lokasi 		= SurveiLokasi::where('survei_id', $model->id)
+				->where('kelurahan', $value->dokumen_jaminan[$value['jenis']]['alamat']['kelurahan'])
+				->where('kecamatan', $value->dokumen_jaminan[$value['jenis']]['alamat']['kecamatan'])
+				->where('kota', $value->dokumen_jaminan[$value['jenis']]['alamat']['kota'])
+				->where('agenda', 'jaminan')
+				->where('alamat', $alamat_tb)
+				->where('nama', $find->nasabah['nama'])
+				->where('telepon', $find->nasabah['telepon'])->first();
+
+				if(!$survei_lokasi)
+				{
+					$prev_survei 	= SurveiLokasi::where('survei_id', $model->id)->where('agenda', 'jaminan')->delete();
+					$survei_lokasi 	= new SurveiLokasi;
+				}
+
 				$survei_lokasi->survei_id		= $model->id;
 				$survei_lokasi->kelurahan 		= $value->dokumen_jaminan[$value['jenis']]['alamat']['kelurahan'];
 				$survei_lokasi->kecamatan 		= $value->dokumen_jaminan[$value['jenis']]['alamat']['kecamatan'];

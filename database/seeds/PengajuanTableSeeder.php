@@ -9,6 +9,10 @@ use Thunderlabid\Pengajuan\Models\Jaminan;
 
 use Thunderlabid\Pengajuan\Traits\IDRTrait;
 
+use Thunderlabid\Territorial\Models\Desa;
+use Thunderlabid\Territorial\Models\Distrik;
+use Thunderlabid\Territorial\Models\Regensi;
+
 use Carbon\Carbon;
 
 class PengajuanTableSeeder extends Seeder
@@ -84,9 +88,9 @@ class PengajuanTableSeeder extends Seeder
 								'alamat'			=> $faker->address,
 								'rt'				=> '00'.rand(0,9),
 								'rw'				=> '00'.rand(0,9),
-								'kelurahan'			=> $kel[rand(0,344)],
-								'kecamatan'			=> $kec[rand(0,52)],
-								'kota'				=> $kota[rand(0,6)],
+								'kelurahan'			=> $kel[rand(0, count($kel)-1)],
+								'kecamatan'			=> $this->rand_kec(),
+								'kota'				=> $this->rand_kota(),
 								'provinsi'			=> 'Jawa Timur',
 								'negara'			=> 'Indonesia',
 							];
@@ -149,25 +153,35 @@ class PengajuanTableSeeder extends Seeder
 								'alamat'			=> $faker->address,
 								'rt'				=> '00'.rand(0,9),
 								'rw'				=> '00'.rand(0,9),
-								'kelurahan'			=> $kel[rand(0,344)],
-								'kecamatan'			=> $kec[rand(0,52)],
-								'kota'				=> $kota[rand(0,6)],
+								'kelurahan'			=> $kel[rand(0, count($kel)-1)],
+								'kecamatan'			=> $this->rand_kec(),
+								'kota'				=> $this->rand_kota(),
 								'provinsi'			=> 'Jawa Timur',
 								'negara'			=> 'Indonesia',
 							];
 			}
 
+			$alamat_2		= 	[
+								'alamat'			=> $faker->address,
+								'rt'				=> '00'.rand(0,9),
+								'rw'				=> '00'.rand(0,9),
+								'kelurahan'			=> $kel[rand(0, count($kel)-1)],
+								'kecamatan'			=> $this->rand_kec(),
+								'kota'				=> $this->rand_kota(),
+								'provinsi'			=> 'Jawa Timur',
+								'negara'			=> 'Indonesia',
+							];
 			switch ($jenis_jaminan) 
 			{
 				case 'shm':
 				$jaminan 	= $this->generate_shm($value['id'], $nama, $alamat);
-				$jaminan_2 	= $this->generate_shm($value['id'], $nama, $alamat);
+				$jaminan_2 	= $this->generate_shm($value['id'], $nama, $alamat_2);
 				// $jaminan_3 	= $this->generate_shm($value['id'], $nama, $alamat);
 				// $jaminan_4 	= $this->generate_shm($value['id'], $nama, $alamat);
 					break;				
 				case 'shgb':
 				$jaminan 	= $this->generate_shgb($value['id'], $nama, $alamat);
-				$jaminan_2 	= $this->generate_shgb($value['id'], $nama, $alamat);
+				$jaminan_2 	= $this->generate_shgb($value['id'], $nama, $alamat_2);
 				// $jaminan_3 	= $this->generate_shgb($value['id'], $nama, $alamat);
 				// $jaminan_4 	= $this->generate_shgb($value['id'], $nama, $alamat);
 					break;
@@ -248,5 +262,89 @@ class PengajuanTableSeeder extends Seeder
 		}
 
 		return $data;
+	}
+
+	private function rand_kel(){
+		$total_kel 	= Desa::where(function($q){
+			$q->where('territorial_distrik_id', 'like', '3505%')
+			->where('territorial_distrik_id', 'like', '3506%')
+			->orwhere('territorial_distrik_id', 'like', '3507%')
+			->orwhere('territorial_distrik_id', 'like', '3508%')
+			->orwhere('territorial_distrik_id', 'like', '3509%')
+			->orwhere('territorial_distrik_id', 'like', '3510%');
+		})->count();
+
+		$kel 	= Desa::where(function($q){
+			$q->where('territorial_distrik_id', 'like', '3505%')
+			->where('territorial_distrik_id', 'like', '3506%')
+			->orwhere('territorial_distrik_id', 'like', '3507%')
+			->orwhere('territorial_distrik_id', 'like', '3508%')
+			->orwhere('territorial_distrik_id', 'like', '3509%')
+			->orwhere('territorial_distrik_id', 'like', '3510%');
+		})->skip(rand(0,($total_kel-1)))->first();	
+
+		$this->d_id = $kel['territorial_distrik_id'];
+		
+		return $kel['nama'];	
+	}
+
+	private function rand_kec(){
+		if(isset($this->d_id))
+		{
+			$data 		= Distrik::where('id', $this->d_id)->first();
+			$this->r_id = $data['territorial_regensi_id'];
+			return $data['nama'];
+		}
+
+		$total_kec 	= Distrik::where(function($q){
+			$q->where('territorial_regensi_id', 'like', '3505%')
+			->orwhere('territorial_regensi_id', 'like', '3506%')
+			->orwhere('territorial_regensi_id', 'like', '3507%')
+			->orwhere('territorial_regensi_id', 'like', '3508%')
+			->orwhere('territorial_regensi_id', 'like', '3509%')
+			->orwhere('territorial_regensi_id', 'like', '3510%');
+		})->count();	
+
+		$data 	= Distrik::where(function($q){
+			$q->where('territorial_regensi_id', 'like', '3505%')
+			->orwhere('territorial_regensi_id', 'like', '3506%')
+			->orwhere('territorial_regensi_id', 'like', '3507%')
+			->orwhere('territorial_regensi_id', 'like', '3508%')
+			->orwhere('territorial_regensi_id', 'like', '3509%')
+			->orwhere('territorial_regensi_id', 'like', '3510%');
+		})->skip(rand(0,($total_kec-1)))->first();	
+		
+		$this->r_id = $data['territorial_regensi_id'];
+		return $data['nama'];
+	}
+
+	private function rand_kota(){
+		if(isset($this->r_id))
+		{
+			$data 		= Regensi::where('id', $this->r_id)->first();
+			$this->p_id = $data['territorial_provinsi_id'];
+			return $data['nama'];
+		}
+
+		$total_kec 	= Regensi::where(function($q){
+			$q->where('territorial_provinsi_id', 'like', '3505')
+			->orwhere('territorial_provinsi_id', 'like', '3506')
+			->orwhere('territorial_provinsi_id', 'like', '3507')
+			->orwhere('territorial_provinsi_id', 'like', '3508')
+			->orwhere('territorial_provinsi_id', 'like', '3509')
+			->orwhere('territorial_provinsi_id', 'like', '3510');
+		})->count();	
+
+		$data 	= Regensi::where(function($q){
+			$q->where('territorial_provinsi_id', 'like', '3505')
+			->orwhere('territorial_provinsi_id', 'like', '3506')
+			->orwhere('territorial_provinsi_id', 'like', '3507')
+			->orwhere('territorial_provinsi_id', 'like', '3508')
+			->orwhere('territorial_provinsi_id', 'like', '3509')
+			->orwhere('territorial_provinsi_id', 'like', '3510');
+		})->skip(rand(0,($total_kec-1)))->first();	
+		
+		$this->p_id = $kel['territorial_provinsi_id'];
+		return $data['nama'];
 	}
 }

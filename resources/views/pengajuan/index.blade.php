@@ -13,7 +13,7 @@
 					@endif
 					</div>
 					<div class="col-4">
-						<form action="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status]))}}" method="GET">
+						<form action="{{route('pengajuan.'.$status.'.index', array_merge(request()->all(), ['status' => $status]))}}" method="GET">
 							 <div class="input-group">
 							 	@foreach(request()->all() as $k => $v)
 							 		@if(!str_is($k, 'q'))
@@ -35,9 +35,9 @@
 									{{$order}}
 								</button>
 								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-									<a class="dropdown-item" href="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-asc']))}}">Tanggal terbaru &nbsp;&nbsp;&nbsp;&nbsp;</a>
-									<a class="dropdown-item" href="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-desc']))}}">Tanggal terlama &nbsp;&nbsp;&nbsp;&nbsp;</a>
-									<!-- <a class="dropdown-item" href="{{route('pengajuan.pengajuan.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-desc']))}}">Tanggal Z - A</a> -->
+									<a class="dropdown-item" href="{{route('pengajuan.'.$status.'.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-asc']))}}">Tanggal terbaru &nbsp;&nbsp;&nbsp;&nbsp;</a>
+									<a class="dropdown-item" href="{{route('pengajuan.'.$status.'.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-desc']))}}">Tanggal terlama &nbsp;&nbsp;&nbsp;&nbsp;</a>
+									<!-- <a class="dropdown-item" href="{{route('pengajuan.'.$status.'.index', array_merge(request()->all(), ['status' => $status, 'order' => 'date-desc']))}}">Tanggal Z - A</a> -->
 								</div>
 							</div>
 						</div>
@@ -64,7 +64,7 @@
 	    						<div class="row text-left">
 									<div class="col-1">{{ (($pengajuan->currentPage() - 1) * $pengajuan->perPage()) + $loop->iteration }}</div>
 									<div class="col-3">
-			    						<a href="{{ route('pengajuan.pengajuan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}">
+			    						<a href="{{ route('pengajuan.'.$status.'.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}">
 											{{ $v['id'] }} 
 										</a>
 										@if ($v['is_mobile']) 
@@ -79,11 +79,11 @@
 									<div class="col-2">
 			    						<div class="row text-right">
 											<!-- <div class="col-4">
-												<a href="{{ route('pengajuan.pengajuan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}"><i class="fa fa-eye"></i></a>
+												<a href="{{ route('pengajuan.'.$status.'.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => $status]) }}"><i class="fa fa-eye"></i></a>
 											</div> -->
 											<!-- <div class="col-4">
 												@if(str_is($status, 'permohonan'))
-													<a href="#" data-toggle="modal" data-target="#delete" data-url="{{route('pengajuan.pengajuan.destroy', ['id' => $v['id'], 'status' => $status, 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i class="fa fa-trash"></i></a>
+													<a href="#" data-toggle="modal" data-target="#delete" data-url="{{route('pengajuan.'.$status.'.destroy', ['id' => $v['id'], 'status' => $status, 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i class="fa fa-trash"></i></a>
 												@else
 												<span class="text-muted">
 													<i class="fa fa-trash"></i>
