@@ -26,7 +26,7 @@ class CreatePutusanTable extends Migration
 			$table->double('provisi');
 			$table->double('administrasi');
 			$table->double('legal');
-			$table->text('checklists');
+			$table->text('checklists')->nullable();
 			$table->enum('putusan', ['tolak', 'setuju']);
 			$table->text('catatan')->nullable();
 			$table->timestamps();

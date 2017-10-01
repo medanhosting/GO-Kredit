@@ -69,7 +69,7 @@
 						</div>
 					</div>
 					@foreach($realisasi['isi']['pengajuan']['nasabah'] as $k => $v )
-						@if($k!='keluarga' && $k!='alamat' && $k!='is_ktp')
+						@if($k!='keluarga' && $k!='alamat' && $k!='is_ektp' && $k!='is_lama')
 							<div class="row text-justify" style="margin:10px 0px @if($k=='penghasilan_bersih') -1px @else 10px @endif -15px;border-bottom:1px solid #aaa;">
 								<div class="col-xs-6 text-left">
 									{{str_replace('_', ' ', $k)}}

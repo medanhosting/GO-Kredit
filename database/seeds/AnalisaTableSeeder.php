@@ -37,7 +37,7 @@ class AnalisaTableSeeder extends Seeder
 			$data['pengajuan_id']	= $value['id'];
 			$data['analis']['nip']	= Orang::first()['nip'];
 			$data['analis']['nama']	= Orang::first()['nama'];
-			$data['tanggal']		= Carbon::now()->addHours(rand(13,24))->format('d/m/Y H:i');
+			$data['tanggal']		= Carbon::now()->subHours(rand(12,23))->format('d/m/Y H:i');
 			$data['character']		= $hsl_survei[rand(0,4)];
 			$data['capacity']		= $hsl_survei[rand(0,4)];
 			$data['capital']		= $hsl_survei[rand(0,4)];

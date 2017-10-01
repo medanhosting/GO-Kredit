@@ -23,7 +23,9 @@
 	Route::get('/password', 	['as'	=> 'password.get', 		'uses' => 'LoginController@password_get']);
 	Route::post('/password', 	['as'	=> 'password.post', 	'uses' => 'LoginController@password_post']);
 
-	Route::middleware('auth')->group( function() {
+	Route::get('/pilih/koperasi',			['as'	=> 'pilih.koperasi','uses' => 'DashboardController@pilih_koperasi']);
+
+	Route::middleware(['auth', 'pilih_koperasi'])->group( function() {
 		Route::get('/home',					['as'	=> 'home',			'uses' => 'DashboardController@home']);
 		Route::get('/simulasi/{mode}',		['as'	=> 'simulasi',		'uses' => 'DashboardController@simulasi']);
 		Route::get('/download/{filename}',	['as' 	=> 'download', 		'uses' => 'DownloadController@download']);
@@ -35,6 +37,7 @@
 			Route::delete('/{status}/{id}',					['as'	=> 'pengajuan.destroy', 'uses' => 'PengajuanController@destroy']);
 			Route::post('/pengajuan/assign/analisa/{id}',	['as'	=> 'pengajuan.assign_analisa', 	'uses' => 'PengajuanController@assign_analisa']);
 			Route::post('/pengajuan/assign/putusan/{id}',	['as'	=> 'pengajuan.assign_putusan', 	'uses' => 'PengajuanController@assign_putusan']);
+			Route::post('/pengajuan/validasi/putusan/{id}',	['as'	=> 'pengajuan.validasi_putusan', 	'uses' => 'PengajuanController@validasi_putusan']);
 			
 			Route::middleware('scope:permohonan')->group( function() {
 				Route::resource('permohonan', 					'PermohonanController');
@@ -48,8 +51,8 @@
 				Route::resource('analisa', 			'AnalisaController');
 			});
 
-			Route::middleware('scope:keputusan')->group( function() {
-				Route::resource('keputusan', 		'PutusanController');
+			Route::middleware('scope:putusan')->group( function() {
+				Route::resource('putusan', 			'PutusanController');
 			});
 			
 			Route::middleware('scope:realisasi')->group( function() {

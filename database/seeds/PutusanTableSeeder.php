@@ -38,7 +38,7 @@ class PutusanTableSeeder extends Seeder
 		foreach ($pengajuan as $key => $value) 
 		{
 			$data['pengajuan_id']	= $value['pengajuan_id'];
-			$data['tanggal']		= Carbon::now()->addHours(rand(25,36))->format('d/m/Y H:i');
+			$data['tanggal']		= Carbon::now()->subHours(rand(1,11))->format('d/m/Y H:i');
 			$data['pembuat_keputusan']['nip']	= Orang::first()['nip'];
 			$data['pembuat_keputusan']['nama']	= Orang::first()['nama'];
 			$data['plafon_pinjaman']			= $value['kredit_diusulkan'];

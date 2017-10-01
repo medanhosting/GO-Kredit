@@ -12,13 +12,16 @@ use Thunderlabid\Pengajuan\Models\LegalRealisasi;
 use Thunderlabid\Survei\Models\Survei;
 
 use Thunderlabid\Manajemen\Models\Orang;
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
-use Thunderlabid\Log\Models\Kredit;
+use Exception, Session, MessageBag, DB, Carbon\Carbon, Auth;
 
-use Exception, Session, MessageBag, DB, Carbon\Carbon;
+use Thunderlabid\Log\Traits\IDRTrait;
 
 class PengajuanController extends Controller
 {
+	use IDRTrait;
+
 	protected $view_dir = 'pengajuan.';
 
 	public function __construct()
@@ -27,7 +30,7 @@ class PengajuanController extends Controller
 
 		$this->middleware('scope:'.request()->segment(2));
 		
-		$this->middleware('required_password')->only('destroy', 'assign_analisa');
+		$this->middleware('required_password')->only('destroy', 'assign_analisa', 'assign_putusan');
 	}
 
 	public function index ($status) 
@@ -163,36 +166,6 @@ class PengajuanController extends Controller
 		return view('pengajuan.print.'.$mode, compact('realisasi'));
 	}
 
-	private function riwayat_kredit_nasabah($nik, $id)
-	{
-		$k_ids	= array_column(Kredit::where('nasabah_id', $nik)->where('pengajuan_id', '<>', $id)->get()->toArray(), 'pengajuan_id');
-
-		return Pengajuan::wherein('id', $k_ids)->get();
-	}
-
-	private function riwayat_kredit_jaminan($kendaraan, $tanah_bangunan, $id)
-	{
-		$w_id 	= [];
-
-		foreach ($kendaraan as $key => $value) {
-			$w_id[] = $value['dokumen_jaminan']['bpkb']['nomor_bpkb'];
-		}
-
-		$w_id  		= array_unique($w_id);
-		$k_ids_1	= array_column(Kredit::whereIn('jaminan_id', $w_id)->where('jaminan_tipe', 'bpkb')->where('pengajuan_id', '<>', $id)->get(['pengajuan_id'])->toArray(), 'pengajuan_id');
-
-		foreach ($tanah_bangunan as $key => $value) {
-			$w_id[] = $value['dokumen_jaminan'][$value['jenis']]['nomor_sertifikat'];
-		}
-		$w_id 	 	= array_unique($w_id);
-		$k_ids_2	= array_column(Kredit::whereIn('jaminan_id', $w_id)->whereIn('jaminan_tipe', ['shgb', 
-			'shm'])->where('pengajuan_id', '<>', $id)->get(['pengajuan_id'])->toArray(), 'pengajuan_id');
-
-		$k_ids 		= array_unique(array_merge($k_ids_1, $k_ids_2));
-
-		return Pengajuan::wherein('id', $k_ids)->get();
-	}
-
 	public function assign_analisa($id = null)
 	{
 		try {
@@ -223,4 +196,84 @@ class PengajuanController extends Controller
 			return redirect()->back()->withErrors($e->getMessage());
 		}
  	}
+
+	public function assign_putusan($id = null)
+	{
+		try {
+			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->status('analisa')->kantor(request()->get('kantor_aktif_id'))->first();
+
+			if(!$permohonan)
+			{
+				throw new Exception("Permohonan Kredit tidak ditemukan", 1);
+			}
+
+			DB::BeginTransaction();
+
+			//pimpinan
+			$kredit_diusulkan 	= $this->formatMoneyFrom($permohonan['analisa']['kredit_diusulkan']);
+			
+			if($kredit_diusulkan > 10000000)
+			{
+				$pimpinan 		= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->active(Carbon::now())->where('role', 'komisaris')->first();
+			}
+			else
+			{
+				$pimpinan 		= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->active(Carbon::now())->where('role', 'pimpinan')->first();
+			}
+
+			if(!$pimpinan)
+			{
+				throw new Exception("Tidak ada data pimpinan", 1);
+			}
+
+			$pk['nip']			= $pimpinan['orang']['nip'];
+			$pk['nama']			= $pimpinan['orang']['nama'];
+
+			$status 				= new Status;
+			$status->pengajuan_id 	= $permohonan['id'];
+			$status->status 		= 'putusan';
+			$status->progress 		= 'perlu';
+			$status->karyawan 		= $pk;
+			$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$status->save();
+
+			DB::commit();
+			return redirect(route('pengajuan.putusan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => 'putusan']));
+		} catch (Exception $e) {
+			DB::rollback();
+			return redirect()->back()->withErrors($e->getMessage());
+		}
+ 	}
+
+	public function validasi_putusan($id = null)
+	{
+		try {
+			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->status('putusan')->kantor(request()->get('kantor_aktif_id'))->first();
+
+			if(!$permohonan)
+			{
+				throw new Exception("Permohonan Kredit tidak ditemukan", 1);
+			}
+
+			DB::BeginTransaction();
+
+			$pk['nip']			= Auth::user()['nip'];
+			$pk['nama']			= Auth::user()['nama'];
+
+			$status 				= new Status;
+			$status->pengajuan_id 	= $permohonan['id'];
+			$status->status 		= $permohonan->putusan['putusan'];
+			$status->progress 		= 'sudah';
+			$status->karyawan 		= $pk;
+			$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$status->save();
+
+			DB::commit();
+			return redirect(route('pengajuan.putusan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => 'putusan']));
+		} catch (Exception $e) {
+			DB::rollback();
+			return redirect()->back()->withErrors($e->getMessage());
+		}
+ 	}
+ 	
 }

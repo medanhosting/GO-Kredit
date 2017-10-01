@@ -101,10 +101,15 @@ class Pengajuan extends Model
 	{
 		return $this->hasMany(Status::class, 'pengajuan_id');
 	}
-	
-	public function setAoAttribute($variable)
+
+	public function analisa()
 	{
-		$this->attributes['ao']		= json_encode($variable);
+		return $this->hasOne(Analisa::class, 'pengajuan_id');
+	}
+
+	public function putusan()
+	{
+		return $this->hasOne(Putusan::class, 'pengajuan_id');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -114,6 +119,11 @@ class Pengajuan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
+	public function setAoAttribute($variable)
+	{
+		$this->attributes['ao']		= json_encode($variable);
+	}
+
 	public function scopeKantor($query, $variable)
 	{
 		if(is_array($variable))

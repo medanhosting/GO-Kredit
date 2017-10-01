@@ -60,5 +60,6 @@ class Kernel extends HttpKernel
         'scope' => \App\Http\Middleware\ScopeMiddleware::class,
         'required_password' => \App\Http\Middleware\RequiredPasswordMiddleware::class,
         'device' => \App\Http\Middleware\API\ApiMiddleware::class,
+        'pilih_koperasi' => \App\Http\Middleware\PilihKoperasiMiddleware::class,
     ];
 }

@@ -41,8 +41,8 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Pengajuan\Events\Analisa\AnalisaCreated', 'App\Listeners\SimpanStatusDoingAnalisa');
 		Event::listen('Thunderlabid\Pengajuan\Events\Analisa\AnalisaUpdated', 'App\Listeners\SimpanStatusDoingAnalisa');
 
-		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanCreated', 'App\Listeners\SimpanStatusDonePutusan');
-		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanUpdated', 'App\Listeners\SimpanStatusDonePutusan');
+		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanCreated', 'App\Listeners\SimpanStatusDoingPutusan');
+		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanUpdated', 'App\Listeners\SimpanStatusDoingPutusan');
 		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanCreated', 'App\Listeners\GenerateLegalitasRealisasi');
 		Event::listen('Thunderlabid\Pengajuan\Events\Putusan\PutusanUpdated', 'App\Listeners\GenerateLegalitasRealisasi');
 		

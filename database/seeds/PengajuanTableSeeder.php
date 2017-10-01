@@ -6,6 +6,7 @@ use Thunderlabid\Manajemen\Models\Kantor;
 
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Jaminan;
+use Thunderlabid\Pengajuan\Models\Status;
 
 use Thunderlabid\Pengajuan\Traits\IDRTrait;
 
@@ -134,7 +135,10 @@ class PengajuanTableSeeder extends Seeder
 				'dokumen_pelengkap'	=> $dokumen_pelengkap,
 			];
 
-			Pengajuan::create($data);
+			$pengajuan 	= Pengajuan::create($data);
+			$status 	= Status::where('pengajuan_id', $pengajuan['id'])->orderby('created_at', 'desc')->first();
+			$status->tanggal 	= Carbon::now()->subHours(rand(48,72))->format('d/m/Y h:i');
+			$status->save();
 		}
 
 		//SIMPAN JAMINAN

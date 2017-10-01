@@ -44,25 +44,8 @@
 				<!-- Tab panes -->
 				<div class="tab-content">
 					<div class="tab-pane active" id="overview" role="tabpanel">
-						<div class="clearfix">&nbsp;</div>
-						<div class="row">
-							<div class="col-sm-6 text-left">
-								<label>POKOK PINJAMAN : </label>
-								<!-- {!! Form::vLabel('Pokok Pinjaman', 'pinjaman', $permohonan['pokok_pinjaman'], ['class' => 'form-control inline-edit text-info'], true) !!} -->
-							</div>
-							<div class="col-sm-6 text-right">
-								<label>{{$permohonan['pokok_pinjaman']}}</label>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-sm-6 text-left">
-								<label>KEMAMPUAN ANGSUR : </label>
-								<!-- {!! Form::vLabel('Kemampuan Angsur', 'angsuran', $permohonan['kemampuan_angsur'], ['class' => 'form-control inline-edit text-info'], true) !!} -->
-							</div>
-							<div class="col-sm-6 text-right">
-								<label>{{$permohonan['kemampuan_angsur']}}</label>
-							</div>
-						</div>
+						@include('pengajuan.analisa.permohonan_kredit')
+
 						@if(!is_null($analisa['id']))
 							<div class="row">
 								<div class="col-sm-12 text-right">
@@ -122,10 +105,10 @@
 				<div class="clearfix">&nbsp;</div>
 				{!! Form::open(['url' => route('pengajuan.analisa.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 					<div class="row">
-							<div class="col">
-								{!! Form::vText('Tanggal Analisa', 'tanggal', $analisa['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
-							</div>
+						<div class="col">
+							{!! Form::vText('Tanggal Analisa', 'tanggal', $analisa['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 						</div>
+					</div>
 					<div class="row">
 						<div class="col">
 							{!! Form::vSelect('Character', 'character', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['character'], ['class' => 'form-control text-info inline-edit'], true) !!}

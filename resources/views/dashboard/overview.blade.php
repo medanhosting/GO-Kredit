@@ -7,6 +7,7 @@
 				</h4>
 			</div>
 		</div>
+		<div class="arrow-right"></div>
 		<div class="row align-items-center">
 			<div class="col-3">
 				<a href="{{ route('simulasi', ['mode' => 'pa', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style" style="color:#fff">
@@ -84,7 +85,7 @@
 			</div>
 			<div class="col">
 				@if(in_array('analisa', $scopes['scopes']))
-					<a href="{{ route('pengajuan.permohonan.index', ['status' => 'analisa', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style" style="color:#fff">
+					<a href="{{ route('pengajuan.putusan.index', ['status' => 'putusan', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style" style="color:#fff">
 						<div class="frontpage_square">
 							<i class="d-block fa fa-file-o fa-2x" style="padding-bottom:5px;"></i>
 							KEPUTUSAN
@@ -97,7 +98,7 @@
 					</div>
 				@endif
 			</div>
-		</div>
+		</div><!-- 
 		<div class="clearfix">&nbsp;</div>
 		<div class="clearfix">&nbsp;</div>
 		<div class="clearfix">&nbsp;</div>
@@ -184,7 +185,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 
 	@if($is_holder)
@@ -198,7 +199,7 @@
 		</div>
 
 		<div class="row align-items-center">
-			<div class="col">
+			<!-- <div class="col">
 				@if(in_array('kantor', $holder_scopes['scopes']))
 					<a href="{{ route('manajemen.kantor.create', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
 						<div class="frontpage_square">
@@ -212,8 +213,8 @@
 						KANTOR BARU
 					</div>
 				@endif
-			</div>
-			<div class="col">
+			</div> -->
+			<div class="col-sm-3">
 				@if(in_array('kantor', $holder_scopes['scopes']))
 					<a href="{{ route('manajemen.kantor.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
 						<div class="frontpage_square">
@@ -228,7 +229,7 @@
 					</div>
 				@endif
 			</div>
-			<div class="col">
+			<!-- <div class="col">
 				@if(in_array('karyawan', $holder_scopes['scopes']))
 					<a href="{{ route('manajemen.karyawan.create', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
 						<div class="frontpage_square">
@@ -242,8 +243,8 @@
 						KARYAWAN BARU
 					</div>
 				@endif
-			</div>
-			<div class="col">
+			</div> -->
+			<div class="col-sm-3">
 				@if(in_array('karyawan', $holder_scopes['scopes']))
 					<a href="{{ route('manajemen.karyawan.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="card-link text-style">
 						<div class="frontpage_square">

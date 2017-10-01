@@ -54,4 +54,10 @@ class DashboardController extends Controller
 		$this->layout->pages 	= view('dashboard.simulasi', compact('mode', 'rincian'));
 		return $this->layout;
 	}
+
+	public function pilih_koperasi(){
+		$url 	= url()->previous();
+
+		return view('dashboard.koperasi', compact('url'));
+	}
 }

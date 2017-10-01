@@ -117,6 +117,9 @@
 														</i>
 													</p>
 												</div>
+											</div>
+											@if(!count($v['putusan']['checklists']))
+											<div class="row" style="padding-top:20px;">
 												<div class="col-6 text-left">
 													<p>Jaminan :</p>
 												</div>
@@ -128,6 +131,35 @@
 											@include ('pengajuan.permohonan.jaminan_kendaraan.components.table', ['jaminan_kendaraan' => $v['jaminan_kendaraan']])
 
 											@include ('pengajuan.permohonan.jaminan_tanah_bangunan.components.table', ['jaminan_tanah_bangunan' => $v['jaminan_tanah_bangunan']])
+											@else
+											<div class="row">
+												<!-- <div class="col-6">
+													<h7 class="text-secondary">CETAK IDENTITAS NASABAH DAN JAMINAN KREDIT</h7>
+													<br/>
+													@foreach($v['putusan']['checklists']['objek'] as $kc => $vc)
+														@if($vc=='ada')
+														<a href="{{route('pengajuan.pengajuan.print', ['id' => $v['id'], 'mode' => $kc, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" style="width:100%" class="text-success">
+															{{strtoupper(str_replace('_', ' ', $kc))}}
+														</a><br/>
+														@endif
+													@endforeach
+												</div> -->
+												<div class="col-12">
+													<h7 class="text-secondary">CETAK DOKUMEN PENGIKAT KREDIT</h7>
+												</div>
+											</div>
+											<div class="row">
+												@foreach($v['putusan']['checklists']['pengikat'] as $kc => $vc)
+													@if($vc=='ada')
+														<div class="col-6">
+															<a href="{{route('pengajuan.pengajuan.print', ['id' => $v['id'], 'mode' => $kc, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" style="width:100%" class="text-success">
+															{{strtoupper(str_replace('_', ' ', $kc))}}
+															</a><br/>
+														</div>
+													@endif
+												@endforeach
+											</div>
+											@endif
 										</div>
 									</div>
 								</div>

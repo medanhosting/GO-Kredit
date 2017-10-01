@@ -38,7 +38,7 @@ class Status extends Model
 	protected $errors;
 	protected $latest_analysis;
 
-	public static $types	= ['permohonan', 'survei', 'analisa', 'tolak', 'setuju', 'realisasi', 'expired', 'void'];
+	public static $types	= ['permohonan', 'survei', 'analisa', 'putusan', 'tolak', 'setuju', 'realisasi', 'expired', 'void'];
 
 	protected $events 		= [
 		'creating' 	=> StatusCreating::class,

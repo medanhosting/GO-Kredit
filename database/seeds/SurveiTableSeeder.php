@@ -30,6 +30,8 @@ class SurveiTableSeeder extends Seeder
 		DB::table('s_survei_foto')->truncate();
 		DB::table('s_survei_lokasi')->truncate();
 		DB::table('s_assigned_surveyor')->truncate();
+
+		$faker		= \Faker\Factory::create();
 		
 		$char_kenal 		= ['dikenal', 'kurang_dikenal', 'tidak_dikenal'];
 		$char_watak 		= ['baik', 'cukup_baik', 'tidak_baik'];
@@ -186,7 +188,7 @@ class SurveiTableSeeder extends Seeder
 		foreach ($pengajuan as $key => $value) 
 		{
 			//character
-			$survei['tanggal']		= Carbon::now()->addHours(rand(1,12))->format('d/m/Y H:i');
+			$survei['tanggal']		= Carbon::now()->subHours(rand(24,47))->format('d/m/Y H:i');
 			$survei['kode_kantor']	= $value['kode_kantor'];
 			$survei['pengajuan_id'] = $value['id'];
 
@@ -257,7 +259,7 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c4['dokumen_survei']['capital']['kendaraan']['jumlah_kendaraan_roda_2']	= rand(0,2);
 			$s_survei_c4['dokumen_survei']['capital']['kendaraan']['nilai_kendaraan']	= $this->formatMoneyTo($h_roda_2 + $h_roda_4);
 
-			$s_survei_c4['dokumen_survei']['capital']['usaha']['nama_usaha']	= $faker->companyName;
+			$s_survei_c4['dokumen_survei']['capital']['usaha']['nama_usaha']	= $faker->company;
 			$s_survei_c4['dokumen_survei']['capital']['usaha']['bidang_usaha']	= $capi_busaha[rand(0,3)];
 			
 			$lama_usaha 	= rand(1,10);
@@ -265,7 +267,9 @@ class SurveiTableSeeder extends Seeder
 
 			$stts_usaha 	= $capi_ousaha[rand(0,2)];
 
-			$s_survei_c4['dokumen_survei']['capital']['usaha']['status_usaha']	= $stts_usaha;
+			$s_survei_c4['dokumen_survei']['capital']['usaha']['status']		= $stts_usaha;
+			$s_survei_c4['dokumen_survei']['capital']['usaha']['omzet_bulanan']	= $this->formatMoneyTo(rand(1,10)*500000);
+
 			if(str_is($stts_usaha, 'kerjasama_bagi_hasil'))
 			{
 				$s_survei_c4['dokumen_survei']['capital']['usaha']['bagi_hasil']= rand(30,70);

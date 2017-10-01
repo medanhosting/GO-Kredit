@@ -41,20 +41,23 @@ class ManajemenTableSeeder extends Seeder
 		//BASIC ADMIN
 		Orang::create(['nama'   => 'Chelsy Mooy', 'email' => 'chelsy@thunderlab.id', 'password' => 'adminadmin']);
 		Orang::create(['nama'   => 'Agil Mahendra', 'email' => 'agil@thunderlab.id', 'password' => 'adminadmin']);
+		Orang::create(['nama'   => 'Budi Purnomo', 'email' => 'budi@thunderlab.id', 'password' => 'adminadmin']);
 
 		//BASIC SCOPES = DISCONTINUED
 		// $this->scopes();
 
 		//BASIC PENEMPATAN
-		PenempatanKaryawan::create(['kantor_id' => Kantor::first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'komisaris', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'keputusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+		PenempatanKaryawan::create(['kantor_id' => Kantor::first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'komisaris', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'putusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
 		
-		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(1)->first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'pimpinan', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'keputusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => ['keputusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(1)->first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'komisaris', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'putusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => ['putusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
 	
-		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(2)->first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'pimpinan', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'keputusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => ['keputusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(2)->first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'komisaris', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'putusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => ['putusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
 
-		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(3)->first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'pimpinan', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'keputusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => ['keputusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(3)->first()['id'], 'orang_id' => Orang::first()['id'], 'role' => 'komisaris', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'putusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => ['putusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
 		
-		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(1)->first()['id'], 'orang_id' => Orang::skip(1)->first()['id'], 'role' => 'pimpinan', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'keputusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => ['keputusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(1)->first()['id'], 'orang_id' => Orang::skip(1)->first()['id'], 'role' => 'pimpinan', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'putusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => ['putusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+
+		PenempatanKaryawan::create(['kantor_id' => Kantor::skip(1)->first()['id'], 'orang_id' => Orang::skip(2)->first()['id'], 'role' => 'kabag_kredit', 'scopes' => ['pengajuan','permohonan', 'survei', 'analisa', 'putusan', 'setujui', 'tolak', 'realisasi', 'expired', 'kantor', 'karyawan'], 'policies' => ['putusan' => ['max:10000000']], 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
 
 		//BASIC MOBILE
 		MobileApi::create(['key' => 'THUNDERCUTE', 'secret' => 'AWAWAWLAND', 'tipe' => 'customer', 'versi' => 1]);
@@ -93,9 +96,9 @@ class ManajemenTableSeeder extends Seeder
 				'features'		=> [],
 			],[
 				'id'			=> 5,
-				'scope'         => 'keputusan',  
+				'scope'         => 'putusan',  
 				'policies'      => [],  
-				'icon'          => 'fa fa-keputusan',  
+				'icon'          => 'fa fa-putusan',  
 				'scope_id'      => 1,
 				'features'		=> [[
 					'id'			=> 6,
