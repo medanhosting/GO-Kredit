@@ -38,11 +38,12 @@ class LoginController extends Controller
 
 		if (Auth::attempt($credential))
 		{
+			return redirect()->route('home');
 			//get kantor id
-			$hari_ini 	= Carbon::now();
-			$penempatan	= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active($hari_ini)->first();
+			// $hari_ini 	= Carbon::now();
+			// $penempatan	= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active($hari_ini)->first();
 
-			return redirect()->route('home', ['kantor_aktif_id' => $penempatan['kantor_id']]);
+			// return redirect()->route('home', ['kantor_aktif_id' => $penempatan['kantor_id']]);
 		}
 		else
 		{

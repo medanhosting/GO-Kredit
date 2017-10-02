@@ -56,7 +56,7 @@ class DashboardController extends Controller
 	}
 
 	public function pilih_koperasi(){
-		$url 	= url()->previous();
+		$url 	= request()->get('prev_url');
 
 		return view('dashboard.koperasi', compact('url'));
 	}

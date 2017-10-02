@@ -11,6 +11,7 @@
 <div class="form-row">
 	@php
 		$all = request()->all();
+		unset($all['prev_url']);
 	@endphp
 
 	<div class="form-group pull-right">

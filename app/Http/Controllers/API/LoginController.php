@@ -74,12 +74,12 @@ class LoginController extends BaseController
 			}
 
 			$salt 		= explode(',', env('APP_SALT', 'ABC,ACB'));
-			$nip 		= Auth::user()['nip'];
+			$user 		= Auth::user();
 			$kode_kantor= $penempatan['kantor_id'];
 
-			$token 		= base64_encode($key.'::'.$salt[rand(0,3)].'::'.$secret.'::'.$nip.'::'.$kode_kantor);
+			$token 		= base64_encode($key.'::'.$salt[rand(0,3)].'::'.$secret.'::'.$user['nip'].'::'.$kode_kantor);
 			
-			return Response::json(['status' => 1, 'data' => ['token' => $token, 'nip' => $nip, 'scopes' => $penempatan['scopes']]]);
+			return Response::json(['status' => 1, 'data' => ['token' => $token, 'user' => $user, 'scopes' => $penempatan['scopes']]]);
 		}
 		else
 		{

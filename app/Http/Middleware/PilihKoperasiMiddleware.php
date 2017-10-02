@@ -13,7 +13,7 @@ class PilihKoperasiMiddleware
 	{
 		if(!request()->has('kantor_aktif_id'))
 		{
-			return redirect()->route('pilih.koperasi');
+			return redirect()->route('pilih.koperasi', ['prev_url' => request()->url()]);
 		}
 
 		return $next($request);
