@@ -106,6 +106,7 @@ class KaryawanController extends Controller
 
 			if(is_null($id))
 			{
+				$penempatan['kantor_id']= request()->get('kantor_id');
 				$penempatan['orang_id']	= $orang_simpan['id'];
 				if(in_array('keputusan', $penempatan['scopes']) && $penempatan['role']=='pimpinan')
 				{
