@@ -50,8 +50,11 @@ window.formInputMask = {
 		date.mask(selector);
 	},
 	datetime: function () {
-		var date = new Inputmask({
-			alias: 'dd/mm/yyyy hh:mm'
+		var date = new Inputmask('datetime', {
+			alias: 'dd/mm/yyyy',
+			mask: '1/2/y h:s',
+			placeholder: 'dd/mm/yyyy hh:mm',
+			separator: '/'
 		});
 		var selector = $('.mask-date-time');
 		date.mask(selector);
