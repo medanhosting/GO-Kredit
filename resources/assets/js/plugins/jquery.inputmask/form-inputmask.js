@@ -179,6 +179,7 @@ window.formInputMask = {
 		this.money();
 		this.moneyRight();
 		this.date();
+		this.datetime();
 		this.birthDay();
 		this.year();
 		this.yearBefore();

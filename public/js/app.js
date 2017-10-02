@@ -5405,6 +5405,13 @@ window.formInputMask = {
 		var selector = $('.mask-date');
 		date.mask(selector);
 	},
+	datetime: function datetime() {
+		var date = new Inputmask({
+			alias: 'dd/mm/yyyy hh:mm'
+		});
+		var selector = $('.mask-date-time');
+		date.mask(selector);
+	},
 	year: function year() {
 		var year = new Inputmask({
 			mask: "y",
@@ -5451,7 +5458,7 @@ window.formInputMask = {
 		yearAfter.mask(selector);
 	},
 	idKTP: function idKTP() {
-		var idKTP = new Inputmask('99-99-999999-9999');
+		var idKTP = new Inputmask('35-99-99-999999-9999');
 		var selector = $('.mask-id-card');
 		idKTP.mask(selector);
 	},
@@ -5527,6 +5534,7 @@ window.formInputMask = {
 		this.money();
 		this.moneyRight();
 		this.date();
+		this.datetime();
 		this.birthDay();
 		this.year();
 		this.yearBefore();
