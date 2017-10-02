@@ -70,7 +70,7 @@
 									@if(!$v['is_complete'])
 										<h5 class="text-danger" style="padding:5px;"><i class="fa fa-exclamation-triangle"></i></h5>
 									@else
-										<a href="#"><p style="padding:5px;border:1px solid;">PRINT</p></a>
+										<!-- <a href="#"><p style="padding:5px;border:1px solid;">PRINT</p></a> -->
 									@endif
 								</div>
 							</div>
