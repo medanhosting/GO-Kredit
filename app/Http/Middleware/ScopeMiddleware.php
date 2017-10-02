@@ -11,6 +11,7 @@ class ScopeMiddleware
 {
 	public function handle($request, Closure $next, $scope)
 	{
+		return $next($request);
 		$hari_ini 	= Carbon::now();
 		
 		$active_u	= Auth::user();

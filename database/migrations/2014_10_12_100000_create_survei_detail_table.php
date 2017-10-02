@@ -20,6 +20,8 @@ class CreateSurveiDetailTable extends Migration
 			$table->text('dokumen_survei');
 			$table->timestamps();
 			$table->softDeletes();
+			
+            $table->index(['deleted_at', 'survei_id', 'jenis']);
 		});
 	}
 

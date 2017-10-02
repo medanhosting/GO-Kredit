@@ -27,6 +27,8 @@ class CreateSurveiLokasiTable extends Migration
 			$table->string('agenda')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
+
+            $table->index(['deleted_at', 'kecamatan', 'kota']);
 		});
 	}
 

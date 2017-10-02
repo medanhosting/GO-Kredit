@@ -21,6 +21,9 @@ class CreateSurveiTable extends Migration
 			$table->boolean('is_lengkap')->default(false);
 			$table->timestamps();
 			$table->softDeletes();
+
+            $table->index(['deleted_at', 'kode_kantor', 'tanggal']);
+            $table->index(['deleted_at', 'pengajuan_id', 'tanggal']);
 		});
 	}
 

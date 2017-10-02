@@ -21,6 +21,8 @@ class CreateManajemenMobileApiTable extends Migration
             $table->integer('versi');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(['deleted_at', 'key']);
         });
     }
 

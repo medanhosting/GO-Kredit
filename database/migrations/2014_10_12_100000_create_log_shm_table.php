@@ -26,6 +26,8 @@ class CreateLogShmTable extends Migration
 			$table->double('nilai')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
+			
+			$table->index(['deleted_at', 'parent_id', 'nomor_sertifikat']);
 		});
 	}
 

@@ -31,6 +31,8 @@ class CreateLogNasabahTable extends Migration
 			$table->text('keluarga')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
+			
+			$table->index(['deleted_at', 'parent_id', 'nik']);
 		});
 	}
 

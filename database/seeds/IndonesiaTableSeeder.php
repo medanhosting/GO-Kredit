@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 use Thunderlabid\Territorial\Models\Negara;
 use Thunderlabid\Territorial\Models\Provinsi;
@@ -36,6 +38,9 @@ class IndonesiaTableSeeder extends Seeder
 			}
 			fclose($handle);
 		}
+		Schema::table('territorial_provinsi', function (Blueprint $table) {
+			$table->index(['territorial_negara_id', 'nama']);
+		});
 
 		// regency
 		if (($handle = fopen(database_path().'/seeds/csv/regencies.csv', "r")) !== FALSE) 
@@ -49,6 +54,9 @@ class IndonesiaTableSeeder extends Seeder
 			}
 			fclose($handle);
 		}
+		Schema::table('territorial_regensi', function (Blueprint $table) {
+			$table->index(['territorial_provinsi_id', 'nama']);
+		});
 
 		// district
 		if (($handle = fopen(database_path().'/seeds/csv/districts.csv', "r")) !== FALSE) 
@@ -62,6 +70,10 @@ class IndonesiaTableSeeder extends Seeder
 			}
 			fclose($handle);
 		}
+		Schema::table('territorial_distrik', function (Blueprint $table) {
+			$table->index(['territorial_regensi_id', 'nama']);
+		});
+
 		exit;
 
 		// village

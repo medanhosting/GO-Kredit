@@ -590,6 +590,24 @@
 									@foreach($survei['jaminan_tanah_bangunan'] as $k => $v)
 										@php $jenis = $v['dokumen_survei']['collateral']['jenis'] @endphp
 										<div class="tab-pane  @if($lokasi['agenda']=='jaminan' && $perc[$k]==100) active @endif" id="jaminan{{$v['id']}}" role="tabpanel">
+											
+											<h6 class="text-secondary"><strong><u>Foto Jaminan</u></strong></h6>
+											<div class="row">
+												@forelse($v['foto']['arsip_foto'] as $k2 => $v2)
+												<div class="col-sm-4">
+													<img src="{{$v2['url']}}"  class="img-fluid" alt="Foto Jaminan" style="border:1px solid #aaa">
+												</div>
+												@empty
+												<div class="col-sm-4"></div>
+												<div class="col-sm-4">
+													<img src="https://images-na.ssl-images-amazon.com/images/I/31PkEHsnkXL._SX342_.jpg"  class="img-fluid" alt="Foto Jaminan" style="border:1px solid #aaa">
+												</div>
+												<div class="col-sm-4"></div>
+												<div class="col-sm-12 text-right text-secondary"><i>*harap melengkapi foto melalui aplikasi mobile</i></div>
+												@endforelse
+											</div>
+											<div class="clearfix">&nbsp;</div>
+
 											{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
 											<h6 class="text-secondary"><strong><u>Alamat</u></strong></h6>
 											<div class="row">

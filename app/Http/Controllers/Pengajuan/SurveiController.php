@@ -58,7 +58,7 @@ class SurveiController extends Controller
 			$take 	= 12;
 		}
 
-		$survei 	= $survei->orderby('created_at', 'desc')->paginate($take);
+		$survei 	= $survei->with(['survei'])->orderby('created_at', 'desc')->paginate($take);
 
 		view()->share('survei', $survei);
 		view()->share('status', $status);
@@ -177,7 +177,7 @@ class SurveiController extends Controller
 					$q->where('nip', Auth::user()['nip']);
 				})->where('id', $id)->first();
 
-			$survei 		= Survei::where('id', $lokasi['survei_id'])->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'surveyor'])->first();
+			$survei 		= Survei::where('id', $lokasi['survei_id'])->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'surveyor', 'jaminan_kendaraan.foto', 'jaminan_tanah_bangunan.foto'])->first()->toArray();
 
 			$breadcrumb 	= [
 				[
@@ -292,6 +292,7 @@ class SurveiController extends Controller
 				foreach ($survei['jaminan_kendaraan'] as $k => $v) {
 					$c_col 		= SurveiDetail::rule_of_valid_collateral_bpkb();
 					$total 		= $total + count($c_col);
+					$v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['has_foto']	= $v['has_foto'];
 
 					$validator 	= Validator::make($v['dokumen_survei']['collateral']['bpkb'], $c_col);
 					if ($validator->fails())
@@ -317,6 +318,7 @@ class SurveiController extends Controller
 					$c_col 		= SurveiDetail::rule_of_valid_collateral_sertifikat($v['dokumen_survei']['collateral']['jenis'], $v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['tipe']);
 					$total 		= $total + count($c_col);
 
+					$v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['has_foto']	= $v['has_foto'];
 					$validator 	= Validator::make($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']], $c_col);
 					if ($validator->fails())
 					{

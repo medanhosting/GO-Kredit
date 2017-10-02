@@ -20,6 +20,8 @@ class CreateAssignedSurveyorTable extends Migration
 			$table->string('nama')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
+
+            $table->index(['deleted_at', 'survei_id', 'nip']);
 		});
 	}
 
