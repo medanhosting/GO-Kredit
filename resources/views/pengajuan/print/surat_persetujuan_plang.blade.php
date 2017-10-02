@@ -32,7 +32,7 @@
 			<div class="clearfix">&nbsp;</div>
 			
 			<div class="row text-center">
-				<div class="col-sm-12">
+				<div class="col-xs-12">
 					<h3>SURAT PERNYATAAN<br/>PERSETUJUAN PEMASANGAN PLANG</h3>
 				</div> 
 			</div> 
@@ -41,23 +41,33 @@
 			<div class="clearfix">&nbsp;</div>
 
 			<div class="row text-justify">
-				<div class="col-sm-12">
+				<div class="col-xs-12">
 					<p>
 						Saya yang bertanda tangan di bawah ini : 
 					</p>
-
+				</div>
+				<div class="col-xs-2">
+					Nama : 
+				</div>
+				<div class="col-xs-10">
+					{{$data['pengajuan']['nasabah']['nama']}}
+				</div>
+				<div class="col-xs-2">
+					Alamat :
+				</div>
+				<div class="col-xs-10">
+					{{implode(' ', $data['pengajuan']['nasabah']['alamat'])}}
+				</div>
+				<div class="col-xs-2">
+					No SPK :
+				</div>
+				<div class="col-xs-10">
+					_________________
+				</div>
+				<div class="clearfix">&nbsp;</div>
+				<div class="col-xs-12">
 					<p>
-						&emsp;&emsp;Nama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$realisasi['isi']['pengajuan']['nasabah']['nama']}}<br/>
-
-						&emsp;&emsp;Alamat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{implode(' ', $realisasi['isi']['pengajuan']['nasabah']['alamat'])}}<br/>
-						
-						&emsp;&emsp;No SPK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$realisasi['isi']['pengajuan']['id']}}
-					</p>
-
-					<div class="clearfix">&nbsp;</div>
-
-					<p>
-						Dengan ini menyatakan bahwa bilamana saya tidak melakukan kewajiban membayar angsuran dan/atau pokok pinjaman beserta biaya-biaya lainnya secara tepat waktu, maka saya secara sadar dan tanpa paksaan dari pihak manapun menyetujui tanah/rumah saya dipasang plang atau dicat dengan tulisan “Tanah dan Bangunan ini menjadi jaminan di {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}}“ dan atas pemasangan plang atau pengecatan tersebut saya tidak akan melakukan tuntutan baik pidana maupun perdata kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}} atau pihak manapun yang mewakili.
+						Dengan ini menyatakan bahwa bilamana saya tidak melakukan kewajiban membayar angsuran dan/atau pokok pinjaman beserta biaya-biaya lainnya secara tepat waktu, maka saya secara sadar dan tanpa paksaan dari pihak manapun menyetujui tanah/rumah saya dipasang plang atau dicat dengan tulisan “Tanah dan Bangunan ini menjadi jaminan di {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}}“ dan atas pemasangan plang atau pengecatan tersebut saya tidak akan melakukan tuntutan baik pidana maupun perdata kepada {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}} atau pihak manapun yang mewakili.
 					</p> 	
 
 					<div class="clearfix">&nbsp;</div>
@@ -72,11 +82,11 @@
 			<div class="clearfix">&nbsp;</div>
 
 			<div class="row text-left">
-				<div class="col-sm-6">
-					<p>{{$realisasi['isi']['pimpinan']['kantor']['alamat']['kota']}}, {{\Carbon\Carbon::createFromFormat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d/m/Y')}}</p>
+				<div class="col-xs-6">
+					<p>{{$pimpinan['kantor']['alamat']['kota']}}, {{\Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}}</p>
 					<p>Hormat Kami,</p>
 				</div>
-				<div class="col-sm-6">
+				<div class="col-xs-6">
 					
 				</div>
 				<div class="clearfix">&nbsp;</div>
@@ -84,11 +94,11 @@
 				<div class="clearfix">&nbsp;</div>
 				<div class="clearfix">&nbsp;</div>
 
-				<div class="col-sm-6">
-					<p>{{$realisasi['isi']['pengajuan']['nasabah']['nama']}}</p>
+				<div class="col-xs-6">
+					<p>{{$data['pengajuan']['nasabah']['nama']}}</p>
 					<p>Debitur</p>
 				</div>
-				<div class="col-sm-6">
+				<div class="col-xs-6">
 				</div>
 			</div>
 		

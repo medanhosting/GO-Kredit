@@ -34,7 +34,7 @@
 			<div class="row text-center">
 				<div class="col-xs-12">
 					<h3>SURAT PENYERAHAN HAK MILIK<br/>SECARA FIDUSIA</h3>
-					<h5>No : {{$realisasi['isi']['pengajuan']['id']}}</h5>
+					<h5>No : _________________</h5>
 				</div> 
 			</div> 
 
@@ -44,36 +44,36 @@
 			<div class="row text-justify" style="font-size:11px;">
 				<div class="col-xs-12">
 					<p>
-						Surat Penyerahan Hak Milik Secara FIDUSIA ini dibuat pada hari {{$hari[strtolower(Carbon\Carbon::createFromFormat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d-m-Y')}} oleh dan antara :	
+						Surat Penyerahan Hak Milik Secara FIDUSIA ini dibuat pada hari {{$hari[strtolower(Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d-m-Y')}} oleh dan antara :	
 					</p>
 
 					<p>
 						<ol>
 							<li> 
-								{{$realisasi['isi']['pimpinan']['orang']['nama']}} jabatan Pimpinan {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}, yang dalam hal ini bertindak untuk dan atas nama {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}} yang berkedudukan di {{implode(' ', $realisasi['isi']['pengajuan']['kantor']['alamat'])}}, selanjutnya disebut {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}, dengan :
+								{{$pimpinan['orang']['nama']}} jabatan Pimpinan {{strtoupper($pimpinan['kantor']['jenis'])}}, yang dalam hal ini bertindak untuk dan atas nama {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}} yang berkedudukan di {{implode(' ', $data['pengajuan']['kantor']['alamat'])}}, selanjutnya disebut {{strtoupper($pimpinan['kantor']['jenis'])}}, dengan :
 							</li>
 							<li>
-								{{$realisasi['isi']['pengajuan']['nasabah']['nama']}}, beralamat di {{implode(' ', $realisasi['isi']['pengajuan']['nasabah']['alamat'])}} yang dalam hal ini bertindak dan atas nama Pribadi selanjutnya disebut PEMINJAM.	
+								{{$data['pengajuan']['nasabah']['nama']}}, beralamat di {{implode(' ', $data['pengajuan']['nasabah']['alamat'])}} yang dalam hal ini bertindak dan atas nama Pribadi selanjutnya disebut PEMINJAM.	
 							</li>
 						</ol>
 					</p>
 					<p>
-						{{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} dan PEMINJAM tersebut di atas, dengan ini menerangkan bahwa : 	
+						{{strtoupper($pimpinan['kantor']['jenis'])}} dan PEMINJAM tersebut di atas, dengan ini menerangkan bahwa : 	
 					</p>
 
 					<p>
 						<ol>
 							<li>
-								Oleh Kedua Belah Pihak telah dibuat dan ditandatangani Surat Perjanjian Kredit, tertanggal  di bawah nomor SPK: {{$realisasi['isi']['pengajuan']['id']}} dan lampiran-lampirannya yang selanjutnya akan disebut sebagai PERJANJIAN dan merupakan bagian satu kesatuan tak terpisahkan dengan Surat Penyerahan Hak Milik Secara FIDUSIA ini;
+								Oleh Kedua Belah Pihak telah dibuat dan ditandatangani Surat Perjanjian Kredit, tertanggal  di bawah nomor SPK: _________________ dan lampiran-lampirannya yang selanjutnya akan disebut sebagai PERJANJIAN dan merupakan bagian satu kesatuan tak terpisahkan dengan Surat Penyerahan Hak Milik Secara FIDUSIA ini;
 							</li>
 							<li>
-								Berdasarkan Perjanjian tersebut di atas, dengan ini PEMINJAM menyatakan dengan sesungguhnya telah dan secara sah berhutang dan menerima hutang   tersebut dari {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} berupa uang sebesar {{$realisasi['isi']['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($realisasi['isi']['putusan']['plafon_pinjaman'])}}) yang jumlah tersebut beserta perinciannya tercantum dalam  Perjanjian, yang selanjutnya disebut juga sebagai pinjaman;							
+								Berdasarkan Perjanjian tersebut di atas, dengan ini PEMINJAM menyatakan dengan sesungguhnya telah dan secara sah berhutang dan menerima hutang   tersebut dari {{strtoupper($pimpinan['kantor']['jenis'])}} berupa uang sebesar {{$data['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($data['putusan']['plafon_pinjaman'])}}) yang jumlah tersebut beserta perinciannya tercantum dalam  Perjanjian, yang selanjutnya disebut juga sebagai pinjaman;							
 							</li>
 							<li>
-								Atas Hutang tersebut diatas PEMINJAM berjanji dan mengikatkan diri untuk membayar kembali kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} sesuai dengan ketentuan dan syarat–syarat pembayaran sebagaimana ditetapkan dalam perjanjian;
+								Atas Hutang tersebut diatas PEMINJAM berjanji dan mengikatkan diri untuk membayar kembali kepada {{strtoupper($pimpinan['kantor']['jenis'])}} sesuai dengan ketentuan dan syarat–syarat pembayaran sebagaimana ditetapkan dalam perjanjian;
 							</li>
 							<li>
-								Untuk menjamin lebih lanjut pembayaran (pembayaran-pembayaran) Hutang yang harus dilaksanakan oleh PEMINJAM kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} sesuai dengan ketentuan-ketentuan dan syarat-syarat sebagaimana ditetapkan dalam Perjanjian, maka PEMINJAM dengan ini menyerahkan Hak milik atas Barang sebagai Jaminan Kepercayaan (FEO/FIDUCIARE EIGENDOM OVERDRACHT/FIDUSIA) atas barang (barang-barang) milik PEMINJAM kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} dengan spesifikasi barang (barang-barang) sebagai berikut :
+								Untuk menjamin lebih lanjut pembayaran (pembayaran-pembayaran) Hutang yang harus dilaksanakan oleh PEMINJAM kepada {{strtoupper($pimpinan['kantor']['jenis'])}} sesuai dengan ketentuan-ketentuan dan syarat-syarat sebagaimana ditetapkan dalam Perjanjian, maka PEMINJAM dengan ini menyerahkan Hak milik atas Barang sebagai Jaminan Kepercayaan (FEO/FIDUCIARE EIGENDOM OVERDRACHT/FIDUSIA) atas barang (barang-barang) milik PEMINJAM kepada {{strtoupper($pimpinan['kantor']['jenis'])}} dengan spesifikasi barang (barang-barang) sebagai berikut :
 							</li>
 							<li>
 								PEMINJAM dengan ini juga menyatakan bahwa barang-barang jaminan tersebut diatas adalah milik pribadi secara sah dari PEMINJAM baik secara hukum maupun fisik dan PEMINJAM dengan ini menyatakan bahwa barang-barang jaminan tersebut tidak dalam keadaan dijaminkan atas sesuatu hutang atau pada pihak lain atau apapun namanya ataupun tidak tersangkut perkara atau sengketa baik didalam maupun diluar pengadilan serta tidak ditaruh dibawah penyitaan (conservatoir/revindicatoir beslag) atau bebas dari segala beban dan selama pinjaman yang berkenaan dengan perjanjian kredit ini belum lunas tidak akan diberatkan dengan beban apapun kepada pihak ketiga;
@@ -82,7 +82,7 @@
 								Berdasarkan hal-hal tersebut di atas, Kedua Belah Pihak setuju dan sepakat bahwa penyerahan jaminan secara FIDUSIA ini (yang selanjutnya disebut Surat) dilakukan dengan syarat-syarat dan ketentuan-ketentuan yang lazim dipergunakan dalam penyerahan hak milik secara FIDUSIA sebagaimana yang tertulis pada bagian ii (kedua) PERJANJIAN ini yang juga merupakan satu kesatuan dari dan tidak terpisahkan dengan Surat Penyerahan Hak Milik secara FIDUSIA ini;
 							</li>
 							<li>
-								Surat Penyerahan Hak milik secara FIDUSIA ini mulai berlaku dan mengikat sejak tanggal ditanda tangani oleh kedua belah pihak dan berakhir sampai kewajiban PEMINJAM selesai dipenuhi seluruhnya, dibuat dalam rangkap 2 (DUA) yang dibubuhi meterai secukupnya, dan mempunyai kekuatan hukum yang sama. Lembar asli Pertama dipegang oleh {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}, lembar asli kedua dipegang oleh PEMINJAM;		
+								Surat Penyerahan Hak milik secara FIDUSIA ini mulai berlaku dan mengikat sejak tanggal ditanda tangani oleh kedua belah pihak dan berakhir sampai kewajiban PEMINJAM selesai dipenuhi seluruhnya, dibuat dalam rangkap 2 (DUA) yang dibubuhi meterai secukupnya, dan mempunyai kekuatan hukum yang sama. Lembar asli Pertama dipegang oleh {{strtoupper($pimpinan['kantor']['jenis'])}}, lembar asli kedua dipegang oleh PEMINJAM;		
 							</li>
 						</ol>
 					</p> 	
@@ -93,7 +93,7 @@
 						Menerangkan :
 						<ul>
 							<li>
-								Bahwa {{$realisasi['isi']['pengajuan']['nasabah']['nama']}} (selanjutnya disebut Debitur) telah memperoleh fasilitas kredit dari Pihak Kedua, sejumlah {{$realisasi['isi']['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($realisasi['isi']['putusan']['plafon_pinjaman'])}}) sebagaimana tersebut dalam Perjanjian Kredit Nomer {{$realisasi['isi']['pengajuan']['id']}}, tanggal {{$kredit['tanggal_pengajuan']}} ;
+								Bahwa {{$data['pengajuan']['nasabah']['nama']}} (selanjutnya disebut Debitur) telah memperoleh fasilitas kredit dari Pihak Kedua, sejumlah {{$data['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($data['putusan']['plafon_pinjaman'])}}) sebagaimana tersebut dalam Perjanjian Kredit Nomer _________________, tanggal ______________ ;
 							</li>
 							<li>
 								Bahwa dalam memberikan kredit/pinjaman tersebut, Pihak Kedua membutuhkan jaminan pribadi Pihak Pertama untuk pelunasan hutang Debitur tersebut;
@@ -111,7 +111,7 @@
 
 			<div class="row text-center" style="font-size:11px;">
 				<div class="col-xs-6">
-					{{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}
+					{{strtoupper($pimpinan['kantor']['jenis'])}}
 				</div>
 				<div class="col-xs-6">
 					PEMINJAM
@@ -122,10 +122,10 @@
 				<div class="clearfix">&nbsp;</div>
 
 				<div class="col-xs-6">
-					({{$realisasi['isi']['pimpinan']['orang']['nama']}})
+					({{$pimpinan['orang']['nama']}})
 				</div>
 				<div class="col-xs-6">
-					({{$realisasi['isi']['pengajuan']['nasabah']['nama']}})
+					({{$data['pengajuan']['nasabah']['nama']}})
 				</div>
 			</div>
 		

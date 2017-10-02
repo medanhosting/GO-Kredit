@@ -28,7 +28,7 @@
 						@foreach($v as $k2 => $v2)
 							<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 								<div class="col-sm-6 text-left">
-									{{ucwords(str_replace('_', ' ', $k))}} {{ucwords(str_replace('_', ' ', $k2))}}
+									{{strtoupper(str_replace('_', ' ', $k))}} {{strtoupper(str_replace('_', ' ', $k2))}}
 								</div> 
 								<div class="col-sm-6 text-right">
 									{{str_replace('_', ' ', $v2)}}
@@ -38,7 +38,7 @@
 					@else
 						<div class="row text-justify" style="margin:10px 0px @if($k=='catatan') -1px @else 10px @endif 0px;border-bottom:1px solid #aaa;">
 							<div class="col-sm-6 text-left">
-								{{ucwords(str_replace('_', ' ', $k))}}
+								{{strtoupper(str_replace('_', ' ', $k))}}
 							</div> 
 							<div class="col-sm-6 text-right">
 								{{str_replace('_', ' ', $v)}}
@@ -68,7 +68,7 @@
 						@foreach($v as $k2 => $v2)
 							<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 								<div class="col-sm-6 text-left">
-									{{ucwords(str_replace('_', ' ', $k))}} {{ucwords(str_replace('_', ' ', $k2))}}
+									{{strtoupper(str_replace('_', ' ', $k))}} {{strtoupper(str_replace('_', ' ', $k2))}}
 								</div> 
 								<div class="col-sm-6 text-right">
 									{{str_replace('_', ' ', $v2)}}
@@ -78,7 +78,7 @@
 					@else
 						<div class="row text-justify" style="margin:10px 0px @if($k=='catatan') -1px @else 10px @endif 0px;border-bottom:1px solid #aaa;">
 							<div class="col-sm-6 text-left">
-								{{ucwords(str_replace('_', ' ', $k))}}
+								{{strtoupper(str_replace('_', ' ', $k))}}
 							</div> 
 							<div class="col-sm-6 text-right">
 								{{str_replace('_', ' ', $v)}}
@@ -113,7 +113,7 @@
 										@foreach((array)$v2 as $k3 => $v3)
 											<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 												<div class="col-sm-4 text-left">
-													{{ucwords(str_replace('_', ' ', $k3))}}
+													{{strtoupper(str_replace('_', ' ', $k3))}}
 												</div> 
 												<div class="col-sm-8 text-right">
 													{{str_replace('_', ' ', $v3)}}
@@ -123,7 +123,7 @@
 									@else
 										<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 											<div class="col-sm-4 text-left">
-												{{ucwords(str_replace('_', ' ', $k2))}}
+												{{strtoupper(str_replace('_', ' ', $k2))}}
 											</div> 
 											<div class="col-sm-8 text-right">
 												{{str_replace('_', ' ', $v2)}}
@@ -134,7 +134,7 @@
 							@else
 								<div class="row text-justify" style="margin:0px 0px 0px 0px;border-bottom:1px solid #aaa;">
 									<div class="col-sm-6 text-left">
-										{{ucwords(str_replace('_', ' ', $k))}}
+										{{strtoupper(str_replace('_', ' ', $k))}}
 									</div> 
 									<div class="col-sm-6 text-right">
 										{{str_replace('_', ' ', $v)}}
@@ -170,7 +170,7 @@
 									@foreach((array)$v2 as $k3 => $v3)
 										<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 											<div class="col-sm-7 text-left">
-												{{ucwords(str_replace('_', ' ', $k3))}}
+												{{strtoupper(str_replace('_', ' ', $k3))}}
 											</div> 
 											<div class="col-sm-5 text-right">
 												{{str_replace('_', ' ', $v3)}}
@@ -180,7 +180,7 @@
 								@else
 									<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 										<div class="col-sm-7 text-left">
-											{{ucwords(str_replace('_', ' ', $k2))}}
+											{{strtoupper(str_replace('_', ' ', $k2))}}
 										</div> 
 										<div class="col-sm-5 text-right">
 											{{str_replace('_', ' ', $v2)}}
@@ -220,7 +220,7 @@
 										@foreach((array)$v2 as $k3 => $v3)
 											<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 												<div class="col-sm-6 text-left">
-													{{ucwords(str_replace('_', ' ', $k3))}}
+													{{strtoupper(str_replace('_', ' ', $k3))}}
 												</div> 
 												<div class="col-sm-6 text-right">
 													{{str_replace('_', ' ', $v3)}}
@@ -230,7 +230,7 @@
 									@else
 										<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 											<div class="col-sm-6 text-left">
-												{{ucwords(str_replace('_', ' ', $k2))}}
+												{{strtoupper(str_replace('_', ' ', $k2))}}
 											</div> 
 											<div class="col-sm-6 text-right">
 												{{str_replace('_', ' ', $v2)}}
@@ -241,7 +241,7 @@
 							@else
 								<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 									<div class="col-sm-6 text-left">
-										{{ucwords(str_replace('_', ' ', $k))}}
+										{{strtoupper(str_replace('_', ' ', $k))}}
 									</div> 
 									<div class="col-sm-6 text-right">
 										{{str_replace('_', ' ', $v)}}

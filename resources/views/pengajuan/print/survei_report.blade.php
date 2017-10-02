@@ -34,7 +34,7 @@
 				</div> 
 				<div class="col-xs-3" style="border:1px solid;">
 					<p style="padding:15px;margin:0px;">
-						{{$realisasi['isi']['survei']['pengajuan_id']}} / {{$realisasi['isi']['survei']['id']}}
+						{{$data['survei']['pengajuan_id']}} / {{$data['survei']['id']}}
 					</p>
 				</div>
 			</div> 
@@ -46,28 +46,30 @@
 					<div class="col-xs-6 text-center">
 						<div class="row" style="background-color:#aaa;padding:5px;">
 							<div class="col">
+								<strong>
 								CHARACTER
+								</strong>
 							</div>
 						</div>
-						@foreach($realisasi['isi']['survei']['character']['dokumen_survei']['character'] as $k => $v )
+						@foreach($data['survei']['character']['dokumen_survei']['character'] as $k => $v )
 							@if(is_array($v))
 								@foreach($v as $k2 => $v2)
 									<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 										<div class="col-xs-6 text-left">
-											{{ucwords(str_replace('_', ' ', $k))}} {{ucwords(str_replace('_', ' ', $k2))}}
+											{{strtoupper(str_replace('_', ' ', $k))}} {{strtoupper(str_replace('_', ' ', $k2))}}
 										</div> 
 										<div class="col-xs-6 text-right">
-											{{str_replace('_', ' ', $v2)}}
+											{{strtoupper(str_replace('_', ' ', $v2))}}
 										</div> 
 									</div>
 								@endforeach
 							@else
 								<div class="row text-justify" style="margin:10px 0px @if($k=='catatan') -1px @else 10px @endif 0px;border-bottom:1px solid #aaa;">
 									<div class="col-xs-6 text-left">
-										{{ucwords(str_replace('_', ' ', $k))}}
+										{{strtoupper(str_replace('_', ' ', $k))}}
 									</div> 
 									<div class="col-xs-6 text-right">
-										{{str_replace('_', ' ', $v)}}
+										{{strtoupper(str_replace('_', ' ', $v))}}
 									</div> 
 								</div>
 							@endif
@@ -77,28 +79,30 @@
 					<div class="col-xs-6 text-center">
 						<div class="row" style="background-color:#aaa;padding:5px;">
 							<div class="col">
+								<strong>
 								CONDITION
+								</strong>
 							</div>
 						</div>
-						@foreach($realisasi['isi']['survei']['condition']['dokumen_survei']['condition'] as $k => $v )
+						@foreach($data['survei']['condition']['dokumen_survei']['condition'] as $k => $v )
 							@if(is_array($v))
 								@foreach($v as $k2 => $v2)
 									<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 										<div class="col-xs-6 text-left">
-											{{ucwords(str_replace('_', ' ', $k))}} {{ucwords(str_replace('_', ' ', $k2))}}
+											{{strtoupper(str_replace('_', ' ', $k))}} {{strtoupper(str_replace('_', ' ', $k2))}}
 										</div> 
 										<div class="col-xs-6 text-right">
-											{{str_replace('_', ' ', $v2)}}
+											{{strtoupper(str_replace('_', ' ', $v2))}}
 										</div> 
 									</div>
 								@endforeach
 							@else
 								<div class="row text-justify" style="margin:10px 0px @if($k=='catatan') -1px @else 10px @endif 0px;border-bottom:1px solid #aaa;">
 									<div class="col-xs-6 text-left">
-										{{ucwords(str_replace('_', ' ', $k))}}
+										{{strtoupper(str_replace('_', ' ', $k))}}
 									</div> 
 									<div class="col-xs-6 text-right">
-										{{str_replace('_', ' ', $v)}}
+										{{strtoupper(str_replace('_', ' ', $v))}}
 									</div> 
 								</div>
 							@endif
@@ -108,11 +112,13 @@
 					<div class="col-xs-12 text-center">
 						<div class="row" style="background-color:#aaa;padding:5px;">
 							<div class="col">
+								<strong>
 								CAPACITY
+								</strong>
 							</div>
 						</div>
 						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
-							@foreach($realisasi['isi']['survei']['capacity']['dokumen_survei']['capacity'] as $k => $v )
+							@foreach($data['survei']['capacity']['dokumen_survei']['capacity'] as $k => $v )
 								<div class="col-xs-6 text-left">
 									@if(is_array($v))
 										<strong>{{strtoupper(str_replace('_', ' ', $k))}}</strong>
@@ -121,20 +127,20 @@
 												@foreach((array)$v2 as $k3 => $v3)
 													<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 														<div class="col-xs-4 text-left">
-															{{ucwords(str_replace('_', ' ', $k3))}}
+															{{strtoupper(str_replace('_', ' ', $k3))}}
 														</div> 
 														<div class="col-xs-8 text-right">
-															{{str_replace('_', ' ', $v3)}}
+															{{strtoupper(str_replace('_', ' ', $v3))}}
 														</div> 
 													</div>
 												@endforeach
 											@else
 												<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 													<div class="col-xs-4 text-left">
-														{{ucwords(str_replace('_', ' ', $k2))}}
+														{{strtoupper(str_replace('_', ' ', $k2))}}
 													</div> 
 													<div class="col-xs-8 text-right">
-														{{str_replace('_', ' ', $v2)}}
+														{{strtoupper(str_replace('_', ' ', $v2))}}
 													</div> 
 												</div>
 											@endif
@@ -142,10 +148,10 @@
 									@else
 										<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 											<div class="col-xs-6 text-left">
-												{{ucwords(str_replace('_', ' ', $k))}}
+												{{strtoupper(str_replace('_', ' ', $k))}}
 											</div> 
 											<div class="col-xs-6 text-right">
-												{{str_replace('_', ' ', $v)}}
+												{{strtoupper(str_replace('_', ' ', $v))}}
 											</div> 
 										</div>
 									@endif
@@ -156,11 +162,13 @@
 					<div class="col-xs-12 text-center">
 						<div class="row" style="background-color:#aaa;padding:5px;">
 							<div class="col">
+								<strong>
 								CAPITAL
+								</strong>
 							</div>
 						</div>
 						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
-							@foreach($realisasi['isi']['survei']['capital']['dokumen_survei']['capital'] as $k => $v )
+							@foreach($data['survei']['capital']['dokumen_survei']['capital'] as $k => $v )
 								<div class="col-xs-6 text-left">
 									<strong>{{strtoupper(str_replace('_', ' ', $k))}}</strong>
 									@foreach((array)$v as $k2 => $v2)
@@ -168,20 +176,20 @@
 											@foreach((array)$v2 as $k3 => $v3)
 												<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 													<div class="col-xs-7 text-left">
-														{{ucwords(str_replace('_', ' ', $k3))}}
+														{{strtoupper(str_replace('_', ' ', $k3))}}
 													</div> 
 													<div class="col-xs-5 text-right">
-														{{str_replace('_', ' ', $v3)}}
+														{{strtoupper(str_replace('_', ' ', $v3))}}
 													</div> 
 												</div>
 											@endforeach
 										@else
 											<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 												<div class="col-xs-7 text-left">
-													{{ucwords(str_replace('_', ' ', $k2))}}
+													{{strtoupper(str_replace('_', ' ', $k2))}}
 												</div> 
 												<div class="col-xs-5 text-right">
-													{{str_replace('_', ' ', $v2)}}
+													{{strtoupper(str_replace('_', ' ', $v2))}}
 												</div> 
 											</div>
 										@endif
@@ -202,7 +210,7 @@
 				</div> 
 				<div class="col-xs-3" style="border:1px solid;">
 					<p style="padding:15px;margin:0px;">
-						{{$realisasi['isi']['survei']['pengajuan_id']}} / {{$realisasi['isi']['survei']['id']}}
+						{{$data['survei']['pengajuan_id']}} / {{$data['survei']['id']}}
 					</p>
 				</div>
 			</div> 
@@ -214,11 +222,13 @@
 					<div class="col-xs-12 text-center">
 						<div class="row" style="background-color:#aaa;padding:5px;">
 							<div class="col">
+								<strong>
 								COLLATERAL
+								</strong>
 							</div>
 						</div>
 						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
-						@foreach($realisasi['isi']['survei']['collateral'] as $k0 => $v0 )
+						@foreach($data['survei']['collateral'] as $k0 => $v0 )
 							@foreach($v0['dokumen_survei']['collateral'] as $k => $v )
 								@if(!str_is($k, 'jenis'))
 								<div class="col-xs-6 text-left">
@@ -229,20 +239,20 @@
 												@foreach((array)$v2 as $k3 => $v3)
 													<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 														<div class="col-xs-6 text-left">
-															{{ucwords(str_replace('_', ' ', $k3))}}
+															{{strtoupper(str_replace('_', ' ', $k3))}}
 														</div> 
 														<div class="col-xs-6 text-right">
-															{{str_replace('_', ' ', $v3)}}
+															{{strtoupper(str_replace('_', ' ', $v3))}}
 														</div> 
 													</div>
 												@endforeach
 											@else
 												<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 													<div class="col-xs-6 text-left">
-														{{ucwords(str_replace('_', ' ', $k2))}}
+														{{strtoupper(str_replace('_', ' ', $k2))}}
 													</div> 
 													<div class="col-xs-6 text-right">
-														{{str_replace('_', ' ', $v2)}}
+														{{strtoupper(str_replace('_', ' ', $v2))}}
 													</div> 
 												</div>
 											@endif
@@ -250,10 +260,10 @@
 									@else
 										<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 											<div class="col-xs-6 text-left">
-												{{ucwords(str_replace('_', ' ', $k))}}
+												{{strtoupper(str_replace('_', ' ', $k))}}
 											</div> 
 											<div class="col-xs-6 text-right">
-												{{str_replace('_', ' ', $v)}}
+												{{strtoupper(str_replace('_', ' ', $v))}}
 											</div> 
 										</div>
 									@endif
@@ -267,32 +277,34 @@
 
 				<div class="row text-justify" style="background-color:#aaa;padding:5px;">
 					<div class="col-xs-12 text-center">
+						<strong>
 						SURVEYOR
+						</strong>
 					</div> 
 				</div> 
 				<div class="clearfix">&nbsp;</div>
 				<div class="row">
-				@foreach($realisasi['isi']['survei']['surveyor'] as $k => $v)
+				@foreach($data['survei']['surveyor'] as $k => $v)
 					<div class="col-sm-6">
 						<div class="row">
 							<div class="col-xs-4 text-left">
-								Tanggal 
+								TANGGAL 
 							</div>
 							<div class="col-xs-8 text-right">
-								{{$realisasi['isi']['survei']['tanggal']}}
+								{{$data['survei']['tanggal']}}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-xs-4 text-left">
-								Nama 
+								NAMA 
 							</div>
 							<div class="col-xs-8 text-right">
-								{{$v['nama']}}
+								{{strtoupper($v['nama'])}}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-xs-4 text-left">
-								Paraf 
+								PARAF 
 							</div>
 							<div class="col-xs-8 text-right">
 								

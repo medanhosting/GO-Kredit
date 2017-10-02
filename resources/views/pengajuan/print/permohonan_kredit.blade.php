@@ -33,7 +33,7 @@
 					<h3>PERMOHONAN KREDIT</h3>
 				</div> 
 				<div class="col-xs-3" style="border:1px solid;">
-					<p style="padding:15px;margin:0px;">{{$realisasi['isi']['pengajuan']['id']}}</p>
+					<p style="padding:15px;margin:0px;">{{$data['pengajuan']['id']}}</p>
 				</div>
 			</div> 
 
@@ -41,23 +41,23 @@
 
 			<div class="row text-justify">
 				<div class="col-xs-12 text-center" style="background-color:#aaa;padding:5px;">
-					RENCANA KREDIT
+					<strong>RENCANA KREDIT</strong>
 				</div> 
 			</div> 
 			<div class="row text-justify" style="border-bottom:1px solid #aaa;padding:5px;">
 				<div class="col-xs-4 text-left">
-					Pengajuan Kredit
+					PENGAJUAN KREDIT
 				</div> 
 				<div class="col-xs-8 text-right">
-					{{$realisasi['isi']['pengajuan']['pokok_pinjaman']}}
+					{{$data['pengajuan']['pokok_pinjaman']}}
 				</div> 
 			</div> 
 			<div class="row text-justify" style="border-bottom:1px solid #aaa;padding:5px;">
 				<div class="col-xs-4 text-left">
-					Kemampuan Angsur
+					KEMAMPUAN ANGSUR
 				</div> 
 				<div class="col-xs-8 text-right">
-					{{$realisasi['isi']['pengajuan']['kemampuan_angsur']}}
+					{{$data['pengajuan']['kemampuan_angsur']}}
 				</div> 
 			</div> 
 
@@ -65,17 +65,19 @@
 				<div class="col-xs-6 text-center">
 					<div class="row" style="background-color:#aaa;padding:5px;">
 						<div class="col">
+							<strong>
 							DATA PRIBADI
+							</strong>
 						</div>
 					</div>
-					@foreach($realisasi['isi']['pengajuan']['nasabah'] as $k => $v )
+					@foreach($data['pengajuan']['nasabah'] as $k => $v )
 						@if($k!='keluarga' && $k!='alamat' && $k!='is_ektp' && $k!='is_lama')
 							<div class="row text-justify" style="margin:10px 0px @if($k=='penghasilan_bersih') -1px @else 10px @endif -15px;border-bottom:1px solid #aaa;">
 								<div class="col-xs-6 text-left">
-									{{str_replace('_', ' ', $k)}}
+									{{strtoupper(str_replace('_', ' ', $k))}}
 								</div> 
 								<div class="col-xs-6 text-right">
-									{{str_replace('_', ' ', $v)}}
+									{{strtoupper(str_replace('_', ' ', $v))}}
 								</div> 
 							</div>
 						@endif 
@@ -83,20 +85,22 @@
 				</div> 
 				
 				<div class="col-xs-6 text-center">
-					@foreach($realisasi['isi']['pengajuan']['nasabah']['keluarga'] as $k => $v )
+					@foreach($data['pengajuan']['nasabah']['keluarga'] as $k => $v )
 						<div class="row" style="background-color:#aaa;padding:5px;">
 							<div class="col">
+								<strong>
 								DATA {{strtoupper(str_replace('_', ' ', $v['hubungan']))}}
+								</strong>
 							</div>
 						</div>
 						@foreach($v as $k2 => $v2)
 							@if($k2!='hubungan')
 								<div class="row text-justify" style="margin:10px -15px @if($k=='telepon') -1px @else 10px @endif 0px;border-bottom:1px solid #aaa;">
 									<div class="col-xs-4 text-left">
-										{{str_replace('_', ' ', $k2)}}
+										{{strtoupper(str_replace('_', ' ', $k2))}}
 									</div> 
 									<div class="col-xs-8 text-right">
-										{{str_replace('_', ' ', $v2)}}
+										{{strtoupper(str_replace('_', ' ', $v2))}}
 									</div> 
 								</div>
 							@endif
@@ -105,13 +109,15 @@
 
 					<div class="row text-justify" style="padding-left:15px;">
 						<div class="col-xs-12 text-center" style="background-color:#aaa;padding:5px;">
+							<strong>
 							ALAMAT
+							</strong>
 						</div> 
 					</div>
 					<div class="row text-justify" style="margin:10px -15px 10px 0px;border-bottom:1px solid #aaa;">
 						<div class="col-xs-12 text-left">
-							@foreach($realisasi['isi']['pengajuan']['nasabah']['alamat'] as $k => $v )
-								{{str_replace('_', ' ', $k)}} {{str_replace('_', ' ', $v)}}
+							@foreach($data['pengajuan']['nasabah']['alamat'] as $k => $v )
+								{{strtoupper(str_replace('_', ' ', $k))}} {{strtoupper(str_replace('_', ' ', $v))}}
 							@endforeach
 						</div> 
 					</div>
@@ -120,28 +126,62 @@
 			</div> 
 
 			<div class="row text-justify">
-				@foreach($realisasi['isi']['pengajuan']['jaminan'] as $k => $v)
+				@foreach($data['pengajuan']['jaminan_kendaraan'] as $k => $v)
 					<div class="col-xs-6 text-center">
 						<div class="row" style="background-color:#aaa;padding:5px;">
 							<div class="col-xs-12">
+								<strong>
 								DATA JAMINAN {{strtoupper(str_replace('_', ' ', $v['jenis']))}} {{($k+1)}}
+								</strong>
 							</div> 
 						</div> 
 						@foreach($v['dokumen_jaminan'][$v['jenis']] as $k2 => $v2)
 							@if($k2!='alamat')
 								<div class="row text-justify" style="margin:10px 0px @if($k2 =='tahun_perolehan') -1px @else 10px @endif -15px;border-bottom:1px solid #aaa;">
 									<div class="col-xs-6 text-left">
-										{{str_replace('_', ' ', $k2)}}
+										{{strtoupper(str_replace('_', ' ', $k2))}}
 									</div> 
 									<div class="col-xs-6 text-right" >
-										{{str_replace('_', ' ', $v2)}}
+										{{strtoupper(str_replace('_', ' ', $v2))}}
 									</div> 
 								</div>
 							@else
 								<div class="row text-justify" style="margin:10px 0px 10px -15px;border-bottom:1px solid #aaa;">
 									<div class="col-xs-12 text-left">
 										@foreach($v2 as $k3 => $v3) 
-											{{str_replace('_', ' ', $k3)}} {{str_replace('_', ' ', $v3)}}
+											{{strtoupper(str_replace('_', ' ', $k3))}} {{strtoupper(str_replace('_', ' ', $v3))}}
+										@endforeach
+									</div> 
+								</div>
+							@endif
+
+						@endforeach
+					</div> 
+				@endforeach
+				@foreach($data['pengajuan']['jaminan_tanah_bangunan'] as $k => $v)
+					<div class="col-xs-6 text-center">
+						<div class="row" style="background-color:#aaa;padding:5px;">
+							<div class="col-xs-12">
+								<strong>
+								DATA JAMINAN {{strtoupper(str_replace('_', ' ', $v['jenis']))}} {{($k+1)}}
+								</strong>
+							</div> 
+						</div> 
+						@foreach($v['dokumen_jaminan'][$v['jenis']] as $k2 => $v2)
+							@if($k2!='alamat')
+								<div class="row text-justify" style="margin:10px 0px @if($k2 =='tahun_perolehan') -1px @else 10px @endif -15px;border-bottom:1px solid #aaa;">
+									<div class="col-xs-6 text-left">
+										{{strtoupper(str_replace('_', ' ', $k2))}}
+									</div> 
+									<div class="col-xs-6 text-right" >
+										{{strtoupper(str_replace('_', ' ', $v2))}}
+									</div> 
+								</div>
+							@else
+								<div class="row text-justify" style="margin:10px 0px 10px -15px;border-bottom:1px solid #aaa;">
+									<div class="col-xs-12 text-left">
+										@foreach($v2 as $k3 => $v3) 
+											{{strtoupper(str_replace('_', ' ', $k3))}} {{strtoupper(str_replace('_', ' ', $v3))}}
 										@endforeach
 									</div> 
 								</div>
@@ -155,40 +195,42 @@
 
 			<div class="row text-justify" style="background-color:#aaa;padding:5px;">
 				<div class="col-xs-12 text-center">
+					<strong>
 					TANDA TANGAN
+					</strong>
 				</div> 
 			</div> 
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
-				<div class="col-xs-12 text-left">
-					{{$kantor_aktif['alamat']['kota']}}, {{Carbon\Carbon::parse($realisasi['isi']['pengajuan']['created_at'])->format('d/m/Y')}}
+				<div class="col-xs-4 text-center">
+					{{strtoupper($kantor_aktif['alamat']['kota'])}}, {{Carbon\Carbon::parse($data['pengajuan']['created_at'])->format('d/m/Y')}}
 				</div>
 			</div>
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-xs-4 text-center">
-					Pemohon
+					PEMOHON
 					<br/>
 					<br/>
 					<br/>
-					{{$realisasi['isi']['pengajuan']['nasabah']['nama']}}
+					{{strtoupper($data['pengajuan']['nasabah']['nama'])}}
 				</div>
 				<div class="col-xs-4 text-center">
-					@if(!is_null($realisasi['isi']['pengajuan']['nasabah']['keluarga'][0]))
-						{{ucwords(str_replace('_',' ',$realisasi['isi']['pengajuan']['nasabah']['keluarga'][0]['hubungan']))}}
+					@if(!is_null($data['pengajuan']['nasabah']['keluarga'][0]))
+						{{strtoupper(str_replace('_',' ',$data['pengajuan']['nasabah']['keluarga'][0]['hubungan']))}}
 						<br/>
 						<br/>
 						<br/>
-						{{$realisasi['isi']['pengajuan']['nasabah']['keluarga'][0]['nama']}}
+						{{strtoupper($data['pengajuan']['nasabah']['keluarga'][0]['nama'])}}
 					@endif
 				</div>
 				<div class="col-xs-4 text-center">
-					@if(!is_null($realisasi['isi']['pengajuan']['ao']['nama']))
-						Referensi
+					@if(!is_null($data['pengajuan']['ao']['nama']))
+						REFERENSI
 						<br/>
 						<br/>
 						<br/>
-						{{$realisasi['isi']['pengajuan']['ao']['nama']}}
+						{{strtoupper($data['pengajuan']['ao']['nama'])}}
 					@endif
 				</div>
 			</div>

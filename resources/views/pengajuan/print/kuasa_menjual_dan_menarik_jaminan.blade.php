@@ -32,9 +32,9 @@
 			<header>
 				<div class="row">
 					<div class="col-xs-12 text-left">
-						<h3>{{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}}</h3>
-						<p>{{implode(' ', $realisasi['isi']['pimpinan']['kantor']['alamat'])}}</p>
-						<p>Telp : {{$realisasi['isi']['pimpinan']['kantor']['telepon']}}</p>
+						<h3>{{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}}</h3>
+						<p>{{implode(' ', $pimpinan['kantor']['alamat'])}}</p>
+						<p>Telp : {{$pimpinan['kantor']['telepon']}}</p>
 					</div>
 				</div>
 				<hr>
@@ -51,12 +51,12 @@
 			<div class="row text-justify">
 				<div class="col-xs-12">
 					<p>
-						Pada hari ini {{$hari[strtolower(Carbon\Carbon::createfromformat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d/m/Y')}} sehubungan dengan pinjaman atas nama Sdr. {{$realisasi['isi']['pengajuan']['nasabah']['nama']}}  dengan alamat {{implode(' ', $realisasi['isi']['pengajuan']['nasabah']['alamat'])}}. sesuai dengan Surat Perjanjian Kredit No. {{$kredit['nomor_kredit']}}. tanggal {{$kredit['tanggal_pengajuan']}} yang telah terjadi wan prestasi / ingkar janji, dalam rangka memenuhi kewajiban selaku Pemberi Fidusia ataupun Pemegang Obyek Fidusia, sesuai dengan pasal 30 Undang-undang No. 42 tahun 1999 tentang Jaminan Fidusia, bersama dengan ini kami selaku pihak Pemberi Fidusia atau Pemegang Obyek Fidusia, menyerahkan dengan sukarela secara sadar dan tanpa paksaan dari pihak manapun kepada Penerima Fidusia atau pihak yang mewakilinya, atas obyek fidusia / barang jaminan berupa kendaraan bermotor dengan identitas sebagai berikut :
+						Pada hari ini {{$hari[strtolower(Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}} sehubungan dengan pinjaman atas nama Sdr. {{$data['pengajuan']['nasabah']['nama']}}  dengan alamat {{implode(' ', $data['pengajuan']['nasabah']['alamat'])}}. sesuai dengan Surat Perjanjian Kredit No. _________________ tanggal ____________ yang telah terjadi wan prestasi / ingkar janji, dalam rangka memenuhi kewajiban selaku Pemberi Fidusia ataupun Pemegang Obyek Fidusia, sesuai dengan pasal 30 Undang-undang No. 42 tahun 1999 tentang Jaminan Fidusia, bersama dengan ini kami selaku pihak Pemberi Fidusia atau Pemegang Obyek Fidusia, menyerahkan dengan sukarela secara sadar dan tanpa paksaan dari pihak manapun kepada Penerima Fidusia atau pihak yang mewakilinya, atas obyek fidusia / barang jaminan berupa kendaraan bermotor dengan identitas sebagai berikut :
 					</p>
 
 					<div class="row">
 						<ol>
-							@foreach($realisasi['isi']['survei']['collateral'] as $k => $v)
+							@foreach($data['survei']['collateral'] as $k => $v)
 								@if($v['dokumen_survei']['collateral']['jenis']=='bpkb')
 									<div class="col-xs-6">
 										<li> Kendaraan 
@@ -85,10 +85,10 @@
 					<div class="clearfix">&nbsp;</div>
 
 					<p>
-						Untuk selanjutnya, bilamana setelah lewatnya waktu 7(tujuh) hari sejak tanggal penyerahan obyek fidusia ini tidak dilakukan pelunasan atas seluruh kewajiban yang tertunggak, maka pihak {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}} (selaku penerima fidusia) diberikan kewenangan untuk melakukan penjualan di bawah tangan atas obyek fidusia tersebut diatas dengan harga tertinggi yang bisa didapatkan. Bilamana terdapat kelebihan atas penjualan obyek fidusia, maka kelebihan tersebut akan dikembalikan kepada pemberi fidusia dan bilamana masih terdapat kekurangan maka Debitur tetap bertanggung jawab atas utang yang belum terbayar, sesuai dengan pasal 34 ayat 1 dan ayat 2 dari Undang-undang No. 42 tahun 1999 tentang Jaminan Fidusia.
+						Untuk selanjutnya, bilamana setelah lewatnya waktu 7(tujuh) hari sejak tanggal penyerahan obyek fidusia ini tidak dilakukan pelunasan atas seluruh kewajiban yang tertunggak, maka pihak {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}} (selaku penerima fidusia) diberikan kewenangan untuk melakukan penjualan di bawah tangan atas obyek fidusia tersebut diatas dengan harga tertinggi yang bisa didapatkan. Bilamana terdapat kelebihan atas penjualan obyek fidusia, maka kelebihan tersebut akan dikembalikan kepada pemberi fidusia dan bilamana masih terdapat kekurangan maka Debitur tetap bertanggung jawab atas utang yang belum terbayar, sesuai dengan pasal 34 ayat 1 dan ayat 2 dari Undang-undang No. 42 tahun 1999 tentang Jaminan Fidusia.
 					</p>
 					<p>
-						Atas penyerahan obyek fidusia ini maupun atas penjualan obyek fidusia setelah lewatnya tenggat waktu yang diberikan, kami menyatakan akan menyerahkan sepenuhnya pada kebijakan {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}}. dan tidak akan melakukan tuntutan apapun baik pidana maupun perdata kepada pihak {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}}. ataupun pihak yang mewakilinya di kemudian hari.
+						Atas penyerahan obyek fidusia ini maupun atas penjualan obyek fidusia setelah lewatnya tenggat waktu yang diberikan, kami menyatakan akan menyerahkan sepenuhnya pada kebijakan {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}}. dan tidak akan melakukan tuntutan apapun baik pidana maupun perdata kepada pihak {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}}. ataupun pihak yang mewakilinya di kemudian hari.
 					</p>
 				</div> 
 			</div> 
@@ -109,7 +109,7 @@
 				<div class="clearfix">&nbsp;</div>
 
 				<div class="col-xs-4">
-					({{$realisasi['isi']['pengajuan']['nasabah']['nama']}})
+					({{$data['pengajuan']['nasabah']['nama']}})
 				</div>
 				<div class="col-xs-4">
 					(&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;)

@@ -33,7 +33,7 @@
 			<div class="row text-center">
 				<div class="col-xs-12">
 					<h3>SURAT PERJANJIAN  KREDIT</h3>
-					<h5>No : {{$realisasi['isi']['pengajuan']['id']}} </h5>
+					<h5>No : {{$data['pengajuan']['id']}} </h5>
 				</div> 
 			</div> 
 
@@ -42,16 +42,16 @@
 			<div class="row text-justify">
 				<div class="col-xs-12">
 					<p>
-						Pada hari ini {{$hari[strtolower(Carbon\Carbon::createfromformat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d/m/Y')}}, telah dibuat dan ditandatangani perjanjian antara :
+						Pada hari ini {{$hari[strtolower(Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}}, telah dibuat dan ditandatangani perjanjian antara :
 					</p>
 
 					<p>
 						<ol>
 							<li> 
-								{{$realisasi['isi']['pimpinan']['orang']['nama']}} jabatan {{ucwords($realisasi['isi']['pimpinan']['role'])}} {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}, yang dalam hal ini bertindak untuk dan atas nama {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}} yang berkedudukan di {{implode(' ', $realisasi['isi']['pimpinan']['kantor']['alamat'])}}, selanjutnya disebut {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}, dengan :
+								{{$pimpinan['orang']['nama']}} jabatan {{ucwords($pimpinan['role'])}} {{strtoupper($pimpinan['kantor']['jenis'])}}, yang dalam hal ini bertindak untuk dan atas nama {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}} yang berkedudukan di {{implode(' ', $pimpinan['kantor']['alamat'])}}, selanjutnya disebut {{strtoupper($pimpinan['kantor']['jenis'])}}, dengan :
 							</li>
 							<li>
-								{{$realisasi['isi']['pengajuan']['nasabah']['nama']}}, beralamat di {{implode(' ', $realisasi['isi']['pimpinan']['nasabah']['alamat'])}} yang dalam hal ini bertindak dan atas nama Pribadi selanjutnya disebut PEMINJAM.	
+								{{$data['pengajuan']['nasabah']['nama']}}, beralamat di {{implode(' ', $pimpinan['nasabah']['alamat'])}} yang dalam hal ini bertindak dan atas nama Pribadi selanjutnya disebut PEMINJAM.	
 							</li>
 						</ol>
 					</p>
@@ -63,23 +63,23 @@
 					<p>
 						<ol>
 							<li>
-								Peminjam mengakui menerima uang sebagai pinjaman atau kredit dari {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} sebagaimana oleh {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} telah diserahkan kepadanya uang sebesar  {{$realisasi['isi']['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($realisasi['isi']['putusan']['plafon_pinjaman'])}}) dalam bentuk fasilitas Pinjaman Tetap. Jumlah Pinjaman yang diberikan {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} kepada Peminjam yang cukup dibuktikan dengan PERJANJIAN ini sebagai bukti/kwitansi tanda penerimaan atas jumlah pinjaman tersebut;
+								Peminjam mengakui menerima uang sebagai pinjaman atau kredit dari {{strtoupper($pimpinan['kantor']['jenis'])}} sebagaimana oleh {{strtoupper($pimpinan['kantor']['jenis'])}} telah diserahkan kepadanya uang sebesar  {{$data['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($data['putusan']['plafon_pinjaman'])}}) dalam bentuk fasilitas Pinjaman Tetap. Jumlah Pinjaman yang diberikan {{strtoupper($pimpinan['kantor']['jenis'])}} kepada Peminjam yang cukup dibuktikan dengan PERJANJIAN ini sebagai bukti/kwitansi tanda penerimaan atas jumlah pinjaman tersebut;
 							</li>
 							<li>
-								Atas fasilitas pinjaman tersebut peminjam berkewajiban untuk membayar provisi kredit sebesar {{$realisasi['isi']['putusan']['perc_provisi']}} ({{\App\Http\Service\UI\Terbilang::terbilang($realisasi['isi']['putusan']['perc_provisi'])}} ) % dari pinjaman pokok, yang dipungut sekali dalam masa perjanjian kredit ini dan harus dibayar segera setelah perjanjian ini ditandatangani
+								Atas fasilitas pinjaman tersebut peminjam berkewajiban untuk membayar provisi kredit sebesar {{$data['putusan']['perc_provisi']}} ({{\App\Http\Service\UI\Terbilang::terbilang($data['putusan']['perc_provisi'])}} ) % dari pinjaman pokok, yang dipungut sekali dalam masa perjanjian kredit ini dan harus dibayar segera setelah perjanjian ini ditandatangani
 							</li>
 							<li>
-								Pengembalian pinjaman atau kredit wajib dilakukan oleh peminjam dengan cara mengangsur bunga dan/atau pokok pinjaman tiap bulan  dan dilakukan secara berturut-turut tanpa adanya suatu tunggakan atau penangguhan dengan jumlah angsuran per-bulan sebesar {{$realisasi['isi']['analisa']['total_angsuran']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($realisasi['isi']['analisa']['total_angsuran'])}}),  dengan jangka waktu pinjaman 6 (enam) bulan sejak tanggal PERJANJIAN ini ditandatangani, dibayar dalam  6 (enam) kali angsuran, pada tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d')}} ({{\App\Http\Service\UI\Terbilang::terbilang(Carbon\Carbon::createfromformat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d'))}}) setiap bulannya, pengembalian pinjaman atau kredit berlaku mulai {{Carbon\Carbon::createfromformat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d/m/Y')}} dan berakhir pada {{Carbon\Carbon::createfromformat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->addMonths($realisasi['isi']['putusan']['jangka_waktu'])->format('d/m/Y')}}, hingga seluruh pinjaman baik berupa pokok, bunga maupun biaya-biaya lainnya telah lunas;
+								Pengembalian pinjaman atau kredit wajib dilakukan oleh peminjam dengan cara mengangsur bunga dan/atau pokok pinjaman tiap bulan  dan dilakukan secara berturut-turut tanpa adanya suatu tunggakan atau penangguhan dengan jumlah angsuran per-bulan sebesar {{$data['analisa']['total_angsuran']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($data['analisa']['total_angsuran'])}}),  dengan jangka waktu pinjaman 6 (enam) bulan sejak tanggal PERJANJIAN ini ditandatangani, dibayar dalam  6 (enam) kali angsuran, pada tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d')}} ({{\App\Http\Service\UI\Terbilang::terbilang(Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d'))}}) setiap bulannya, pengembalian pinjaman atau kredit berlaku mulai {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}} dan berakhir pada {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->addMonths($data['putusan']['jangka_waktu'])->format('d/m/Y')}}, hingga seluruh pinjaman baik berupa pokok, bunga maupun biaya-biaya lainnya telah lunas;
 							</li>
 							<li>
-								Sesuai keterangan dan pengakuan yang disampaikan Peminjam kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}, uang yang dipinjam dari {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} hanya akan dipergunakan untuk keperluan Menambah Modal; Atas tujuan penggunaan fasilitas pinjaman tersebut, {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} mempercayakan sepenuhnya kepada Peminjam dan tidak bertanggung jawab atas penggunaan uang hasil pinjaman tersebut dan {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} sewaktu–waktu dapat meminta pelunasan pinjaman secara seketika apabila penggunaan uang hasil pinjaman diluar keperluan diatas;
+								Sesuai keterangan dan pengakuan yang disampaikan Peminjam kepada {{strtoupper($pimpinan['kantor']['jenis'])}}, uang yang dipinjam dari {{strtoupper($pimpinan['kantor']['jenis'])}} hanya akan dipergunakan untuk keperluan Menambah Modal; Atas tujuan penggunaan fasilitas pinjaman tersebut, {{strtoupper($pimpinan['kantor']['jenis'])}} mempercayakan sepenuhnya kepada Peminjam dan tidak bertanggung jawab atas penggunaan uang hasil pinjaman tersebut dan {{strtoupper($pimpinan['kantor']['jenis'])}} sewaktu–waktu dapat meminta pelunasan pinjaman secara seketika apabila penggunaan uang hasil pinjaman diluar keperluan diatas;
 							</li>
 							<li>
 								Peminjam, oleh karena kredit yang diterimanya dengan ini menyerahkan sebagai jaminan barang – barang beserta surat – suratnya berupa :	
 								<div class="clearfix">&nbsp;</div>
 								<div class="row">
 									<ol type="i">
-										@foreach($realisasi['isi']['survei']['collateral'] as $k => $v)
+										@foreach($data['survei']['collateral'] as $k => $v)
 											@if($v['dokumen_survei']['collateral']['jenis']=='bpkb')
 												<div class="col-xs-12">
 													<li> {{strtoupper($v['dokumen_survei']['collateral']['jenis'])}} 
@@ -141,7 +141,7 @@
 
 			<div class="row text-center">
 				<div class="col-xs-6">
-					{{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}
+					{{strtoupper($pimpinan['kantor']['jenis'])}}
 				</div>
 				<div class="col-xs-6">
 					PEMINJAM
@@ -152,10 +152,10 @@
 				<div class="clearfix">&nbsp;</div>
 
 				<div class="col-xs-6">
-					({{$realisasi['isi']['pimpinan']['orang']['nama']}})
+					({{$pimpinan['orang']['nama']}})
 				</div>
 				<div class="col-xs-6">
-					({{$realisasi['isi']['pengajuan']['nasabah']['nama']}})
+					({{$data['pengajuan']['nasabah']['nama']}})
 				</div>
 			</div>
 		</div>
@@ -175,16 +175,16 @@
 					<p>
 						<ol>
 							<li> 
-								Pencairan Pinjaman Kredit dilakukan setelah PEMINJAM memenuhi seluruh kewajiban yang ditetapkan {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}};
+								Pencairan Pinjaman Kredit dilakukan setelah PEMINJAM memenuhi seluruh kewajiban yang ditetapkan {{strtoupper($pimpinan['kantor']['jenis'])}};
 							</li>
 							<li>
-								PEMINJAM wajib membayar setiap angsuran tepat pada waktunya sebagaimana ditentukan dalam PERJANJIAN. Bilamana PEMINJAM tidak menepati pelaksanaan pembayaran sesuai tanggal dari masing-masing angsuran sebagaimana diatur dalam PERJANJIAN ini, maka dianggap telah cukup bukti bahwa PEMINJAM telah lalai/wanprestasi, sehingga tanpa memerlukan teguran dari {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} kepada PEMINJAM dikenakan kewajiban sebagai berikut:
+								PEMINJAM wajib membayar setiap angsuran tepat pada waktunya sebagaimana ditentukan dalam PERJANJIAN. Bilamana PEMINJAM tidak menepati pelaksanaan pembayaran sesuai tanggal dari masing-masing angsuran sebagaimana diatur dalam PERJANJIAN ini, maka dianggap telah cukup bukti bahwa PEMINJAM telah lalai/wanprestasi, sehingga tanpa memerlukan teguran dari {{strtoupper($pimpinan['kantor']['jenis'])}} kepada PEMINJAM dikenakan kewajiban sebagai berikut:
 								<ol type="a">
 									<li>
 										Apabila terjadi keterlambatan pembayaran lebih dari 3 (tiga) hari dari tanggal jatuh tempo angsuran, maka kepada PEMINJAM dikenakan denda sebesar 0,5% (nol koma lima persen) per hari keterlambatan dari jumlah angsuran yang dihitung dari tanggal jatuh tempo angsuran;
 									</li>
 									<li>
-										Apabila {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} memandang perlu melakukan tindakan-tindakan penagihan kepada PEMINJAM, maka seluruh biaya-biaya dan ongkos-ongkos penagihan tersebut baik di dalam atau di luar pengadilan akan ditanggung seluruhnya dan harus dibayar oleh PEMINJAM;
+										Apabila {{strtoupper($pimpinan['kantor']['jenis'])}} memandang perlu melakukan tindakan-tindakan penagihan kepada PEMINJAM, maka seluruh biaya-biaya dan ongkos-ongkos penagihan tersebut baik di dalam atau di luar pengadilan akan ditanggung seluruhnya dan harus dibayar oleh PEMINJAM;
 									</li>
 									<li>
 										Semua biaya-biaya atau ongkos-ongkos termasuk ongkos penafsiran, penyimpanan, pemeliharaan, dan pemeriksaan barang jaminan, ongkos pengacara, ongkos penjualan, biaya-biaya atau ongkos-ongkos lainnya, dan segala macam biaya-biaya atau ongkos-ongkos yang ditimbulkan karena perjanjian ini maupun yang akan timbul di kemudian hari selama biaya-biaya atau ongkos-ongkos tersebut masih berhubungan dengan perjanjian kredit ini akan dibebankan dan dipikul oleh Peminjam;
@@ -192,10 +192,10 @@
 								</ol>	
 							</li>
 							<li>
-								Seluruh hutang PEMINJAM berikut denda dan biaya-biaya lain yang timbul kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} dapat ditagih secara seketika dan sekaligus bilamana :
+								Seluruh hutang PEMINJAM berikut denda dan biaya-biaya lain yang timbul kepada {{strtoupper($pimpinan['kantor']['jenis'])}} dapat ditagih secara seketika dan sekaligus bilamana :
 								<ol type="a">
 									<li>
-										PEMINJAM meninggal dunia kecuali jika para ahli waris dan atau yang memperoleh hak dapat memenuhi seluruh kewajiban PEMINJAM dan memperoleh persetujuan {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}};
+										PEMINJAM meninggal dunia kecuali jika para ahli waris dan atau yang memperoleh hak dapat memenuhi seluruh kewajiban PEMINJAM dan memperoleh persetujuan {{strtoupper($pimpinan['kantor']['jenis'])}};
 									</li>
 									<li>
 										PEMINJAM dinyatakan pailit atau mengajukan pailit atau dapat menunda pemba yaran hutang-hutangnya (surseance van betaling);
@@ -204,7 +204,7 @@
 										Kekayaan PEMINJAM baik sebagian ataupun seluruhnya disita oleh pihak lain;
 									</li>
 									<li>
-										Barang agunan tersebut dipindah tangankan atau dijaminkan kepada pihak ketiga  tanpa mendapatkan persetujuan tertulis dari {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}};
+										Barang agunan tersebut dipindah tangankan atau dijaminkan kepada pihak ketiga  tanpa mendapatkan persetujuan tertulis dari {{strtoupper($pimpinan['kantor']['jenis'])}};
 									</li>
 									<li>
 										PEMINJAM lalai dalam membayar salah satu angsuran atau angsuran-angsurannya ataupun pelunasan pinjaman yang berupa jasa pinjaman, pokok pinjaman, jasa tambahan maupun biaya–biaya lain yang cukup dibuktikan dengan lewatnya waktu;
@@ -216,26 +216,26 @@
 										Bilamana barang jaminan musnah, berkurang nilainnya baik sebagian ataupun seluruhnya atau karena sesuatu hal yang berakhir hak penguasaannya;
 									</li>
 									<li>
-										Bilamana pernyataan-pernyataan, surat-surat, maupun keterangan-keterangan yang diberikan oleh Peminjam kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} dalam rangka pemberian kredit ini ternyata tidak benar dan palsu atau dipalsukan atau tidak mengandung kebenaran materiil;
+										Bilamana pernyataan-pernyataan, surat-surat, maupun keterangan-keterangan yang diberikan oleh Peminjam kepada {{strtoupper($pimpinan['kantor']['jenis'])}} dalam rangka pemberian kredit ini ternyata tidak benar dan palsu atau dipalsukan atau tidak mengandung kebenaran materiil;
 									</li>
 									<li>
-										Menurut penilaian {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} bahwa PEMINJAM tidak dapat menjalankan usahanya dengan baik yang akan mempengaruhi pemenuhan kewajiban PEMINJAM kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}};
+										Menurut penilaian {{strtoupper($pimpinan['kantor']['jenis'])}} bahwa PEMINJAM tidak dapat menjalankan usahanya dengan baik yang akan mempengaruhi pemenuhan kewajiban PEMINJAM kepada {{strtoupper($pimpinan['kantor']['jenis'])}};
 									</li>
 								</ol>
 							</li>
 							<li>
-								Bilamana PEMINJAM bermaksud melunasi hutangnya kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} sebelum berakhirnya masa angsuran atau disebut dengan pelunasan dipercepat, maka PEMINJAM menyetujui untuk :
+								Bilamana PEMINJAM bermaksud melunasi hutangnya kepada {{strtoupper($pimpinan['kantor']['jenis'])}} sebelum berakhirnya masa angsuran atau disebut dengan pelunasan dipercepat, maka PEMINJAM menyetujui untuk :
 								<ol type="a">
 									<li>
 										Membayar penuh angsuran yang telah jatuh tempo;
 									</li>
 									<li>
-										Membayar angsuran yang belum jatuh tempo dikurangi dengan discount yang diberikan oleh {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}. Bilamana Peminjam melakukan pelunasan pinjaman dipercepat sampai dengan  ½ (setengah) masa kontrak pinjaman {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} akan memberikan discount sebesar 50 % dari total sisa bunga yang harus dibayar; atau keringanan sebesar 20% dari total sisa bunga yang harus dibayar bilamana waktu pelunasan lebih dari ½ (setengah) masa kontrak pinjaman;
+										Membayar angsuran yang belum jatuh tempo dikurangi dengan discount yang diberikan oleh {{strtoupper($pimpinan['kantor']['jenis'])}}. Bilamana Peminjam melakukan pelunasan pinjaman dipercepat sampai dengan  ½ (setengah) masa kontrak pinjaman {{strtoupper($pimpinan['kantor']['jenis'])}} akan memberikan discount sebesar 50 % dari total sisa bunga yang harus dibayar; atau keringanan sebesar 20% dari total sisa bunga yang harus dibayar bilamana waktu pelunasan lebih dari ½ (setengah) masa kontrak pinjaman;
 									</li>
 								</ol>
 							</li>
 							<li>
-								Peminjam menyetujui bahwa jumlah uang yang terhutang pada waktu tertentu didasarkan pada bukti dan catatan yang ada pada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} dan yang berlaku mengikat dan sah dalam menentukan dan menetapkan jumlah kredit atau hutang peminjam kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} serta melepaskan haknya untuk mengajukan keberatan atas pembuktian tersebut;
+								Peminjam menyetujui bahwa jumlah uang yang terhutang pada waktu tertentu didasarkan pada bukti dan catatan yang ada pada {{strtoupper($pimpinan['kantor']['jenis'])}} dan yang berlaku mengikat dan sah dalam menentukan dan menetapkan jumlah kredit atau hutang peminjam kepada {{strtoupper($pimpinan['kantor']['jenis'])}} serta melepaskan haknya untuk mengajukan keberatan atas pembuktian tersebut;
 							</li>
 							<li>
 								Peminjam berjanji, menjamin serta mengikatkan diri untuk hal-hal sebagai berikut:
@@ -244,24 +244,24 @@
 										Mendahulukan pembayaran yang terhutang berdasarkan perjanjian kredit ini dari pembayaran lainnya;
 									</li>
 									<li>
-										Tidak mengadakan perjanjian kredit dengan Pihak Lain tanpa mendapat persetujuan tertulis terlebih dahulu dari {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} sepanjang mengenai apa yang diberikan sebagai jaminan dalam perjanjian kredit ini;
+										Tidak mengadakan perjanjian kredit dengan Pihak Lain tanpa mendapat persetujuan tertulis terlebih dahulu dari {{strtoupper($pimpinan['kantor']['jenis'])}} sepanjang mengenai apa yang diberikan sebagai jaminan dalam perjanjian kredit ini;
 									</li>
 									<li>
-										Bahwa Peminjam berjanji untuk memberikan jaminan pengganti ataupun jaminan tambahan bilamana dipandang perlu oleh pihak {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} bilamana jaminan yang diberikan musnah atau berkurang nilainya baik sebagian ataupun seluruhnya atau karena sesuatu hal yang menyebabkan berakhirnya hak penguasaannya;
+										Bahwa Peminjam berjanji untuk memberikan jaminan pengganti ataupun jaminan tambahan bilamana dipandang perlu oleh pihak {{strtoupper($pimpinan['kantor']['jenis'])}} bilamana jaminan yang diberikan musnah atau berkurang nilainya baik sebagian ataupun seluruhnya atau karena sesuatu hal yang menyebabkan berakhirnya hak penguasaannya;
 									</li>
 									<li>
 										Bahwa Peminjam tidak tersangkut dalam suatu perkara atau sengketa apapun;
 									</li>
 									<li>
-										Bahwa Peminjam segera memberitahukan kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} segala perubahan dalam sifat dan/atau lingkup perusahaan atau kejadian/keadaan yang mempunyai pengaruh penting atau buruk atas usaha/kegiatan perusahaan Peminjam;
+										Bahwa Peminjam segera memberitahukan kepada {{strtoupper($pimpinan['kantor']['jenis'])}} segala perubahan dalam sifat dan/atau lingkup perusahaan atau kejadian/keadaan yang mempunyai pengaruh penting atau buruk atas usaha/kegiatan perusahaan Peminjam;
 									</li>
 									<li>
-										Peminjam dengan ini berjanji akan tunduk kepada segala ketentuan-ketentuan dan kebiasaan-kebiasaan yang berlaku pada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}}, baik yang berlaku sekarang maupun di kemudian hari;
+										Peminjam dengan ini berjanji akan tunduk kepada segala ketentuan-ketentuan dan kebiasaan-kebiasaan yang berlaku pada {{strtoupper($pimpinan['kantor']['jenis'])}}, baik yang berlaku sekarang maupun di kemudian hari;
 									</li>
 								</ol>
 							</li>
 							<li>
-								Peminjam menyetujui dan memberi kuasa kepada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} untuk mengalihkan atau menggadai ulangkan atau dengan cara apapun memindahkan dan menyerahkan piutang atau tagihan-tagihan {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} berdasarkan perjanjian ini kepada pihak lain dengan siapa pihak {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} akan membuat perjanjian berikut semua hak, kekuasaan-kekuasaan dan jaminan-jaminan yang ada pada {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} dengan syarat-syarat dan perjanjian-perjanjian yang dianggap baik menurut pandangan {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} sendiri. Perjanjian ini mengikat dan dapat dieksekusi baik oleh {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} maupun pengganti-penggantinya;
+								Peminjam menyetujui dan memberi kuasa kepada {{strtoupper($pimpinan['kantor']['jenis'])}} untuk mengalihkan atau menggadai ulangkan atau dengan cara apapun memindahkan dan menyerahkan piutang atau tagihan-tagihan {{strtoupper($pimpinan['kantor']['jenis'])}} berdasarkan perjanjian ini kepada pihak lain dengan siapa pihak {{strtoupper($pimpinan['kantor']['jenis'])}} akan membuat perjanjian berikut semua hak, kekuasaan-kekuasaan dan jaminan-jaminan yang ada pada {{strtoupper($pimpinan['kantor']['jenis'])}} dengan syarat-syarat dan perjanjian-perjanjian yang dianggap baik menurut pandangan {{strtoupper($pimpinan['kantor']['jenis'])}} sendiri. Perjanjian ini mengikat dan dapat dieksekusi baik oleh {{strtoupper($pimpinan['kantor']['jenis'])}} maupun pengganti-penggantinya;
 							</li>
 							<li>
 								Apabila timbul perselisihan sebagai akibat dari PERJANJIAN ini, pertama-tama akan diselesaikan secara musyawarah antara kedua belah pihak akan tetapi apabila tidak tercapai penyelesaian dalam musyawarah,maka kedua belah pihak sepakat agar sengketa yang timbul diselesaikan di Kantor Panitera Pengadilan Negeri Malang di Malang;
@@ -272,7 +272,7 @@
 						</ol>
 					</p>
 					<p>
-						Demikian syarat-syarat tersebut diatas merupakan satu kesatuan yang tidak terpisahkan dari SURAT PERJANJIAN KREDIT. No. {{$realisasi['isi']['pengajuan']['id']}} tertanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d/m/Y')}} yang telah dimengerti dan disepakati oleh kedua belah pihak.
+						Demikian syarat-syarat tersebut diatas merupakan satu kesatuan yang tidak terpisahkan dari SURAT PERJANJIAN KREDIT. No. _________________ tertanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}} yang telah dimengerti dan disepakati oleh kedua belah pihak.
 					</p>
 				</div> 
 			</div> 

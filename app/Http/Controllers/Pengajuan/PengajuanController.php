@@ -145,25 +145,50 @@ class PengajuanController extends Controller
 
 	public function print($id, $mode)
 	{
-		$realisasi 		= LegalRealisasi::where('pengajuan_id', $id)->where('jenis', $mode)->first();
-		if($realisasi)
-		{
-			$realisasi 	= $realisasi->toArray();
-		}
-		else
-		{
-			if($mode=='permohonan_kredit')
-			{
-				$realisasi['isi']['pengajuan']	= Pengajuan::where('id', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->first()->toArray();
-			}
-			else
-			{
-				$realisasi['isi']['pengajuan']	= Pengajuan::where('id', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->first()->toArray();
+		// $realisasi 		= LegalRealisasi::where('pengajuan_id', $id)->where('jenis', $mode)->first();
+		// if($realisasi)
+		// {
+		// 	$realisasi 	= $realisasi->toArray();
+		// }
+		// else
+		// {
+		// 	if($mode=='permohonan_kredit')
+		// 	{
+				$data['pengajuan']	= Pengajuan::where('id', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->first()->toArray();
 				
-				$realisasi['isi']['survei']		=  Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'surveyor'])->first();
-			}
-		}
-		return view('pengajuan.print.'.$mode, compact('realisasi'));
+				$data['survei']		=  Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_kendaraan.foto', 'jaminan_tanah_bangunan', 'jaminan_tanah_bangunan.foto', 'surveyor'])->first();
+				
+				$data['analisa']	= Analisa::where('pengajuan_id', $data['pengajuan']['id'])->first();
+
+				$data['putusan']	= Putusan::where('pengajuan_id', $data['pengajuan']['id'])->first();
+
+				if(!is_null($data['putusan']))
+				{
+					$tanggal 		= Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('Y-m-d H:i:s');
+				}
+				else
+				{
+					$tanggal 		= Carbon::now()->format('Y-m-d H:i:s');
+				}
+
+				$pimpinan 			= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('role', 'pimpinan')->where('tanggal_masuk', '>=', $tanggal)->where(function($q)use($tanggal){$q->where('tanggal_keluar', '<=', $tanggal)->orwherenull('tanggal_keluar');})->first();
+			// }
+			// else
+			// {
+			// 	$realisasi['isi']['pengajuan']	= Pengajuan::where('id', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->first()->toArray();
+				
+			// }
+		// }
+				if($mode=='perjanjian_kredit' && $data['analisa']['jenis_pinjaman']=='pa')
+				{
+					$mode 	= 'perjanjian_kredit_angsuran';
+				}
+				elseif($mode=='perjanjian_kredit')
+				{
+					$mode 	= 'perjanjian_kredit_musiman';
+				}
+
+		return view('pengajuan.print.'.$mode, compact('data', 'pimpinan'));
 	}
 
 	public function assign_analisa($id = null)

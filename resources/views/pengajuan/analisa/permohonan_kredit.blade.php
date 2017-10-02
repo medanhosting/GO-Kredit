@@ -128,7 +128,7 @@
 								@if($k2!='alamat')
 									<div class="row text-justify" style="margin:10px 0px @if($k2 =='tahun_perolehan') -1px @else 10px @endif -15px;border-bottom:1px solid #eee;">
 										<div class="col-sm-6 text-left">
-											{{str_replace('_', ' ', $k2)}}
+											{{strtoupper(str_replace('_', ' ', $k2))}}
 										</div> 
 										<div class="col-sm-6 text-right" >
 											{{str_replace('_', ' ', $v2)}}
@@ -137,7 +137,7 @@
 								@else
 									<div class="row text-justify" style="margin:10px 0px 10px -15px;border-bottom:1px solid #eee;">
 										<div class="col-sm-6 text-left">
-											{{str_replace('_', ' ', $k2)}}
+											{{strtoupper(str_replace('_', ' ', $k2))}}
 										</div> 
 										<div class="col-sm-6 text-right">
 											@foreach($v2 as $k3 => $v3) 

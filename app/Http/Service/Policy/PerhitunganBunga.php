@@ -44,7 +44,8 @@ class PerhitunganBunga
 			$k_angs 		= $this->formatMoneyFrom($rincian['kemampuan_angsur']);
 			$p_pinjaman 	= $this->formatMoneyFrom($rincian['pokok_pinjaman']);
 
-			$est_bulan 		= (($p_pinjaman + ($p_pinjaman*0.02)) / $k_angs);
+			$est_bulan 		= $p_pinjaman / ($k_angs - ($p_pinjaman*0.02*(1/12)));
+
 			if($p_pinjaman < 25000000)
 			{
 				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.70)/12; 
@@ -74,8 +75,9 @@ class PerhitunganBunga
 			$rincian['bunga_per_tahun']		= $rincian['bunga_per_bulan'] * 12;
 
 			//bunga tahunan
-			$total_bunga  	= $p_pinjaman * $rincian['bunga_per_bulan'];
-			$bulan 			= ceil(($p_pinjaman + $total_bunga)/$k_angs);
+			$bulan 			= ceil($est_bulan);
+			$total_bunga  	= $p_pinjaman * ($rincian['bunga_per_bulan']/100) * $bulan;
+			// $bulan 			= ceil(($p_pinjaman + $total_bunga)/$k_angs);
 
 			//kredit diusulkan
 			$kredit_update 	= $bulan * $k_angs;
@@ -119,7 +121,6 @@ class PerhitunganBunga
 			$k_angs 		= $this->formatMoneyFrom($rincian['kemampuan_angsur']);
 			$p_pinjaman 	= $this->formatMoneyFrom($rincian['pokok_pinjaman']);
 
-			$est_bulan 		= (($p_pinjaman + ($p_pinjaman*0.02)) / $k_angs);
 			if($p_pinjaman < 25000000)
 			{
 				$rincian['bunga_per_bulan']	= 2.80/6; 
@@ -162,7 +163,7 @@ class PerhitunganBunga
 			foreach (range(1, $bulan) as $k) 
 			{
 				$angsuran_bulanan 	= $p_pinjaman/6;
-				$angsuran_bunga 	= ($p_pinjaman * $rincian['bunga_per_bulan'] * 6)/600;
+				$angsuran_bunga 	= $p_pinjaman * ($rincian['bunga_per_bulan']/100);
 
 				$angsuran_bulanan 	= ceil($angsuran_bulanan/100) *100;
 				$angsuran_bunga 	= ceil($angsuran_bunga/100) *100;

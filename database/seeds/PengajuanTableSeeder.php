@@ -61,7 +61,7 @@ class PengajuanTableSeeder extends Seeder
 			'https://i1.wp.com/www.azzhura.com/wp-content/uploads/2015/11/kartu-keluarga.jpg',
 		];
 		
-		$hubungan		= ['orang_tua', 'pasangan', 'anak'];
+		$hubungan		= ['orang_tua', 'suami', 'istri', 'anak'];
 
 		//JAMINAN
 		$jj	= ['bpkb', 'shm', 'shgb'];
@@ -106,7 +106,22 @@ class PengajuanTableSeeder extends Seeder
 			$nasabah['pekerjaan']			= $pekerjaan[rand(0,5)];
 			$nasabah['penghasilan_bersih']	= 'Rp '.rand(1,9).rand(1,9).'00.000';
 			$nasabah['alamat']				= $alamat;
-			$nasabah['keluarga'][0]['hubungan']	= $hubungan[rand(0,2)];
+			$idx_h 	= rand(0,3);
+			if(in_array($idx_h, [1,2]))
+			{
+				if($gndr=='perempuan')
+				{
+					$nasabah['keluarga'][0]['hubungan']	= 'suami';
+				}
+				else
+				{
+					$nasabah['keluarga'][0]['hubungan']	= 'istri';
+				}
+			}
+			else
+			{
+				$nasabah['keluarga'][0]['hubungan']	= $hubungan[$idx_h];
+			}
 			$nasabah['keluarga'][0]['nama']		= $faker->name;
 			$nasabah['keluarga'][0]['nik']		= '35-73-03-'.rand(100000,710000).'-000'.rand(1,4);
 			$nasabah['keluarga'][0]['telepon']	= $faker->phoneNumber;

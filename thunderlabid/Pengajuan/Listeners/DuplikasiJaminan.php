@@ -36,14 +36,14 @@ class DuplikasiJaminan
 		$model = $event->data;
 
 		//check duplikasi jaminan
-		$exists_jaminan		= collect(Jaminan::where('jenis', $model->jenis)->where('pengajuan_id', '<>', $model->pengajuan_id)->whereHas('pengajuan', function($q){$q->status(['permohonan', 'survei', 'analisa']);})->get()->toArray());
+		$exists_jaminan		= collect(Jaminan::where('jenis', $model->jenis)->where('pengajuan_id', '<>', $model->pengajuan_id)->whereHas('pengajuan', function($q){$q->status(['permohonan', 'survei', 'analisa', 'putusan']);})->get()->toArray());
 
 		switch ($model->jenis) {
 			case 'shgb':
-				$cari 		= $exists_jaminan->where('dokumen_jaminan.shgb.nomor_sertifikat', $model->dokumen_jaminan['shgb']['nomor_sertifikat']);
+				$cari 		= $exists_jaminan->where('dokumen_jaminan.shgb.nomor_sertifikat', $model->dokumen_jaminan['shgb']['nomor_sertifikat'])->where('dokumen_jaminan.jenis', $model->dokumen_jaminan['jenis'])->where('dokumen_jaminan.shgb.alamat.kota', $model->dokumen_jaminan['shgb']['alamat']['kota']);
 				break;
 			case 'shm':
-				$cari 		= $exists_jaminan->where('dokumen_jaminan.shm.nomor_sertifikat', $model->dokumen_jaminan['shm']['nomor_sertifikat']);
+				$cari 		= $exists_jaminan->where('dokumen_jaminan.shm.nomor_sertifikat', $model->dokumen_jaminan['shm']['nomor_sertifikat'])->where('dokumen_jaminan.jenis', $model->dokumen_jaminan['jenis'])->where('dokumen_jaminan.shm.alamat.kota', $model->dokumen_jaminan['shm']['alamat']['kota']);
 				break;
 			default:
 				$cari 		= $exists_jaminan->where('dokumen_jaminan.bpkb.nomor_bpkb', $model->dokumen_jaminan['bpkb']['nomor_bpkb']);

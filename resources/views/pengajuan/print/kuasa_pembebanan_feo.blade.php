@@ -47,25 +47,25 @@
 						Saya yang bertanda tangan dibawah ini :	
 					</p>
 					<p>
-					&emsp;&emsp;Nama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$realisasi['isi']['pengajuan']['nasabah']['nama']}}<br/>
+					&emsp;&emsp;Nama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$data['pengajuan']['nasabah']['nama']}}<br/>
 
-					&emsp;&emsp;Pekerjaan&nbsp;&nbsp;: {{ucwords(str_replace('_',' ',$realisasi['isi']['pengajuan']['nasabah']['pekerjaan']))}}<br/>
+					&emsp;&emsp;Pekerjaan&nbsp;&nbsp;: {{ucwords(str_replace('_',' ',$data['pengajuan']['nasabah']['pekerjaan']))}}<br/>
 					
-					&emsp;&emsp;Alamat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{implode(' ', $realisasi['isi']['pengajuan']['nasabah']['alamat'])}}<br/>
+					&emsp;&emsp;Alamat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{implode(' ', $data['pengajuan']['nasabah']['alamat'])}}<br/>
 					
 					&emsp;&emsp;( Selanjutnya  disebut Pemberi Kuasa )</p>
 					
 					<p>Dengan ini memberi kuasa kepada : </p>
 					<p>
-					&emsp;&emsp;{{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}}<br/>
-					&emsp;&emsp;{{implode(' ',$realisasi['isi']['pimpinan']['kantor']['alamat'])}}<br/>
+					&emsp;&emsp;{{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}}<br/>
+					&emsp;&emsp;{{implode(' ',$pimpinan['kantor']['alamat'])}}<br/>
 					<br/>
 					
-					&emsp;&emsp;Nama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$realisasi['isi']['pimpinan']['orang']['nama']}}</br>
+					&emsp;&emsp;Nama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$pimpinan['orang']['nama']}}</br>
 					
-					&emsp;&emsp;Pekerjaan&nbsp;&nbsp;: {{ucwords(str_replace('_', ' ', $realisasi['isi']['pimpinan']['role']))}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}}<br/>
+					&emsp;&emsp;Pekerjaan&nbsp;&nbsp;: {{ucwords(str_replace('_', ' ', $pimpinan['role']))}} {{$pimpinan['kantor']['nama']}}<br/>
 					
-					&emsp;&emsp;Alamat&nbsp;&nbsp;: {{implode(' ',$realisasi['isi']['pimpinan']['orang']['alamat'])}}<br/>
+					&emsp;&emsp;Alamat&emsp;&emsp;: {{implode(' ',$pimpinan['orang']['alamat'])}}<br/>
 					
 					&emsp;&emsp;( Selanjutnya disebut Penerima Kuasa )</p>
 
@@ -81,7 +81,7 @@
 						-----------------------------------------------------------------------------------------------
 					</p>
 					<p>
-						Dengan hak subtitusi untuk membebankan jaminan fiducia atas obyek jaminan fiducia yang akan disebut dibawah ini, guna menjamin pelunasan hutang kredit atas nama  {{$realisasi['isi']['pengajuan']['nasabah']['nama']}} selaku debitur, sejumlah {{$realisasi['isi']['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($realisasi['isi']['putusan']['plafon_pinjaman'])}}). Sejumlah uang yang dapat ditentukan dikemudian hari berdasarkan Perjanjian Kredit yang ditandatangani oleh debitur Pemberi Kuasa dengan {{strtoupper($realisasi['isi']['pimpinan']['kantor']['jenis'])}} {{$realisasi['isi']['pimpinan']['kantor']['nama']}} {{implode(' ',$realisasi['isi']['pimpinan']['kantor']['alamat'])}} selaku kreditur dan dibuktikan dengn Perjanjian Kredit No. {{$realisasi['isi']['pengajuan']['id']}} tertanggal {{$realisasi['isi']['pengajuan']['putusan']['tanggal']}} berikut penambahan, perubahan, perpanjangan serta pembaharuannya yang mungkin diadakan kemudian, sampai nilai penjaminan sebesar {{$realisasi['isi']['putusan']['plafon_pinjaman']}}  atas obyek fiducia berupa kendaraan dengan spesifikasi sebagai berikut :
+						Dengan hak subtitusi untuk membebankan jaminan fiducia atas obyek jaminan fiducia yang akan disebut dibawah ini, guna menjamin pelunasan hutang kredit atas nama  {{$data['pengajuan']['nasabah']['nama']}} selaku debitur, sejumlah {{$data['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($data['putusan']['plafon_pinjaman'])}}). Sejumlah uang yang dapat ditentukan dikemudian hari berdasarkan Perjanjian Kredit yang ditandatangani oleh debitur Pemberi Kuasa dengan {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}} {{implode(' ',$pimpinan['kantor']['alamat'])}} selaku kreditur dan dibuktikan dengn Perjanjian Kredit No. {{$data['pengajuan']['id']}} tertanggal {{$data['pengajuan']['putusan']['tanggal']}} berikut penambahan, perubahan, perpanjangan serta pembaharuannya yang mungkin diadakan kemudian, sampai nilai penjaminan sebesar {{$data['putusan']['plafon_pinjaman']}}  atas obyek fiducia berupa kendaraan dengan spesifikasi sebagai berikut :
 					</p>
 
 					@php $nilai = 0; @endphp
@@ -132,7 +132,7 @@
 
 			<div class="row text-center" style="font-size:11px;">
 				<div class="col-xs-6">
-					{{$realisasi['isi']['pimpinan']['kantor']['alamat']['kota']}}, {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d/m/Y')}}
+					{{$pimpinan['kantor']['alamat']['kota']}}, {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}}
 					<br/>Pemberi Kuasa
 				</div>
 				<div class="col-xs-6">
@@ -144,10 +144,10 @@
 				<div class="clearfix">&nbsp;</div>
 
 				<div class="col-xs-6">
-					({{$realisasi['isi']['pengajuan']['nasabah']['nama']}})
+					({{$data['pengajuan']['nasabah']['nama']}})
 				</div>
 				<div class="col-xs-6">
-					({{$realisasi['isi']['pimpinan']['orang']['nama']}})
+					({{$pimpinan['orang']['nama']}})
 				</div>
 			</div>
 		

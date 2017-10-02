@@ -50,7 +50,7 @@
 								Character
 							</div>
 							<div class="col-xs-6 text-left">
-								{{ucwords(str_replace('_',' ', $realisasi['isi']['analisa']['character']))}}
+								{{ucwords(str_replace('_',' ', $data['analisa']['character']))}}
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -58,7 +58,7 @@
 								Capacity
 							</div>
 							<div class="col-xs-6 text-left">
-								{{ucwords(str_replace('_',' ', $realisasi['isi']['analisa']['capacity']))}}
+								{{ucwords(str_replace('_',' ', $data['analisa']['capacity']))}}
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -66,7 +66,7 @@
 								Collateral
 							</div>
 							<div class="col-xs-6 text-left">
-								{{ucwords(str_replace('_',' ', $realisasi['isi']['analisa']['collateral']))}}
+								{{ucwords(str_replace('_',' ', $data['analisa']['collateral']))}}
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -74,7 +74,7 @@
 								Capital
 							</div>
 							<div class="col-xs-6 text-left">
-								{{ucwords(str_replace('_',' ', $realisasi['isi']['analisa']['capital']))}}
+								{{ucwords(str_replace('_',' ', $data['analisa']['capital']))}}
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -82,7 +82,7 @@
 								Condition
 							</div>
 							<div class="col-xs-6 text-left">
-								{{ucwords(str_replace('_',' ', $realisasi['isi']['analisa']['condition']))}}</p>
+								{{ucwords(str_replace('_',' ', $data['analisa']['condition']))}}</p>
 							</div>
 						</div>
 					</div>
@@ -98,7 +98,7 @@
 								Jenis Pinjaman
 							</div>
 							<div class="col-xs-6 text-right">
-								{{strtoupper($realisasi['isi']['analisa']['jenis_pinjaman'])}}
+								{{strtoupper($data['analisa']['jenis_pinjaman'])}}
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -106,7 +106,7 @@
 								Suku Bunga
 							</div>
 							<div class="col-xs-6 text-right">
-								{{$realisasi['isi']['analisa']['suku_bunga']}} %
+								{{$data['analisa']['suku_bunga']}} %
 							</div>
 						</div>
 
@@ -115,7 +115,7 @@
 								Jangka Waktu
 							</div>
 							<div class="col-xs-6 text-right">
-								{{$realisasi['isi']['analisa']['jangka_waktu']}} bulan
+								{{$data['analisa']['jangka_waktu']}} bulan
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -123,14 +123,14 @@
 								Max. Plafon Kredit
 							</div>
 							<div class="col-xs-6 text-left">
-								{{$realisasi['isi']['analisa']['limit_angsuran']}} x {{$realisasi['isi']['analisa']['limit_jangka_waktu']}} bulan
+								{{$data['analisa']['limit_angsuran']}} x {{$data['analisa']['limit_jangka_waktu']}} bulan
 							</div>
 						</div>
 						<div class="row text-justify">
 							<div class="col-xs-6 text-left">
 							</div>
 							<div class="col-xs-6 text-right">
-								{{$terbilang->formatMoneyTo($terbilang->formatmoneyfrom($realisasi['isi']['analisa']['limit_angsuran']) * $realisasi['isi']['analisa']['limit_jangka_waktu'])}} 
+								{{$terbilang->formatMoneyTo($terbilang->formatmoneyfrom($data['analisa']['limit_angsuran']) * $data['analisa']['limit_jangka_waktu'])}} 
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -138,7 +138,7 @@
 								Kredit yang diusulkan
 							</div>
 							<div class="col-xs-6 text-right">
-								{{$realisasi['isi']['analisa']['kredit_diusulkan']}}
+								{{$data['analisa']['kredit_diusulkan']}}
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -151,7 +151,7 @@
 								Angsuran Pokok
 							</div>
 							<div class="col-xs-6 text-right">
-								{{$realisasi['isi']['analisa']['angsuran_pokok']}}
+								{{$data['analisa']['angsuran_pokok']}}
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -159,7 +159,7 @@
 								Angsuran Bunga
 							</div>
 							<div class="col-xs-6 text-right">
-								{{$realisasi['isi']['analisa']['angsuran_bunga']}}
+								{{$data['analisa']['angsuran_bunga']}}
 							</div>
 						</div>
 						<div class="row text-justify">
@@ -167,14 +167,14 @@
 								Total Angsuran
 							</div>
 							<div class="col-xs-6 text-right">
-								{{$terbilang->formatMoneyTo($terbilang->formatmoneyfrom($realisasi['isi']['analisa']['angsuran_pokok']) + $terbilang->formatmoneyfrom($realisasi['isi']['analisa']['angsuran_bunga']))}} 
+								{{$terbilang->formatMoneyTo($terbilang->formatmoneyfrom($data['analisa']['angsuran_pokok']) + $terbilang->formatmoneyfrom($data['analisa']['angsuran_bunga']))}} 
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-xs-12 text-left">
-						{{$realisasi['isi']['pimpinan']['kantor']['alamat']['kota']}}, {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $realisasi['isi']['putusan']['tanggal'])->format('d/m/Y')}}
+						{{$pimpinan['kantor']['alamat']['kota']}}, {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}}
 					</div>
 				</div>
 				<div class="row">
@@ -184,14 +184,14 @@
 						<br/>
 						<br/>
 						<br/>
-						{{$realisasi['isi']['analisa']['analis']['nama']}}
+						{{$data['analisa']['analis']['nama']}}
 					</div>
 					<div class="col-xs-3 text-left">
 						Pimpinan
 						<br/>
 						<br/>
 						<br/>
-						{{$realisasi['isi']['pimpinan']['orang']['nama']}}
+						{{$pimpinan['orang']['nama']}}
 					</div>
 				</div>
 			</div>
