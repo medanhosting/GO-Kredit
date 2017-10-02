@@ -134,7 +134,7 @@
 									<div class="form-group">
 										<label class="mb-1">NIK</label>
 										<div class="input-group">
-											{!! Form::text('nasabah[nik]', $permohonan['nasabah']['nik'], ['class' => 'nnik form-control inline-edit', 'placeholder' => '35-73-03-148014-0001']) !!}
+											{!! Form::text('nasabah[nik]', $permohonan['nasabah']['nik'], ['class' => 'nnik form-control inline-edit mask-id-card', 'placeholder' => '35-73-03-148014-0001']) !!}
 											<div class="input-group-addon bg-white border-0 invisible">
 												<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
 												<span class="hidden-xs">Memeriksa NIK</span>
