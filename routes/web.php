@@ -68,26 +68,27 @@
 			Route::get('kantor/index/ajax', ['uses' => 'KantorController@ajax', 	'as' => 'kantor.ajax']);
 			
 			Route::resource('karyawan', 	'KaryawanController');
-			Route::post('karyawan/batch',		 	['uses' => 'KaryawanController@batch', 	'as' => 'karyawan.batch']);
-			Route::get('karyawan/batch/upload', 	['uses' => 'KaryawanController@upload', 'as' => 'karyawan.upload']);
-			Route::any('karyawan/index/ajax',		['uses' => 'KaryawanController@ajax', 	'as' => 'karyawan.ajax']);
+			Route::post('karyawan/batch',		 		['uses' => 'KaryawanController@batch', 	'as' => 'karyawan.batch']);
+			Route::get('karyawan/batch/upload', 		['uses' => 'KaryawanController@upload', 'as' => 'karyawan.upload']);
+			Route::any('karyawan/index/ajax',			['uses' => 'KaryawanController@ajax', 	'as' => 'karyawan.ajax']);
 		});
 
-		Route::any('regensi',	['uses' => 'HelperController@getRegensi', 		'as' => 'regensi.index']);
-		Route::any('distrik',	['uses'	=> 'HelperController@getDistrik',		'as' => 'distrik.index']);
-		Route::any('desa',		['uses' => 'HelperController@getDesa',			'as' => 'desa.index']);
-	
-		Route::any('jabatan',	['uses' => 'HelperController@jabatan',			'as' => 'jabatan.index']);
-		Route::any('scopes',	['uses' => 'HelperController@scopes',			'as' => 'scopes.index']);
-		
-		Route::any('upload/image', 		['as' => 'upload.image.store',		'uses' => 'HelperController@storeGambar']);
-		Route::any('remove/image',		['as' => 'upload.image.destroy',	'uses' => 'HelperController@destroyGambar']);
-
-		//ajax data log
-		Route::any('log/nasabah', 		['as' => 'log.nasabah',		'uses' => 'LogController@nasabah']);
-		Route::any('log/bpkb', 			['as' => 'log.bpkb',		'uses' => 'LogController@bpkb']);
-		Route::any('log/sertifikat', 	['as' => 'log.sertifikat',	'uses' => 'LogController@sertifikat']);
 	});
+	Route::any('regensi',	['uses' => 'HelperController@getRegensi', 		'as' => 'regensi.index']);
+	Route::any('distrik',	['uses'	=> 'HelperController@getDistrik',		'as' => 'distrik.index']);
+	Route::any('desa',		['uses' => 'HelperController@getDesa',			'as' => 'desa.index']);
+
+	Route::any('jabatan',	['uses' => 'HelperController@jabatan',			'as' => 'jabatan.index']);
+	Route::any('scopes',	['uses' => 'HelperController@scopes',			'as' => 'scopes.index']);
+	
+	Route::any('upload/image', 		['as' => 'upload.image.store',		'uses' => 'HelperController@storeGambar']);
+	Route::any('remove/image',		['as' => 'upload.image.destroy',	'uses' => 'HelperController@destroyGambar']);
+
+	//ajax data log
+	Route::any('log/nasabah', 		['as' => 'log.nasabah',		'uses' => 'LogController@nasabah']);
+	Route::any('log/bpkb', 			['as' => 'log.bpkb',		'uses' => 'LogController@bpkb']);
+	Route::any('log/sertifikat', 	['as' => 'log.sertifikat',	'uses' => 'LogController@sertifikat']);
+	
 #});
 
 

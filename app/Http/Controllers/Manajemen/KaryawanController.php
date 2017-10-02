@@ -97,7 +97,6 @@ class KaryawanController extends Controller
 			{
 				$orang	= request()->only('nama', 'email', 'telepon', 'telepon', 'alamat');
 			}
-dd($orang);
 			$penempatan 		= request()->get('kantor');
 
 			DB::beginTransaction();
@@ -138,8 +137,8 @@ dd($orang);
 	{
 		if(request()->has('mode'))
 		{
-			switch ($request()->get('mode')) {
-				case 'pindah':
+			switch (request()->get('mode')) {
+				case 'mutasi':
 					return $this->pindah(request()->get('penempatan_id'));
 					break;
 				case 'resign':
@@ -174,7 +173,7 @@ dd($orang);
 	{
 		try {
 			DB::beginTransaction();
-			$penempatan 	= PenempatanKaryawan::findorfail($id);
+			$penempatan 	= PenempatanKaryawan::findorfail($penempatan_id);
 			$penempatan->tanggal_keluar 	= request()->get('tanggal_pindah');
 			$penempatan->save();
 
@@ -188,10 +187,10 @@ dd($orang);
 			$penempatan_baru->save();
 			DB::commit();
 
-			return redirect(route('manajemen.kantor.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]));
+			return redirect(route('manajemen.karyawan.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]));
 		} catch (Exception $e) {
 			DB::rollback();
-			return redirect(route('manajemen.kantor.index', ['id' => $id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
+			return redirect(route('manajemen.karyawan.index', ['id' => $id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
 		}
 	}
 
@@ -199,16 +198,16 @@ dd($orang);
 	{
 		try {
 			DB::beginTransaction();
-			$penempatan 	= PenempatanKaryawan::findorfail($id);
-			$penempatan->tanggal_keluar 	= request()->get('tanggal_pindah');
+			$penempatan 	= PenempatanKaryawan::findorfail($penempatan_id);
+			$penempatan->tanggal_keluar 	= request()->get('tanggal_keluar');
 			$penempatan->save();
 
 			DB::commit();
 
-			return redirect(route('manajemen.kantor.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]));
+			return redirect(route('manajemen.karyawan.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]));
 		} catch (Exception $e) {
 			DB::rollback();
-			return redirect(route('manajemen.kantor.index', ['id' => $id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
+			return redirect(route('manajemen.karyawan.index', ['id' => $id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
 		}
 	}
 
@@ -226,16 +225,18 @@ dd($orang);
 			{
 				$penempatan['policies']	= [];
 			}
-			$penempatan_simpan 		= new PenempatanKaryawan;
+			$penempatan['kantor_id']	= request()->get('kantor_id');
+			$penempatan['orang_id']		= $orang_id;
+			$penempatan_simpan 			= new PenempatanKaryawan;
 			$penempatan_simpan->fill($penempatan);
 			$penempatan_simpan->save();
 
 			DB::commit();
 
-			return redirect(route('manajemen.kantor.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]));
+			return redirect(route('manajemen.karyawan.index', ['kantor_aktif_id' => $this->kantor_aktif['id']]));
 		} catch (Exception $e) {
 			DB::rollback();
-			return redirect(route('manajemen.kantor.index', ['id' => $id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
+			return redirect(route('manajemen.karyawan.index', ['id' => $id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
 		}
 	}
 

@@ -105,7 +105,7 @@
 														<th class="text-center">#</th>
 														<th class="text-center">Kantor</th>
 														<th class="text-center">Jabatan</th>
-														<th class="text-center">Scopes</th>
+														<th class="text-center" style="max-width:320px;">Scopes</th>
 														<th class="text-center">Masa Kerja</th>
 														<th class="text-center">&nbsp;</th>
 													</tr>
@@ -116,7 +116,7 @@
 														<td class="text-center">{{ ($k2 + 1) }}</td>
 														<td class="text-center">{{ ucwords(str_replace('_', ' ', $v2['kantor']['nama'])) }}</td>
 														<td class="text-center">{{ ucwords(str_replace('_', ' ', $v2['role'])) }}</td>
-														<td class="text-center">
+														<td class="text-center" style="max-width:320px;">
 															@foreach($v2['scopes'] as $k3 => $v3)
 																<span class="badge badge-primary"> manage {{$v3}} </span>
 															@endforeach
@@ -129,13 +129,12 @@
 															@endif
 														</td>
 														<td class="text-center">
-															<a href="#" data-toggle="modal" data-target="#pindah">
+															<a href="#" data-toggle="modal" class="mutasi_karyawan" data-target="#mutasi" data-action="{{route('manajemen.karyawan.update', ['orang_id' => $v['id'],'penempatan_id' => $v2['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'mutasi'])}}">
 																<i class="fa fa-exchange"></i>
 															</a> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-															<a href="#" data-toggle="modal" data-target="#resign">
+															<a href="#" data-toggle="modal" class="resign_karyawan" data-target="#resign" data-action="{{route('manajemen.karyawan.update', ['orang_id' => $v['id'],'penempatan_id' => $v2['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'resign'])}}">
 																<i class="fa fa-close"></i>
 															</a>
-
 														</td>
 													</tr>
 													@empty
@@ -145,7 +144,7 @@
 													@endforelse
 													<tr>
 														<td colspan="6" class="text-right">
-															<a href="#" data-toggle="modal" data-target="#assign">
+															<a href="#" class="assign_karyawan" data-toggle="modal" data-target="#assign" data-action="{{route('manajemen.karyawan.update', ['orang_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'assign'])}}">
 																Penempatan Baru
 															</a>
 														</td>
@@ -178,8 +177,7 @@
 		</div>
 	</div>
 
-	@component ('bootstrap.modal', ['id' => 'resign'])
-		{!! Form::open(['url' => '#', 'method' => 'post']) !!}
+	@component ('bootstrap.modal', ['id' => 'resign', 'form' => true, 'method' => 'patch', 'url' => '#'])
 		@slot ('title')
 			Resign dari jabatan ini
 		@endslot
@@ -198,13 +196,11 @@
 
 		@slot ('footer')
 			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-			<a href="#" class="btn btn-info btn-outline">Simpan</a>
+			{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
 		@endslot
-		{!! Form::close() !!}
 	@endcomponent
 
-	@component ('bootstrap.modal', ['id' => 'pindah'])
-		{!! Form::open(['url' => '#', 'method' => 'post']) !!}
+	@component ('bootstrap.modal', ['id' => 'mutasi', 'form' => true, 'method' => 'patch', 'url' => '#'])
 		@slot ('title')
 			Pindah dari jabatan ini
 		@endslot
@@ -213,10 +209,10 @@
 			<p>Untuk pindah jabatan ini, harap mengisi kode kantor yang baru dan tanggal pindah</p>
 
 			<fieldset class="form-group">
-				<label class="text-sm">Kode Kantor</label>
+				<label class="text-sm">KODE KANTOR</label>
 				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-10">
-						{!! Form::text('kantor_id', null, ['class' => 'form-control required', 'placeholder' => 'Masukkan kode kantor']) !!}			
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						@include('manajemen.kantor.ajax-kode-pusat', ['kantor' => ['pusat' => $kantor_aktif]])
 					</div>
 				</div>
 			</fieldset>
@@ -233,13 +229,11 @@
 
 		@slot ('footer')
 			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-			<a href="#" class="btn btn-info btn-outline">Simpan</a>
+			{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
 		@endslot
-		{!! Form::close() !!}
 	@endcomponent
 
-	@component ('bootstrap.modal', ['id' => 'assign'])
-		{!! Form::open(['url' => '#', 'method' => 'post']) !!}
+	@component ('bootstrap.modal', ['id' => 'assign', 'form' => true, 'method' => 'patch', 'url' => '#'])
 		@slot ('title')
 			Penempatan Baru
 		@endslot
@@ -247,19 +241,10 @@
 		@slot ('body')
 			<p>Untuk penempatan baru, harap mengisi form berikut</p>
 			<fieldset class="form-group">
-				<label class="text-sm">Kode Kantor</label>
+				<label class="text-sm">KODE KANTOR</label>
 				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-10">
-						{!! Form::text('kantor[kantor_id]', null, ['class' => 'form-control required', 'placeholder' => 'Masukkan kode kantor']) !!}			
-					</div>
-				</div>
-			</fieldset>
-
-			<fieldset class="form-group">
-				<label class="text-sm">Jabatan</label>
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-10">
-						{!! Form::text('kantor[role]', null, ['class' => 'form-control required', 'placeholder' => 'Masukkan jabatan']) !!}			
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						@include('manajemen.kantor.ajax-kode-pusat', ['kantor' => ['pusat' => $kantor_aktif]])
 					</div>
 				</div>
 			</fieldset>
@@ -267,21 +252,26 @@
 			<fieldset class="form-group">
 				<label class="text-sm">Tanggal Masuk Kerja</label>
 				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-10">
+					<div class="col-xs-12 col-sm-12 col-md-12">
 						{!! Form::text('kantor[tanggal_masuk]', null, ['class' => 'form-control required', 'placeholder' => 'Masukkan tanggal masuk']) !!}			
 					</div>
 				</div>
 			</fieldset>
 
 			<fieldset class="form-group">
-				<label class="text-sm">Scopes</label>
+				<label class="text-sm">JABATAN</label>
 				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-10">
-						<select class="scopesselect form-control" name="kantor[scopes][]" multiple="multiple" style="width:300px;">
-							@foreach($scopes as $k => $v)
-								<option value="{{$v}}">Manage {{ucwords($v)}}</option>
-							@endforeach
-						</select>	
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<select class="jabatan-select form-control" name="kantor[role]" style="width:100%"></select>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset class="form-group">
+				<label class="text-sm">WEWENANG</label>
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<select class="scopes-select form-control" name="kantor[scopes][]" multiple="multiple" style="width:100%"></select>	
 					</div>
 				</div>
 			</fieldset>
@@ -289,9 +279,8 @@
 
 		@slot ('footer')
 			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-			<a href="#" class="btn btn-info btn-outline">Simpan</a>
+			{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
 		@endslot
-		{!! Form::close() !!}
 	@endcomponent
 @endpush
 
@@ -300,12 +289,69 @@
 @endpush
 
 @push('js')
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-
 	<script type="text/javascript">
-	   	$(document).ready(function() {
-		    $('.scopesselect').select2();
+		//MODAL PARSE DATA ATTRIBUTE//
+		$("a.assign_karyawan").on("click", parsingDataAttributeAssign);
+
+		function parsingDataAttributeAssign(){
+			$('#assign').find('form').attr('action', $(this).attr("data-action"));
+		}
+
+		$("a.resign_karyawan").on("click", parsingDataAttributeResign);
+
+		function parsingDataAttributeResign(){
+			$('#resign').find('form').attr('action', $(this).attr("data-action"));
+		}
+
+		$("a.mutasi_karyawan").on("click", parsingDataAttributeMutasi);
+
+		function parsingDataAttributeMutasi(){
+			$('#mutasi').find('form').attr('action', $(this).attr("data-action"));
+		}
+
+   		$(".scopes-select").select2({
+			ajax: {
+				url: "{{route('scopes.index')}}",
+				data: function (params) {
+				var jabatan = $('.jabatan-select').select2('data');
+						return {
+							role: jabatan[0].id // search term
+						};
+					},
+				processResults: function (data, params) {
+					return {
+						results:  $.map(data, function (scope) {
+							return {
+								text: 'Manage '+scope,
+								id: scope
+							}
+						})
+					};
+				},
+			}
+		});
+
+		$(".jabatan-select").select2({
+			tags: true,
+			ajax: {
+				url: "{{route('jabatan.index')}}",
+				data: function (params) {
+				var kantor = $('.kode-pusat-kantor').select2('data');
+						return {
+							// kantor_aktif_id: kantor[0].id // search term
+						};
+					},
+				processResults: function (data, params) {
+					return {
+						results:  $.map(data, function (jabatan) {
+							return {
+								text: jabatan.role,
+								id: jabatan.role
+							}
+						})
+					};
+				},
+			}
 		});
 	</script>
 @endpush

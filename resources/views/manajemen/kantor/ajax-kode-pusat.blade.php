@@ -1,11 +1,8 @@
-<select class="kode-pusat-kantor form-control required" name="kantor_id">
+<select class="kode-pusat-kantor form-control required" name="kantor_id" style="width:100%;">
 	<option value="{{$kantor['pusat']['id']}}">{{$kantor['pusat']['nama']}}</option>
 </select>
 
 @push('js')
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-
 	<script type="text/javascript">
 		$(".kode-pusat-kantor").select2({
 			ajax: {
