@@ -19,6 +19,8 @@ class CreateSurveiFotoTable extends Migration
 			$table->text('arsip_foto');
 			$table->timestamps();
 			$table->softDeletes();
+
+            $table->index(['deleted_at', 'survei_detail_id']);
 		});
 	}
 

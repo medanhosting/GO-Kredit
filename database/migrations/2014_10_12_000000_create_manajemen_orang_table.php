@@ -24,6 +24,10 @@ class CreateManajemenOrangTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(['deleted_at', 'nip']);
+            $table->index(['deleted_at', 'email']);
+            $table->index(['deleted_at', 'nama']);
         });
     }
 

@@ -21,6 +21,8 @@ class CreateLegalRealisasiTable extends Migration
 			$table->text('isi');
 			$table->timestamps();
 			$table->softDeletes();
+
+            $table->index(['deleted_at', 'pengajuan_id', 'jenis']);
 		});
 	}
 

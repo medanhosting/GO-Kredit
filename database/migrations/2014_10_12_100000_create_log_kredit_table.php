@@ -21,6 +21,9 @@ class CreateLogKreditTable extends Migration
 			$table->string('jaminan_tipe');
 			$table->timestamps();
 			$table->softDeletes();
+
+			$table->index(['deleted_at', 'pengajuan_id', 'nasabah_id']);
+			$table->index(['deleted_at', 'pengajuan_id', 'jaminan_id', 'jaminan_tipe']);
 		});
 	}
 

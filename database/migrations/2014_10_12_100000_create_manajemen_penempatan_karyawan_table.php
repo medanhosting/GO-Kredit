@@ -24,6 +24,8 @@ class CreateManajemenPenempatanKaryawanTable extends Migration
 			$table->datetime('tanggal_keluar')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
+
+            $table->index(['deleted_at', 'kantor_id', 'orang_id']);
 		});
 	}
 

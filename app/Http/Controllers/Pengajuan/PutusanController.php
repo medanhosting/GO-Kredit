@@ -48,7 +48,7 @@ class PutusanController extends Controller
 			$order 	= $order.' terlama';
 		}
 
-		$pengajuan 				= Pengajuan::status($status)->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'status_permohonan']);
+		$pengajuan 				= Pengajuan::status($status)->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'status_permohonan', 'putusan']);
 
 		if (request()->has('q'))
 		{

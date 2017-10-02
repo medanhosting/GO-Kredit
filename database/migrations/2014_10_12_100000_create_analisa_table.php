@@ -33,6 +33,8 @@ class CreateAnalisaTable extends Migration
 			$table->double('angsuran_bunga');
 			$table->timestamps();
 			$table->softDeletes();
+			
+            $table->index(['deleted_at', 'pengajuan_id']);
 		});
 	}
 

@@ -26,6 +26,8 @@ class CreateManajemenKantorTable extends Migration
 			$table->softDeletes();
 		
 			$table->primary('id');
+
+			$table->index(['deleted_at', 'nama']);
 		});
 	}
 

@@ -31,6 +31,8 @@ class CreatePutusanTable extends Migration
 			$table->text('catatan')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
+			
+            $table->index(['deleted_at', 'pengajuan_id']);
 		});
 	}
 

@@ -15,13 +15,15 @@ class CreatePengajuanJaminanTable extends Migration
 	{
 		Schema::create('p_jaminan', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('pengajuan_id');
 			$table->enum('jenis', ['bpkb', 'shm', 'shgb']);
 			$table->double('nilai_jaminan');
 			$table->integer('tahun_perolehan');
 			$table->text('dokumen_jaminan');
-			$table->string('pengajuan_id');
 			$table->timestamps();
 			$table->softDeletes();
+
+            $table->index(['deleted_at', 'pengajuan_id', 'jenis']);
 		});
 	}
 

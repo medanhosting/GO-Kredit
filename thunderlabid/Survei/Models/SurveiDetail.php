@@ -412,7 +412,7 @@ class SurveiDetail extends Model
 
 	public function getHasFotoAttribute()
 	{
-		if(count($this->foto))
+		if($this->jenis == 'collateral' && count($this->foto))
 		{
 			return true;
 		}
@@ -513,6 +513,7 @@ class SurveiDetail extends Model
 		$rules['harga_taksasi']		= ['required'];
 		$rules['persentasi_bank']	= ['required'];
 		$rules['harga_bank']		= ['required'];
+		$rules['has_foto']			= ['required'];
 
 		return $rules;
 	}
@@ -560,6 +561,7 @@ class SurveiDetail extends Model
 		$rules['njop_tanah']		= ['required'];
 		$rules['persentasi_taksasi']			= ['required'];
 		$rules['harga_taksasi']		= ['required'];
+		$rules['has_foto']			= ['required', 'between:1,1'];
 
 		return $rules;
 	}
