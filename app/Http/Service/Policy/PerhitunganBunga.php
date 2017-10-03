@@ -119,9 +119,9 @@ class PerhitunganBunga
 		try
 		{
 			$rincian['pokok_pinjaman']		= $this->pengajuan_kredit;
-			$rincian['kemampuan_angsur']	= $this->kemampuan_angsur;
+			// $rincian['kemampuan_angsur']	= $this->kemampuan_angsur;
 
-			$k_angs 		= $this->formatMoneyFrom($rincian['kemampuan_angsur']);
+			// $k_angs 		= $this->formatMoneyFrom($rincian['kemampuan_angsur']);
 			$p_pinjaman 	= $this->formatMoneyFrom($rincian['pokok_pinjaman']);
 
 			if($p_pinjaman < 25000000)
