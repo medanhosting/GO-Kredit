@@ -12,9 +12,11 @@
 				<div class="col-3">
 					{!! Form::bsText('Pokok Pinjaman', 'pokok_pinjaman', null, ['class' => 'form-control mask-money', 'placeholder' => 'masukkan pokok pinjaman']) !!}
 				</div>
+				@if($mode=='pa')
 				<div class="col-3">
 					{!! Form::bsText('Kemampuan Angsur', 'kemampuan_angsur', null, ['class' => 'form-control mask-money', 'placeholder' => 'masukkan kemampuan angsur']) !!}
 				</div>
+				@endif
 				<div class="col-3">
 					{!! Form::bsText('Bunga per Tahun', 'bunga_per_tahun', null, ['class' => 'form-control', 'placeholder' => 'masukkan bunga per tahun']) !!}
 				</div>
