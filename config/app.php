@@ -77,7 +77,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'id',
 
     /*
     |--------------------------------------------------------------------------
@@ -90,7 +90,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'id',
 
     /*
     |--------------------------------------------------------------------------
@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        // Barryvdh\Debugbar\ServiceProvider::class,
 
         Thunderlabid\Manajemen\ManajemenServiceProvider::class,
         Thunderlabid\Pengajuan\PengajuanServiceProvider::class,
@@ -233,6 +234,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'MessageBag' => Illuminate\Support\MessageBag::class,
+        // 'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];

@@ -229,7 +229,7 @@ class Pengajuan extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['pokok_pinjaman']				= ['required', 'numeric'];
+		$rules['pokok_pinjaman']				= ['required', 'numeric', 'min:2500000'];
 		$rules['kemampuan_angsur']				= ['required', 'numeric'];
 		$rules['is_mobile']						= ['boolean'];
 		$rules['dokumen_pelengkap.ktp']			= ['url'];

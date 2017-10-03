@@ -106,7 +106,7 @@
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Pokok Jaminan', 'pokok_pinjaman', $permohonan['pokok_pinjaman'], ['class' => 'form-control mask-money inline-edit text-info', 'placeholder' => 'pokok pinjaman'], true, 'Min. Rp. 2.500.000') !!}
+								{!! Form::vText('Pokok Pinjaman', 'pokok_pinjaman', $permohonan['pokok_pinjaman'], ['class' => 'form-control mask-money inline-edit text-info', 'placeholder' => 'pokok pinjaman'], true, 'Min. Rp. 2.500.000') !!}
 							</div>
 						</div>
 						<div class="row">
