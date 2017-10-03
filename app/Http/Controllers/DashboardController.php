@@ -37,7 +37,7 @@ class DashboardController extends Controller
 
 		$rincian 	= [];
 
-		if(request()->has('kemampuan_angsur') && request()->has('pokok_pinjaman'))
+		if(request()->has('pokok_pinjaman'))
 		{
 			if($mode=='pa')
 			{

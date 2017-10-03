@@ -22,7 +22,7 @@ class PerhitunganBunga
 	 * @param  $file
 	 * @return void
 	 */
-	public function __construct($pengajuan_kredit, $kemampuan_angsur, $bunga_per_bulan = null)
+	public function __construct($pengajuan_kredit, $kemampuan_angsur = 'Rp 0', $bunga_per_bulan = null)
 	{
 		$this->pengajuan_kredit 	= $pengajuan_kredit;
 		$this->kemampuan_angsur 	= $kemampuan_angsur;
