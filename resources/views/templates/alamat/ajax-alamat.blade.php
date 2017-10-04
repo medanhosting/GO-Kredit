@@ -1,33 +1,48 @@
 <div class="col-auto col-md-10">
-	{!! Form::bsText('Jalan', $prefix.'[alamat]'.$suffix, $alamat['alamat'], ['class' => 'alamat form-control '.$inline, 'placeholder' => 'JL. Adi Sucipto Gang 2 Nomor 11']) !!}
+	{!! Form::bsText('Jalan', $prefix.'[alamat]'.$suffix, $alamat['alamat'], ['class' => 'alamat form-control '.$inline, 'placeholder' => 'JL. Adi Sucipto Gang 2 Nomor 11'], true) !!}
 </div>
 <div class="row ml-0 mr-0">
 	<div class="col-auto col-md-5">
-		{!! Form::bsText('RT', $prefix.'[rt]'.$suffix, $alamat['rt'], ['class' => 'rt form-control mask-rt-rw '.$inline, 'placeholder' => '001']) !!}
+		{!! Form::bsText('RT', $prefix.'[rt]'.$suffix, $alamat['rt'], ['class' => 'rt form-control mask-rt-rw '.$inline, 'placeholder' => '001'], true) !!}
 	</div>
 	<div class="col-auto col-md-5">
-		{!! Form::bsText('RW', $prefix.'[rw]'.$suffix, $alamat['rw'], ['class' => 'rw form-control mask-rt-rw '.$inline, 'placeholder' => '002']) !!}
+		{!! Form::bsText('RW', $prefix.'[rw]'.$suffix, $alamat['rw'], ['class' => 'rw form-control mask-rt-rw '.$inline, 'placeholder' => '002'], true) !!}
 	</div>
 </div>
 
 <div class="col-auto col-md-10">
-	{!! Form::bsText('Desa/Dusun', $prefix.'[kelurahan]'.$suffix, $alamat['kelurahan'], ['class' => 'kelurahan form-control '.$inline, 'placeholder' => 'MERGAN']) !!}
+	{!! Form::bsText('Desa/Dusun', $prefix.'[kelurahan]'.$suffix, $alamat['kelurahan'], ['class' => 'kelurahan form-control '.$inline, 'placeholder' => 'MERGAN'], true) !!}
 </div>
 
 <div class="col-auto col-md-10">
 	<div class="form-group">
 		{!! Form::label('', 'KECAMATAN', ['class' => 'text-uppercase mb-1']) !!}
-		<select class="ajax-teritori-kecamatan custom-select {{$inline}} kecamatan form-control required" name="{{$prefix}}[kecamatan]{{$suffix}}" style="width:100%">
+		<select class="ajax-teritori-kecamatan custom-select {{$inline}} kecamatan form-control required @if($errors->has($prefix.'[kecamatan]'.$suffix)) is-invalid @endif" name="{{$prefix}}[kecamatan]{{$suffix}}" style="width:100%">
 			<option value="{{$kecamatan}}">{{$kecamatan}}</option>
 		</select>
+
+		@if ($errors->has($prefix.'[kecamatan]'.$suffix))
+		<div class="invalid-feedback">
+			@foreach ($errors->get($name) as $v)
+				{{ $v }}<br>
+			@endforeach
+		</div>
+		@endif
 	</div>
 </div>
 
 <div class="col-auto col-md-10">
 		{!! Form::label('', 'KOTA/KABUPATEN', ['class' => 'text-uppercase mb-1']) !!}
-	<select class="ajax-teritori-kota custom-select {{$inline}} kota form-control required" name="{{$prefix}}[kota]{{$suffix}}" style="width:100%">
+	<select class="ajax-teritori-kota custom-select {{$inline}} kota form-control required @if($errors->has($prefix.'[kota]'.$suffix)) is-invalid @endif" name="{{$prefix}}[kota]{{$suffix}}" style="width:100%">
 		<option value="{{$kota}}">{{$kota}}</option>
 	</select>
+	@if ($errors->has($prefix.'[kota]'.$suffix))
+	<div class="invalid-feedback">
+		@foreach ($errors->get($name) as $v)
+			{{ $v }}<br>
+		@endforeach
+	</div>
+	@endif
 </div>
 
 @push('js')

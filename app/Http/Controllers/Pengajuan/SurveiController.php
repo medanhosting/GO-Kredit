@@ -146,10 +146,10 @@ class SurveiController extends Controller
 
 				$collateral->survei_id 		= $id;
 				$collateral->jenis 			= 'collateral';
-				$key 	= key(request()->get('collateral'));
+				$key 	= key(request()->get('collateral')[request()->get('survei_detail_id')]);
 
 				$ds_all = $collateral->dokumen_survei;
-				$ds		= array_merge($collateral->dokumen_survei['collateral'][$key], request()->get('collateral')[$key]);
+				$ds		= array_merge($collateral->dokumen_survei['collateral'][$key], request()->get('collateral')[request()->get('survei_detail_id')][$key]);
 
 				$ds_all['collateral'][$key] = $ds;
 				$collateral->dokumen_survei = $ds_all;
@@ -158,7 +158,50 @@ class SurveiController extends Controller
 
 			return redirect(route('pengajuan.survei.show', ['id' => request()->get('lokasi_id'), 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => 'survei']));
 		} catch (Exception $e) {
-			return redirect()->back()->withErrors($e->getMessage());
+
+			foreach ($e->getMessage()->toarray() as $k => $v) {
+				$exp 	= explode('.', $k);
+
+				if(request()->has('collateral'))
+				{
+					if(count($exp) ==4)
+					{
+						$msg[$exp[1].'['.request()->get('survei_detail_id').']['.$exp[2].']['.$exp[3].']'] 	= $v;
+					}
+					elseif(count($exp) ==3)
+					{
+						$msg[$exp[1].'['.request()->get('survei_detail_id').']['.$exp[2].']'] 	= $v;
+					}
+					elseif(count($exp) ==2)
+					{
+						$msg[$exp[1].'['.request()->get('survei_detail_id').']'] 	= $v;
+					}
+					else
+					{
+						$msg[$exp[0].'['.request()->get('survei_detail_id').']'] 	= $v;
+					}
+				}
+				else
+				{
+					if(count($exp) ==4)
+					{
+						$msg[$exp[1].'['.$exp[2].']['.$exp[3].']'] 	= $v;
+					}
+					elseif(count($exp) ==3)
+					{
+						$msg[$exp[1].'['.$exp[2].']'] 	= $v;
+					}
+					elseif(count($exp) ==2)
+					{
+						$msg[$exp[1]] 	= $v;
+					}
+					else
+					{
+						$msg[$exp[0]] = $v;
+					}
+				}
+			}
+			return redirect()->back()->withErrors($msg);
 		}
 
 	}
@@ -178,6 +221,8 @@ class SurveiController extends Controller
 				})->where('id', $id)->first();
 
 			$survei 		= Survei::where('id', $lokasi['survei_id'])->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'surveyor', 'jaminan_kendaraan.foto', 'jaminan_tanah_bangunan.foto'])->first()->toArray();
+
+			$permohonan 	= Pengajuan::where('id', $survei['pengajuan_id'])->with(['jaminan_kendaraan', 'jaminan_tanah_bangunan'])->first();
 
 			$breadcrumb 	= [
 				[
@@ -344,7 +389,7 @@ class SurveiController extends Controller
 			view()->share('breadcrumb', $breadcrumb);
 			view()->share('status', $status);
 
-			$this->layout->pages 	= view('pengajuan.survei.show', compact('survei', 'lokasi', 'checker', 'percentage'));
+			$this->layout->pages 	= view('pengajuan.survei.show', compact('survei', 'lokasi', 'checker', 'percentage', 'permohonan'));
 			return $this->layout;
 
 		} catch (Exception $e) {

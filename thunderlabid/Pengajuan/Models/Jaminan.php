@@ -110,7 +110,7 @@ class Jaminan extends Model
 		// $rules['dokumen_jaminan.bpkb.atas_nama']		= ['required_if:jenis,bpkb', 'max:255'];
 		$rules['dokumen_jaminan.bpkb.tipe']				= ['required_if:jenis,bpkb', 'max:255'];
 
-		$rules['dokumen_jaminan.shm.tipe']				= ['required_if:jenis,shm', 'max:255', 'in:tanah,tanah_dan_bangunan'];
+		$rules['dokumen_jaminan.shm.tipe']				= ['required_if:jenis,shm', 'max:255', 'in:tanah,tanah_dan_bangunan,pekarangan,sawah,tambak'];
 		$rules['dokumen_jaminan.shm.nomor_sertifikat']	= ['required_if:jenis,shm', 'max:255'];
 		// $rules['dokumen_jaminan.shm.atas_nama']			= ['required_if:jenis,shm', 'max:255'];
 		
@@ -120,9 +120,14 @@ class Jaminan extends Model
 		$rules['dokumen_jaminan.shm.luas_tanah']		= ['numeric'];
 		$rules['dokumen_jaminan.shm.luas_bangunan']		= ['numeric'];
 		
-		$rules['dokumen_jaminan.shm.alamat']			= ['required_if:jenis,shm', 'array'];
+		$rules['dokumen_jaminan.shm.alamat.alamat']		= ['max:255'];
+		$rules['dokumen_jaminan.shm.alamat.rt']			= ['required_with:dokumen_jaminan.shm.alamat.alamat'];
+		$rules['dokumen_jaminan.shm.alamat.rw']			= ['required_with:dokumen_jaminan.shm.alamat.alamat'];
+		$rules['dokumen_jaminan.shm.alamat.kelurahan']	= ['required_with:dokumen_jaminan.shm.alamat.alamat'];
+		$rules['dokumen_jaminan.shm.alamat.kecamatan']	= ['required_with:dokumen_jaminan.shm.alamat.alamat'];
+		$rules['dokumen_jaminan.shm.alamat.kota']		= ['required_if:jenis,shm'];
 
-		$rules['dokumen_jaminan.shgb.tipe']						= ['required_if:jenis,shgb', 'max:255', 'in:tanah,tanah_dan_bangunan'];
+		$rules['dokumen_jaminan.shgb.tipe']						= ['required_if:jenis,shgb', 'max:255', 'in:tanah,tanah_dan_bangunan,pekarangan,sawah,tambak'];
 		$rules['dokumen_jaminan.shgb.nomor_sertifikat']			= ['required_if:jenis,shgb', 'max:255'];
 		$rules['dokumen_jaminan.shgb.masa_berlaku_sertifikat']	= ['required_if:jenis,shgb', 'max:255', 'date_format:"Y"'];
 		// $rules['dokumen_jaminan.shgb.atas_nama']				= ['required_if:jenis,shgb', 'max:255'];
@@ -133,7 +138,12 @@ class Jaminan extends Model
 		$rules['dokumen_jaminan.shgb.luas_tanah']		= ['numeric'];
 		$rules['dokumen_jaminan.shgb.luas_bangunan']	= ['numeric'];
 		
-		$rules['dokumen_jaminan.shgb.alamat']			= ['required_if:jenis,shgb', 'array'];
+		$rules['dokumen_jaminan.shgb.alamat.alamat']	= ['max:255'];
+		$rules['dokumen_jaminan.shgb.alamat.rt']		= ['required_with:dokumen_jaminan.shgb.alamat.alamat'];
+		$rules['dokumen_jaminan.shgb.alamat.rw']		= ['required_with:dokumen_jaminan.shgb.alamat.alamat'];
+		$rules['dokumen_jaminan.shgb.alamat.kelurahan']	= ['required_with:dokumen_jaminan.shgb.alamat.alamat'];
+		$rules['dokumen_jaminan.shgb.alamat.kecamatan']	= ['required_with:dokumen_jaminan.shgb.alamat.alamat'];
+		$rules['dokumen_jaminan.shgb.alamat.kota']		= ['required_if:jenis,shgb'];
 
 		$rules['pengajuan_id']		= ['required'];
 

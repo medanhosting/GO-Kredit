@@ -108,6 +108,7 @@ class SurveiDetail extends Model
 			$variable['capital']['rumah']['nilai_rumah']			= $this->formatMoneyFrom($variable['capital']['rumah']['nilai_rumah']);
 			$variable['capital']['kendaraan']['nilai_kendaraan']	= $this->formatMoneyFrom($variable['capital']['kendaraan']['nilai_kendaraan']);
 			$variable['capital']['usaha']['nilai_aset']				= $this->formatMoneyFrom($variable['capital']['usaha']['nilai_aset']);
+			$variable['capital']['usaha']['omzet_bulanan']			= $this->formatMoneyFrom($variable['capital']['usaha']['omzet_bulanan']);
 
 			if(isset($variable['capital']['hutang']))
 			{
@@ -209,8 +210,8 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.capital.rumah.status']			= ['required_if:jenis,capital','in:milik_sendiri,keluarga,dinas,sewa'];
 		$rules['dokumen_survei.capital.rumah.sewa_sejak']		= ['required_if:dokumen_survei.capital.rumah.status,sewa'];
 		$rules['dokumen_survei.capital.rumah.masa_sewa']		= ['required_if:dokumen_survei.capital.rumah.status,sewa'];
-		$rules['dokumen_survei.capital.rumah.angsuran_bulanan']	= ['numeric'];
-		$rules['dokumen_survei.capital.rumah.lama_angsuran']	= ['required_with:dokumen_survei.capital.rumah.angsuran_bulanan', 'numeric'];
+		$rules['dokumen_survei.capital.rumah.angsuran_bulanan']	= ['required_if:dokumen_survei.capital.rumah.status,angsuran'];
+		$rules['dokumen_survei.capital.rumah.lama_angsuran']	= ['required_if:dokumen_survei.capital.rumah.status,angsuran'];
 		$rules['dokumen_survei.capital.rumah.lama_menempati']	= ['required_if:jenis,capital', 'numeric'];
 		$rules['dokumen_survei.capital.rumah.luas_rumah']		= ['required_if:jenis,capital', 'numeric'];
 		$rules['dokumen_survei.capital.rumah.nilai_rumah']		= ['required_if:jenis,capital', 'numeric'];
@@ -219,24 +220,25 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.capital.kendaraan.jumlah_kendaraan_roda_2']	= ['required_if:jenis,capital', 'numeric'];
 		$rules['dokumen_survei.capital.kendaraan.nilai_kendaraan']			= ['required_if:jenis,capital', 'numeric'];
 		
-		$rules['dokumen_survei.capital.usaha.nama_usaha']		= ['required_if:jenis,capital', 'max:255'];
-		$rules['dokumen_survei.capital.usaha.bidang_usaha']		= ['required_if:jenis,capital', 'max:255'];
-		$rules['dokumen_survei.capital.usaha.lama_usaha']		= ['required_if:jenis,capital', 'numeric'];
-		$rules['dokumen_survei.capital.usaha.status']			= ['required_if:jenis,capital', 'in:milik_sendiri,milik_keluarga,kerjasama_bagi_hasil'];
-		$rules['dokumen_survei.capital.usaha.bagi_hasil']		= ['required_if:dokumen_survei.capital.usaha.status,kerjasama_bagi_hasil'];
-		$rules['dokumen_survei.capital.usaha.nilai_aset']		= ['required_if:jenis,capital'];
-		$rules['dokumen_survei.capital.usaha.omzet_bulanan']	= ['required_if:jenis,capital'];
+		$rules['dokumen_survei.capital.usaha.nama_usaha']		= ['max:255'];
+		$rules['dokumen_survei.capital.usaha.bidang_usaha']		= ['max:255'];
+		// $rules['dokumen_survei.capital.usaha.lama_usaha']		= ['numeric'];
+		$rules['dokumen_survei.capital.usaha.status']			= ['in:milik_sendiri,milik_keluarga,kerjasama_bagi_hasil'];
+		// $rules['dokumen_survei.capital.usaha.bagi_hasil']		= ['required_if:dokumen_survei.capital.usaha.status,kerjasama_bagi_hasil', 'numeric'];
+		$rules['dokumen_survei.capital.usaha.nilai_aset']		= ['numeric'];
+		$rules['dokumen_survei.capital.usaha.omzet_bulanan']	= ['numeric'];
 		
 		$rules['dokumen_survei.capital.hutang.*.nama_bank']			= ['max:255'];
 		$rules['dokumen_survei.capital.hutang.*.jumlah_pinjaman']	= ['numeric'];
 		$rules['dokumen_survei.capital.hutang.*.jumlah_angsuran']	= ['numeric'];
-		$rules['dokumen_survei.capital.hutang.*.jangka_waktu']		= ['numeric'];
+		// $rules['dokumen_survei.capital.hutang.*.jangka_waktu']		= ['numeric'];
 
 		//COLLATERAL
 		$rules['dokumen_survei.collateral.jenis']			= ['required_if:jenis,collateral', 'in:bpkb,shm,shgb'];
 
 		// $rules['dokumen_survei.collateral.bpkb.merk']			= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
 		// $rules['dokumen_survei.collateral.bpkb.tipe']			= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
+		// $rules['dokumen_survei.collateral.bpkb.nomor_polisi']	= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
 		// $rules['dokumen_survei.collateral.bpkb.nomor_polisi']	= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
 		// $rules['dokumen_survei.collateral.bpkb.warna']			= ['required_if:dokumen_survei.collateral.jenis,bpkb'];
 		// $rules['dokumen_survei.collateral.bpkb.tahun']			= ['required_if:dokumen_survei.collateral.jenis,bpkb', 'date_format:"Y"', 'before:'.date('Y', strtotime('now'))];
@@ -263,6 +265,7 @@ class SurveiDetail extends Model
 		// $rules['dokumen_survei.collateral.shm.alamat']			= ['required_if:dokumen_survei.collateral.jenis,shm'];
 		// $rules['dokumen_survei.collateral.shm.tipe']			= ['required_if:dokumen_survei.collateral.jenis,shm', 'in:tanah,tanah_dan_bangunan'];
 		// $rules['dokumen_survei.collateral.shm.luas_tanah']		= ['required_if:dokumen_survei.collateral.jenis,shm'];
+		$rules['dokumen_survei.collateral.shm.panjang_tanah']	= ['numeric'];
 		// $rules['dokumen_survei.collateral.shm.panjang_tanah']	= ['required_if:dokumen_survei.collateral.jenis,shm'];
 		// $rules['dokumen_survei.collateral.shm.lebar_tanah']		= ['required_if:dokumen_survei.collateral.jenis,shm'];
 		// $rules['dokumen_survei.collateral.shm.luas_bangunan']	= ['required_if:dokumen_survei.collateral.shm.tipe,tanah_dan_bangunan'];
@@ -286,6 +289,7 @@ class SurveiDetail extends Model
 		// $rules['dokumen_survei.collateral.shm.njop_tanah']		= ['required_if:dokumen_survei.collateral.jenis,shm', 'numeric'];
 		// $rules['dokumen_survei.collateral.shm.nilai_bangunan']	= ['required_if:dokumen_survei.collateral.shm.tipe,tanah_dan_bangunan', 'numeric'];
 		// $rules['dokumen_survei.collateral.shm.njop_bangunan']	= ['required_if:dokumen_survei.collateral.shm.tipe,tanah_dan_bangunan', 'numeric'];
+		$rules['dokumen_survei.collateral.shm.persentasi_taksasi']	= ['numeric'];
 		// $rules['dokumen_survei.collateral.shm.persentasi_taksasi']	= ['required_if:dokumen_survei.collateral.jenis,shm', 'numeric'];
 		// $rules['dokumen_survei.collateral.shm.harga_taksasi']		= ['required_if:dokumen_survei.collateral.jenis,shm', 'numeric'];
 
@@ -365,6 +369,7 @@ class SurveiDetail extends Model
 			$variable['capital']['rumah']['nilai_rumah']			= $this->formatMoneyTo($variable['capital']['rumah']['nilai_rumah']);
 			$variable['capital']['kendaraan']['nilai_kendaraan']	= $this->formatMoneyTo($variable['capital']['kendaraan']['nilai_kendaraan']);
 			$variable['capital']['usaha']['nilai_aset']				= $this->formatMoneyTo($variable['capital']['usaha']['nilai_aset']);
+			$variable['capital']['usaha']['omzet_bulanan']			= $this->formatMoneyTo($variable['capital']['usaha']['omzet_bulanan']);
 
 			if(isset($variable['capital']['hutang']))
 			{

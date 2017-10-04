@@ -240,7 +240,7 @@ class Pengajuan extends Model
 
 		$rules['nasabah.nik']					= ['required_if:is_mobile,false', 'max:255'];
 		$rules['nasabah.nama']					= ['required_with:nasabah.nik', 'max:255'];
-		$rules['nasabah.tanggal_lahir']			= ['required_with:nasabah.nik', 'date_format:"Y-m-d"'];
+		$rules['nasabah.tanggal_lahir']			= ['required_with:nasabah.nik', 'date_format:"Y-m-d"', 'before:'.date('Y-m-d', strtotime('- 17 years'))];
 		$rules['nasabah.tempat_lahir']			= ['required_with:nasabah.nik', 'max:255'];
 		$rules['nasabah.jenis_kelamin']			= ['required_with:nasabah.nik', 'in:laki-laki,perempuan'];
 		$rules['nasabah.status_perkawinan']		= ['required_with:nasabah.nik', 'in:belum_kawin,kawin,cerai,cerai_mati'];
@@ -250,8 +250,17 @@ class Pengajuan extends Model
 		// $rules['nasabah.telepon']				= ['required', 'max:40'];
 		$rules['nasabah.nomor_whatsapp']		= ['max:255'];
 		$rules['nasabah.email']					= ['max:40'];
-		$rules['nasabah.alamat']				= ['required_with:nasabah.nik', 'array'];
-		$rules['nasabah.keluarga']				= ['array'];
+		$rules['nasabah.alamat.alamat']			= ['required_with:nasabah.nik'];
+		$rules['nasabah.alamat.rt']				= ['required_with:nasabah.nik'];
+		$rules['nasabah.alamat.rw']				= ['required_with:nasabah.nik'];
+		$rules['nasabah.alamat.kelurahan']		= ['required_with:nasabah.nik'];
+		$rules['nasabah.alamat.kecamatan']		= ['required_with:nasabah.nik'];
+		$rules['nasabah.alamat.kota']			= ['required_with:nasabah.nik'];
+		
+		$rules['nasabah.keluarga.*.hubungan']	= ['in:orang_tua,anak,suami,istri,saudara'];
+		$rules['nasabah.keluarga.*.nik']		= ['required_with:nasabah.keluarga.*.hubungan'];
+		$rules['nasabah.keluarga.*.nama']		= ['required_with:nasabah.keluarga.*.hubungan'];
+		$rules['nasabah.keluarga.*.telepon']	= ['required_with:nasabah.keluarga.*.hubungan'];
 
 		$data 						= $this->attributes;
 		$data['nasabah'] 			= json_decode($data['nasabah'], true);

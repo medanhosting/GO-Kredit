@@ -99,11 +99,7 @@
 						@else
 						{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 						@endif
-						<div class="row">
-							<div class="col">
-								{!! Form::vText('Tanggal Pengajuan', 'tanggal_pengajuan', $permohonan['status_terakhir']['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
-							</div>
-						</div>
+						
 						<div class="row">
 							<div class="col">
 								{!! Form::vText('Pokok Pinjaman', 'pokok_pinjaman', $permohonan['pokok_pinjaman'], ['class' => 'form-control mask-money inline-edit text-info', 'placeholder' => 'pokok pinjaman'], true, 'Min. Rp. 2.500.000') !!}
@@ -150,19 +146,19 @@
 										@endif
 									</div>
 									{!! Form::bsCheckbox('Nasabah menggunakan e-KTP', 'nasabah[is_ektp]', $permohonan['nasabah']['is_ektp'], ['class' => 'nis_ektp form-check-input inline-edit'], true) !!}
-									{!! Form::bsText('Nama', 'nasabah[nama]', $permohonan['nasabah']['nama'], ['class' => 'nnama form-control inline-edit', 'placeholder' => 'Tukimin']) !!}
-									{!! Form::bsText('Tempat lahir', 'nasabah[tempat_lahir]', $permohonan['nasabah']['tempat_lahir'], ['class' => 'ntempat_lahir form-control inline-edit', 'placeholder' => 'Malang']) !!}
-									{!! Form::bsText('Tanggal lahir', 'nasabah[tanggal_lahir]', $permohonan['nasabah']['tanggal_lahir'], ['class' => 'ntanggal_lahir form-control inline-edit mask-date', 'placeholder' => 'dd/mm/yyyy']) !!}
-									{!! Form::bsSelect('Jenis Kelamin', 'nasabah[jenis_kelamin]', ['' => 'pilih', 'laki-laki' => 'Laki-Laki', 'perempuan' => 'perempuan'], $permohonan['nasabah']['jenis_kelamin'], ['class' => 'custom-select njenis_kelamin form-control inline-edit']) !!}
-									{!! Form::bsSelect('Status pernikahan', 'nasabah[status_perkawinan]', array_merge(['' => 'pilih'], $status_perkawinan), $permohonan['nasabah']['status_perkawinan'], ['class' => 'custom-select nstatus_perkawinan form-control inline-edit']) !!}
-									{!! Form::bsSelect('Pekerjaan', 'nasabah[pekerjaan]', array_merge(['' => 'pilih'], $jenis_pekerjaan), $permohonan['nasabah']['pekerjaan'], ['class' => 'custom-select npekerjaan form-control inline-edit']) !!}
-									{!! Form::bsText('Penghasilan Bersih', 'nasabah[penghasilan_bersih]', $permohonan['nasabah']['penghasilan_bersih'], ['class' => 'npenghasilan_bersih form-control inline-edit mask-money', 'placeholder' => 'masukkan penghasilan bersih']) !!}
+									{!! Form::bsText('Nama', 'nasabah[nama]', $permohonan['nasabah']['nama'], ['class' => 'nnama form-control inline-edit', 'placeholder' => 'Tukimin'], true) !!}
+									{!! Form::bsText('Tempat lahir', 'nasabah[tempat_lahir]', $permohonan['nasabah']['tempat_lahir'], ['class' => 'ntempat_lahir form-control inline-edit', 'placeholder' => 'Malang'], true) !!}
+									{!! Form::bsText('Tanggal lahir', 'nasabah[tanggal_lahir]', $permohonan['nasabah']['tanggal_lahir'], ['class' => 'ntanggal_lahir form-control inline-edit mask-date', 'placeholder' => 'dd/mm/yyyy'], true) !!}
+									{!! Form::bsSelect('Jenis Kelamin', 'nasabah[jenis_kelamin]', ['' => 'pilih', 'laki-laki' => 'Laki-Laki', 'perempuan' => 'perempuan'], $permohonan['nasabah']['jenis_kelamin'], ['class' => 'custom-select njenis_kelamin form-control inline-edit'], true) !!}
+									{!! Form::bsSelect('Status pernikahan', 'nasabah[status_perkawinan]', array_merge(['' => 'pilih'], $status_perkawinan), $permohonan['nasabah']['status_perkawinan'], ['class' => 'custom-select nstatus_perkawinan form-control inline-edit'], true) !!}
+									{!! Form::bsSelect('Pekerjaan', 'nasabah[pekerjaan]', array_merge(['' => 'pilih'], $jenis_pekerjaan), $permohonan['nasabah']['pekerjaan'], ['class' => 'custom-select npekerjaan form-control inline-edit'], true) !!}
+									{!! Form::bsText('Penghasilan Bersih', 'nasabah[penghasilan_bersih]', $permohonan['nasabah']['penghasilan_bersih'], ['class' => 'npenghasilan_bersih form-control inline-edit mask-money', 'placeholder' => 'masukkan penghasilan bersih'], true) !!}
 									<div class="clearfix">&nbsp;</div>
 
 									<h6 class="text-secondary"><strong><u>Kontak</u></strong></h6>
-									{!! Form::bsText('No. Telp', 'nasabah[telepon]', $permohonan['nasabah'][telepon], ['class' => 'ntelepon form-control inline-edit mask-no-telepon', 'placeholder' => '0888 3738 4401']) !!}
-									{!! Form::bsText('No. Whatsapp', 'nasabah[nomor_whatsapp]', $permohonan['nasabah']['nomor_whatsapp'], ['class' => 'nnomor_whatsapp form-control inline-edit mask-no-handphone', 'placeholder' => '0888 3738 4401']) !!}
-									{!! Form::bsText('Email', 'nasabah[email]', $permohonan['nasabah'][email], ['class' => 'nemail form-control inline-edit', 'placeholder' => 'tukimin@gmail.com']) !!}
+									{!! Form::bsText('No. Telp', 'nasabah[telepon]', $permohonan['nasabah'][telepon], ['class' => 'ntelepon form-control inline-edit mask-no-telepon', 'placeholder' => '0888 3738 4401'], true) !!}
+									{!! Form::bsText('No. Whatsapp', 'nasabah[nomor_whatsapp]', $permohonan['nasabah']['nomor_whatsapp'], ['class' => 'nnomor_whatsapp form-control inline-edit mask-no-handphone', 'placeholder' => '0888 3738 4401'], true) !!}
+									{!! Form::bsText('Email', 'nasabah[email]', $permohonan['nasabah'][email], ['class' => 'nemail form-control inline-edit', 'placeholder' => 'tukimin@gmail.com'], true) !!}
 									<div class="clearfix">&nbsp;</div>
 
 									<h6 class="text-secondary"><strong><u>Alamat</u></strong></h6>
@@ -387,7 +383,7 @@
 										
 										{!! Form::vText('L. Tanah', 'jaminan_tanah_bangunan['.($ktb+1).'][luas_tanah]', $vtb['dokumen_jaminan'][$vtb['jenis']]['luas_tanah'], ['class' => 'jtbltanah form-control text-info inline-edit', 'placeholder' => '36'], true) !!}
 									
-										<div class="laban" style="@if($vtb['dokumen_jaminan'][$vtb['jenis']]['tipe']=='tanah') display: none; @endif">
+										<div class="laban" style="@if($vtb['dokumen_jaminan'][$vtb['jenis']]['tipe']!='tanah_dan_bangunan') display: none; @endif">
 										{!! Form::vText('L. Bangunan', 'jaminan_tanah_bangunan['.($ktb+1).'][luas_bangunan]', $vtb['dokumen_jaminan'][$vtb['jenis']]['luas_bangunan'], ['class' => 'jtblbangunan form-control text-info inline-edit', 'placeholder' => '24'], true) !!}
 										</div>
 
@@ -703,10 +699,10 @@
 		///HIDE LUAS BANGUNAN JAMINAN TB JIKA TIPE TANAH///
 		function checkTipeSTF(){
 			var tr 	= $(this).closest('tr');
-			if($(this).val()=='tanah'){
-				tr.find('.laban').hide();
-			}else{
+			if($(this).val()=='tanah_dan_bangunan'){
 				tr.find('.laban').show();
+			}else{
+				tr.find('.laban').hide();
 			}
 		}
 

@@ -8,7 +8,7 @@
 
 <div id="accordion" role="tablist" aria-multiselectable="true">
 	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="character" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+		<div class="card-header" role="tab" id="kredit" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
 			<div class="row">
 				<div class="col-sm-8">
 					KREDIT
@@ -40,7 +40,7 @@
 		</div>
 	</div>
 	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="character" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+		<div class="card-header" role="tab" id="nasabah" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
 			<div class="row">
 				<div class="col-sm-8">
 					NASABAH
@@ -76,7 +76,7 @@
 		</div>
 	</div>
 	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="character" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+		<div class="card-header" role="tab" id="keluarga" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
 			<div class="row">
 				<div class="col-sm-8">
 					KELUARGA
@@ -104,7 +104,7 @@
 		</div>
 	</div>
 	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="character" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+		<div class="card-header" role="tab" id="jaminan" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
 			<div class="row">
 				<div class="col-sm-8">
 					JAMINAN

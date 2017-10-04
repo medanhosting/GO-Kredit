@@ -78,6 +78,11 @@
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs" role="tablist">
 					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#permohonan" role="tab">
+							Permohonan Kredit
+						</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link @if($lokasi['agenda']=='nasabah') active @endif" data-toggle="tab" href="#character" role="tab">
 							Character @if(!$checker['character']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
 						</a>
@@ -106,6 +111,10 @@
 
 				<!-- Tab panes -->
 				<div class="tab-content">
+					<div class="tab-pane" id="permohonan" role="tabpanel">
+						<div class="clearfix">&nbsp;</div>
+						@include('pengajuan.analisa.permohonan_kredit')
+					</div>
 					<div class="tab-pane @if($lokasi['agenda']=='nasabah') active @endif" id="character" role="tabpanel">
 						<div class="clearfix">&nbsp;</div>
 						<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
@@ -135,18 +144,18 @@
 						@forelse($survei['character']['dokumen_survei']['character']['informasi'] as $k => $v)
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Informasi '.$k, 'character[informasi][]', $v, ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
+								{!! Form::vText('Informasi '.$k, 'character[informasi][$k]', $v, ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
 							</div>
 						</div>
 						@empty
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Informasi 1', 'character[informasi][]', null, ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
+								{!! Form::vText('Informasi 1', 'character[informasi][1]', null, ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Informasi 2', 'character[informasi][]', null, ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
+								{!! Form::vText('Informasi 2', 'character[informasi][2]', null, ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
 							</div>
 						</div>
 						@endforelse
@@ -255,9 +264,11 @@
 						<h6 class="text-secondary"><strong><u>Rumah</u></strong></h6>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Status Kepemilikan', 'capital[rumah][status]', ['milik_sendiri' => 'Milik Sendiri', 'keluarga' => 'Keluarga', 'dinas' => 'Dinas', 'sewa' => 'Sewa'], $survei['capital']['dokumen_survei']['capital']['rumah']['status'], ['class' => 'caprumahstatus form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Status Kepemilikan', 'capital[rumah][status]', ['milik_sendiri' => 'Milik Sendiri', 'keluarga' => 'Keluarga', 'dinas' => 'Dinas', 'sewa' => 'Sewa', 'angsuran' => 'KPR/KPA'], $survei['capital']['dokumen_survei']['capital']['rumah']['status'], ['class' => 'caprumahstatus form-control text-info inline-edit'], true) !!}
 							</div>
 						</div>
+
+						<div id="capisewa" @if($survei['capital']['dokumen_survei']['capital']['rumah']['status']!='sewa') style="display:none" @endif>
 						<div class="row">
 							<div class="col">
 								{!! Form::vText('Sewa Sejak', 'capital[rumah][sewa_sejak]', $survei['capital']['dokumen_survei']['capital']['rumah']['sewa_sejak'], ['class' => 'caprumahsewasejak form-control inline-edit text-info', 'placeholder' => '2015'], true) !!}
@@ -268,6 +279,9 @@
 								{!! Form::vText('Masa Sewa', 'capital[rumah][masa_sewa]', $survei['capital']['dokumen_survei']['capital']['rumah']['masa_sewa'], ['class' => 'caprumahmasasewa form-control inline-edit text-info', 'placeholder' => '2 Tahun'], true) !!}
 							</div>
 						</div>
+						</div>
+
+						<div id="capiangs" @if($survei['capital']['dokumen_survei']['capital']['rumah']['status']!='angsuran') style="display:none" @endif>
 						<div class="row">
 							<div class="col">
 								{!! Form::vText('Angsuran Bulanan', 'capital[rumah][angsuran_bulanan]', $survei['capital']['dokumen_survei']['capital']['rumah']['angsuran_bulanan'], ['class' => 'carumahangsuranbulanan mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 3.500.000'], true) !!}
@@ -277,6 +291,7 @@
 							<div class="col">
 								{!! Form::vText('Lama Angsuran', 'capital[rumah][lama_angsuran]', $survei['capital']['dokumen_survei']['capital']['rumah']['lama_angsuran'], ['class' => 'caprumahlamaangsuran form-control inline-edit text-info', 'placeholder' => '2 Tahun'], true) !!}
 							</div>
+						</div>
 						</div>
 						<div class="row">
 							<div class="col">
@@ -461,125 +476,125 @@
 											{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
 												<div class="row">
 													<div class="col">
-														{!! Form::vLabel('Merk', 'collateral[bpkb][merk]', $v['dokumen_survei']['collateral']['bpkb']['merk'], ['class' => 'form-control inline-edit text-info'], true) !!}
+														{!! Form::vLabel('Merk', 'collateral['.$v['id'].'][bpkb][merk]', $v['dokumen_survei']['collateral']['bpkb']['merk'], ['class' => 'form-control inline-edit text-info'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vLabel('Tipe', 'collateral[bpkb][tipe]', $v['dokumen_survei']['collateral']['bpkb']['tipe'], ['class' => 'form-control inline-edit text-info'], true) !!}
+														{!! Form::vLabel('Tipe', 'collateral['.$v['id'].'][bpkb][tipe]', $v['dokumen_survei']['collateral']['bpkb']['tipe'], ['class' => 'form-control inline-edit text-info'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vLabel('Jenis', 'collateral[bpkb][jenis]', ucwords(str_replace('_',' ',$v['dokumen_survei']['collateral']['bpkb']['jenis'])), ['class' => 'form-control inline-edit text-info'], true) !!}
+														{!! Form::vLabel('Jenis', 'collateral['.$v['id'].'][bpkb][jenis]', ucwords(str_replace('_',' ',$v['dokumen_survei']['collateral']['bpkb']['jenis'])), ['class' => 'form-control inline-edit text-info'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vLabel('Tahun', 'collateral[bpkb][tahun]', $v['dokumen_survei']['collateral']['bpkb']['tahun'], ['class' => 'form-control inline-edit text-info'], true) !!}
+														{!! Form::vLabel('Tahun', 'collateral['.$v['id'].'][bpkb][tahun]', $v['dokumen_survei']['collateral']['bpkb']['tahun'], ['class' => 'form-control inline-edit text-info'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vLabel('Nomor BPKB', 'collateral[bpkb][nomor_bpkb]', $v['dokumen_survei']['collateral']['bpkb']['nomor_bpkb'], ['class' => 'form-control inline-edit text-info'], true) !!}
-													</div>
-												</div>
-
-												<div class="row">
-													<div class="col">
-														{!! Form::vText('Nomor Polisi', 'collateral[bpkb][nomor_polisi]', $v['dokumen_survei']['collateral']['bpkb']['nomor_polisi'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'N 5577 CC'], true) !!}
-													</div>
-												</div>
-												<div class="row">
-													<div class="col">
-														{!! Form::vText('Atas Nama', 'collateral[bpkb][atas_nama]', $v['dokumen_survei']['collateral']['bpkb']['atas_nama'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Tukimin'], true) !!}
+														{!! Form::vLabel('Nomor BPKB', 'collateral['.$v['id'].'][bpkb][nomor_bpkb]', $v['dokumen_survei']['collateral']['bpkb']['nomor_bpkb'], ['class' => 'form-control inline-edit text-info'], true) !!}
 													</div>
 												</div>
 
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Nomor Mesin', 'collateral[bpkb][nomor_mesin]', $v['dokumen_survei']['collateral']['bpkb']['nomor_mesin'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'JJ09E1266700'], true) !!}
+														{!! Form::vText('Nomor Polisi', 'collateral['.$v['id'].'][bpkb][nomor_polisi]', $v['dokumen_survei']['collateral']['bpkb']['nomor_polisi'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'N 5577 CC'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Nomor Rangka', 'collateral[bpkb][nomor_rangka]', $v['dokumen_survei']['collateral']['bpkb']['nomor_rangka'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'MM9PK0322CJ173615'], true) !!}
+														{!! Form::vText('Atas Nama', 'collateral['.$v['id'].'][bpkb][atas_nama]', $v['dokumen_survei']['collateral']['bpkb']['atas_nama'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Tukimin'], true) !!}
 													</div>
 												</div>
 
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Warna', 'collateral[bpkb][warna]', $v['dokumen_survei']['collateral']['bpkb']['warna'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Merah'], true) !!}
+														{!! Form::vText('Nomor Mesin', 'collateral['.$v['id'].'][bpkb][nomor_mesin]', $v['dokumen_survei']['collateral']['bpkb']['nomor_mesin'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'JJ09E1266700'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Masa Berlaku STNK', 'collateral[bpkb][masa_berlaku_stnk]', $v['dokumen_survei']['collateral']['bpkb']['masa_berlaku_stnk'], ['class' => 'mask-date form-control inline-edit text-info', 'placeholder' => 'dd/mm/yyyy'], true) !!}
+														{!! Form::vText('Nomor Rangka', 'collateral['.$v['id'].'][bpkb][nomor_rangka]', $v['dokumen_survei']['collateral']['bpkb']['nomor_rangka'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'MM9PK0322CJ173615'], true) !!}
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col">
+														{!! Form::vText('Warna', 'collateral['.$v['id'].'][bpkb][warna]', $v['dokumen_survei']['collateral']['bpkb']['warna'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Merah'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Fungsi Sehari Hari', 'collateral[bpkb][fungsi_sehari_hari]', $v['dokumen_survei']['collateral']['bpkb']['fungsi_sehari_hari'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Transportasi Pribadi'], true) !!}
+														{!! Form::vText('Masa Berlaku STNK', 'collateral['.$v['id'].'][bpkb][masa_berlaku_stnk]', $v['dokumen_survei']['collateral']['bpkb']['masa_berlaku_stnk'], ['class' => 'mask-date form-control inline-edit text-info', 'placeholder' => 'dd/mm/yyyy'], true) !!}
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														{!! Form::vText('Fungsi Sehari Hari', 'collateral['.$v['id'].'][bpkb][fungsi_sehari_hari]', $v['dokumen_survei']['collateral']['bpkb']['fungsi_sehari_hari'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Transportasi Pribadi'], true) !!}
 													</div>
 												</div>
 												
 												<div class="row">
 													<div class="col">
-														{!! Form::vSelect('Faktur Pembelian', 'collateral[bpkb][faktur]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['faktur'], ['class' => 'form-control text-info inline-edit'], true) !!}
+														{!! Form::vSelect('Faktur Pembelian', 'collateral['.$v['id'].'][bpkb][faktur]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['faktur'], ['class' => 'form-control text-info inline-edit'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vSelect('Kwitansi Jual Beli', 'collateral[bpkb][kwitansi_jual_beli]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['kwitansi_jual_beli'], ['class' => 'form-control text-info inline-edit'], true) !!}
+														{!! Form::vSelect('Kwitansi Jual Beli', 'collateral['.$v['id'].'][bpkb][kwitansi_jual_beli]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['kwitansi_jual_beli'], ['class' => 'form-control text-info inline-edit'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vSelect('Kwitansi Kosong', 'collateral[bpkb][kwitansi_kosong]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['kwitansi_kosong'], ['class' => 'form-control text-info inline-edit'], true) !!}
+														{!! Form::vSelect('Kwitansi Kosong', 'collateral['.$v['id'].'][bpkb][kwitansi_kosong]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['kwitansi_kosong'], ['class' => 'form-control text-info inline-edit'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vSelect('KTP a.n. BPKB', 'collateral[bpkb][ktp_an_bpkb]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['ktp_an_bpkb'], ['class' => 'form-control text-info inline-edit'], true) !!}
+														{!! Form::vSelect('KTP a.n. BPKB', 'collateral['.$v['id'].'][bpkb][ktp_an_bpkb]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['ktp_an_bpkb'], ['class' => 'form-control text-info inline-edit'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vSelect('Asuransi', 'collateral[bpkb][asuransi]', ['all_risk' => 'All Risk', 'tlo' => 'TLO', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['asuransi'], ['class' => 'form-control text-info inline-edit'], true) !!}
-													</div>
-												</div>
-
-
-												<div class="row">
-													<div class="col">
-														{!! Form::vSelect('Status Kepemilikan', 'collateral[bpkb][status_kepemilikan]', ['an_sendiri' => 'a.n. Sendiri', 'an_orang_lain_milik_sendiri' => 'a.n. Orang Lain Milik Sendiri', 'an_orang_lain_dengan_surat_kuasa' => 'a.n. Orang Lain dengan Surat Kuasa'], $v['dokumen_survei']['collateral']['bpkb']['status_kepemilikan'], ['class' => 'form-control text-info inline-edit'], true) !!}
-													</div>
-												</div>
-												<div class="row">
-													<div class="col">
-														{!! Form::vSelect('Kondisi Kendaraan', 'collateral[bpkb][kondisi_kendaraan]', ['baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'buruk' => 'Buruk'], $v['dokumen_survei']['collateral']['bpkb']['kondisi_kendaraan'], ['class' => 'form-control text-info inline-edit'], true) !!}
+														{!! Form::vSelect('Asuransi', 'collateral['.$v['id'].'][bpkb][asuransi]', ['all_risk' => 'All Risk', 'tlo' => 'TLO', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral']['bpkb']['asuransi'], ['class' => 'form-control text-info inline-edit'], true) !!}
 													</div>
 												</div>
 
+
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Harga Taksasi', 'collateral[bpkb][harga_taksasi]', $v['dokumen_survei']['collateral']['bpkb']['harga_taksasi'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000'], true) !!}
+														{!! Form::vSelect('Status Kepemilikan', 'collateral['.$v['id'].'][bpkb][status_kepemilikan]', ['an_sendiri' => 'a.n. Sendiri', 'an_orang_lain_milik_sendiri' => 'a.n. Orang Lain Milik Sendiri', 'an_orang_lain_dengan_surat_kuasa' => 'a.n. Orang Lain dengan Surat Kuasa'], $v['dokumen_survei']['collateral']['bpkb']['status_kepemilikan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Persentasi Bank', 'collateral[bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
-													</div>
-												</div>
-												<div class="row">
-													<div class="col">
-														{!! Form::vText('Harga Bank', 'collateral[bpkb][harga_bank]', $v['dokumen_survei']['collateral']['bpkb']['harga_bank'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000'], true) !!}
+														{!! Form::vSelect('Kondisi Kendaraan', 'collateral['.$v['id'].'][bpkb][kondisi_kendaraan]', ['baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'buruk' => 'Buruk'], $v['dokumen_survei']['collateral']['bpkb']['kondisi_kendaraan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 													</div>
 												</div>
 
 												<div class="row">
 													<div class="col">
-														{!! Form::vTextarea('Catatan', 'collateral[bpkb][catatan]', $v['dokumen_survei']['collateral']['bpkb']['catatan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Ada cacat', 'rows' => 5], true) !!}
+														{!! Form::vText('Harga Taksasi', 'collateral['.$v['id'].'][bpkb][harga_taksasi]', $v['dokumen_survei']['collateral']['bpkb']['harga_taksasi'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000'], true) !!}
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														{!! Form::vText('Persentasi Bank', 'collateral['.$v['id'].'][bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+														{!! Form::vText('Harga Bank', 'collateral['.$v['id'].'][bpkb][harga_bank]', $v['dokumen_survei']['collateral']['bpkb']['harga_bank'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000'], true) !!}
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col">
+														{!! Form::vTextarea('Catatan', 'collateral['.$v['id'].'][bpkb][catatan]', $v['dokumen_survei']['collateral']['bpkb']['catatan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Ada cacat', 'rows' => 5], true) !!}
 													</div>
 												</div>
 												
@@ -612,205 +627,205 @@
 											<h6 class="text-secondary"><strong><u>Alamat</u></strong></h6>
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('Alamat', 'collateral['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['alamat'], ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('Alamat', 'collateral['.$v['id'].']['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['alamat'], ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('RT/RW', 'collateral['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['rt'].' / '.$v['dokumen_survei']['collateral'][$jenis]['alamat']['rw'], ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('RT/RW', 'collateral['.$v['id'].']['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['rt'].' / '.$v['dokumen_survei']['collateral'][$jenis]['alamat']['rw'], ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('DESA/DUSUN', 'collateral['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['kelurahan'], ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('DESA/DUSUN', 'collateral['.$v['id'].']['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['kelurahan'], ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('KECAMATAN', 'collateral['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['kecamatan'], ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('KECAMATAN', 'collateral['.$v['id'].']['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['kecamatan'], ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('KOTA/KAB', 'collateral['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['kota'], ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('KOTA/KAB', 'collateral['.$v['id'].']['.$jenis.'][alamat]', $v['dokumen_survei']['collateral'][$jenis]['alamat']['kota'], ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											<h6 class="text-secondary"><strong><u>Informasi Jaminan</u></strong></h6>
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('Tipe', 'collateral['.$jenis.'][tipe]', str_replace('_',' ',$v['dokumen_survei']['collateral'][$jenis]['tipe']), ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('Tipe', 'collateral['.$v['id'].']['.$jenis.'][tipe]', str_replace('_',' ',$v['dokumen_survei']['collateral'][$jenis]['tipe']), ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('Nomor Sertifikat', 'collateral['.$jenis.'][nomor_sertifikat]', $v['dokumen_survei']['collateral'][$jenis]['nomor_sertifikat'], ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('Nomor Sertifikat', 'collateral['.$v['id'].']['.$jenis.'][nomor_sertifikat]', $v['dokumen_survei']['collateral'][$jenis]['nomor_sertifikat'], ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											@if($jenis=='shgb')
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('Berlaku Hingga', 'collateral['.$jenis.'][masa_berlaku_sertifikat]', $v['dokumen_survei']['collateral'][$jenis]['masa_berlaku_sertifikat'], ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('Berlaku Hingga', 'collateral['.$v['id'].']['.$jenis.'][masa_berlaku_sertifikat]', $v['dokumen_survei']['collateral'][$jenis]['masa_berlaku_sertifikat'], ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											@endif
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Atas Nama', 'collateral['.$jenis.'][atas_nama_sertifikat]', $v['dokumen_survei']['collateral'][$jenis]['atas_nama_sertifikat'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
+													{!! Form::vText('Atas Nama', 'collateral['.$v['id'].']['.$jenis.'][atas_nama_sertifikat]', $v['dokumen_survei']['collateral'][$jenis]['atas_nama_sertifikat'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Tukimin'], true) !!}
 												</div>
 											</div>
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('Luas Tanah', 'collateral['.$jenis.'][luas_tanah]', $v['dokumen_survei']['collateral'][$jenis]['luas_tanah'], ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('Luas Tanah', 'collateral['.$v['id'].']['.$jenis.'][luas_tanah]', $v['dokumen_survei']['collateral'][$jenis]['luas_tanah'], ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Panjang Tanah', 'collateral['.$jenis.'][panjang_tanah]', $v['dokumen_survei']['collateral'][$jenis]['panjang_tanah'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
+													{!! Form::vText('Panjang Tanah', 'collateral['.$v['id'].']['.$jenis.'][panjang_tanah]', $v['dokumen_survei']['collateral'][$jenis]['panjang_tanah'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Lebar Tanah', 'collateral['.$jenis.'][lebar_tanah]', $v['dokumen_survei']['collateral'][$jenis]['lebar_tanah'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '6'], true) !!}
+													{!! Form::vText('Lebar Tanah', 'collateral['.$v['id'].']['.$jenis.'][lebar_tanah]', $v['dokumen_survei']['collateral'][$jenis]['lebar_tanah'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '6'], true) !!}
 												</div>
 											</div>
 											@if($v['dokumen_survei']['collateral'][$jenis]['tipe']=='tanah_dan_bangunan')
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('Luas Bangunan', 'collateral['.$jenis.'][luas_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['luas_bangunan'], ['class' => 'form-control inline-edit text-info'], true) !!}
+													{!! Form::vLabel('Luas Bangunan', 'collateral['.$v['id'].']['.$jenis.'][luas_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['luas_bangunan'], ['class' => 'form-control inline-edit text-info'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Panjang Bangunan', 'collateral['.$jenis.'][panjang_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['panjang_bangunan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
+													{!! Form::vText('Panjang Bangunan', 'collateral['.$v['id'].']['.$jenis.'][panjang_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['panjang_bangunan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Lebar Bangunan', 'collateral['.$jenis.'][lebar_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['lebar_bangunan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '6'], true) !!}
+													{!! Form::vText('Lebar Bangunan', 'collateral['.$v['id'].']['.$jenis.'][lebar_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['lebar_bangunan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '6'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Fungsi Bangunan', 'collateral['.$jenis.'][fungsi_bangunan]', ['ruko' => 'Ruko', 'rukan' => 'Rukan', 'rumah' => 'Rumah'], $v['dokumen_survei']['collateral'][$jenis]['fungsi_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Fungsi Bangunan', 'collateral['.$v['id'].']['.$jenis.'][fungsi_bangunan]', ['ruko' => 'Ruko', 'rukan' => 'Rukan', 'rumah' => 'Rumah'], $v['dokumen_survei']['collateral'][$jenis]['fungsi_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Bentuk Bangunan', 'collateral['.$jenis.'][bentuk_bangunan]', ['tingkat' => 'Tingkat', 'tidak_tingkat' => 'Tidak Tingkat'], $v['dokumen_survei']['collateral'][$jenis]['bentuk_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Bentuk Bangunan', 'collateral['.$v['id'].']['.$jenis.'][bentuk_bangunan]', ['tingkat' => 'Tingkat', 'tidak_tingkat' => 'Tidak Tingkat'], $v['dokumen_survei']['collateral'][$jenis]['bentuk_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Konstruksi Bangunan', 'collateral['.$jenis.'][konstruksi_bangunan]', ['permanen' => 'Permanen', 'semi_permanen' => 'Semi Permanen'], $v['dokumen_survei']['collateral'][$jenis]['konstruksi_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Konstruksi Bangunan', 'collateral['.$v['id'].']['.$jenis.'][konstruksi_bangunan]', ['permanen' => 'Permanen', 'semi_permanen' => 'Semi Permanen'], $v['dokumen_survei']['collateral'][$jenis]['konstruksi_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Lantai Bangunan', 'collateral['.$jenis.'][lantai_bangunan]', ['keramik' => 'Keramik', 'tegel_biasa' => 'Tegel Biasa'], $v['dokumen_survei']['collateral'][$jenis]['lantai_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Lantai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][lantai_bangunan]', ['keramik' => 'Keramik', 'tegel_biasa' => 'Tegel Biasa'], $v['dokumen_survei']['collateral'][$jenis]['lantai_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Dinding', 'collateral['.$jenis.'][dinding]', ['tembok' => 'Tembok', 'semi_tembok' => 'Semi Tembok'], $v['dokumen_survei']['collateral'][$jenis]['dinding'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Dinding', 'collateral['.$v['id'].']['.$jenis.'][dinding]', ['tembok' => 'Tembok', 'semi_tembok' => 'Semi Tembok'], $v['dokumen_survei']['collateral'][$jenis]['dinding'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Listrik', 'collateral['.$jenis.'][listrik]', $v['dokumen_survei']['collateral'][$jenis]['listrik'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '900 Watt'], true) !!}
+													{!! Form::vText('Listrik', 'collateral['.$v['id'].']['.$jenis.'][listrik]', $v['dokumen_survei']['collateral'][$jenis]['listrik'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '900 Watt'], true) !!}
 												</div>
 											</div>
 											@endif
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Sumber Air', 'collateral['.$jenis.'][air]', ['pdam' => 'PDAM', 'sumur' => 'Sumur'], $v['dokumen_survei']['collateral'][$jenis]['air'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Sumber Air', 'collateral['.$v['id'].']['.$jenis.'][air]', ['pdam' => 'PDAM', 'sumur' => 'Sumur'], $v['dokumen_survei']['collateral'][$jenis]['air'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Akses Jalan', 'collateral['.$jenis.'][jalan]', ['tanah' => 'Tanah', 'batu' => 'Batu', 'aspal' => 'Aspal'], $v['dokumen_survei']['collateral'][$jenis]['jalan'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Akses Jalan', 'collateral['.$v['id'].']['.$jenis.'][jalan]', ['tanah' => 'Tanah', 'batu' => 'Batu', 'aspal' => 'Aspal'], $v['dokumen_survei']['collateral'][$jenis]['jalan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Letak Lokasi Thdp Jalan', 'collateral['.$jenis.'][letak_lokasi_terhadap_jalan]', ['sama' => 'Sama', 'lebih_rendah' => 'Lebih Rendah', 'lebih_tinggi' => 'Lebih Tinggi'], $v['dokumen_survei']['collateral'][$jenis]['letak_lokasi_terhadap_jalan'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Letak Lokasi Thdp Jalan', 'collateral['.$v['id'].']['.$jenis.'][letak_lokasi_terhadap_jalan]', ['sama' => 'Sama', 'lebih_rendah' => 'Lebih Rendah', 'lebih_tinggi' => 'Lebih Tinggi'], $v['dokumen_survei']['collateral'][$jenis]['letak_lokasi_terhadap_jalan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Lingkungan', 'collateral['.$jenis.'][lingkungan]', ['perumahan' => 'Perumahan', 'kampung' => 'Kampung', 'pertokoan' => 'Pertokoan', 'pasar' => 'Pasar', 'perkantoran' => 'Perkantoran', 'industri' => 'Industri'], $v['dokumen_survei']['collateral'][$jenis]['lingkungan'], ['class' => 'form-control text-info inline-edit'], true) !!}
-												</div>
-											</div>
-
-											<div class="row">
-												<div class="col">
-													{!! Form::vSelect('AJB', 'collateral['.$jenis.'][ajb]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral'][$jenis]['ajb'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Lingkungan', 'collateral['.$v['id'].']['.$jenis.'][lingkungan]', ['perumahan' => 'Perumahan', 'kampung' => 'Kampung', 'pertokoan' => 'Pertokoan', 'pasar' => 'Pasar', 'perkantoran' => 'Perkantoran', 'industri' => 'Industri'], $v['dokumen_survei']['collateral'][$jenis]['lingkungan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('PBB Terakhir', 'collateral['.$jenis.'][pbb_terakhir]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral'][$jenis]['pbb_terakhir'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('AJB', 'collateral['.$v['id'].']['.$jenis.'][ajb]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral'][$jenis]['ajb'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('IMB', 'collateral['.$jenis.'][imb]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral'][$jenis]['imb'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('PBB Terakhir', 'collateral['.$v['id'].']['.$jenis.'][pbb_terakhir]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral'][$jenis]['pbb_terakhir'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Asuransi', 'collateral['.$jenis.'][asuransi]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral'][$jenis]['asuransi'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('IMB', 'collateral['.$v['id'].']['.$jenis.'][imb]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral'][$jenis]['imb'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Nilai Tanah', 'collateral['.$jenis.'][nilai_tanah]', $v['dokumen_survei']['collateral'][$jenis]['nilai_tanah'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
+													{!! Form::vSelect('Asuransi', 'collateral['.$v['id'].']['.$jenis.'][asuransi]', ['ada' => 'Ada', 'tidak_ada' => 'Tidak Ada'], $v['dokumen_survei']['collateral'][$jenis]['asuransi'], ['class' => 'form-control text-info inline-edit'], true) !!}
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col">
+													{!! Form::vText('Nilai Tanah', 'collateral['.$v['id'].']['.$jenis.'][nilai_tanah]', $v['dokumen_survei']['collateral'][$jenis]['nilai_tanah'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('NJOP Tanah', 'collateral['.$jenis.'][njop_tanah]', $v['dokumen_survei']['collateral'][$jenis]['njop_tanah'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
+													{!! Form::vText('NJOP Tanah', 'collateral['.$v['id'].']['.$jenis.'][njop_tanah]', $v['dokumen_survei']['collateral'][$jenis]['njop_tanah'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
 												</div>
 											</div>
 
 											@if($v['dokumen_survei']['collateral'][$jenis]['tipe']=='tanah_dan_bangunan')
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Nilai Bangunan', 'collateral['.$jenis.'][nilai_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['nilai_bangunan'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
+													{!! Form::vText('Nilai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][nilai_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['nilai_bangunan'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
 												</div>
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('NJOP Bangunan', 'collateral['.$jenis.'][njop_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['njop_bangunan'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
+													{!! Form::vText('NJOP Bangunan', 'collateral['.$v['id'].']['.$jenis.'][njop_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['njop_bangunan'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
 												</div>
 											</div>
 											@endif
 
 											<!-- <div class="row">
 												<div class="col">
-													{!! Form::vText('NJOP', 'collateral['.$jenis.'][njop]', $v['dokumen_survei']['collateral'][$jenis]['njop'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 140.000.000'], true) !!}
+													{!! Form::vText('NJOP', 'collateral['.$v['id'].']['.$jenis.'][njop]', $v['dokumen_survei']['collateral'][$jenis]['njop'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 140.000.000'], true) !!}
 												</div>
 											</div> -->
 											
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Persentasi Taksasi', 'collateral['.$jenis.'][persentasi_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['persentasi_taksasi'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
+													{!! Form::vText('Persentasi Taksasi', 'collateral['.$v['id'].']['.$jenis.'][persentasi_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['persentasi_taksasi'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
 												</div>
 											</div>
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Harga Taksasi', 'collateral['.$jenis.'][harga_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['harga_taksasi'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000'], true) !!}
+													{!! Form::vText('Harga Taksasi', 'collateral['.$v['id'].']['.$jenis.'][harga_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['harga_taksasi'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000'], true) !!}
 												</div>
 											</div>
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vTextarea('Catatan', 'collateral['.$jenis.'][catatan]', $v['dokumen_survei']['collateral'][$jenis]['catatan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Ada 2 AC', 'rows' => 5], true) !!}
+													{!! Form::vTextarea('Catatan', 'collateral['.$v['id'].']['.$jenis.'][catatan]', $v['dokumen_survei']['collateral'][$jenis]['catatan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Ada 2 AC', 'rows' => 5], true) !!}
 												</div>
 											</div>
 											
@@ -871,5 +886,26 @@
 		$("a.cloneHutang").on("click", cloneHutang);
 
 		$("a.removeHutang").on("click", removeHutang);
+
+		$("select.caprumahstatus").on("change", checkKepemilikan);
+
+		function checkKepemilikan(){
+			var form = $(this).closest('form');
+			if($(this).val()=='sewa'){
+				form.find('#capisewa').show();
+			}
+			else{
+				form.find('#capisewa').hide();
+			}
+
+			if($(this).val()=='angsuran'){
+				form.find('#capiangs').show();
+			}
+			else{
+				form.find('#capiangs').hide();
+			}
+		}
 	</script>
 @endpush
+capisewa
+capiangs

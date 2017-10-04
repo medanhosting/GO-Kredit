@@ -239,6 +239,11 @@ class PermohonanController extends Controller
 				}
 			}
 
+			if(!count($permohonan['jaminan_kendaraan']) && !count($permohonan['jaminan_tanah_bangunan']))
+			{
+				$total 		= $total + 1;
+			}
+
 
 			$percentage 	= floor(($complete / max($total, 1)) * 100);
 
@@ -284,6 +289,7 @@ class PermohonanController extends Controller
 	public function store ($id = null)
 	{
 		try {
+			$flag = null;
 
 			DB::BeginTransaction();
 
@@ -348,6 +354,7 @@ class PermohonanController extends Controller
 				{
 					if(!is_null($value['nomor_bpkb']))
 					{
+						$flag 	= 'jaminan_kendaraan';
 						$di_jk['jenis']				= 'bpkb';
 						$di_jk['tahun_perolehan']	= $value['tahun_perolehan'];
 						$di_jk['nilai_jaminan']		= $value['nilai_jaminan'];
@@ -377,6 +384,7 @@ class PermohonanController extends Controller
 				{
 					if(!is_null($value['nomor_sertifikat']))
 					{
+						$flag 	= 'jaminan_tanah_bangunan';
 						$di_jtb['jenis']				= $value['jenis'];
 						$di_jtb['tahun_perolehan']		= $value['tahun_perolehan'];
 						$di_jtb['nilai_jaminan']		= $value['nilai_jaminan'];
@@ -408,13 +416,75 @@ class PermohonanController extends Controller
 		} catch (Exception $e) {
 			DB::rollback();
 
-			if (!is_null($id))
-			{
-				return redirect(route($this->view_dir . 'show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage());
+			foreach ($e->getMessage()->toarray() as $k => $v) {
+				$exp 	= explode('.', $k);
+
+				if(str_is('dokumen_jaminan.bpkb.*', $k) || $flag == 'jaminan_kendaraan')
+				{
+					if(count($exp) ==4)
+					{
+						$msg['jaminan_kendaraan['.$key.']['.$exp[2].']['.$exp[3].']'] = $v;
+					}
+					elseif(count($exp) ==3)
+					{
+						$msg['jaminan_kendaraan['.$key.']['.$exp[2].']'] = $v;
+					}
+					elseif(count($exp) ==2)
+					{
+						$msg['jaminan_kendaraan['.$key.']['.$exp[1].']'] = $v;
+					}
+					else
+					{
+						$msg['jaminan_kendaraan['.$key.']['.$exp[0].']'] = $v;
+					}
+				}
+				
+				elseif(str_is('dokumen_jaminan.shm.*', $k) || str_is('dokumen_jaminan.shgb.*', $k) || $flag == 'jaminan_tanah_bangunan')
+				{
+					if(count($exp) ==4)
+					{
+						$msg['jaminan_tanah_bangunan['.$key.']['.$exp[2].']['.$exp[3].']'] = $v;
+					}
+					elseif(count($exp) ==3)
+					{
+						$msg['jaminan_tanah_bangunan['.$key.']['.$exp[2].']'] = $v;
+					}
+					elseif(count($exp) ==2)
+					{
+						$msg['jaminan_tanah_bangunan['.$key.']['.$exp[1].']'] = $v;
+					}
+					else
+					{
+						$msg['jaminan_tanah_bangunan['.$key.']['.$exp[0].']'] = $v;
+					}
+				}
+				else
+				{
+					if(count($exp) ==4)
+					{
+						$msg[$exp[1].'['.$exp[2].']['.$exp[3].']'] 	= $v;
+					}
+					elseif(count($exp) ==3)
+					{
+						$msg[$exp[0].'['.$exp[1].']['.$exp[2].']'] 	= $v;
+					}
+					elseif(count($exp) ==2)
+					{
+						$msg[$exp[0].'['.$exp[1].']'] 	= $v;
+					}
+					else
+					{
+						$msg[$exp[0]] = $v;
+					}
+				}
 			}
 
-			$errors = new MessageBag();
-			return redirect(route($this->view_dir . 'create', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($e->getMessage())->withInput();
+			if (!is_null($id))
+			{
+				return redirect(route($this->view_dir . 'show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($msg);
+			}
+
+			return redirect(route($this->view_dir . 'create', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]))->withErrors($msg)->withInput();
 		}
 	}
 
@@ -510,7 +580,10 @@ class PermohonanController extends Controller
 
 		$tipe_sertifikat	= [
 			'tanah'				=> 'Tanah',
-			'tanah_dan_bangunan'=> 'Tanah & Bangunan'
+			'tanah_dan_bangunan'=> 'Tanah & Bangunan',
+			'pekarangan'		=> 'Pekarangan',
+			'sawah'				=> 'Sawah',
+			'tambak'			=> 'Tambak'
 		];
 
 		$status_perkawinan = [
