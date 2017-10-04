@@ -235,7 +235,6 @@ class SurveiController extends Controller
 				]
 			];
 
-
 			$checker 	= [];
 			$complete 	= 0;
 			$total 		= 0;

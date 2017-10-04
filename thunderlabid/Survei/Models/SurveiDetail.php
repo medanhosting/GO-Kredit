@@ -502,7 +502,7 @@ class SurveiDetail extends Model
 		$rules['warna']				= ['required'];
 		$rules['tahun']				= ['required'];
 		$rules['atas_nama']			= ['required'];
-		$rules['alamat']			= ['required'];
+		// $rules['alamat']			= ['required'];
 		$rules['nomor_bpkb']		= ['required'];
 		$rules['nomor_mesin']		= ['required'];
 		$rules['nomor_rangka']		= ['required'];
