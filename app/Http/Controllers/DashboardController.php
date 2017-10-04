@@ -46,7 +46,7 @@ class DashboardController extends Controller
 			}
 			elseif($mode=='pt')
 			{
-				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/12);
+				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/6);
 				$rincian 	= $rincian->pt();
 			}
 		}

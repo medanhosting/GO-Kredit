@@ -166,7 +166,7 @@ class PerhitunganBunga
 			foreach (range(1, $bulan-1) as $k) 
 			{
 				$angsuran_bulanan 	= 0;
-				$angsuran_bunga  	= ceil(($p_pinjaman * ($rincian['bunga_per_tahun']/100))/5);
+				$angsuran_bunga  	= ceil((($p_pinjaman * ($rincian['bunga_per_tahun']/100))/5)/100) * 100;
 
 				$sisa_pinjaman 		= $sisa_pinjaman - $angsuran_bulanan;
 

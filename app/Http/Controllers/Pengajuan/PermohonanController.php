@@ -337,7 +337,6 @@ class PermohonanController extends Controller
 			$permohonan->fill($data_input);
 			$permohonan->save();
 
-			
 			if (request()->has('jaminan_kendaraan'))
 			{
 				foreach ($permohonan->jaminan_kendaraan as $key => $value)
@@ -347,20 +346,23 @@ class PermohonanController extends Controller
 
 				foreach (request()->get('jaminan_kendaraan') as $key => $value) 
 				{
-					$di_jk['jenis']				= 'bpkb';
-					$di_jk['tahun_perolehan']	= $value['tahun_perolehan'];
-					$di_jk['nilai_jaminan']		= $value['nilai_jaminan'];
+					if(!is_null($value['nomor_bpkb']))
+					{
+						$di_jk['jenis']				= 'bpkb';
+						$di_jk['tahun_perolehan']	= $value['tahun_perolehan'];
+						$di_jk['nilai_jaminan']		= $value['nilai_jaminan'];
 
-					$di_jk['dokumen_jaminan']['bpkb']['jenis']			= $value['jenis'];
-					$di_jk['dokumen_jaminan']['bpkb']['merk']			= $value['merk'];
-					$di_jk['dokumen_jaminan']['bpkb']['tahun']			= $value['tahun'];
-					$di_jk['dokumen_jaminan']['bpkb']['nomor_bpkb']		= $value['nomor_bpkb'];
-					$di_jk['dokumen_jaminan']['bpkb']['tipe']			= $value['tipe'];
-					$di_jk['pengajuan_id']		= $permohonan->id;
+						$di_jk['dokumen_jaminan']['bpkb']['jenis']			= $value['jenis'];
+						$di_jk['dokumen_jaminan']['bpkb']['merk']			= $value['merk'];
+						$di_jk['dokumen_jaminan']['bpkb']['tahun']			= $value['tahun'];
+						$di_jk['dokumen_jaminan']['bpkb']['nomor_bpkb']		= $value['nomor_bpkb'];
+						$di_jk['dokumen_jaminan']['bpkb']['tipe']			= $value['tipe'];
+						$di_jk['pengajuan_id']		= $permohonan->id;
 
-					$jaminan	= new Jaminan;
-					$jaminan->fill($di_jk);
-					$jaminan->save();
+						$jaminan	= new Jaminan;
+						$jaminan->fill($di_jk);
+						$jaminan->save();
+					}
 				}
 			}
 
@@ -373,27 +375,30 @@ class PermohonanController extends Controller
 
 				foreach (request()->get('jaminan_tanah_bangunan') as $key => $value) 
 				{
-					$di_jtb['jenis']				= $value['jenis'];
-					$di_jtb['tahun_perolehan']		= $value['tahun_perolehan'];
-					$di_jtb['nilai_jaminan']		= $value['nilai_jaminan'];
+					if(!is_null($value['nomor_sertifikat']))
+					{
+						$di_jtb['jenis']				= $value['jenis'];
+						$di_jtb['tahun_perolehan']		= $value['tahun_perolehan'];
+						$di_jtb['nilai_jaminan']		= $value['nilai_jaminan'];
 
-					$di_jtb['dokumen_jaminan'][$value['jenis']]['nomor_sertifikat']	= $value['nomor_sertifikat'];
-					$di_jtb['dokumen_jaminan'][$value['jenis']]['tipe']				= $value['tipe'];
+						$di_jtb['dokumen_jaminan'][$value['jenis']]['nomor_sertifikat']	= $value['nomor_sertifikat'];
+						$di_jtb['dokumen_jaminan'][$value['jenis']]['tipe']				= $value['tipe'];
 
-					$di_jtb['dokumen_jaminan'][$value['jenis']]['luas_tanah']		= $value['luas_tanah'];
-					
-					if($value['tipe']=='tanah_dan_bangunan'){
-						$di_jtb['dokumen_jaminan'][$value['jenis']]['luas_bangunan']= $value['luas_bangunan'];
+						$di_jtb['dokumen_jaminan'][$value['jenis']]['luas_tanah']		= $value['luas_tanah'];
+						
+						if($value['tipe']=='tanah_dan_bangunan'){
+							$di_jtb['dokumen_jaminan'][$value['jenis']]['luas_bangunan']= $value['luas_bangunan'];
+						}
+						if($value['jenis']=='shgb'){
+							$di_jtb['dokumen_jaminan'][$value['jenis']]['masa_berlaku_sertifikat']	= $value['masa_berlaku_sertifikat'];
+						}
+						$di_jtb['dokumen_jaminan'][$value['jenis']]['alamat']			= $value['alamat'];
+						$di_jtb['pengajuan_id']			= $permohonan->id;
+
+						$jaminan	= new Jaminan;
+						$jaminan->fill($di_jtb);
+						$jaminan->save();
 					}
-					if($value['jenis']=='shgb'){
-						$di_jtb['dokumen_jaminan'][$value['jenis']]['masa_berlaku_sertifikat']	= $value['masa_berlaku_sertifikat'];
-					}
-					$di_jtb['dokumen_jaminan'][$value['jenis']]['alamat']			= $value['alamat'];
-					$di_jtb['pengajuan_id']			= $permohonan->id;
-
-					$jaminan	= new Jaminan;
-					$jaminan->fill($di_jtb);
-					$jaminan->save();
 				}
 			}
 	

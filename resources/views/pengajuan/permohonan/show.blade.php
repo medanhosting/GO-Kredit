@@ -277,6 +277,8 @@
 						@else
 						{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 						@endif
+						{!!Form::hidden('jaminan_kendaraan', 1)!!}
+						{!!Form::hidden('jaminan_tanah_bangunan', 1)!!}
 						<p class="text-left text-secondary">JAMINAN KENDARAAN</p>
 						<table class="table table-sm table-bordered">
 							<thead class="thead-default">
@@ -407,30 +409,30 @@
 								@empty
 								<tr id="clonedJaminanTB1" class="clonedJaminanTB">
 									<td style="border:1px #aaa solid;padding:15px 25px;" class="text-center">
-										{!! Form::vSelect(null, 'jaminan_tanah_bangunan['.($ktb+1).'][jenis]', $jenis_sertifikat, null, ['class' => 'jtbjenis form-control text-info inline-edit', 'style' => 'width:65px;'], true) !!}
+										{!! Form::vSelect(null, 'jaminan_tanah_bangunan[1][jenis]', $jenis_sertifikat, null, ['class' => 'jtbjenis form-control text-info inline-edit', 'style' => 'width:65px;'], true) !!}
 									</td>
 									<td style="border:1px #aaa solid" class="text-center">
-										{!! Form::vText('No. Sertifikat', 'jaminan_tanah_bangunan['.($ktb+1).'][nomor_sertifikat]', null, ['class' => 'jtbnomorsertifikat form-control text-info inline-edit', 'placeholder' => '12-27-98-36-3-54502'], true) !!}
+										{!! Form::vText('No. Sertifikat', 'jaminan_tanah_bangunan[1][nomor_sertifikat]', null, ['class' => 'jtbnomorsertifikat form-control text-info inline-edit', 'placeholder' => '12-27-98-36-3-54502'], true) !!}
 										
-										{!! Form::vSelect('Tipe', 'jaminan_tanah_bangunan['.($ktb+1).'][tipe]', $tipe_sertifikat, null, ['class' => 'jtbtipe form-control text-info inline-edit', 'style' => 'padding:0px;'], true) !!}
+										{!! Form::vSelect('Tipe', 'jaminan_tanah_bangunan[1][tipe]', $tipe_sertifikat, null, ['class' => 'jtbtipe form-control text-info inline-edit', 'style' => 'padding:0px;'], true) !!}
 
-										<div class="maber" style="@if($vtb['jenis']=='shm') display: none; @endif">
-										{!! Form::vText('Berlaku Hingga', 'jaminan_tanah_bangunan['.($ktb+1).'][masa_berlaku_sertifikat]', null, ['class' => 'jtbmaber mask-year form-control text-info inline-edit', 'placeholder' => '2000'], true) !!}
+										<div class="maber" style="display: none;">
+										{!! Form::vText('Berlaku Hingga', 'jaminan_tanah_bangunan[1][masa_berlaku_sertifikat]', null, ['class' => 'jtbmaber mask-year form-control text-info inline-edit', 'placeholder' => '2000'], true) !!}
 										</div>
 										
-										{!! Form::vText('L. Tanah', 'jaminan_tanah_bangunan['.($ktb+1).'][luas_tanah]', null, ['class' => 'jtbltanah form-control text-info inline-edit', 'placeholder' => '36'], true) !!}
+										{!! Form::vText('L. Tanah', 'jaminan_tanah_bangunan[1][luas_tanah]', null, ['class' => 'jtbltanah form-control text-info inline-edit', 'placeholder' => '36'], true) !!}
 									
 										<div class="laban" style="display: none;">
-										{!! Form::vText('L. Bangunan', 'jaminan_tanah_bangunan['.($ktb+1).'][luas_bangunan]', null, ['class' => 'jtblbangunan form-control text-info inline-edit', 'placeholder' => '24'], true) !!}
+										{!! Form::vText('L. Bangunan', 'jaminan_tanah_bangunan[1][luas_bangunan]', null, ['class' => 'jtblbangunan form-control text-info inline-edit', 'placeholder' => '24'], true) !!}
 										</div>
 
-										@include('templates.alamat.v-ajax-alamat', ['kecamatan' => $kantor_aktif['alamat']['kecamatan'], 'kota' => $kantor_aktif['alamat']['kota'], 'prefix' => 'jaminan_tanah_bangunan['.($ktb+1).'][alamat]', 'alamat' => $kantor_aktif['alamat'], 'class' => 'jtbalamat'])
+										@include('templates.alamat.v-ajax-alamat', ['kecamatan' => $kantor_aktif['alamat']['kecamatan'], 'kota' => $kantor_aktif['alamat']['kota'], 'prefix' => 'jaminan_tanah_bangunan[1][alamat]', 'alamat' => $kantor_aktif['alamat'], 'class' => 'jtbalamat'])
 									</td>
 									<td style="border:1px #aaa solid;padding:15px;" class="text-center">
-										{!! Form::vText(null, 'jaminan_tanah_bangunan['.($ktb+1).'][tahun_perolehan]', null, ['class' => 'jtbtahunoleh form-control text-info inline-edit', 'placeholder' => '2000', 'style' => 'padding:7px;'], true) !!}
+										{!! Form::vText(null, 'jaminan_tanah_bangunan[1][tahun_perolehan]', null, ['class' => 'jtbtahunoleh form-control text-info inline-edit', 'placeholder' => '2000', 'style' => 'padding:7px;'], true) !!}
 									</td>
 									<td style="border:1px #aaa solid;padding:15px;" class="text-center">
-										{!! Form::vText(null, 'jaminan_tanah_bangunan['.($ktb+1).'][nilai_jaminan]', null, ['class' => 'jtbnilai form-control text-info inline-edit mask-money', 'placeholder' => 'harga jaminan', 'style' => 'padding:7px;'], true) !!}
+										{!! Form::vText(null, 'jaminan_tanah_bangunan[1][nilai_jaminan]', null, ['class' => 'jtbnilai form-control text-info inline-edit mask-money', 'placeholder' => 'harga jaminan', 'style' => 'padding:7px;'], true) !!}
 									</td>
 									<td style="border:1px #aaa solid" class="text-center">
 										<a class="cloneJaminanTB text-info" style="font-size:18px;padding:3px;"><i class="fa fa-copy"></i></a> 
