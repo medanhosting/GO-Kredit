@@ -473,7 +473,26 @@
 								<div class="tab-content">
 									@foreach($survei['jaminan_kendaraan'] as $k => $v)
 										<div class="tab-pane" id="jaminan{{$v['id']}}" role="tabpanel">
+												<h6 class="text-secondary"><strong><u>Foto Jaminan</u></strong></h6>
+												<div class="row">
+													@forelse($v['foto']['arsip_foto'] as $k2 => $v2)
+													<div class="col-sm-4">
+														<img src="{{$v2['url']}}"  class="img-fluid" alt="Foto Jaminan" style="border:1px solid #aaa">
+													</div>
+													@empty
+													<div class="col-sm-4"></div>
+													<div class="col-sm-4">
+														<img src="https://images-na.ssl-images-amazon.com/images/I/31PkEHsnkXL._SX342_.jpg"  class="img-fluid" alt="Foto Jaminan" style="border:1px solid #aaa">
+													</div>
+													<div class="col-sm-4"></div>
+													<div class="col-sm-12 text-right text-secondary"><i>*harap melengkapi foto melalui aplikasi mobile</i></div>
+													@endforelse
+												</div>
+												<div class="clearfix">&nbsp;</div>
+												<div class="clearfix">&nbsp;</div>
+
 											{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
+												<h6 class="text-secondary"><strong><u>Data Survei</u></strong></h6>
 												<div class="row">
 													<div class="col">
 														{!! Form::vLabel('Merk', 'collateral['.$v['id'].'][bpkb][merk]', $v['dokumen_survei']['collateral']['bpkb']['merk'], ['class' => 'form-control inline-edit text-info'], true) !!}
@@ -622,7 +641,9 @@
 												@endforelse
 											</div>
 											<div class="clearfix">&nbsp;</div>
+											<div class="clearfix">&nbsp;</div>
 
+											<h6 class="text-secondary"><strong><u>Data Survei</u></strong></h6>
 											{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
 											<h6 class="text-secondary"><strong><u>Alamat</u></strong></h6>
 											<div class="row">
