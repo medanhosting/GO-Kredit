@@ -6,6 +6,10 @@
 				<a href="{{route('simulasi', ['mode' => 'pa', 'kantor_aktif_id' => $kantor_aktif['id']])}}" class="nav-link text-secondary">Simulasi Kredit PA</a>
 				<a href="{{route('simulasi', ['mode' => 'pt', 'kantor_aktif_id' => $kantor_aktif['id']])}}" class="nav-link text-secondary">Simulasi Kredit PT</a>
 				<a href="{{route('pengajuan.permohonan.create', ['status' => 'permohonan', 'kantor_aktif_id' => $kantor_aktif['id']])}}" class="nav-link text-secondary">Permohonan Kredit Baru</a>
+
+				@if(in_array('passcode', $scopes['scopes']))
+				<a href="{{route('pengajuan.passcode.index', ['status' => 'survei', 'kantor_aktif_id' => $kantor_aktif['id']])}}" class="nav-link text-secondary">Generate Passcode</a>
+				@endif
 			</nav>
 		</div>
 	</div>

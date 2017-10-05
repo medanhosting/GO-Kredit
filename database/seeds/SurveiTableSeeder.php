@@ -205,13 +205,18 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c1['dokumen_survei']['character']['catatan']		= $char_catatan[rand(0,1)];
 
 			$s_survei_c2['jenis']	= 'condition';
-			$s_survei_c2['dokumen_survei']['condition']['persaingan_usaha']			= $cond_pu[rand(0,2)];
-			$s_survei_c2['dokumen_survei']['condition']['prospek_usaha']			= $cond_pu[rand(0,2)];
-			$s_survei_c2['dokumen_survei']['condition']['perputaran_usaha']			= $cond_ppu[rand(0,2)];
+			$s_survei_c2['dokumen_survei']['condition']['pekerjaan']				= $value->nasabah['pekerjaan'];
+			if($value->nasabah['pekerjaan']!='pegawai_negeri' && $value->nasabah['pekerjaan']!='polri')
+			{
+				$s_survei_c2['dokumen_survei']['condition']['persaingan_usaha']			= $cond_pu[rand(0,2)];
+				$s_survei_c2['dokumen_survei']['condition']['prospek_usaha']			= $cond_pu[rand(0,2)];
+				$s_survei_c2['dokumen_survei']['condition']['perputaran_usaha']			= $cond_ppu[rand(0,2)];
+				$s_survei_c2['dokumen_survei']['condition']['resiko_usaha_kedepan']		= $cond_risk[rand(0,2)];
+				$s_survei_c2['dokumen_survei']['condition']['jumlah_pelanggan_harian']	= $cond_cust[rand(0,3)];
+				$s_survei_c2['dokumen_survei']['condition']['catatan']				= $cond_catatan[rand(0,1)];
+			}
 			$s_survei_c2['dokumen_survei']['condition']['pengalaman_usaha']			= $cond_pgu[rand(0,3)];
-			$s_survei_c2['dokumen_survei']['condition']['resiko_usaha_kedepan']		= $cond_risk[rand(0,2)];
-			$s_survei_c2['dokumen_survei']['condition']['jumlah_pelanggan_harian']	= $cond_cust[rand(0,3)];
-			$s_survei_c2['dokumen_survei']['condition']['catatan']			= $cond_catatan[rand(0,1)];
+
 
 			$s_survei_c3['jenis']	= 'capacity';
 			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['utama']			= $this->formatMoneyTo(rand(10,50)*100000);
@@ -277,7 +282,7 @@ class SurveiTableSeeder extends Seeder
 
 			$s_survei_c4['dokumen_survei']['capital']['usaha']['nilai_aset']	= $this->formatMoneyTo(rand(1,10)*5000000 * $lama_usaha);
 
-			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['nama_bank']			= $nm_bank[rand(0,3)];
+			$s_survei_c4['dokumen_survei']['capital']['hutang'][0]['lembaga_keuangan']	= $nm_bank[rand(0,3)];
 			$jlh_pinjaman 	= rand(1,10)*2500000;
 			$jww 			= rand(12,60);
 			$angs_bul 		= rand(10,50)/1000;

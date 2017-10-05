@@ -79,7 +79,7 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" data-toggle="tab" href="#keluarga" role="tab">
-							Keluarga @if(!$checker['keluarga']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
+							Data Keluarga @if(!$checker['keluarga']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
 						</a>
 					</li>
 					<li class="nav-item">

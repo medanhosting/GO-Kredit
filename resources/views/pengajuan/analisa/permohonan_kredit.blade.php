@@ -3,6 +3,9 @@
 <div class="row">
 	<div class="col-sm-12 text-center">
 		<h5>PERMOHONAN KREDIT</h5>
+		<p style="padding:10px;margin:0px;">
+			{{$permohonan['id']}}
+		</p>
 	</div>
 </div> 
 
@@ -79,7 +82,7 @@
 		<div class="card-header" role="tab" id="keluarga" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
 			<div class="row">
 				<div class="col-sm-8">
-					KELUARGA
+					DATA KELUARGA
 				</div>
 				<div class="col-sm-4 text-right">
 					<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsekeluarga" aria-expanded="false" aria-controls="collapsekeluarga" style="color:black"><i class="fa fa-chevron-down"></i></a>

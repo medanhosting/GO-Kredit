@@ -170,32 +170,32 @@
 						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Persaingan Usaha', 'condition[persaingan_usaha]', ['padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['persaingan_usaha'], ['class' => 'copersainganusaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Persaingan Usaha', 'condition[persaingan_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['persaingan_usaha'], ['class' => 'copersainganusaha form-control text-info inline-edit'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Prospek Usaha', 'condition[prospek_usaha]', ['padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['prospek_usaha'], ['class' => 'coprospekusaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Prospek Usaha', 'condition[prospek_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['prospek_usaha'], ['class' => 'coprospekusaha form-control text-info inline-edit'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Perputaran Usaha', 'condition[perputaran_usaha]', ['padat' => 'Padat', 'sedang' => 'Sedang', 'lambat' => 'Lambat'], $survei['condition']['dokumen_survei']['condition']['perputaran_usaha'], ['class' => 'coperputaranusaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Perputaran Usaha', 'condition[perputaran_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'lambat' => 'Lambat'], $survei['condition']['dokumen_survei']['condition']['perputaran_usaha'], ['class' => 'coperputaranusaha form-control text-info inline-edit'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Pengalaman Usaha', 'condition[pengalaman_usaha]', ['< 1 Tahun' => '< 1 Tahun', '2 - 3 Tahun' => '2 - 3 Tahun', '3 - 5 Tahun' => '3 - 5 Tahun', '> Tahun' => '> Tahun'], $survei['condition']['dokumen_survei']['condition']['pengalaman_usaha'], ['class' => 'copengalamanusaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Pengalaman Usaha / Lama Bekerja', 'condition[pengalaman_usaha]', ['< 1 Tahun' => '< 1 Tahun', '2 - 3 Tahun' => '2 - 3 Tahun', '3 - 5 Tahun' => '3 - 5 Tahun', '> Tahun' => '> Tahun'], $survei['condition']['dokumen_survei']['condition']['pengalaman_usaha'], ['class' => 'copengalamanusaha form-control text-info inline-edit'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Resiko Usaha Ke Depan', 'condition[resiko_usaha_kedepan]', ['bagus' => 'Bagus', 'biasa' => 'Biasa', 'suram' => 'Suram'], $survei['condition']['dokumen_survei']['condition']['resiko_usaha_kedepan'], ['class' => 'coresikousaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Resiko Usaha Ke Depan', 'condition[resiko_usaha_kedepan]', [null => 'Pilih', 'bagus' => 'Bagus', 'biasa' => 'Biasa', 'suram' => 'Suram'], $survei['condition']['dokumen_survei']['condition']['resiko_usaha_kedepan'], ['class' => 'coresikousaha form-control text-info inline-edit'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Jumlah Pelanggan Harian', 'condition[jumlah_pelanggan_harian]', ['0 - 10' => '0 - 10', '10 - 50' => '10 - 50', '50 - 100' => '50 - 100', '> 100' => '> 100'], $survei['condition']['dokumen_survei']['condition']['jumlah_pelanggan_harian'], ['class' => 'cjumlahpelanggan form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Jumlah Pelanggan Harian', 'condition[jumlah_pelanggan_harian]', [null => 'Pilih', '0 - 10' => '0 - 10', '10 - 50' => '10 - 50', '50 - 100' => '50 - 100', '> 100' => '> 100'], $survei['condition']['dokumen_survei']['condition']['jumlah_pelanggan_harian'], ['class' => 'cjumlahpelanggan form-control text-info inline-edit'], true) !!}
 							</div>
 						</div>
 						{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
@@ -364,7 +364,7 @@
 						<table class="table table-sm table-bordered">
 							<thead class="thead-default">
 								<tr>
-									<th style="border:1px #aaa solid">Nama Bank</th>
+									<th style="border:1px #aaa solid">Lembaga Keuangan</th>
 									<th style="border:1px #aaa solid">Jumlah Pinjaman</th>
 									<th style="border:1px #aaa solid">Jumlah Angsuran</th>
 									<th style="border:1px #aaa solid">Jangka Waktu</th>
@@ -375,7 +375,7 @@
 								@forelse($survei['capital']['dokumen_survei']['capital']['hutang'] as $k => $v)
 									<tr id="clonedHutang{{$k+1}}" class="clonedHutang">
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][nama_bank]', $v['nama_bank'], ['class' => 'knamabank form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][lembaga_keuangan]', $v['lembaga_keuangan'], ['class' => 'klembagakeuangan form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="border:1px #aaa solid">
 											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jumlah_pinjaman]', $v['jumlah_pinjaman'], ['class' => 'kjumlahpinjaman mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 40.000.000', 'style' => 'padding:7px;'], true) !!}
@@ -396,7 +396,7 @@
 								@empty
 									<tr id="clonedHutang1" class="clonedHutang">
 										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang][1][nama_bank]', null, ['class' => 'knamabank form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
+											{!! Form::vText(null, 'capital[hutang][1][lembaga_keuangan]', null, ['class' => 'klembagakeuangan form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
 										</td>
 										<td style="border:1px #aaa solid">
 											{!! Form::vText(null, 'capital[hutang][1][jumlah_pinjaman]', null, ['class' => 'kjumlahpinjaman form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 60.000.000', 'style' => 'padding:7px;'], true) !!}
@@ -602,7 +602,12 @@
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Persentasi Bank', 'collateral['.$v['id'].'][bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
+														{!! Form::vText('Persentasi Bank', 'collateral['.$v['id'].'][bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'colperbank form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
+													</div>
+												</div>
+												<div class="row">
+													<div class="col">
+													{!!Form::hidden('passcode', 'passcode', ['id' => 'passcode'])!!}
 													</div>
 												</div>
 												<div class="row">
@@ -865,6 +870,7 @@
 	</div>
 
 	@include('pengajuan.ajax.modal_analisa')
+	@include('pengajuan.survei.modal_passcode_entry')
 @endpush
 
 @push('submenu')
@@ -895,7 +901,7 @@
 				.on('click', 'a.cloneHutang', cloneHutang)
 				.on('click', 'a.removeHutang', removeHutang);
 
-			$("#clonedHutang"+cloneIndexHutang).find('.knamabank').attr('name', 'Hutang['+cloneIndexHutang+'][nama_bank]');
+			$("#clonedHutang"+cloneIndexHutang).find('.klembagakeuangan').attr('name', 'Hutang['+cloneIndexHutang+'][lembaga_keuangan]');
 			$("#clonedHutang"+cloneIndexHutang).find('.kjumlahpinjaman').attr('name', 'Hutang['+cloneIndexHutang+'][jumlah_pinjaman]');
 			$("#clonedHutang"+cloneIndexHutang).find('.kjumlahangsuran').attr('name', 'Hutang['+cloneIndexHutang+'][jumlah_angsuran]');
 			$("#clonedHutang"+cloneIndexHutang).find('.kjangkawaktu').attr('name', 'Hutang['+cloneIndexHutang+'][jangka_waktu]');
@@ -926,7 +932,32 @@
 				form.find('#capiangs').hide();
 			}
 		}
+
+		var global_perc = $("input.colperbank").val();
+		
+		$("input.colperbank").on("change", checkPersentasi);
+
+		function checkPersentasi(){
+			var perc = $(this).val();
+			if(perc > 50){
+				$('#modal_passcode_entry').modal('toggle');
+			}
+			else{
+				global_perc = $(this).val();
+			}
+		}
+
+		$("input.colperbank").on("focus", setPersentasi);
+
+		function setPersentasi(){
+			global_perc = $(this).val();
+		}
+
+		$("#passcode_batal").on("click", revertDataPasscode);
+
+		function revertDataPasscode(){
+			$('input.colperbank').val(global_perc);
+			$('#passcode').val('');
+		}
 	</script>
 @endpush
-capisewa
-capiangs
