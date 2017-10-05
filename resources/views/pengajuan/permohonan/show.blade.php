@@ -1,5 +1,5 @@
 @push('main')
-	<div class="container bg-white bg-shadow p-4">
+	<div class="container-fluid bg-white bg-shadow p-4">
 		<div class="row">
 			<div class="col">
 				<h4 class='mb-2 text-style text-secondary'>
@@ -32,34 +32,38 @@
 							<div class="progress-bar" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
 						</div>
 						<hr/>
+
 						@if(!is_null($permohonan['ao']))
-						<h7 class="text-secondary">AO</h7>
-						<br/>
-						<h7>{{$permohonan['ao']['nama']}}</h7>
-						<br/>
+							<h7 class="text-secondary">AO</h7>
+							<br/>
+							<h7>{{$permohonan['ao']['nama']}}</h7>
+							<br/>
+							<hr/>
 						@endif
-						<hr/>
+
 						
 						@if(!is_null($permohonan['dokumen_pelengkap']['tanda_tangan']))
-						<h7 class="text-secondary">SPESIMEN TTD</h7>
-						<br/>
-						<img src="{{$permohonan['dokumen_pelengkap']['tanda_tangan']}}" class="img-fluid" alt="Foto KTP">
-						<hr/>
+							<h7 class="text-secondary">SPESIMEN TTD</h7>
+							<br/>
+							<img src="{{$permohonan['dokumen_pelengkap']['tanda_tangan']}}" class="img-fluid" alt="Foto KTP">
+							<hr/>
 						@endif
+
 						<p>Form Pengajuan</p>
 						<a href="{{route('pengajuan.pengajuan.print', ['id' => $permohonan['id'], 'mode' => 'permohonan_kredit', 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" style="width:100%" class="btn btn-primary btn-sm">
 							Print
 						</a>
+
 						@if($percentage==100)
-						<hr/>
-						<p>Data Sudah Lengkap</p>
-						<a data-toggle="modal" data-target="#assign-survei" data-action="{{route('pengajuan.permohonan.assign_survei', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_assign btn btn-primary btn-sm text-white" style="width:100%">Assign Untuk Survei</a>
+							<hr/>
+							<p>Data Sudah Lengkap</p>
+							<a data-toggle="modal" data-target="#assign-survei" data-action="{{route('pengajuan.permohonan.assign_survei', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_assign btn btn-primary btn-sm text-white" style="width:100%">Assign Untuk Survei</a>
 						@endif
 
 						@if($percentage==100 && $v['nasabah']['is_lama'] && $flag_jam)
-						<hr/>
-						<p>Nasabah & Jaminan Lama</p>
-						<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $survei['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm text-white" style="width:100%">Lanjutkan Analisa</a>
+							<hr/>
+							<p>Nasabah & Jaminan Lama</p>
+							<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $survei['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm text-white" style="width:100%">Lanjutkan Analisa</a>
 						@endif
 					</div>
 				</div>
@@ -95,19 +99,19 @@
 						<div class="clearfix">&nbsp;</div>
 						<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
 						@if(is_null($permohonan['id']))
-						{!! Form::open(['url' => route('pengajuan.permohonan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id])]) !!}
+							{!! Form::open(['url' => route('pengajuan.permohonan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id])]) !!}
 						@else
-						{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+							{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 						@endif
 						
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Pokok Pinjaman', 'pokok_pinjaman', $permohonan['pokok_pinjaman'], ['class' => 'form-control mask-money inline-edit text-info', 'placeholder' => 'pokok pinjaman'], true, 'Min. Rp. 2.500.000') !!}
+								{!! Form::vText('Pokok Pinjaman', 'pokok_pinjaman', $permohonan['pokok_pinjaman'], ['class' => 'form-control mask-money inline-edit border-input w-25 text-secondary pb-1', 'placeholder' => 'pokok pinjaman'], true, 'Min. Rp. 2.500.000') !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Kemampuan Angsur', 'kemampuan_angsur', $permohonan['kemampuan_angsur'], ['class' => 'form-control mask-money inline-edit text-info', 'placeholder' => 'kemampuan angsur'], true) !!}
+								{!! Form::vText('Kemampuan Angsur', 'kemampuan_angsur', $permohonan['kemampuan_angsur'], ['class' => 'form-control mask-money inline-edit border-input w-25 text-secondary pb-1', 'placeholder' => 'kemampuan angsur'], true) !!}
 							</div>
 						</div>
 						{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
@@ -118,76 +122,83 @@
 						<div class="clearfix">&nbsp;</div>
 						<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
 						@if(is_null($permohonan['id']))
-						{!! Form::open(['url' => route('pengajuan.permohonan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true]) !!}
+							{!! Form::open(['url' => route('pengajuan.permohonan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true]) !!}
 						@else
-						{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH']) !!}
+							{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH']) !!}
 						@endif
 							<div class="row">
 								<div class="col-sm-12">
 									<h6 class="text-secondary"><strong><u>Profil</u></strong></h6>
 								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label class="mb-1">NIK</label>
-										<div class="input-group">
-											{!! Form::text('nasabah[nik]', $permohonan['nasabah']['nik'], ['class' => 'nnik form-control inline-edit mask-id-card', 'placeholder' => '35-73-03-148014-0001']) !!}
-											<div class="input-group-addon bg-white border-0 invisible">
-												<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
-												<span class="hidden-xs">Memeriksa NIK</span>
-											</div>
+								<div class="col-sm-5 order-2">
+									@if(!is_null($permohonan['dokumen_pelengkap']['ktp']))
+										<img src="{{$permohonan['dokumen_pelengkap']['ktp']}}" class="img-fluid d-block mx-auto" alt="Responsive image" style="width:320px">
+										<br/>
+										<label class="mb-1">GANTI FOTO KTP</label><br/>
+										<label class="custom-file">
+											{!! Form::file('dokumen_pelengkap[ktp]', ['class' => 'custom-file-input']) !!}
+											<span class="custom-file-control"></span>
+										</label>
+									@else
+										<div class="d-block mx-auto">
+											<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" class="img-fluid d-block mx-auto" alt="Responsive image" style="width: 250px;">
+											<br/>
+											<label class="mb-1">FOTO KTP</label><br/>
+											<label class="custom-file">
+												<input type="file" class="custom-file-input">
+
+												<span class="custom-file-control"></span>
+											</label>
 										</div>
-
-										@if ($errors->has($name) && $show_error)
-											<div class="invalid-feedback">
-												@foreach ($errors->get($name) as $v)
-													{{ $v }}<br>
-												@endforeach
+									@endif
+								</div>
+								<div class="col-sm-7 order-1">
+									<div class="row form-group mb-2">
+										<div class="col-sm-4 text-right">
+											{!! Form::label('', 'NIK', ['class' => 'text-uppercase mb-0']) !!}
+										</div>
+										<div class="col">
+												{!! Form::text('nasabah[nik]', $permohonan['nasabah']['nik'], ['class' => 'nnik form-control inline-edit mask-id-card border-input w-75 text-secondary pb-1', 'placeholder' => '35-73-03-148014-0001']) !!}
+												<small class="hidden-xs text-muted invisible"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i> Memeriksa NIK</small>
+												@if ($errors->has($name) && $show_error)
+													<div class="invalid-feedback">
+														@foreach ($errors->get($name) as $v)
+															{{ $v }}<br>
+														@endforeach
+													</div>
+												@endif
 											</div>
-										@endif
 									</div>
-									{!! Form::bsCheckbox('Nasabah menggunakan e-KTP', 'nasabah[is_ektp]', $permohonan['nasabah']['is_ektp'], ['class' => 'nis_ektp form-check-input inline-edit'], true) !!}
-									{!! Form::bsText('Nama', 'nasabah[nama]', $permohonan['nasabah']['nama'], ['class' => 'nnama form-control inline-edit', 'placeholder' => 'Tukimin'], true) !!}
-									{!! Form::bsText('Tempat lahir', 'nasabah[tempat_lahir]', $permohonan['nasabah']['tempat_lahir'], ['class' => 'ntempat_lahir form-control inline-edit', 'placeholder' => 'Malang'], true) !!}
-									{!! Form::bsText('Tanggal lahir', 'nasabah[tanggal_lahir]', $permohonan['nasabah']['tanggal_lahir'], ['class' => 'ntanggal_lahir form-control inline-edit mask-date', 'placeholder' => 'dd/mm/yyyy'], true) !!}
-									{!! Form::bsSelect('Jenis Kelamin', 'nasabah[jenis_kelamin]', ['' => 'pilih', 'laki-laki' => 'Laki-Laki', 'perempuan' => 'perempuan'], $permohonan['nasabah']['jenis_kelamin'], ['class' => 'custom-select njenis_kelamin form-control inline-edit'], true) !!}
-									{!! Form::bsSelect('Status pernikahan', 'nasabah[status_perkawinan]', array_merge(['' => 'pilih'], $status_perkawinan), $permohonan['nasabah']['status_perkawinan'], ['class' => 'custom-select nstatus_perkawinan form-control inline-edit'], true) !!}
-									{!! Form::bsSelect('Pekerjaan', 'nasabah[pekerjaan]', array_merge(['' => 'pilih'], $jenis_pekerjaan), $permohonan['nasabah']['pekerjaan'], ['class' => 'custom-select npekerjaan form-control inline-edit'], true) !!}
-									{!! Form::bsText('Penghasilan Bersih', 'nasabah[penghasilan_bersih]', $permohonan['nasabah']['penghasilan_bersih'], ['class' => 'npenghasilan_bersih form-control inline-edit mask-money', 'placeholder' => 'masukkan penghasilan bersih'], true) !!}
+									<div class="row form-group">
+										<div class="col-sm-8 ml-auto">
+											{!! Form::checkbox('nasabah[is_ektp]', $permohonan['nasabah']['edit'], ['class' => 'nis_ektp form-check-input inline-edit']) !!} Nasabah menggunakan E-KTP
+										</div>
+									</div>
+									{{--  {!! Form::bsCheckbox('Nasabah menggunakan e-KTP', 'nasabah[is_ektp]', $permohonan['nasabah']['is_ektp'], ['class' => 'nis_ektp form-check-input inline-edit'], true) !!}  --}}
+									{!! Form::vText('Nama', 'nasabah[nama]', $permohonan['nasabah']['nama'], ['class' => 'nnama form-control inline-edit border-input w-100 text-secondary pb-1', 'placeholder' => 'Tukimin'], true) !!}
+									{!! Form::vText('Tempat lahir', 'nasabah[tempat_lahir]', $permohonan['nasabah']['tempat_lahir'], ['class' => 'ntempat_lahir form-control inline-edit border-input w-75 text-secondary pb-1', 'placeholder' => 'Malang'], true) !!}
+									{!! Form::vText('Tanggal lahir', 'nasabah[tanggal_lahir]', $permohonan['nasabah']['tanggal_lahir'], ['class' => 'ntanggal_lahir form-control inline-edit mask-date border-input w-50 text-secondary pb-1', 'placeholder' => 'dd/mm/yyyy'], true) !!}
+									{!! Form::vSelect('Jenis Kelamin', 'nasabah[jenis_kelamin]', ['' => 'pilih', 'laki-laki' => 'Laki-Laki', 'perempuan' => 'perempuan'], $permohonan['nasabah']['jenis_kelamin'], ['class' => 'custom-select njenis_kelamin form-control inline-edit border-input w-50 text-secondary pb-1'], true) !!}
+									{!! Form::vSelect('Status pernikahan', 'nasabah[status_perkawinan]', array_merge(['' => 'pilih'], $status_perkawinan), $permohonan['nasabah']['status_perkawinan'], ['class' => 'custom-select nstatus_perkawinan form-control inline-edit border-input w-50 text-secondary pb-1'], true) !!}
+									{!! Form::vSelect('Pekerjaan', 'nasabah[pekerjaan]', array_merge(['' => 'pilih'], $jenis_pekerjaan), $permohonan['nasabah']['pekerjaan'], ['class' => 'custom-select npekerjaan form-control inline-edit border-input w-50 text-secondary pb-1'], true) !!}
+									{!! Form::vText('Penghasilan Bersih', 'nasabah[penghasilan_bersih]', $permohonan['nasabah']['penghasilan_bersih'], ['class' => 'npenghasilan_bersih form-control inline-edit mask-money border-input w-50 text-secondary pb-1', 'placeholder' => 'masukkan penghasilan bersih'], true) !!}
 									<div class="clearfix">&nbsp;</div>
-
-									<h6 class="text-secondary"><strong><u>Kontak</u></strong></h6>
-									{!! Form::bsText('No. Telp', 'nasabah[telepon]', $permohonan['nasabah'][telepon], ['class' => 'ntelepon form-control inline-edit mask-no-telepon', 'placeholder' => '0888 3738 4401'], true) !!}
-									{!! Form::bsText('No. Whatsapp', 'nasabah[nomor_whatsapp]', $permohonan['nasabah']['nomor_whatsapp'], ['class' => 'nnomor_whatsapp form-control inline-edit mask-no-handphone', 'placeholder' => '0888 3738 4401'], true) !!}
-									{!! Form::bsText('Email', 'nasabah[email]', $permohonan['nasabah'][email], ['class' => 'nemail form-control inline-edit', 'placeholder' => 'tukimin@gmail.com'], true) !!}
 									<div class="clearfix">&nbsp;</div>
 
 									<h6 class="text-secondary"><strong><u>Alamat</u></strong></h6>
 									<div class="row form-group">
-									@if(count($permohonan['nasabah']['alamat']))
-										@include('templates.alamat.ajax-alamat', ['kecamatan' => $permohonan['nasabah']['alamat']['kecamatan'], 'kota' => $permohonan['nasabah']['alamat']['kota'], 'prefix' => 'nasabah[alamat]', 'inline' => 'inline-edit', 'alamat' => $permohonan['nasabah']['alamat']])
-									@else
-										@include('templates.alamat.ajax-alamat', ['kecamatan' => $kantor_aktif['alamat']['kecamatan'], 'prefix' => 'nasabah[alamat]', 'inline' => 'inline-edit'])
-									@endif
+										@if(count($permohonan['nasabah']['alamat']))
+											@include('templates.alamat.ajax-alamat', ['kecamatan' => $permohonan['nasabah']['alamat']['kecamatan'], 'kota' => $permohonan['nasabah']['alamat']['kota'], 'prefix' => 'nasabah[alamat]', 'inline' => 'inline-edit', 'alamat' => $permohonan['nasabah']['alamat']])
+										@else
+											@include('templates.alamat.ajax-alamat', ['kecamatan' => $kantor_aktif['alamat']['kecamatan'], 'prefix' => 'nasabah[alamat]', 'inline' => 'inline-edit'])
+										@endif
 									</div>
-								</div>
-								<div class="col-sm-6">
-									@if(!is_null($permohonan['dokumen_pelengkap']['ktp']))
-									<img src="{{$permohonan['dokumen_pelengkap']['ktp']}}" class="img-fluid" alt="Responsive image">
-									<br/>
-									<label class="mb-1">GANTI FOTO KTP</label><br/>
-									<label class="custom-file">
-										{!! Form::file('dokumen_pelengkap[ktp]', ['class' => 'custom-file-input']) !!}
-										<span class="custom-file-control"></span>
-									</label>
-									@else
-									<img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" class="img-fluid" alt="Responsive image">
-									<br/>
-									<label class="mb-1">FOTO KTP</label><br/>
-									<label class="custom-file">
-										{!! Form::file('dokumen_pelengkap[ktp]', ['class' => 'custom-file-input']) !!}
-										<span class="custom-file-control"></span>
-									</label>
-									@endif
+									<div class="clearfix">&nbsp;</div>
+
+									<h6 class="text-secondary"><strong><u>Kontak</u></strong></h6>
+									{!! Form::vText('No. Telp', 'nasabah[telepon]', $permohonan['nasabah'][telepon], ['class' => 'ntelepon form-control inline-edit mask-no-telepon border-input w-50 text-secondary pb-1', 'placeholder' => '0888 3738 4401'], true) !!}
+									{!! Form::vText('No. Whatsapp', 'nasabah[nomor_whatsapp]', $permohonan['nasabah']['nomor_whatsapp'], ['class' => 'nnomor_whatsapp form-control inline-edit mask-no-handphone border-input w-50 text-secondary pb-1', 'placeholder' => '0888 3738 4401'], true) !!}
+									{!! Form::vText('Email', 'nasabah[email]', $permohonan['nasabah'][email], ['class' => 'nemail form-control inline-edit border-input w-75 text-secondary pb-1', 'placeholder' => 'tukimin@gmail.com'], true) !!}
 								</div>
 							</div>
 						{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
@@ -206,57 +217,63 @@
 						@else
 						{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH']) !!}
 						@endif
-						<table class="table table-sm table-bordered">
+						<table class="table table-bordered">
 							<thead class="thead-default">
 								<tr>
-									<th style="border:1px #aaa solid">Hubungan</th>
-									<th style="border:1px #aaa solid">NIK</th>
-									<th style="border:1px #aaa solid">Nama</th>
-									<th style="border:1px #aaa solid">Telepon</th>
-									<th style="border:1px #aaa solid" colspan="2">&nbsp;</th>
+									<th>Hubungan</th>
+									<th>NIK</th>
+									<th>Nama</th>
+									<th>Telepon</th>
+									<th colspan="2">&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody id="formKeluarga">
 								@forelse($permohonan['nasabah']['keluarga'] as $k => $v)
 									<tr id="clonedKeluarga{{$k+1}}" class="clonedKeluarga">
-										<td style="border:1px #aaa solid">
-											{!! Form::vSelect(null, 'keluarga['.($k+1).'][hubungan]', ['anak' => 'Anak', 'orang_tua' => 'Orang Tua', 'suami' => 'Suami', 'istri' => 'Istri', 'saudara' => 'Saudara'], $v['hubungan'], ['class' => 'khubungan form-control text-info inline-edit'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vSelect(null, 'keluarga['.($k+1).'][hubungan]', ['anak' => 'Anak', 'orang_tua' => 'Orang Tua', 'suami' => 'Suami', 'istri' => 'Istri', 'saudara' => 'Saudara'], $v['hubungan'], ['class' => 'khubungan form-control text-primary inline-edit'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'keluarga['.($k+1).'][nik]', $v['nik'], ['class' => 'knik form-control text-info inline-edit', 'placeholder' => '35-73-03-148014-0001', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'keluarga['.($k+1).'][nik]', $v['nik'], ['class' => 'knik form-control text-primary inline-edit', 'placeholder' => '35-73-03-148014-0001'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'keluarga['.($k+1).'][nama]', $v['nama'], ['class' => 'knama form-control text-info inline-edit', 'placeholder' => 'Sukinem', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'keluarga['.($k+1).'][nama]', $v['nama'], ['class' => 'knama form-control text-primary inline-edit', 'placeholder' => 'Sukinem'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'keluarga['.($k+1).'][telepon]', $v['telepon'], ['class' => 'ktelepon form-control text-info inline-edit', 'placeholder' => '0818 3319 4748', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'keluarga['.($k+1).'][telepon]', $v['telepon'], ['class' => 'ktelepon form-control text-primary inline-edit', 'placeholder' => '0818 3319 4748'], true) !!}
 										</td>
-										<td style="padding-top:12px;border:1px #aaa solid">
-											<a class="cloneKeluarga text-info" style="font-size:16px;padding:5px;"><i class="fa fa-copy"></i></a> 
-										</td>
-										<td style="padding-top:12px;border:1px #aaa solid">
-											<a class="removeKeluarga text-danger" style="font-size:16px;padding:5px;"><i class="fa fa-trash"></i></a>
+										<td class="align-text-top text-center" colspan="2">
+											<a class="cloneKeluarga text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat keluarga">
+												<i class="fa fa-copy fa-lg"></i>
+											</a>
+											&nbsp;&nbsp;&nbsp;
+											<a class="removeKeluarga text-danger" data-toggle="tooltip" data-placement="bottom" title="hapus keluarga">
+												<i class="fa fa-trash fa-lg"></i>
+											</a>
 										</td>
 									</tr>
 								@empty
 									<tr id="clonedKeluarga1" class="clonedKeluarga">
-										<td style="border:1px #aaa solid">
+										<td class="align-text-top">
 											{!! Form::vSelect(null, 'keluarga[1][hubungan]', ['anak' => 'Anak', 'orang_tua' => 'Orang Tua', 'suami' => 'Suami', 'istri' => 'Istri', 'saudara' => 'Saudara'], null, ['class' => 'khubungan form-control text-info inline-edit'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
+										<td class="align-text-top">
 											{!! Form::vText(null, 'keluarga[1][nik]', null, ['class' => 'knik form-control text-info inline-edit', 'placeholder' => '35-73-03-148014-0001', 'style' => 'padding:7px;'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
+										<td class="align-text-top">
 											{!! Form::vText(null, 'keluarga[1][nama]', null, ['class' => 'knama form-control text-info inline-edit', 'placeholder' => 'Sukinem', 'style' => 'padding:7px;'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
+										<td class="align-text-top">
 											{!! Form::vText(null, 'keluarga[1][telepon]', null, ['class' => 'ktelepon form-control text-info inline-edit', 'placeholder' => '0818 3319 4748', 'style' => 'padding:7px;'], true) !!}
 										</td>
-										<td style="padding-top:12px;border:1px #aaa solid">
-											<a class="cloneKeluarga text-info" style="font-size:16px;padding:5px;"><i class="fa fa-copy"></i></a> 
-										</td>
-										<td style="padding-top:12px;border:1px #aaa solid">
-											<a class="removeKeluarga text-danger" style="font-size:16px;padding:5px;"><i class="fa fa-trash"></i></a>
+										<td class="align-text-top text-center" colspan="2">
+											<a class="cloneKeluarga text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat keluarga">
+												<i class="fa fa-copy fa-lg"></i>
+											</a>
+											&nbsp;&nbsp;nbsp;
+											<a class="removeKeluarga text-danger" data-toggle="tooltip" data-placement="bottom" title="hapus keluarga">
+												<i class="fa fa-trash fa-lg"></i>
+											</a>
 										</td>
 									</tr>
 								@endforelse
@@ -276,175 +293,188 @@
 						{!!Form::hidden('jaminan_kendaraan', 1)!!}
 						{!!Form::hidden('jaminan_tanah_bangunan', 1)!!}
 						<p class="text-left text-secondary">JAMINAN KENDARAAN</p>
-						<table class="table table-sm table-bordered">
+						<table class="table table-bordered">
 							<thead class="thead-default">
 								<tr>
-									<th style="border:1px #aaa solid; width:80px;" class="text-center">Jenis</th>
-									<th style="border:1px #aaa solid;" class="text-center">No. BPKB</th>
-									<th style="border:1px #aaa solid;" class="text-center">Detail</th>
-									<th style="border:1px #aaa solid;" class="text-center">Tahun Perolehan</th>
-									<th style="border:1px #aaa solid;" class="text-center">Harga Jaminan (*)</th>
-									<th style="border:1px #aaa solid;" class="text-center">&nbsp;</th>
-									<th style="border:1px #aaa solid;" class="text-center">&nbsp;</th>
+									<th class="text-center">Jenis</th>
+									<th class="text-center">No. BPKB</th>
+									<th class="text-center">Detail</th>
+									<th class="text-center">Tahun Perolehan</th>
+									<th class="text-center">Harga Jaminan (*)</th>
+									<th class="text-center" colspan="2">Action</th>
 								</tr>
 							</thead> 
 							<tbody id="formJaminanKendaraan">
 								@forelse ($permohonan['jaminan_kendaraan'] as $kj => $vj)
-								<tr id="clonedJaminanKendaraan{{$kj+1}}" class="clonedJaminanKendaraan">
-									<td style="border:1px #aaa solid" class="text-center">
-										{!! Form::vSelect(null, 'jaminan_kendaraan['.($kj+1).'][jenis]', $jenis_kendaraan, $vj['dokumen_jaminan']['bpkb']['jenis'], ['class' => 'jkjenis form-control text-info inline-edit'], true) !!}
-									</td>
-									<td style="border:1px #aaa solid" class="text-center tdnomorbpkb">
-										{!! Form::vText(null, 'jaminan_kendaraan['.($kj+1).'][nomor_bpkb]', $vj['dokumen_jaminan']['bpkb']['nomor_bpkb'], ['class' => 'jknomorbpkb form-control text-info inline-edit', 'placeholder' => 'F 12345678', 'style' => 'padding:7px;'], true) !!}
-									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										{!! Form::vText('Merk', 'jaminan_kendaraan['.($kj+1).'][merk]', $vj['dokumen_jaminan']['bpkb']['merk'], ['class' => 'jkmerk form-control text-info inline-edit', 'placeholder' => 'Honda'], true) !!}
-										{!! Form::vText('Tipe', 'jaminan_kendaraan['.($kj+1).'][tipe]', $vj['dokumen_jaminan']['bpkb']['tipe'], ['class' => 'jktipe form-control text-info inline-edit', 'placeholder' => 'Sedan'], true) !!}
-										{!! Form::vText('Tahun', 'jaminan_kendaraan['.($kj+1).'][tahun]', $vj['dokumen_jaminan']['bpkb']['tahun'], ['class' => 'jktahun form-control text-info inline-edit', 'placeholder' => '2000'], true) !!}
-									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										{!! Form::vText(null, 'jaminan_kendaraan['.($kj+1).'][tahun_perolehan]', $vj['tahun_perolehan'], ['class' => 'jktahunoleh form-control text-info inline-edit', 'placeholder' => '2000', 'style' => 'padding:7px;'], true) !!}
-									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										{!! Form::vText(null, 'jaminan_kendaraan['.($kj+1).'][nilai_jaminan]', $vj['nilai_jaminan'], ['class' => 'jknilai form-control text-info inline-edit mask-money', 'placeholder' => 'harga jaminan', 'style' => 'padding:7px;'], true) !!}
-									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										<a class="cloneJaminanKendaraan text-info" style="font-size:18px;padding:3px;"><i class="fa fa-copy"></i></a> 
-									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										<a class="removeJaminanKendaraan text-danger" style="font-size:18px;padding:3px;"><i class="fa fa-trash"></i></a>
-									</td>
-								</tr>
+									<tr id="clonedJaminanKendaraan{{$kj+1}}" class="clonedJaminanKendaraan">
+										<td class="text-center align-text-top">
+											{!! Form::vSelect(null, 'jaminan_kendaraan['.($kj+1).'][jenis]', $jenis_kendaraan, $vj['dokumen_jaminan']['bpkb']['jenis'], ['class' => 'jkjenis form-control text-secondary inline-edit', 'style' => 'width: 65px;'], true) !!}
+										</td>
+										<td class="text-center align-text-top tdnomorbpkb">
+											{!! Form::vText(null, 'jaminan_kendaraan['.($kj+1).'][nomor_bpkb]', $vj['dokumen_jaminan']['bpkb']['nomor_bpkb'], ['class' => 'jknomorbpkb form-control text-secondary inline-edit', 'placeholder' => 'F 12345678'], true) !!}
+										</td>
+										<td class="text-center align-text-top">
+											{!! Form::vText('Merk', 'jaminan_kendaraan['.($kj+1).'][merk]', $vj['dokumen_jaminan']['bpkb']['merk'], ['class' => 'jkmerk form-control text-secondary inline-edit', 'placeholder' => 'Honda'], true) !!}
+											{!! Form::vText('Tipe', 'jaminan_kendaraan['.($kj+1).'][tipe]', $vj['dokumen_jaminan']['bpkb']['tipe'], ['class' => 'jktipe form-control text-secondary inline-edit', 'placeholder' => 'Sedan'], true) !!}
+											{!! Form::vText('Tahun', 'jaminan_kendaraan['.($kj+1).'][tahun]', $vj['dokumen_jaminan']['bpkb']['tahun'], ['class' => 'jktahun form-control text-secondary inline-edit', 'placeholder' => '2000'], true) !!}
+										</td>
+										<td class="text-center align-text-top">
+											{!! Form::vText(null, 'jaminan_kendaraan['.($kj+1).'][tahun_perolehan]', $vj['tahun_perolehan'], ['class' => 'jktahunoleh form-control text-secondary inline-edit', 'placeholder' => '2000'], true) !!}
+										</td>
+										<td class="text-right align-text-top">
+											{!! Form::vText(null, 'jaminan_kendaraan['.($kj+1).'][nilai_jaminan]', $vj['nilai_jaminan'], ['class' => 'jknilai form-control text-secondary inline-edit mask-money', 'placeholder' => 'harga jaminan'], true) !!}
+										</td>
+										<td class="text-center align-text-top" colspan="2">
+											<div class="d-inline">
+												<a class="cloneJaminanKendaraan text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat jaminan kendaraan">
+													<i class="fa fa-copy fa-lg"></i>
+												</a> 
+												&nbsp;&nbsp;&nbsp;
+												<a class="removeJaminanKendaraan text-danger" data-toggle="tooltip" data-placement="bottom" title="hapus jaminan kendaraan">
+													<i class="fa fa-trash fa-lg"></i>
+												</a>
+											</div>
+										</td>
+									</tr>
 								@empty
 									<tr id="clonedJaminanKendaraan1" class="clonedJaminanKendaraan">
-										<td style="border:1px #aaa solid" class="text-center">
-											{!! Form::vSelect(null, 'jaminan_kendaraan[1][jenis]', $jenis_kendaraan, null, ['class' => 'jkjenis form-control text-info inline-edit'], true) !!}
+										<td class="text-center align-text-top">
+											{!! Form::vSelect(null, 'jaminan_kendaraan[1][jenis]', $jenis_kendaraan, null, ['class' => 'jkjenis form-control text-secondary inline-edit', 'style' => 'width: 65px;'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid" class="text-center tdnomorbpkb">
-											{!! Form::vText(null, 'jaminan_kendaraan[1][nomor_bpkb]', null, ['class' => 'jknomorbpkb form-control text-info inline-edit', 'placeholder' => 'F 12345678', 'style' => 'padding:7px;'], true) !!}
+										<td class="text-center align-text-top tdnomorbpkb">
+											{!! Form::vText(null, 'jaminan_kendaraan[1][nomor_bpkb]', null, ['class' => 'jknomorbpkb form-control text-secondary inline-edit', 'placeholder' => 'F 12345678'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid" class="text-center">
-											{!! Form::vText('Merk', 'jaminan_kendaraan[1][merk]', null, ['class' => 'jkmerk form-control text-info inline-edit', 'placeholder' => 'Honda'], true) !!}
-											{!! Form::vText('Tipe', 'jaminan_kendaraan[1][tipe]', null, ['class' => 'jktipe form-control text-info inline-edit', 'placeholder' => 'Sedan'], true) !!}
-											{!! Form::vText('Tahun', 'jaminan_kendaraan[1][tahun]', null, ['class' => 'jktahun form-control text-info inline-edit', 'placeholder' => '2000'], true) !!}
+										<td class="text-center align-text-top">
+											{!! Form::vText('Merk', 'jaminan_kendaraan[1][merk]', null, ['class' => 'jkmerk form-control text-secondary inline-edit', 'placeholder' => 'Honda'], true) !!}
+											{!! Form::vText('Tipe', 'jaminan_kendaraan[1][tipe]', null, ['class' => 'jktipe form-control text-secondary inline-edit', 'placeholder' => 'Sedan'], true) !!}
+											{!! Form::vText('Tahun', 'jaminan_kendaraan[1][tahun]', null, ['class' => 'jktahun form-control text-secondary inline-edit', 'placeholder' => '2000'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid" class="text-center">
-											{!! Form::vText(null, 'jaminan_kendaraan[1][tahun_perolehan]', null, ['class' => 'jktahunoleh form-control text-info inline-edit', 'placeholder' => '2000', 'style' => 'padding:7px;'], true) !!}
+										<td class="text-center align-text-top">
+											{!! Form::vText(null, 'jaminan_kendaraan[1][tahun_perolehan]', null, ['class' => 'jktahunoleh form-control text-secondary inline-edit', 'placeholder' => '2000'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid" class="text-center">
-											{!! Form::vText(null, 'jaminan_kendaraan[1][nilai_jaminan]', null, ['class' => 'jknilai form-control text-info inline-edit mask-money', 'placeholder' => 'harga jaminan', 'style' => 'padding:7px;'], true) !!}
+										<td class="text-right align-text-top">
+											{!! Form::vText(null, 'jaminan_kendaraan[1][nilai_jaminan]', null, ['class' => 'jknilai form-control text-secondary inline-edit mask-money', 'placeholder' => 'harga jaminan'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid" class="text-center">
-											<a class="cloneJaminanKendaraan text-info" style="font-size:18px;padding:3px;"><i class="fa fa-copy"></i></a> 
-										</td>
-										<td style="border:1px #aaa solid" class="text-center">
-											<a class="removeJaminanKendaraan text-danger" style="font-size:18px;padding:3px;"><i class="fa fa-trash"></i></a>
+										<td class="text-center align-text-top" colspan="2">
+											<div class="d-inline">
+												<a class="cloneJaminanKendaraan text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat jaminan kendaraan">
+													<i class="fa fa-copy fa-lg"></i>
+												</a> 
+												&nbsp;&nbsp;&nbsp;
+												<a class="removeJaminanKendaraan text-danger" data-toggle="tooltip" data-placement="bottom" title="hapus jaminan kendaraan">
+													<i class="fa fa-trash fa-lg"></i>
+												</a>
+											</div>
 										</td>
 									</tr>
 								@endforelse
 							</tbody>
 							<tfoot>
 								<tr>
-									<td style="border:1px #aaa solid" colspan="8" class="text-right">
-										<small>
-											<i class="text-secondary">* menurut nasabah</i>
-										</small>
+									<td colspan="8" class="text-right align-text-top">
+										<small class="text-secondary"><i>* menurut nasabah</i></small>
 									</td>
 								</tr>
 							</tfoot>		
 						</table>
 						<div class="clearfix">&nbsp;</div>
 						<p class="text-left text-secondary">JAMINAN TANAH BANGUNAN</p>
-						<table class="table table-sm table-bordered">
+						<table class="table table-bordered">
 							<thead class="thead-default">
 								<tr>
-									<th style="border:1px #aaa solid; width:80px;" class="text-center">Jenis</th>
-									<th style="border:1px #aaa solid; width:360px;" class="text-center">Detail</th>
-									<th style="border:1px #aaa solid;" class="text-center">Tahun Perolehan</th>
-									<th style="border:1px #aaa solid;" class="text-center">Harga Jaminan (*)</th>
-									<th style="border:1px #aaa solid;" class="text-center">&nbsp;</th>
-									<th style="border:1px #aaa solid;" class="text-center">&nbsp;</th>
+									<th class="text-center">Jenis</th>
+									<th class="text-center">Detail</th>
+									<th class="text-center" style="width: 15%">Tahun Perolehan</th>
+									<th class="text-center">Harga Jaminan (*)</th>
+									<th class="text-center">Action</th>
 								</tr>
 							</thead> 
 							<tbody id="formJaminanTB">
 								@forelse ($permohonan['jaminan_tanah_bangunan'] as $ktb => $vtb)
-								<tr id="clonedJaminanTB{{$ktb+1}}" class="clonedJaminanTB">
-									<td style="border:1px #aaa solid;padding:15px 25px;" class="text-center">
-										{!! Form::vSelect(null, 'jaminan_tanah_bangunan['.($ktb+1).'][jenis]', $jenis_sertifikat, $vtb['jenis'], ['class' => 'jtbjenis form-control text-info inline-edit', 'style' => 'width:65px;'], true) !!}
-									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										{!! Form::vText('No. Sertifikat', 'jaminan_tanah_bangunan['.($ktb+1).'][nomor_sertifikat]', $vtb['dokumen_jaminan'][$vtb['jenis']]['nomor_sertifikat'], ['class' => 'jtbnomorsertifikat form-control text-info inline-edit', 'placeholder' => '12-27-98-36-3-54502'], true) !!}
-										
-										{!! Form::vSelect('Tipe', 'jaminan_tanah_bangunan['.($ktb+1).'][tipe]', $tipe_sertifikat, $vtb['dokumen_jaminan'][$vtb['jenis']]['tipe'], ['class' => 'jtbtipe form-control text-info inline-edit', 'style' => 'padding:0px;'], true) !!}
+									<tr id="clonedJaminanTB{{$ktb+1}}" class="clonedJaminanTB">
+										<td class="text-center align-text-top p-4">
+											{!! Form::vSelect(null, 'jaminan_tanah_bangunan['.($ktb+1).'][jenis]', $jenis_sertifikat, $vtb['jenis'], ['class' => 'jtbjenis form-control text-secondary inline-edit'], true) !!}
+										</td>
+										<td class="text-center align-text-top">
+											{!! Form::vText('No. Sertifikat', 'jaminan_tanah_bangunan['.($ktb+1).'][nomor_sertifikat]', $vtb['dokumen_jaminan'][$vtb['jenis']]['nomor_sertifikat'], ['class' => 'jtbnomorsertifikat form-control text-secondary inline-edit', 'placeholder' => '12-27-98-36-3-54502'], true) !!}
+											
+											{!! Form::vSelect('Tipe', 'jaminan_tanah_bangunan['.($ktb+1).'][tipe]', $tipe_sertifikat, $vtb['dokumen_jaminan'][$vtb['jenis']]['tipe'], ['class' => 'jtbtipe form-control text-secondary inline-edit'], true) !!}
 
-										<div class="maber" style="@if($vtb['jenis']=='shm') display: none; @endif">
-										{!! Form::vText('Berlaku Hingga', 'jaminan_tanah_bangunan['.($ktb+1).'][masa_berlaku_sertifikat]', $vtb['dokumen_jaminan'][$vtb['jenis']]['masa_berlaku_sertifikat'], ['class' => 'jtbmaber mask-year form-control text-info inline-edit', 'placeholder' => '2000'], true) !!}
-										</div>
+											<div class="maber" style="@if($vtb['jenis']=='shm') display: none; @endif">
+												{!! Form::vText('Berlaku Hingga', 'jaminan_tanah_bangunan['.($ktb+1).'][masa_berlaku_sertifikat]', $vtb['dokumen_jaminan'][$vtb['jenis']]['masa_berlaku_sertifikat'], ['class' => 'jtbmaber mask-year form-control text-secondary inline-edit', 'placeholder' => '2000'], true) !!}
+											</div>
+											
+											{!! Form::vText('L. Tanah', 'jaminan_tanah_bangunan['.($ktb+1).'][luas_tanah]', $vtb['dokumen_jaminan'][$vtb['jenis']]['luas_tanah'], ['class' => 'jtbltanah form-control text-secondary inline-edit', 'placeholder' => '36'], true) !!}
 										
-										{!! Form::vText('L. Tanah', 'jaminan_tanah_bangunan['.($ktb+1).'][luas_tanah]', $vtb['dokumen_jaminan'][$vtb['jenis']]['luas_tanah'], ['class' => 'jtbltanah form-control text-info inline-edit', 'placeholder' => '36'], true) !!}
-									
-										<div class="laban" style="@if($vtb['dokumen_jaminan'][$vtb['jenis']]['tipe']!='tanah_dan_bangunan') display: none; @endif">
-										{!! Form::vText('L. Bangunan', 'jaminan_tanah_bangunan['.($ktb+1).'][luas_bangunan]', $vtb['dokumen_jaminan'][$vtb['jenis']]['luas_bangunan'], ['class' => 'jtblbangunan form-control text-info inline-edit', 'placeholder' => '24'], true) !!}
-										</div>
+											<div class="laban" style="@if($vtb['dokumen_jaminan'][$vtb['jenis']]['tipe']!='tanah_dan_bangunan') display: none; @endif">
+												{!! Form::vText('L. Bangunan', 'jaminan_tanah_bangunan['.($ktb+1).'][luas_bangunan]', $vtb['dokumen_jaminan'][$vtb['jenis']]['luas_bangunan'], ['class' => 'jtblbangunan form-control text-secondary inline-edit', 'placeholder' => '24'], true) !!}
+											</div>
 
-										@include('templates.alamat.v-ajax-alamat', ['kecamatan' => $vtb['dokumen_jaminan'][$vtb['jenis']]['alamat']['kecamatan'], 'kota' => $vtb['dokumen_jaminan'][$vtb['jenis']]['alamat']['kota'], 'prefix' => 'jaminan_tanah_bangunan['.($ktb+1).'][alamat]', 'alamat' => $vtb['dokumen_jaminan'][$vtb['jenis']]['alamat'], 'class' => 'jtbalamat'])
-									</td>
-									<td style="border:1px #aaa solid;padding:15px;" class="text-center">
-										{!! Form::vText(null, 'jaminan_tanah_bangunan['.($ktb+1).'][tahun_perolehan]', $vtb['tahun_perolehan'], ['class' => 'jtbtahunoleh form-control text-info inline-edit', 'placeholder' => '2000', 'style' => 'padding:7px;'], true) !!}
-									</td>
-									<td style="border:1px #aaa solid;padding:15px;" class="text-center">
-										{!! Form::vText(null, 'jaminan_tanah_bangunan['.($ktb+1).'][nilai_jaminan]', $vtb['nilai_jaminan'], ['class' => 'jtbnilai form-control text-info inline-edit mask-money', 'placeholder' => 'harga jaminan', 'style' => 'padding:7px;'], true) !!}
-									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										<a class="cloneJaminanTB text-info" style="font-size:18px;padding:3px;"><i class="fa fa-copy"></i></a> 
-									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										<a class="removeJaminanTB text-danger" style="font-size:18px;padding:3px;"><i class="fa fa-trash"></i></a>
-									</td>
-								</tr>
+											@include('templates.alamat.v-ajax-alamat', ['kecamatan' => $vtb['dokumen_jaminan'][$vtb['jenis']]['alamat']['kecamatan'], 'kota' => $vtb['dokumen_jaminan'][$vtb['jenis']]['alamat']['kota'], 'prefix' => 'jaminan_tanah_bangunan['.($ktb+1).'][alamat]', 'alamat' => $vtb['dokumen_jaminan'][$vtb['jenis']]['alamat'], 'class' => 'jtbalamat'])
+										</td>
+										<td class="text-center align-text-top">
+											{!! Form::vText(null, 'jaminan_tanah_bangunan['.($ktb+1).'][tahun_perolehan]', $vtb['tahun_perolehan'], ['class' => 'jtbtahunoleh form-control text-secondary inline-edit', 'placeholder' => '2000', 'style' => 'padding:7px;'], true) !!}
+										</td>
+										<td class="text-right align-text-top">
+											{!! Form::vText(null, 'jaminan_tanah_bangunan['.($ktb+1).'][nilai_jaminan]', $vtb['nilai_jaminan'], ['class' => 'jtbnilai form-control text-secondary inline-edit mask-money', 'placeholder' => 'harga jaminan'], true) !!}
+										</td>
+										<td class="text-center align-text-top">
+											<div class="d-inline">
+												<a class="cloneJaminanTB text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat jaminan tanah bangunan">
+													<i class="fa fa-copy fa-lg"></i>
+												</a> 
+												&nbsp;&nbsp;&nbsp;
+												<a class="removeJaminanTB text-danger" data-toggle="tooltip" data-placement="bottom" title="hapus jaminan tanah bangunan">
+													<i class="fa fa-trash fa-lg"></i>
+												</a>
+											</div>
+										</td>
+									</tr>
 								@empty
 								<tr id="clonedJaminanTB1" class="clonedJaminanTB">
-									<td style="border:1px #aaa solid;padding:15px 25px;" class="text-center">
-										{!! Form::vSelect(null, 'jaminan_tanah_bangunan[1][jenis]', $jenis_sertifikat, null, ['class' => 'jtbjenis form-control text-info inline-edit', 'style' => 'width:65px;'], true) !!}
+									<td class="text-center align-text-top">
+										{!! Form::vSelect(null, 'jaminan_tanah_bangunan[1][jenis]', $jenis_sertifikat, null, ['class' => 'jtbjenis form-control text-info inline-edit'], true) !!}
 									</td>
-									<td style="border:1px #aaa solid" class="text-center">
+									<td class="text-center align-text-top">
 										{!! Form::vText('No. Sertifikat', 'jaminan_tanah_bangunan[1][nomor_sertifikat]', null, ['class' => 'jtbnomorsertifikat form-control text-info inline-edit', 'placeholder' => '12-27-98-36-3-54502'], true) !!}
-										
-										{!! Form::vSelect('Tipe', 'jaminan_tanah_bangunan[1][tipe]', $tipe_sertifikat, null, ['class' => 'jtbtipe form-control text-info inline-edit', 'style' => 'padding:0px;'], true) !!}
+										{!! Form::vSelect('Tipe', 'jaminan_tanah_bangunan[1][tipe]', $tipe_sertifikat, null, ['class' => 'jtbtipe form-control text-info inline-edit'], true) !!}
 
 										<div class="maber" style="display: none;">
-										{!! Form::vText('Berlaku Hingga', 'jaminan_tanah_bangunan[1][masa_berlaku_sertifikat]', null, ['class' => 'jtbmaber mask-year form-control text-info inline-edit', 'placeholder' => '2000'], true) !!}
+											{!! Form::vText('Berlaku Hingga', 'jaminan_tanah_bangunan[1][masa_berlaku_sertifikat]', null, ['class' => 'jtbmaber mask-year form-control text-info inline-edit', 'placeholder' => '2000'], true) !!}
 										</div>
 										
 										{!! Form::vText('L. Tanah', 'jaminan_tanah_bangunan[1][luas_tanah]', null, ['class' => 'jtbltanah form-control text-info inline-edit', 'placeholder' => '36'], true) !!}
 									
 										<div class="laban" style="display: none;">
-										{!! Form::vText('L. Bangunan', 'jaminan_tanah_bangunan[1][luas_bangunan]', null, ['class' => 'jtblbangunan form-control text-info inline-edit', 'placeholder' => '24'], true) !!}
+											{!! Form::vText('L. Bangunan', 'jaminan_tanah_bangunan[1][luas_bangunan]', null, ['class' => 'jtblbangunan form-control text-info inline-edit', 'placeholder' => '24'], true) !!}
 										</div>
 
 										@include('templates.alamat.v-ajax-alamat', ['kecamatan' => $kantor_aktif['alamat']['kecamatan'], 'kota' => $kantor_aktif['alamat']['kota'], 'prefix' => 'jaminan_tanah_bangunan[1][alamat]', 'alamat' => $kantor_aktif['alamat'], 'class' => 'jtbalamat'])
 									</td>
-									<td style="border:1px #aaa solid;padding:15px;" class="text-center">
-										{!! Form::vText(null, 'jaminan_tanah_bangunan[1][tahun_perolehan]', null, ['class' => 'jtbtahunoleh form-control text-info inline-edit', 'placeholder' => '2000', 'style' => 'padding:7px;'], true) !!}
+									<td class="text-center align-text-top">
+										{!! Form::vText(null, 'jaminan_tanah_bangunan[1][tahun_perolehan]', null, ['class' => 'jtbtahunoleh form-control text-info inline-edit', 'placeholder' => '2000'], true) !!}
 									</td>
-									<td style="border:1px #aaa solid;padding:15px;" class="text-center">
-										{!! Form::vText(null, 'jaminan_tanah_bangunan[1][nilai_jaminan]', null, ['class' => 'jtbnilai form-control text-info inline-edit mask-money', 'placeholder' => 'harga jaminan', 'style' => 'padding:7px;'], true) !!}
+									<td class="text-right align-text-top">
+										{!! Form::vText(null, 'jaminan_tanah_bangunan[1][nilai_jaminan]', null, ['class' => 'jtbnilai form-control text-info inline-edit mask-money', 'placeholder' => 'harga jaminan'], true) !!}
 									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										<a class="cloneJaminanTB text-info" style="font-size:18px;padding:3px;"><i class="fa fa-copy"></i></a> 
-									</td>
-									<td style="border:1px #aaa solid" class="text-center">
-										<a class="removeJaminanTB text-danger" style="font-size:18px;padding:3px;"><i class="fa fa-trash"></i></a>
+									<td class="text-center align-text-op">
+										<div class="d-inline">
+											<a class="cloneJaminanTB text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat jaminan tanah bangunan">
+												<i class="fa fa-copy fa-lg"></i>
+											</a>
+											&nbsp;&nbsp;&nbsp;
+											<a class="removeJaminanTB text-danger" data-toggle="tooltip" data-placement="bottom" title="hapus jaminan tanah bangunan">
+												<i class="fa fa-trash fa-lg"></i>
+											</a>
+										</div>
 									</td>
 								</tr>
 								@endforelse
 							</tbody>
 							<tfoot>
 								<tr>
-									<td style="border:1px #aaa solid" colspan="8" class="text-right">
-										<small>
-											<i class="text-secondary">* menurut nasabah</i>
-										</small>
+									<td colspan="8" class="text-right">
+										<small class="text-secondary"><i>* menurut nasabah</i></small>
 									</td>
 								</tr>
 							</tfoot>		

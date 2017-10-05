@@ -5,97 +5,97 @@
 		<h5>PERMOHONAN KREDIT</h5>
 	</div>
 </div> 
-
+<div class="clearfix">&nbsp;</div>
 <div id="accordion" role="tablist" aria-multiselectable="true">
-	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="kredit" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+	<div class="card">
+		<div class="card-header collapsed" role="tab" id="kredit" data-toggle="collapse" data-parent="#accordion" href="#collapsekredit" aria-expanded="false" aria-controls="collapsekredit" style="cursor: pointer">
 			<div class="row">
 				<div class="col-sm-8">
 					KREDIT
 				</div>
 				<div class="col-sm-4 text-right">
-					<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsekredit" aria-expanded="false" aria-controls="collapsekredit" style="color:black"><i class="fa fa-chevron-down"></i></a>
+					<a class="collapsed text-dark" data-toggle="collapse" data-parent="#accordion" href="#collapsekredit" aria-expanded="false" aria-controls="collapsekredit"><i class="fa fa-chevron-down"></i></a>
 				</div>
 			</div>
 	    </div>
 		<div id="collapsekredit" class="collapse" role="tabpanel" aria-labelledby="kredit">
-			<div class="card-block" style="padding-bottom:20px;">
-				<div class="row text-justify" style="border-bottom:1px solid #aaa;">
+			<div class="card-block">
+				<div class="row text-justify border border-top-0 border-left-0 border-right-0">
 					<div class="col-sm-4 text-left">
-						POKOK PINJAMAN
+						<p class="p-2 pl-4 mb-0">POKOK PINJAMAN</p>
 					</div> 
 					<div class="col-sm-8 text-right">
-						{{$permohonan['pokok_pinjaman']}}
+						<p class="p-2 pr-4 mb-0">{{ $permohonan['pokok_pinjaman'] }}</p>
 					</div> 
 				</div> 
-				<div class="row text-justify" style="border-bottom:1px solid #aaa;">
+				<div class="row text-justify">
 					<div class="col-sm-4 text-left">
-						KEMAMPUAN ANGSUR
+						<p class="p-2 pl-4 mb-0">KEMAMPUAN ANGSUR</p>
 					</div> 
 					<div class="col-sm-8 text-right">
-						{{$permohonan['kemampuan_angsur']}}
+						<p class="p-2 pr-4 mb-0">{{ $permohonan['kemampuan_angsur'] }}</p>
 					</div> 
 				</div> 
 			</div>
 		</div>
 	</div>
-	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="nasabah" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+	<div class="card">
+		<div class="card-header" role="tab" id="nasabah" data-toggle="collapse" data-parent="#accordion" href="#collapsenasabah" aria-expanded="false" aria-controls="collapsenasabah" style="cursor: pointer">
 			<div class="row">
 				<div class="col-sm-8">
 					NASABAH
 				</div>
 				<div class="col-sm-4 text-right">
-					<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsenasabah" aria-expanded="false" aria-controls="collapsenasabah" style="color:black"><i class="fa fa-chevron-down"></i></a>
+					<a class="collapsed text-dark" data-toggle="collapse" data-parent="#accordion" href="#collapsenasabah" aria-expanded="false" aria-controls="collapsenasabah"><i class="fa fa-chevron-down"></i></a>
 				</div>
 			</div>
 	    </div>
 		<div id="collapsenasabah" class="collapse" role="tabpanel" aria-labelledby="nasabah">
-			<div class="card-block" style="border-bottom:1px solid #bbb;padding-bottom:20px;">
+			<div class="card-block">
 				@foreach($permohonan['nasabah'] as $k => $v )
 					@if($k!='keluarga' && $k!='alamat' && $k!='is_ektp' && $k!='is_lama')
-						<div class="row text-justify" style="border-bottom:1px solid #aaa;">
+						<div class="row text-justify border border-top-0 border-left-0 border-right-0">
 							<div class="col-sm-6 text-left">
-								{{strtoupper(str_replace('_', ' ', $k))}}
+								<p class="p-2 pl-4 mb-0">{{ strtoupper(str_replace('_', ' ', $k)) }}</p>
 							</div> 
 							<div class="col-sm-6 text-right">
-								{{str_replace('_', ' ', $v)}}
+								<p class="p-2 pr-4 mb-0">{{ str_replace('_', ' ', $v) }}</p>
 							</div> 
 						</div>
 					@endif 
 				@endforeach
-				<div class="row text-justify" style="border-bottom:1px solid #aaa;">
+				<div class="row text-justify border border-top-0 border-left-0 border-right-0">
 					<div class="col-sm-6 text-left">
-						ALAMAT
+						<p class="p-2 pl-4 mb-0">ALAMAT</p>
 					</div> 
 					<div class="col-sm-6 text-right">
-						{{implode(' ', $permohonan['nasabah']['alamat'])}}
+						<p class="p-2 pr-4 mb-0">{{ implode(' ', $permohonan['nasabah']['alamat']) }}</p>
 					</div> 
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="keluarga" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+	<div class="card">
+		<div class="card-header" role="tab" id="keluarga" data-toggle="collapse" data-parent="#accordion" href="#collapsekeluarga" aria-expanded="false" aria-controls="collapsekeluarga" style="cursor: pointer">
 			<div class="row">
 				<div class="col-sm-8">
 					KELUARGA
 				</div>
 				<div class="col-sm-4 text-right">
-					<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsekeluarga" aria-expanded="false" aria-controls="collapsekeluarga" style="color:black"><i class="fa fa-chevron-down"></i></a>
+					<a class="collapsed text-dark" data-toggle="collapse" data-parent="#accordion" href="#collapsekeluarga" aria-expanded="false" aria-controls="collapsekeluarga"><i class="fa fa-chevron-down"></i></a>
 				</div>
 			</div>
 	    </div>
 		<div id="collapsekeluarga" class="collapse" role="tabpanel" aria-labelledby="keluarga">
-			<div class="card-block" style="border-bottom:1px solid #bbb;padding-bottom:20px;">
+			<div class="card-block">
 				@foreach($permohonan['nasabah']['keluarga'] as $kk => $kv )
 					@foreach($kv as $k => $v)
-						<div class="row text-justify" style="border-bottom:1px solid #aaa;">
+						<div class="row text-justify border border-top-0 border-left-0 border-right-0">
 							<div class="col-sm-6 text-left">
-								{{strtoupper(str_replace('_', ' ', $k))}}
+								<p class="p-2 pl-4 mb-0">{{strtoupper(str_replace('_', ' ', $k))}}</p>
 							</div> 
 							<div class="col-sm-6 text-right">
-								{{str_replace('_', ' ', $v)}}
+								<p class="p-2 pr-4 mb-0">{{str_replace('_', ' ', $v)}}</p>
 							</div> 
 						</div>
 					@endforeach
@@ -103,45 +103,45 @@
 			</div>
 		</div>
 	</div>
-	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="jaminan" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+	<div class="card">
+		<div class="card-header" role="tab" id="jaminan" data-toggle="collapse" data-parent="#accordion" href="#collapsejaminan" aria-expanded="false" aria-controls="collapsejaminan" style="cursor: pointer">
 			<div class="row">
 				<div class="col-sm-8">
 					JAMINAN
 				</div>
 				<div class="col-sm-4 text-right">
-					<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapsejaminan" aria-expanded="false" aria-controls="collapsejaminan" style="color:black"><i class="fa fa-chevron-down"></i></a>
+					<a class="collapsed text-dark" data-toggle="collapse" data-parent="#accordion" href="#collapsejaminan" aria-expanded="false" aria-controls="collapsejaminan"><i class="fa fa-chevron-down"></i></a>
 				</div>
 			</div>
 	    </div>
 		<div id="collapsejaminan" class="collapse" role="tabpanel" aria-labelledby="jaminan">
-			<div class="card-block" style="border-bottom:1px solid #bbb;padding-bottom:20px;">
+			<div class="card-block">
 				@foreach($permohonan['jaminan'] as $k => $v)
 					<div class="row text-justify">
 						<div class="col-sm-12 text-center">
-							<div class="row" style="background-color:#eee;padding:5px;">
+							<div class="row mt-3">
 								<div class="col-sm-12">
-									DATA JAMINAN {{strtoupper(str_replace('_', ' ', $v['jenis']))}} {{($k+1)}}
+									<p class="text-secondary mb-1"><strong>DATA JAMINAN {{strtoupper(str_replace('_', ' ', $v['jenis']))}} {{($k+1)}}</strong></p>
 								</div> 
 							</div> 
 							@foreach($v['dokumen_jaminan'][$v['jenis']] as $k2 => $v2)
-								@if($k2!='alamat')
-									<div class="row text-justify" style="margin:10px 0px @if($k2 =='tahun_perolehan') -1px @else 10px @endif -15px;border-bottom:1px solid #eee;">
+								@if ($k2!='alamat')
+									<div class="row text-justify border border-top-0 border-left-0 border-right-0" style="margin:10px 0px @if($k2 =='tahun_perolehan') -1px @else 10px @endif -15px;">
 										<div class="col-sm-6 text-left">
-											{{strtoupper(str_replace('_', ' ', $k2))}}
+											<p class="p-2 pl-4 mb-0">{{strtoupper(str_replace('_', ' ', $k2))}}</p>
 										</div> 
 										<div class="col-sm-6 text-right" >
-											{{str_replace('_', ' ', $v2)}}
+											<p class="p-2 pr-4 mb-0">{{str_replace('_', ' ', $v2)}}</p>
 										</div> 
 									</div>
 								@else
-									<div class="row text-justify" style="margin:10px 0px 10px -15px;border-bottom:1px solid #eee;">
+									<div class="row text-justify border border-top-0 border-left-0 border-right-0">
 										<div class="col-sm-6 text-left">
-											{{strtoupper(str_replace('_', ' ', $k2))}}
+											<p class="p-2 pl-4 mb-0">{{strtoupper(str_replace('_', ' ', $k2))}}</p>
 										</div> 
 										<div class="col-sm-6 text-right">
 											@foreach($v2 as $k3 => $v3) 
-												{{str_replace('_', ' ', $k3)}} {{str_replace('_', ' ', $v3)}}
+												<p class="p-2 pr-4 mb-0">{{str_replace('_', ' ', $k3)}} {{str_replace('_', ' ', $v3)}}</p>
 											@endforeach
 										</div> 
 									</div>
@@ -151,9 +151,7 @@
 						</div> 
 					</div> 
 				@endforeach
-
 			</div>
 		</div>
 	</div>
-
 </div>

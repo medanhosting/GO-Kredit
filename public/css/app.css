@@ -2690,8 +2690,8 @@ pre code {
 }
 
 .thead-default th {
-  color: #495057;
-  background-color: #e9ecef;
+  color: #868e96;
+  background-color: #f7f7f7;
 }
 
 .table-inverse {
@@ -5322,7 +5322,7 @@ tbody.collapse.show {
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
   list-style: none;
-  background-color: #e9ecef;
+  background-color: #f5f5f5;
   border-radius: 0.25rem;
 }
 
@@ -10071,5 +10071,9 @@ a,
 button {
   cursor: pointer !important;
   outline: none !important;
+}
+
+.border-input {
+  border-bottom: 2px solid #ced4da !important;
 }
 

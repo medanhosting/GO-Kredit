@@ -1,7 +1,7 @@
 <div class="row form-group">
 	@if ($label)
 		<div class="col-sm-4 text-right">
-			{!! Form::label('', $label, ['class' => 'text-uppercase mb-1']) !!}
+			{!! Form::label('', $label, ['class' => 'text-uppercase mt-1 mb-1']) !!}
 		</div>
 		<div class="col text-left">
 	@endif
