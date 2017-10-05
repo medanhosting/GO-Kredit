@@ -158,11 +158,11 @@
 				<a class="navbar-brand" href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}">{{ config('app.name') }}</a>
 				<ul class="navbar-nav mr-auto mt-lg-0">
 					<li class="nav-item btn btn-outline-primary {{ str_is('dashboard', $active_menu) ? 'active' : '' }}">
-						<a class="nav-link" href="#" data-toggle='modal' data-target='#select_social_media'>
+						<a class="nav-link text-white" href="#" data-toggle='modal' data-target='#select_social_media'>
 							@if ($active_account)
 								{!! Form::bsIcon($active_account->type) !!} {{ $active_account->name }}
 							@else
-								<i class="fa fa-building-o"></i>&nbsp; {{$kantor_aktif['nama']}} &nbsp;&nbsp;
+								<i class="fa fa-building-o"></i>&nbsp;&nbsp;&nbsp; {{$kantor_aktif['nama']}} &nbsp;&nbsp;&nbsp;&nbsp;
 							@endif
 							<i class='fa fa-caret-down'></i>
 						</a>
@@ -170,9 +170,9 @@
 				</ul>
 				<ul class="navbar-nav ml-auto mt-lg-0">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<div class='d-none d-sm-inline'>
-								<i class="fa fa-user-circle"></i>&nbsp; {{ $me->email }} &nbsp;&nbsp;&nbsp;
+								<i class="fa fa-user-circle"></i>&nbsp;&nbsp;&nbsp; {{ $me->email }} &nbsp;&nbsp;&nbsp;
 							</div>
 							<span class='d-sm-none'><i class='fa fa-user'></i></span>
 						</a>
