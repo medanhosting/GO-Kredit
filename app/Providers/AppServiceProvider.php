@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
 		//
 		Form::component('bsText'       	, 'bootstrap.form.text'				, ['label' => null, 'name', 'value' => null, 'attributes' => [], 'show_error' => true, 'helper_text' => null, 'prepend' => null, 'append' => null]);
 		Form::component('vLabel'       	, 'bootstrap.form.vlabel'			, ['label' => null, 'name', 'value' => null, 'attributes' => [], 'show_error' => true, 'helper_text' => null, 'prepend' => null, 'append' => null]);
-		Form::component('vText'       	, 'bootstrap.form.vtext'			, ['label' => null, 'name', 'value' => null, 'attributes' => [], 'show_error' => true, 'helper_text' => null, 'prepend' => null, 'append' => null]);
+		Form::component('vText'       	, 'bootstrap.form.vtext'			, ['label' => null, 'name', 'value' => null, 'attributes' => [], 'show_error' => true, 'helper_text' => null, 'prepend' => null, 'append' => null, 'prepend_append_attributes' => []]);
 		Form::component('vTextarea'     , 'bootstrap.form.vtextarea'		, ['label' => null, 'name', 'value' => null, 'attributes' => [], 'show_error' => true, 'helper_text' => null, 'prepend' => null, 'append' => null]);
 		Form::component('vSelect'      , 'bootstrap.form.vselect'			, ['label' => null, 'name', 'options' => [], 'value' => null, 'attributes' => [], 'show_error' => true]);
 		Form::component('bsSelect'      , 'bootstrap.form.select'			, ['label' => null, 'name', 'options' => [], 'value' => null, 'attributes' => [], 'show_error' => true]);

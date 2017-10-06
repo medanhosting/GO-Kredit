@@ -24,7 +24,7 @@
 					<div class="col-sm-4 text-left">
 						<p class="p-2 pl-4 mb-0">POKOK PINJAMAN</p>
 					</div> 
-					<div class="col-sm-8 text-right">
+					<div class="col-sm-8 text-left">
 						<p class="p-2 pr-4 mb-0">{{ $permohonan['pokok_pinjaman'] }}</p>
 					</div> 
 				</div> 
@@ -32,7 +32,7 @@
 					<div class="col-sm-4 text-left">
 						<p class="p-2 pl-4 mb-0">KEMAMPUAN ANGSUR</p>
 					</div> 
-					<div class="col-sm-8 text-right">
+					<div class="col-sm-8 text-left">
 						<p class="p-2 pr-4 mb-0">{{ $permohonan['kemampuan_angsur'] }}</p>
 					</div> 
 				</div> 
@@ -55,20 +55,20 @@
 				@foreach($permohonan['nasabah'] as $k => $v )
 					@if($k!='keluarga' && $k!='alamat' && $k!='is_ektp' && $k!='is_lama')
 						<div class="row text-justify border border-top-0 border-left-0 border-right-0">
-							<div class="col-sm-6 text-left">
+							<div class="col-sm-4 text-left">
 								<p class="p-2 pl-4 mb-0">{{ strtoupper(str_replace('_', ' ', $k)) }}</p>
 							</div> 
-							<div class="col-sm-6 text-right">
-								<p class="p-2 pr-4 mb-0">{{ str_replace('_', ' ', $v) }}</p>
+							<div class="col-sm-8 text-left">
+								<p class="p-2 pr-4 mb-0">{{ ucwords(str_replace('_', ' ', $v)) }}</p>
 							</div> 
 						</div>
 					@endif 
 				@endforeach
 				<div class="row text-justify border border-top-0 border-left-0 border-right-0">
-					<div class="col-sm-6 text-left">
+					<div class="col-sm-4 text-left">
 						<p class="p-2 pl-4 mb-0">ALAMAT</p>
 					</div> 
-					<div class="col-sm-6 text-right">
+					<div class="col-sm-8 text-left">
 						<p class="p-2 pr-4 mb-0">{{ implode(' ', $permohonan['nasabah']['alamat']) }}</p>
 					</div> 
 				</div>
@@ -91,11 +91,11 @@
 				@foreach($permohonan['nasabah']['keluarga'] as $kk => $kv )
 					@foreach($kv as $k => $v)
 						<div class="row text-justify border border-top-0 border-left-0 border-right-0">
-							<div class="col-sm-6 text-left">
-								<p class="p-2 pl-4 mb-0">{{strtoupper(str_replace('_', ' ', $k))}}</p>
+							<div class="col-sm-4 text-left">
+								<p class="p-2 pl-4 mb-0">{{ strtoupper(str_replace('_', ' ', $k)) }}</p>
 							</div> 
-							<div class="col-sm-6 text-right">
-								<p class="p-2 pr-4 mb-0">{{str_replace('_', ' ', $v)}}</p>
+							<div class="col-sm-8 text-left">
+								<p class="p-2 pr-4 mb-0">{{ ucwords(str_replace('_', ' ', $v)) }}</p>
 							</div> 
 						</div>
 					@endforeach
@@ -126,20 +126,20 @@
 							</div> 
 							@foreach($v['dokumen_jaminan'][$v['jenis']] as $k2 => $v2)
 								@if ($k2!='alamat')
-									<div class="row text-justify border border-top-0 border-left-0 border-right-0" style="margin:10px 0px @if($k2 =='tahun_perolehan') -1px @else 10px @endif -15px;">
-										<div class="col-sm-6 text-left">
-											<p class="p-2 pl-4 mb-0">{{strtoupper(str_replace('_', ' ', $k2))}}</p>
+									<div class="row text-justify border border-top-0 border-left-0 border-right-0">
+										<div class="col-sm-4 text-left">
+											<p class="p-2 pl-4 mb-0">{{ strtoupper(str_replace('_', ' ', $k2)) }}</p>
 										</div> 
-										<div class="col-sm-6 text-right" >
-											<p class="p-2 pr-4 mb-0">{{str_replace('_', ' ', $v2)}}</p>
+										<div class="col-sm-8 text-left" >
+											<p class="p-2 pr-4 mb-0">{{ ucwords(str_replace('_', ' ', $v2)) }}</p>
 										</div> 
 									</div>
 								@else
 									<div class="row text-justify border border-top-0 border-left-0 border-right-0">
-										<div class="col-sm-6 text-left">
+										<div class="col-sm-4 text-left">
 											<p class="p-2 pl-4 mb-0">{{strtoupper(str_replace('_', ' ', $k2))}}</p>
 										</div> 
-										<div class="col-sm-6 text-right">
+										<div class="col-sm-8 text-left">
 											@foreach($v2 as $k3 => $v3) 
 												<p class="p-2 pr-4 mb-0">{{str_replace('_', ' ', $k3)}} {{str_replace('_', ' ', $v3)}}</p>
 											@endforeach
