@@ -602,7 +602,7 @@
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Persentasi Bank', 'collateral['.$v['id'].'][bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'colperbank form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
+														{!! Form::vText('Persentasi Bank', 'collateral['.$v['id'].'][bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'colperbank form-control inline-edit text-info', 'placeholder' => '40'], true) !!}
 													</div>
 												</div>
 												<div class="row">
