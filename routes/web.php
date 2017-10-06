@@ -32,6 +32,7 @@
 	
 		Route::prefix('pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
 
+			Route::get('index/ajax', 		['uses' => 'PengajuanController@ajax', 'as' => 'pengajuan.ajax']);
 			// Route::get('/{status}',				['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);
 			// Route::get('/{status}/{id}/show',	['as'	=> 'pengajuan.show', 	'uses' => 'PengajuanController@show']);
 			Route::delete('/{status}/{id}',					['as'	=> 'pengajuan.destroy', 'uses' => 'PengajuanController@destroy']);
@@ -57,6 +58,10 @@
 			
 			Route::middleware('scope:realisasi')->group( function() {
 				Route::get('/realisasi/{id}/done',	['as'	=> 'realisasi.done', 	'uses' => 'RealisasiController@done']);
+			});
+
+			Route::middleware('scope:passcode')->group( function() {
+				Route::resource('passcode', 		'PasscodeController');
 			});
 
 			Route::get('/realisasi/{id}/print/{mode}',		['as'	=> 'pengajuan.print', 	'uses' => 'PengajuanController@print', 'middleware' => 'scope:realisasi']);

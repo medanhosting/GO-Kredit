@@ -188,12 +188,13 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.character.informasi.*']			= ['required_if:jenis,character'];
 		
 		//CONDITION
-		$rules['dokumen_survei.condition.persaingan_usaha']			= ['required_if:jenis,condition', 'in:padat,sedang,biasa'];
-		$rules['dokumen_survei.condition.prospek_usaha']			= ['required_if:jenis,condition', 'in:padat,sedang,biasa'];
-		$rules['dokumen_survei.condition.perputaran_usaha']			= ['required_if:jenis,condition', 'in:padat,sedang,lambat'];
+		$rules['dokumen_survei.condition.pekerjaan']				= ['required_if:jenis,condition'];
+		$rules['dokumen_survei.condition.persaingan_usaha']			= ['required_if:dokumen_survei.condition.pekerjaan,wiraswasta', 'in:padat,sedang,biasa'];
+		$rules['dokumen_survei.condition.prospek_usaha']			= ['required_if:dokumen_survei.condition.pekerjaan,wiraswasta', 'in:padat,sedang,biasa'];
+		$rules['dokumen_survei.condition.perputaran_usaha']			= ['required_if:dokumen_survei.condition.pekerjaan,wiraswasta', 'in:padat,sedang,lambat'];
 		$rules['dokumen_survei.condition.pengalaman_usaha']			= ['required_if:jenis,condition'];
-		$rules['dokumen_survei.condition.resiko_usaha_kedepan']		= ['required_if:jenis,condition', 'in:bagus,biasa,suram'];
-		$rules['dokumen_survei.condition.jumlah_pelanggan_harian']	= ['required_if:jenis,condition'];
+		$rules['dokumen_survei.condition.resiko_usaha_kedepan']		= ['required_if:dokumen_survei.condition.pekerjaan,wiraswasta', 'in:bagus,biasa,suram'];
+		$rules['dokumen_survei.condition.jumlah_pelanggan_harian']	= ['required_if:dokumen_survei.condition.pekerjaan,wiraswasta'];
 
 		//CAPACITY
 		$rules['dokumen_survei.capacity.manajemen_usaha']				= ['required_if:jenis,capacity', 'in:baik,cukup_baik,tidak_baik'];
@@ -228,7 +229,7 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.capital.usaha.nilai_aset']		= ['numeric'];
 		$rules['dokumen_survei.capital.usaha.omzet_bulanan']	= ['numeric'];
 		
-		$rules['dokumen_survei.capital.hutang.*.nama_bank']			= ['max:255'];
+		$rules['dokumen_survei.capital.hutang.*.lembaga_keuangan']	= ['max:255'];
 		$rules['dokumen_survei.capital.hutang.*.jumlah_pinjaman']	= ['numeric'];
 		$rules['dokumen_survei.capital.hutang.*.jumlah_angsuran']	= ['numeric'];
 		// $rules['dokumen_survei.capital.hutang.*.jangka_waktu']		= ['numeric'];
@@ -442,12 +443,12 @@ class SurveiDetail extends Model
 
 	public static function rule_of_valid_condition()
 	{
-		$rules['persaingan_usaha']			= ['required'];
-		$rules['prospek_usaha']				= ['required'];
-		$rules['perputaran_usaha']			= ['required'];
+		$rules['persaingan_usaha']			= ['required_if:pekerjaan,wiraswasta'];
+		$rules['prospek_usaha']				= ['required_if:pekerjaan,wiraswasta'];
+		$rules['perputaran_usaha']			= ['required_if:pekerjaan,wiraswasta'];
 		$rules['pengalaman_usaha']			= ['required'];
-		$rules['resiko_usaha_kedepan']		= ['required'];
-		$rules['jumlah_pelanggan_harian']	= ['required'];
+		$rules['resiko_usaha_kedepan']		= ['required_if:pekerjaan,wiraswasta'];
+		$rules['jumlah_pelanggan_harian']	= ['required_if:pekerjaan,wiraswasta'];
 
 		return $rules;
 	}
@@ -471,7 +472,7 @@ class SurveiDetail extends Model
 		$rules['usaha.nilai_aset']		= ['required'];
 		$rules['usaha.omzet_bulanan']	= ['required'];
 
-		$rules['hutang.*.nama_bank']		= ['required'];
+		$rules['hutang.*.lembaga_keuangan']	= ['required'];
 		$rules['hutang.*.jumlah_pinjaman']	= ['required'];
 		$rules['hutang.*.jumlah_angsuran']	= ['required'];
 		$rules['hutang.*.jangka_waktu']		= ['required'];

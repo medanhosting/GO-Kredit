@@ -301,4 +301,15 @@ class PengajuanController extends Controller
 		}
  	}
  	
+ 	public function ajax ()
+	{
+		$pengajuan 		= Pengajuan::status(request()->get('status'))->kantor(request()->get('kantor_aktif_id'));
+		if(request()->has('q'))
+		{
+			$pengajuan	= $pengajuan->where('p_pengajuan.id', 'like', '%'.request()->get('q').'%');
+		}
+		$pengajuan 		= $pengajuan->get();
+
+		return response()->json($pengajuan);
+	} 
 }

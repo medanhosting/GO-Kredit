@@ -98,7 +98,7 @@ class PengajuanTableSeeder extends Seeder
 
 			$nasabah['nik']					= '35-73-03-'.rand(100000,710000).'-000'.rand(1,4);
 			$nasabah['nama'] 				= $faker->name;
-			$nasabah['tanggal_lahir'] 		= Carbon::parse(rand(17,60).' years ago')->format('d/m/Y');
+			$nasabah['tanggal_lahir'] 		= Carbon::parse(rand(19,60).' years ago')->format('d/m/Y');
 			$nasabah['tempat_lahir']		= $kota[rand(0,6)];
 			$nasabah['jenis_kelamin']		= $gndr[rand(0,1)];
 			$nasabah['telepon']				= $faker->phoneNumber;
@@ -131,8 +131,8 @@ class PengajuanTableSeeder extends Seeder
 			if($mobile)
 			{
 				$nip_ao 		= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
-				$nasabah 		= [];
-				$nasabah['telepon']	= $faker->phoneNumber;
+				// $nasabah 		= [];
+				// $nasabah['telepon']	= $faker->phoneNumber;
 				$dokumen_pelengkap 	= ['ktp' => $foto[rand(0,4)]];
 			}
 			elseif(rand(1,1))

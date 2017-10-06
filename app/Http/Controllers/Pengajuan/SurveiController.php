@@ -21,6 +21,8 @@ class SurveiController extends Controller
 		parent::__construct();
 
 		$this->middleware('scope:survei');
+
+		$this->middleware('required_passcode')->only(['store', 'update']);
 	}
 
 	public function index ($status = 'survei') 
@@ -106,7 +108,10 @@ class SurveiController extends Controller
 
 				$condition->survei_id 		= $id;
 				$condition->jenis 			= 'condition';
-				$condition->dokumen_survei 	= request()->only('condition');
+				$ds_condition 				= request()->only('condition');
+				$ds_condition['condition']['pekerjaan'] 	= $survei->pengajuan->nasabah['pekerjaan'];
+				$ds_condition 				= array_map('array_filter', $ds_condition);;
+				$condition->dokumen_survei 	= $ds_condition;
 				$condition->save();
 			}
 
