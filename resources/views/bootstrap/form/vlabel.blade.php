@@ -15,7 +15,7 @@
 		<div class="input-group-addon">{!! $prepend !!}</div>
 	@endif
 
-	{!! Form::label('', $value, ['class' => 'text-uppercase mb-1']) !!}
+	{!! Form::label('', $value, array_merge(['class' => 'text-uppercase mb-1'], ($attributes ? $attributes : []) )) !!}
 
 	@if ($append)
 		<div class="input-group-addon">{!! $append !!}</div>

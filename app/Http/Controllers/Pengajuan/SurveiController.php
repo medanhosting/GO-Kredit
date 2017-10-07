@@ -12,8 +12,12 @@ use Thunderlabid\Survei\Models\SurveiLokasi;
 use Exception, Auth, Validator;
 use Carbon\Carbon;
 
+use Thunderlabid\Survei\Traits\IDRTrait;
+
 class SurveiController extends Controller
 {
+	use IDRTrait;
+
 	protected $view_dir = 'pengajuan.survei.';
 
 	public function __construct()
@@ -137,8 +141,10 @@ class SurveiController extends Controller
 
 				$capital->survei_id 		= $id;
 				$capital->jenis 			= 'capital';
-				$capital->dokumen_survei 	= request()->only('capital');
-
+				$ds_capital 				= request()->only('capital');
+				$ds_capital['capital']['pekerjaan'] 	= $survei->pengajuan->nasabah['pekerjaan'];
+				$ds_capital 				= array_map('array_filter', $ds_capital);;
+				$capital->dokumen_survei 	= $ds_capital;
 				$capital->save();
 			}
 
@@ -157,6 +163,13 @@ class SurveiController extends Controller
 				$ds		= array_merge($collateral->dokumen_survei['collateral'][$key], request()->get('collateral')[request()->get('survei_detail_id')][$key]);
 
 				$ds_all['collateral'][$key] = $ds;
+
+				if($key=='bpkb')
+				{
+					$ds_all['collateral'][$key]['harga_taksasi']	= $this->formatMoneyTo($this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_kendaraan']) * ($ds_all['collateral'][$key]['persentasi_taksasi']/100));
+					$ds_all['collateral'][$key]['harga_bank']		= $this->formatMoneyTo($this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_kendaraan']) * ($ds_all['collateral'][$key]['persentasi_bank']/100));
+				}
+
 				$collateral->dokumen_survei = $ds_all;
 				$collateral->save();
 			}

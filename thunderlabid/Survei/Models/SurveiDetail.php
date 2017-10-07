@@ -197,6 +197,7 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.condition.jumlah_pelanggan_harian']	= ['required_if:dokumen_survei.condition.pekerjaan,wiraswasta'];
 
 		//CAPACITY
+		$rules['dokumen_survei.capacity.pekerjaan']						= ['required_if:jenis,capacity'];
 		$rules['dokumen_survei.capacity.manajemen_usaha']				= ['required_if:jenis,capacity', 'in:baik,cukup_baik,tidak_baik'];
 		$rules['dokumen_survei.capacity.penghasilan.utama']				= ['required_if:jenis,capacity', 'numeric'];
 		$rules['dokumen_survei.capacity.penghasilan.pasangan']			= ['numeric'];
@@ -464,18 +465,18 @@ class SurveiDetail extends Model
 		$rules['kendaraan.jumlah_kendaraan_roda_2']	= ['required'];
 		$rules['kendaraan.nilai_kendaraan']			= ['required'];
 
-		$rules['usaha.nama_usaha']		= ['required'];
-		$rules['usaha.bidang_usaha']	= ['required'];
-		$rules['usaha.lama_usaha']		= ['required'];
-		$rules['usaha.status']	= ['required'];
-		$rules['usaha.bagi_hasil']		= ['required'];
-		$rules['usaha.nilai_aset']		= ['required'];
-		$rules['usaha.omzet_bulanan']	= ['required'];
+		$rules['usaha.nama_usaha']		= ['required_if:pekerjaan,wiraswasta'];
+		$rules['usaha.bidang_usaha']	= ['required_if:pekerjaan,wiraswasta'];
+		$rules['usaha.lama_usaha']		= ['required_if:pekerjaan,wiraswasta'];
+		$rules['usaha.status']			= ['required_if:pekerjaan,wiraswasta'];
+		$rules['usaha.bagi_hasil']		= ['required_if:pekerjaan,wiraswasta'];
+		$rules['usaha.nilai_aset']		= ['required_if:pekerjaan,wiraswasta'];
+		$rules['usaha.omzet_bulanan']	= ['required_if:pekerjaan,wiraswasta'];
 
-		$rules['hutang.*.lembaga_keuangan']	= ['required'];
-		$rules['hutang.*.jumlah_pinjaman']	= ['required'];
-		$rules['hutang.*.jumlah_angsuran']	= ['required'];
-		$rules['hutang.*.jangka_waktu']		= ['required'];
+		$rules['hutang.*.lembaga_keuangan']	= ['required_if:pekerjaan,wiraswasta'];
+		$rules['hutang.*.jumlah_pinjaman']	= ['required_if:pekerjaan,wiraswasta'];
+		$rules['hutang.*.jumlah_angsuran']	= ['required_if:pekerjaan,wiraswasta'];
+		$rules['hutang.*.jangka_waktu']		= ['required_if:pekerjaan,wiraswasta'];
 
 		return $rules;
 	}

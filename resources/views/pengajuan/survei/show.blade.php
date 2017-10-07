@@ -22,7 +22,7 @@
 		</div>
 		<div class="row">
 			<div class="col-3">
-				@stack('menu_sidebar')
+				@stack('menu_sidebar')perce
 				<div class="card text-left">
 					<div class="card-body">
 						<h6 class="card-title">SURVEI KREDIT</h6>
@@ -597,22 +597,33 @@
 
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Harga Taksasi', 'collateral['.$v['id'].'][bpkb][harga_taksasi]', $v['dokumen_survei']['collateral']['bpkb']['harga_taksasi'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000'], true) !!}
+														{!! Form::vText('Nilai Kendaraan', 'collateral['.$v['id'].'][bpkb][nilai_kendaraan]', $v['dokumen_survei']['collateral']['bpkb']['nilai_kendaraan'], ['class' => 'colnilaik form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000', 'id' => 'colnilaik'.$v['id']], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Persentasi Bank', 'collateral['.$v['id'].'][bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'colperbank form-control inline-edit text-info', 'placeholder' => '40'], true) !!}
+														{!! Form::vText('Persentasi Taksasi', 'collateral['.$v['id'].'][bpkb][persentasi_taksasi]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_taksasi'], ['class' => 'colperctaxbpkb form-control inline-edit text-info', 'placeholder' => '40', 'id' => 'colperctaxbpkb'.$v['id']], true) !!}
+													</div>
+												</div>	
+												<div class="row">
+													<div class="col">
+														{!! Form::vLabel('Harga Taksasi', 'collateral['.$v['id'].'][bpkb][harga_taksasi]', $v['dokumen_survei']['collateral']['bpkb']['harga_taksasi'], ['class' => 'colnilaitaxbpkb form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000', 'id' => 'colnilaitaxbpkb'.$v['id']], true) !!}
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col">
+														{!! Form::vText('Persentasi Bank', 'collateral['.$v['id'].'][bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'colperbank form-control inline-edit text-info', 'placeholder' => '40', 'id' => 'colperbank'.$v['id']], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-													{!!Form::hidden('passcode', 'passcode', ['id' => 'passcode'])!!}
+													{!!Form::hidden('passcode', 'passcode', ['id' => 'passcode'.$v['id']])!!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Harga Bank', 'collateral['.$v['id'].'][bpkb][harga_bank]', $v['dokumen_survei']['collateral']['bpkb']['harga_bank'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000'], true) !!}
+														{!! Form::vLabel('Harga Bank', 'collateral['.$v['id'].'][bpkb][harga_bank]', $v['dokumen_survei']['collateral']['bpkb']['harga_bank'], ['class' => 'colnilaibankbpkb form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000', 'id' => 'colnilaibankbpkb'.$v['id']], true) !!}
 													</div>
 												</div>
 
@@ -748,7 +759,7 @@
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Lantai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][lantai_bangunan]', ['keramik' => 'Keramik', 'tegel_biasa' => 'Tegel Biasa'], $v['dokumen_survei']['collateral'][$jenis]['lantai_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
+													{!! Form::vSelect('Lantai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][lantai_bangunan]', ['keramik' => 'Keramik', 'tegel_biasa' => 'Tegel Biasa'], $v['dokumen_survei']['collateral'][$jenis]['lantai_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}colnilaitaxbpkb
 												</div>
 											</div>
 											<div class="row">
@@ -809,7 +820,7 @@
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Nilai Tanah', 'collateral['.$v['id'].']['.$jenis.'][nilai_tanah]', $v['dokumen_survei']['collateral'][$jenis]['nilai_tanah'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
+													{!! Form::vText('Nilai Tanah', 'collateral['.$v['id'].']['.$jenis.'][nilai_tanah]', $v['dokumen_survei']['collateral'][$jenis]['nilai_tanah'], ['class' => 'colnilait form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
 												</div>
 											</div>
 											<div class="row">
@@ -821,7 +832,7 @@
 											@if($v['dokumen_survei']['collateral'][$jenis]['tipe']=='tanah_dan_bangunan')
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Nilai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][nilai_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['nilai_bangunan'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
+													{!! Form::vText('Nilai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][nilai_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['nilai_bangunan'], ['class' => 'colnilaib form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
 												</div>
 											</div>
 											<div class="row">
@@ -839,13 +850,13 @@
 											
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Persentasi Taksasi', 'collateral['.$v['id'].']['.$jenis.'][persentasi_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['persentasi_taksasi'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
+													{!! Form::vText('Persentasi Taksasi', 'collateral['.$v['id'].']['.$jenis.'][persentasi_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['persentasi_taksasi'], ['class' => 'colperctax form-control inline-edit text-info', 'placeholder' => '60'], true) !!}
 												</div>
 											</div>
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Harga Taksasi', 'collateral['.$v['id'].']['.$jenis.'][harga_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['harga_taksasi'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000'], true) !!}
+													{!! Form::vLabel('Harga Taksasi', 'collateral['.$v['id'].']['.$jenis.'][harga_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['harga_taksasi'], ['class' => 'colnilaitax form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000'], true) !!}
 												</div>
 											</div>
 
@@ -934,11 +945,14 @@
 		}
 
 		var global_perc = $("input.colperbank").val();
+		var s_id 		= $("input.colperbank").attr('id');
 		
 		$("input.colperbank").on("change", checkPersentasi);
+		$("input.colperbank").on("change", setPersentasiBankBPKB);
 
 		function checkPersentasi(){
-			var perc = $(this).val();
+			var perc 	= $(this).val();
+			var s_id 	= $(this).attr('id').replace('colperbank', '');
 			if(perc > 50){
 				$('#modal_passcode_entry').modal('toggle');
 			}
@@ -947,17 +961,78 @@
 			}
 		}
 
+		$("input.colperctax").on("change", checkPersentasiTax);
+		function checkPersentasiTax(){
+			var nilait 	= $(this).closest('form').find('.colnilait').val().replace('Rp', '');
+			var nilaib 	= $(this).closest('form').find('.colnilaib').val().replace('Rp', '');
+
+			nilaitax 	= (nilait.replace(/[\.]+/g, '') * 1) + (nilaib.replace(/[\.]+/g, '') * 1);
+			nilaitax 	= nilaitax * ($(this).val() / 100); 
+
+			$(this).closest('form').find('.colnilaitax').text(nilaitax);
+			$(this).closest('form').find('.colnilaitax').digits();
+			$(this).closest('form').find('.colnilaitax').prepend('Rp ');
+		}
+
+		$("input.colperctaxbpkb").on("change", checkPersentasiTaxBPKB);
+		function checkPersentasiTaxBPKB(){
+			var id 		= $(this).attr('id').replace('colperctaxbpkb', '');
+			var nilaik 	= $('#colnilaik'+id).val().replace('Rp', '');
+			nilaitax 	= nilaik.replace(/[\.]+/g, '') * 1;
+			nilaitax 	= nilaitax * ($(this).val() / 100); 
+
+			$(this).closest('form').find('#colnilaitaxbpkb'+id).text(nilaitax);
+			$(this).closest('form').find('#colnilaitaxbpkb'+id).digits();
+			$(this).closest('form').find('#colnilaitaxbpkb'+id).prepend('Rp ');
+		}
+
+		$.fn.digits = function(){ 
+		    return this.each(function(){ 
+		        $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") ); 
+		    })
+		}
+
+		$("input.colnilaik").on("change", triggerChangeNilaiK);
+
+		function triggerChangeNilaiK(){
+			s_id = $(this).attr('id').replace('colnilaik', '');
+			$("#colperbank"+s_id).trigger('change');
+			$("#colperctaxbpkb"+s_id).trigger('change');
+		}
+
 		$("input.colperbank").on("focus", setPersentasi);
 
 		function setPersentasi(){
 			global_perc = $(this).val();
+			s_id = $(this).attr('id').replace('colperbank', '');
 		}
 
 		$("#passcode_batal").on("click", revertDataPasscode);
+		$("#passcode_batal").on("click", setPersentasiBankBPKB);
+
+		$("#passcode_simpan").on("click", setPercBank);
+		$("#passcode_simpan").on("click", setPersentasiBankBPKB);
 
 		function revertDataPasscode(){
-			$('input.colperbank').val(global_perc);
-			$('#passcode').val('');
+			$('input#colperbank'+s_id).val(global_perc);
+			$('#passcode'+s_id).val('');
 		}
+		
+		function setPercBank(){
+			//CHANGE
+			global_perc = $('#colperbank'+s_id).val();
+		}
+
+		function setPersentasiBankBPKB(){
+			//CHANGE
+			var nilaik 	= $('#colnilaik'+s_id).val().replace('Rp', '');
+			nilaitax 	= nilaik.replace(/[\.]+/g, '') * 1;
+			nilaitax 	= nilaitax * (global_perc / 100); 
+
+			$('#colnilaibankbpkb'+s_id).text(nilaitax);
+			$('#colnilaibankbpkb'+s_id).digits();
+			$('#colnilaibankbpkb'+s_id).prepend('Rp ');			
+		}
+
 	</script>
 @endpush
