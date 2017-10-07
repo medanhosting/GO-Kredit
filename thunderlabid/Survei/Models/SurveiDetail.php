@@ -517,6 +517,8 @@ class SurveiDetail extends Model
 		$rules['kondisi_kendaraan']	= ['required'];
 		$rules['status_kepemilikan']= ['required'];
 		$rules['asuransi']			= ['required'];
+		$rules['nilai_kendaraan']	= ['required'];
+		$rules['persentasi_taksasi']= ['required'];
 		$rules['harga_taksasi']		= ['required'];
 		$rules['persentasi_bank']	= ['required'];
 		$rules['harga_bank']		= ['required'];

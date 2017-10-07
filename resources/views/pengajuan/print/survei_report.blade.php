@@ -117,35 +117,10 @@
 								</strong>
 							</div>
 						</div>
-						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
-							@foreach($data['survei']['capacity']['dokumen_survei']['capacity'] as $k => $v )
-								<div class="col-xs-6 text-left">
-									@if(is_array($v))
-										<strong>{{strtoupper(str_replace('_', ' ', $k))}}</strong>
-										@foreach((array)$v as $k2 => $v2)
-											@if(is_array($v2))
-												@foreach((array)$v2 as $k3 => $v3)
-													<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
-														<div class="col-xs-4 text-left">
-															{{strtoupper(str_replace('_', ' ', $k3))}}
-														</div> 
-														<div class="col-xs-8 text-right">
-															{{strtoupper(str_replace('_', ' ', $v3))}}
-														</div> 
-													</div>
-												@endforeach
-											@else
-												<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
-													<div class="col-xs-4 text-left">
-														{{strtoupper(str_replace('_', ' ', $k2))}}
-													</div> 
-													<div class="col-xs-8 text-right">
-														{{strtoupper(str_replace('_', ' ', $v2))}}
-													</div> 
-												</div>
-											@endif
-										@endforeach
-									@else
+						@foreach($data['survei']['capacity']['dokumen_survei']['capacity'] as $k => $v )
+							<div class="row text-justify">
+								<div class="col-xs-12 text-left">
+									@if(!is_array($v))
 										<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
 											<div class="col-xs-6 text-left">
 												{{strtoupper(str_replace('_', ' ', $k))}}
@@ -156,7 +131,35 @@
 										</div>
 									@endif
 								</div> 
-							@endforeach
+							</div>
+						@endforeach
+						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
+							<div class="col-xs-6" style="padding:0px 15px 0px 0px">
+								<strong>{{strtoupper('PENGHASILAN')}}</strong>
+								@foreach($data['survei']['capacity']['dokumen_survei']['capacity']['penghasilan'] as $k => $v )
+								<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
+									<div class="col-xs-6 text-left">
+										{{strtoupper(str_replace('_', ' ', $k))}}
+									</div> 
+									<div class="col-xs-6 text-right">
+										{{strtoupper(str_replace('_', ' ', $v))}}
+									</div> 
+								</div>
+								@endforeach
+							</div>
+							<div class="col-xs-6" style="padding:0px 0px 0px 15px">
+								<strong>{{strtoupper('PENGELUARAN')}}</strong>
+								@foreach($data['survei']['capacity']['dokumen_survei']['capacity']['pengeluaran'] as $k => $v )
+								<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
+									<div class="col-xs-6 text-left">
+										{{strtoupper(str_replace('_', ' ', $k))}}
+									</div> 
+									<div class="col-xs-6 text-right">
+										{{strtoupper(str_replace('_', ' ', $v))}}
+									</div> 
+								</div>
+								@endforeach
+							</div>
 						</div>
 					</div> 
 					<div class="col-xs-12 text-center">
@@ -168,35 +171,58 @@
 							</div>
 						</div>
 						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
-							@foreach($data['survei']['capital']['dokumen_survei']['capital'] as $k => $v )
-								<div class="col-xs-6 text-left">
-									<strong>{{strtoupper(str_replace('_', ' ', $k))}}</strong>
-									@foreach((array)$v as $k2 => $v2)
-										@if(is_array($v2))
-											@foreach((array)$v2 as $k3 => $v3)
-												<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
-													<div class="col-xs-7 text-left">
-														{{strtoupper(str_replace('_', ' ', $k3))}}
-													</div> 
-													<div class="col-xs-5 text-right">
-														{{strtoupper(str_replace('_', ' ', $v3))}}
-													</div> 
-												</div>
-											@endforeach
-										@else
-											<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
-												<div class="col-xs-7 text-left">
-													{{strtoupper(str_replace('_', ' ', $k2))}}
-												</div> 
-												<div class="col-xs-5 text-right">
-													{{strtoupper(str_replace('_', ' ', $v2))}}
-												</div> 
-											</div>
-										@endif
-									@endforeach
-								</div> 
-							@endforeach
+							<div class="col-xs-6" style="padding:0px 15px 0px 0px">
+								<strong>{{strtoupper('RUMAH')}}</strong>
+								@foreach($data['survei']['capital']['dokumen_survei']['capital']['rumah'] as $k => $v )
+								<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
+									<div class="col-xs-6 text-left">
+										{{strtoupper(str_replace('_', ' ', $k))}}
+									</div> 
+									<div class="col-xs-6 text-right">
+										{{strtoupper(str_replace('_', ' ', $v))}}
+									</div> 
+								</div>
+								@endforeach
+								<strong>{{strtoupper('HUTANG')}}</strong>
+								@foreach($data['survei']['capital']['dokumen_survei']['capital']['hutang'] as $k => $v )
+								@foreach($v as $k1 => $v1)
+								<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
+									<div class="col-xs-6 text-left">
+										{{strtoupper(str_replace('_', ' ', $k1))}}
+									</div> 
+									<div class="col-xs-6 text-right">
+										{{strtoupper(str_replace('_', ' ', $v1))}}
+									</div> 
+								</div>
+								@endforeach
+								@endforeach
+							</div>
+							<div class="col-xs-6" style="padding:0px 0px 0px 15px">
+								<strong>{{strtoupper('KENDARAAN')}}</strong>
+								@foreach($data['survei']['capital']['dokumen_survei']['capital']['kendaraan'] as $k => $v )
+								<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
+									<div class="col-xs-6 text-left">
+										{{strtoupper(str_replace('_', ' ', $k))}}
+									</div> 
+									<div class="col-xs-6 text-right">
+										{{strtoupper(str_replace('_', ' ', $v))}}
+									</div> 
+								</div>
+								@endforeach
+								<strong>{{strtoupper('USAHA')}}</strong>
+								@foreach($data['survei']['capital']['dokumen_survei']['capital']['usaha'] as $k => $v )
+								<div class="row text-justify" style="margin:10px 0px 10px 0px;border-bottom:1px solid #aaa;">
+									<div class="col-xs-6 text-left">
+										{{strtoupper(str_replace('_', ' ', $k))}}
+									</div> 
+									<div class="col-xs-6 text-right">
+										{{strtoupper(str_replace('_', ' ', $v))}}
+									</div> 
+								</div>
+								@endforeach
+							</div>
 						</div>
+
 					</div> 
 				</div> 
 			</div>
@@ -231,7 +257,7 @@
 						@foreach($data['survei']['collateral'] as $k0 => $v0 )
 							@foreach($v0['dokumen_survei']['collateral'] as $k => $v )
 								@if(!str_is($k, 'jenis'))
-								<div class="col-xs-6 text-left">
+								<div class="col-xs-6 text-left" @if($k0%2==0) style="padding: 0px 15px 0px 0px" @else  style="padding: 0px 0px 0px 15px" @endif>
 									@if(is_array($v))
 										<strong>{{strtoupper(str_replace('_', ' ', $k))}}</strong>
 										@foreach((array)$v as $k2 => $v2)

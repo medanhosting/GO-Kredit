@@ -22,7 +22,7 @@
 		</div>
 		<div class="row">
 			<div class="col-3">
-				@stack('menu_sidebar')perce
+				@stack('menu_sidebar')
 				<div class="card text-left">
 					<div class="card-body">
 						<h6 class="card-title">SURVEI KREDIT</h6>
@@ -253,7 +253,12 @@
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Tanggungan Keluarga', 'capacity[tanggungan_keluarga]', $survei['capacity']['dokumen_survei']['capacity']['tanggungan_keluarga'], ['class' => 'catanggungankel form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'K-1'], true) !!}
+								{!! Form::vText('Status Pernikahan', 'capacity[status_pernikahan]', $survei['capacity']['dokumen_survei']['capacity']['status_pernikahan'], ['class' => 'catstatuspernikahan form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'K-1'], true) !!}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								{!! Form::vLabel('Tanggungan Keluarga', 'capacity[tanggungan_keluarga]', $survei['capacity']['dokumen_survei']['capacity']['tanggungan_keluarga'], ['class' => 'cattanggungankeluarga form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'K-1'], true) !!}
 							</div>
 						</div>
 						{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
@@ -348,7 +353,7 @@
 								{!! Form::vSelect('Status Usaha', 'capital[usaha][status]', ['milik_sendiri' => 'Milik Sendiri', 'milik_keluarga' => 'Milik Keluarga', 'kerjasama_bagi_hasil' => 'Kerjasama Bagi Hasil'], $survei['capital']['dokumen_survei']['capital']['usaha']['status'], ['class' => 'capusahastatus form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
-						<div class="row">
+						<div class="row rowcapusahabagihasil" @if($survei['capital']['dokumen_survei']['capital']['usaha']['status']!='kerjasama_bagi_hasil') style="display:none" @endif>
 							<div class="col">
 								{!! Form::vText('Bagi Hasil', 'capital[usaha][bagi_hasil]', $survei['capital']['dokumen_survei']['capital']['usaha']['bagi_hasil'], ['class' => 'capusahabagihasil form-control inline-edit border-input text-info pb-1', 'placeholder' => '40'], true, null, null, '%',  ['class_input_group' => 'w-25', 'class_input_group_append' => 'border-0 bg-white']) !!}
 							</div>
@@ -598,12 +603,12 @@
 
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Nilai Kendaraan', 'collateral['.$v['id'].'][bpkb][nilai_kendaraan]', $v['dokumen_survei']['collateral']['bpkb']['nilai_kendaraan'], ['class' => 'colnilaik form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000', 'id' => 'colnilaik'.$v['id']], true) !!}
+														{!! Form::vText('Nilai Kendaraan', 'collateral['.$v['id'].'][bpkb][nilai_kendaraan]', $v['dokumen_survei']['collateral']['bpkb']['nilai_kendaraan'], ['class' => 'colbpkbnilaik form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000', 'id' => 'colbpkbnilaik'.$v['id']], true) !!}
 													</div>
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Persentasi Taksasi', 'collateral['.$v['id'].'][bpkb][persentasi_taksasi]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_taksasi'], ['class' => 'colperctaxbpkb form-control inline-edit text-info', 'placeholder' => '40', 'id' => 'colperctaxbpkb'.$v['id']], true) !!}
+														{!! Form::vText('Persentasi Taksasi', 'collateral['.$v['id'].'][bpkb][persentasi_taksasi]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_taksasi'], ['class' => 'colbpkbperctax form-control inline-edit text-info', 'placeholder' => '40', 'id' => 'colbpkbperctax'.$v['id']], true) !!}
 													</div>
 												</div>	
 												<div class="row">
@@ -614,7 +619,7 @@
 
 												<div class="row">
 													<div class="col">
-														{!! Form::vText('Persentasi Bank', 'collateral['.$v['id'].'][bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'colperbank form-control inline-edit text-info', 'placeholder' => '40', 'id' => 'colperbank'.$v['id']], true) !!}
+														{!! Form::vText('Persentasi Bank', 'collateral['.$v['id'].'][bpkb][persentasi_bank]', $v['dokumen_survei']['collateral']['bpkb']['persentasi_bank'], ['class' => 'colbpkbpercbank form-control inline-edit text-info', 'placeholder' => '40', 'id' => 'colbpkbpercbank'.$v['id']], true) !!}
 													</div>
 												</div>
 												<div class="row">
@@ -624,7 +629,7 @@
 												</div>
 												<div class="row">
 													<div class="col">
-														{!! Form::vLabel('Harga Bank', 'collateral['.$v['id'].'][bpkb][harga_bank]', $v['dokumen_survei']['collateral']['bpkb']['harga_bank'], ['class' => 'colnilaibankbpkb form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000', 'id' => 'colnilaibankbpkb'.$v['id']], true) !!}
+														{!! Form::vLabel('Harga Bank', 'collateral['.$v['id'].'][bpkb][harga_bank]', $v['dokumen_survei']['collateral']['bpkb']['harga_bank'], ['class' => 'colbpkbnilaibank form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000', 'id' => 'colbpkbnilaibank'.$v['id']], true) !!}
 													</div>
 												</div>
 
@@ -640,7 +645,7 @@
 									@endforeach
 									@foreach($survei['jaminan_tanah_bangunan'] as $k => $v)
 										@php $jenis = $v['dokumen_survei']['collateral']['jenis']; @endphp
-										<div class="tab-pane  {{ ($lokasi['agenda']=='jaminan' && $perc[$k]==100)) ? 'active' : '' }}" id="jaminan{{$v['id']}}" role="tabpanel">
+										<div class="tab-pane  {{ ($lokasi['agenda']=='jaminan' && $perc[$k]==100) ? 'active' : '' }}" id="jaminan{{$v['id']}}" role="tabpanel">
 											
 											<h6 class="text-secondary"><strong><u>Foto Jaminan</u></strong></h6>
 											<div class="row">
@@ -821,7 +826,7 @@
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Nilai Tanah', 'collateral['.$v['id'].']['.$jenis.'][nilai_tanah]', $v['dokumen_survei']['collateral'][$jenis]['nilai_tanah'], ['class' => 'colnilait form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
+													{!! Form::vText('Nilai Tanah', 'collateral['.$v['id'].']['.$jenis.'][nilai_tanah]', $v['dokumen_survei']['collateral'][$jenis]['nilai_tanah'], ['class' => 'colsertifikatnilait form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
 												</div>
 											</div>
 											<div class="row">
@@ -833,7 +838,7 @@
 											@if($v['dokumen_survei']['collateral'][$jenis]['tipe']=='tanah_dan_bangunan')
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Nilai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][nilai_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['nilai_bangunan'], ['class' => 'colnilaib form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
+													{!! Form::vText('Nilai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][nilai_bangunan]', $v['dokumen_survei']['collateral'][$jenis]['nilai_bangunan'], ['class' => 'colsertifikatnilaib form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 70.000.000'], true) !!}
 												</div>
 											</div>
 											<div class="row">
@@ -851,13 +856,13 @@
 											
 											<div class="row">
 												<div class="col">
-													{!! Form::vText('Persentasi Taksasi', 'collateral['.$v['id'].']['.$jenis.'][persentasi_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['persentasi_taksasi'], ['class' => 'colperctax form-control inline-edit text-info', 'placeholder' => '60'], true) !!}
+													{!! Form::vText('Persentasi Taksasi', 'collateral['.$v['id'].']['.$jenis.'][persentasi_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['persentasi_taksasi'], ['class' => 'colsertifikatperctax form-control inline-edit text-info', 'placeholder' => '60'], true) !!}
 												</div>
 											</div>
 
 											<div class="row">
 												<div class="col">
-													{!! Form::vLabel('Harga Taksasi', 'collateral['.$v['id'].']['.$jenis.'][harga_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['harga_taksasi'], ['class' => 'colnilaitax form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000'], true) !!}
+													{!! Form::vLabel('Harga Taksasi', 'collateral['.$v['id'].']['.$jenis.'][harga_taksasi]', $v['dokumen_survei']['collateral'][$jenis]['harga_taksasi'], ['class' => 'colsertifikatnilaitax form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 8.000.000'], true) !!}
 												</div>
 											</div>
 
@@ -892,7 +897,7 @@
 @push('js')
 	<script>
 
-		///CLONE FORM KELUARGA///
+		///CLONE FORM HUTANG///
 		var regex = /^(.+?)(\d+)$/i;
 		var cloneIndexHutang = $(".clonedHutang").length;
 
@@ -925,7 +930,9 @@
 		$("a.cloneHutang").on("click", cloneHutang);
 
 		$("a.removeHutang").on("click", removeHutang);
+		///END OF CLONE FORM HUTANG///
 
+		///CAPITAL, FORM DIMUNCULKAN / HIDE BERDASARKAN KEPEMILIKAN///
 		$("select.caprumahstatus").on("change", checkKepemilikan);
 
 		function checkKepemilikan(){
@@ -944,16 +951,16 @@
 				form.find('#capiangs').hide();
 			}
 		}
+		///END OF CAPITAL, FORM DIMUNCULKAN / HIDE BERDASARKAN KEPEMILIKAN///
 
-		var global_perc = $("input.colperbank").val();
-		var s_id 		= $("input.colperbank").attr('id');
+		var global_perc = $("input.colbpkbpercbank").val();
+		var s_id 		= $("input.colbpkbpercbank").attr('id');
 		
-		$("input.colperbank").on("change", checkPersentasi);
-		$("input.colperbank").on("change", setPersentasiBankBPKB);
-
-		function checkPersentasi(){
+		///COLLATERAL, BPKB CHECK PERSENTASI BANK UNTUK PASSCODE///
+		$("input.colbpkbpercbank").on("change", checBPKBButuhPasscode);
+		function checBPKBButuhPasscode(){
 			var perc 	= $(this).val();
-			var s_id 	= $(this).attr('id').replace('colperbank', '');
+			var s_id 	= $(this).attr('id').replace('colbpkbpercbank', '');
 			if(perc > 50){
 				$('#modal_passcode_entry').modal('toggle');
 			}
@@ -962,23 +969,59 @@
 			}
 		}
 
-		$("input.colperctax").on("change", checkPersentasiTax);
-		function checkPersentasiTax(){
-			var nilait 	= $(this).closest('form').find('.colnilait').val().replace('Rp', '');
-			var nilaib 	= $(this).closest('form').find('.colnilaib').val().replace('Rp', '');
+			//SET PERSENTASI BANK SEBELUM PERUBAHAN
+			//dibutuhkan jika passcode tidak diisi
+			$("input.colbpkbpercbank").on("focus", setBPKBPersentasiBank);
 
-			nilaitax 	= (nilait.replace(/[\.]+/g, '') * 1) + (nilaib.replace(/[\.]+/g, '') * 1);
-			nilaitax 	= nilaitax * ($(this).val() / 100); 
+			function setBPKBPersentasiBank(){
+				global_perc = $(this).val();
+				s_id = $(this).attr('id').replace('colbpkbpercbank', '');
+			}
 
-			$(this).closest('form').find('.colnilaitax').text(nilaitax);
-			$(this).closest('form').find('.colnilaitax').digits();
-			$(this).closest('form').find('.colnilaitax').prepend('Rp ');
+			//PENGENDALI EVENT PASSCODE
+			$(".modal-close").on("click", revertDataPasscode);
+			$("#passcode_batal").on("click", revertDataPasscode);
+			$("#passcode_batal").on("click", hitungBPKBHargaBank);
+
+			$("#passcode_simpan").on("click", setPercBank);
+			$("#passcode_simpan").on("click", hitungBPKBHargaBank);
+			$("#passcode_simpan").on("click", parsingDataPasscode);
+
+			function parsingDataPasscode(){
+				$('#passcode'+s_id).val($('#passcode_oke').val());
+			}
+
+			function revertDataPasscode(){
+				$('input#colbpkbpercbank'+s_id).val(global_perc);
+				$('#passcode'+s_id).val('');
+			}
+			
+			function setPercBank(){
+				global_perc = $('#colbpkbpercbank'+s_id).val();
+			}
+		///END OF COLLATERAL, BPKB CHECK PERSENTASI BANK UNTUK PASSCODE///
+
+		///COLLATERAL, HITUNG HARGA BANK BPKB///
+		$("input.colbpkbpercbank").on("change", hitungBPKBHargaBank);
+		function hitungBPKBHargaBank(){
+			//CHANGE
+			var nilaik 	= $('#colbpkbnilaik'+s_id).val().replace('Rp', '');
+			nilaitax 	= nilaik.replace(/[\.]+/g, '') * 1;
+			nilaitax 	= nilaitax * (global_perc / 100); 
+
+			$('#colbpkbnilaibank'+s_id).text(nilaitax);
+			$('#colbpkbnilaibank'+s_id).digits();
+			$('#colbpkbnilaibank'+s_id).prepend('Rp ');			
 		}
 
-		$("input.colperctaxbpkb").on("change", checkPersentasiTaxBPKB);
-		function checkPersentasiTaxBPKB(){
-			var id 		= $(this).attr('id').replace('colperctaxbpkb', '');
-			var nilaik 	= $('#colnilaik'+id).val().replace('Rp', '');
+
+		///END COLLATERAL, HITUNG HARGA BANK BPKB///
+
+		///COLLATERAL, HITUNG HARGA TAKSASI BPKB///
+		$("input.colbpkbperctax").on("change", hitungBPKBHargaTaksasi);
+		function hitungBPKBHargaTaksasi(){
+			var id 		= $(this).attr('id').replace('colbpkbperctax', '');
+			var nilaik 	= $('#colbpkbnilaik'+id).val().replace('Rp', '');
 			nilaitax 	= nilaik.replace(/[\.]+/g, '') * 1;
 			nilaitax 	= nilaitax * ($(this).val() / 100); 
 
@@ -986,54 +1029,84 @@
 			$(this).closest('form').find('#colnilaitaxbpkb'+id).digits();
 			$(this).closest('form').find('#colnilaitaxbpkb'+id).prepend('Rp ');
 		}
+		///END OF COLLATERAL, HITUNG HARGA TAKSASI BPKB///
 
+
+		///COLLATERAL, HITUNG HARGA TAKSASI SERTIFIKAT///
+		$("input.colsertifikatperctax").on("change", hitungSertifikatHargaTaksasi);
+		function hitungSertifikatHargaTaksasi(){
+			var nilait 	= $(this).closest('form').find('.colsertifikatnilait').val();
+			var nilaib 	= $(this).closest('form').find('.colsertifikatnilaib').val();
+
+			if(nilait){
+				nilait 	= nilait.replace('Rp', '');
+				nilait 	= (nilait.replace(/[\.]+/g, '') * 1);
+			}else{
+				nilait 	= 0;
+			}
+
+			if(nilaib){
+				nilaib 	= nilaib.replace('Rp', '');
+				nilaib 	= (nilaib.replace(/[\.]+/g, '') * 1);
+			}else{
+				nilaib 	= 0;
+			}
+
+			nilaitax 	= nilait + nilaib;
+			nilaitax 	= nilaitax * ($(this).val() / 100); 
+
+			$(this).closest('form').find('.colsertifikatnilaitax').text(nilaitax);
+			$(this).closest('form').find('.colsertifikatnilaitax').digits();
+			$(this).closest('form').find('.colsertifikatnilaitax').prepend('Rp ');
+		}
+		///END OF COLLATERAL, HITUNG HARGA TAKSASI SERTIFIKAT///
+
+		//FUNGSI GLOBAL
 		$.fn.digits = function(){ 
 		    return this.each(function(){ 
 		        $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") ); 
 		    })
 		}
+		//END OF FUNGSI GLOBAL
 
-		$("input.colnilaik").on("change", triggerChangeNilaiK);
+		//PERUBAHAN NILAI KENDARAAN, HITUNG ULANG PERSENTASI BANK
+		$("input.colbpkbnilaik").on("change", triggerBPKBPerubahanHargaKendaraan);
 
-		function triggerChangeNilaiK(){
-			s_id = $(this).attr('id').replace('colnilaik', '');
-			$("#colperbank"+s_id).trigger('change');
-			$("#colperctaxbpkb"+s_id).trigger('change');
+		function triggerBPKBPerubahanHargaKendaraan(){
+			s_id = $(this).attr('id').replace('colbpkbnilaik', '');
+			$("#colbpkbpercbank"+s_id).trigger('change');
+			$("#colbpkbperctax"+s_id).trigger('change');
 		}
+		//END OF PERUBAHAN NILAI KENDARAAN, HITUNG ULANG PERSENTASI BANK
 
-		$("input.colperbank").on("focus", setPersentasi);
 
-		function setPersentasi(){
-			global_perc = $(this).val();
-			s_id = $(this).attr('id').replace('colperbank', '');
-		}
-
-		$("#passcode_batal").on("click", revertDataPasscode);
-		$("#passcode_batal").on("click", setPersentasiBankBPKB);
-
-		$("#passcode_simpan").on("click", setPercBank);
-		$("#passcode_simpan").on("click", setPersentasiBankBPKB);
-
-		function revertDataPasscode(){
-			$('input#colperbank'+s_id).val(global_perc);
-			$('#passcode'+s_id).val('');
-		}
+		//PERUBAHAN STATUS PERNIKAHAN
+		$(".catstatuspernikahan").on("change", hitungTanggunganKeluarga);
 		
-		function setPercBank(){
-			//CHANGE
-			global_perc = $('#colperbank'+s_id).val();
+		function hitungTanggunganKeluarga(){
+			status_p = $(this).val().replace('K-', '');
+			if(status_p.toLowerCase()=='tk'){
+				tanggungan 	= 1500000;
+			}else if(status_p.toLowerCase()=='k'){
+				tanggungan 	= 3000000;
+			}else{
+				tanggungan 	= 3000000 + (status_p * 1250000);
+			}
+
+			$(this).closest('form').find('.cattanggungankeluarga').text(tanggungan);
+			$(this).closest('form').find('.cattanggungankeluarga').digits();
+			$(this).closest('form').find('.cattanggungankeluarga').prepend('Rp ');
 		}
 
-		function setPersentasiBankBPKB(){
-			//CHANGE
-			var nilaik 	= $('#colnilaik'+s_id).val().replace('Rp', '');
-			nilaitax 	= nilaik.replace(/[\.]+/g, '') * 1;
-			nilaitax 	= nilaitax * (global_perc / 100); 
+		//CEK STATUS KEPEMILIKAN USAHA
+		$(".capusahastatus").on("change", cekStatusKepemilikanUsaha);
 
-			$('#colnilaibankbpkb'+s_id).text(nilaitax);
-			$('#colnilaibankbpkb'+s_id).digits();
-			$('#colnilaibankbpkb'+s_id).prepend('Rp ');			
+		function cekStatusKepemilikanUsaha(){
+			if($(this).val()=='kerjasama_bagi_hasil'){
+				$(this).closest('form').find('.rowcapusahabagihasil').show();
+			}else{
+				$(this).closest('form').find('.rowcapusahabagihasil').hide();
+			}
 		}
-
 	</script>
 @endpush

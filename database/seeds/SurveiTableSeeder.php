@@ -52,7 +52,7 @@ class SurveiTableSeeder extends Seeder
 		$capi_owner 		= ['milik_sendiri','keluarga','dinas','sewa'];
 		$capi_ousaha 		= ['milik_sendiri','milik_keluarga','kerjasama_bagi_hasil'];
 		$capi_busaha		= ['media', 'perkebunan', 'garmen', 'kuliner'];
-		$sper 				= ['k','tk','k1','k2','k3'];
+		$sper 				= ['K','TK','K-1','K-2','K-3'];
 		$nm_bank 			= ['bca', 'bni', 'niaga', 'mandiri'];
 
 		$this->warna		= ['putih', 'biru', 'pink', 'hitam', 'hijau', 'abu-abu'];
@@ -219,6 +219,7 @@ class SurveiTableSeeder extends Seeder
 
 
 			$s_survei_c3['jenis']	= 'capacity';
+			$s_survei_c3['dokumen_survei']['capacity']['pekerjaan']						= $value->nasabah['pekerjaan'];
 			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['utama']			= $this->formatMoneyTo(rand(10,50)*100000);
 			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['pasangan']		= $this->formatMoneyTo(rand(20,50)*50000);
 			$s_survei_c3['dokumen_survei']['capacity']['penghasilan']['usaha']			= $this->formatMoneyTo(rand(0,50)*50000);
@@ -228,7 +229,7 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['angsuran_kredit']	= $this->formatMoneyTo(rand(0,50)*500000);
 			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['rincian']		= 'Biaya rumah tangga, pdam, telepon, listrik';
 			$s_survei_c3['dokumen_survei']['capacity']['manajemen_usaha']				= $char_watak[rand(0,2)];
-			$s_survei_c3['dokumen_survei']['capacity']['tanggungan_keluarga']			= $sper[rand(0,4)];
+			$s_survei_c3['dokumen_survei']['capacity']['status_pernikahan']				= $sper[rand(0,4)];
 			$s_survei_c3['dokumen_survei']['capacity']['catatan']						= $cap_catatan[rand(0,1)];
 
 			$s_survei_c4['jenis']	= 'capital';

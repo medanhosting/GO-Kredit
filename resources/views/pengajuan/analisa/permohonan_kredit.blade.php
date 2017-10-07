@@ -55,6 +55,13 @@
 	    </div>
 		<div id="collapsenasabah" class="collapse" role="tabpanel" aria-labelledby="nasabah">
 			<div class="card-block">
+				@if(!is_null($permohonan['dokumen_pelengkap']['ktp']))
+				<div class="row text-justify border border-top-0 border-left-0 border-right-0">
+					<div class="col-sm-12 text-center">
+						<img src="{{$permohonan['dokumen_pelengkap']['ktp']}}" class="img-fluid d-block mx-auto" alt="Responsive image" style="max-height:300px;padding:15px;">
+					</div>
+				</div>
+				@endif
 				@foreach($permohonan['nasabah'] as $k => $v )
 					@if($k!='keluarga' && $k!='alamat' && $k!='is_ektp' && $k!='is_lama')
 						<div class="row text-justify border border-top-0 border-left-0 border-right-0">

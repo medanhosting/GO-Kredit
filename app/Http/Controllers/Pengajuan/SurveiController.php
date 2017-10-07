@@ -128,7 +128,20 @@ class SurveiController extends Controller
 
 				$capacity->survei_id 		= $id;
 				$capacity->jenis 			= 'capacity';
-				$capacity->dokumen_survei 	= request()->only('capacity');
+				$ds_capacity 			 	= request()->only('capacity');
+				$sp 						= strtolower($ds_capacity['capacity']['status_pernikahan']);
+
+				if(str_is($sp, 'tk')){
+					$tk 					= $this->formatMoneyTo(1500000);
+				}elseif(str_is($sp, 'k')){
+					$tk 					= $this->formatMoneyTo(3000000);
+				}else{
+					$anak 					= str_replace('k-', '', $sp) * 1;
+					$ds_capacity['capacity']['tanggungan_keluarga']	= $this->formatMoneyTo(3000000 + ($anak * 1250000));
+				}
+				$ds_capacity['capacity']['pekerjaan'] 	= $survei->pengajuan->nasabah['pekerjaan'];
+
+				$capacity->dokumen_survei 	= $ds_capacity;
 				$capacity->save();
 			}
 
@@ -168,15 +181,21 @@ class SurveiController extends Controller
 				{
 					$ds_all['collateral'][$key]['harga_taksasi']	= $this->formatMoneyTo($this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_kendaraan']) * ($ds_all['collateral'][$key]['persentasi_taksasi']/100));
 					$ds_all['collateral'][$key]['harga_bank']		= $this->formatMoneyTo($this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_kendaraan']) * ($ds_all['collateral'][$key]['persentasi_bank']/100));
+				}else{
+					$nilai_t 	= $this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_tanah']); 
+					if(isset($ds_all['collateral'][$key]['nilai_bangunan'])){
+						$nilai_b 	= $this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_bangunan']); 
+					}else{
+						$nilai_b 	= 0;
+					}
+					$ds_all['collateral'][$key]['harga_taksasi']	= $this->formatMoneyTo(($nilai_b + $nilai_t) * ($ds_all['collateral'][$key]['persentasi_taksasi']/100));
 				}
-
 				$collateral->dokumen_survei = $ds_all;
 				$collateral->save();
 			}
 
 			return redirect(route('pengajuan.survei.show', ['id' => request()->get('lokasi_id'), 'kantor_aktif_id' => request()->get('kantor_aktif_id'), 'status' => 'survei']));
 		} catch (Exception $e) {
-
 			foreach ($e->getMessage()->toarray() as $k => $v) {
 				$exp 	= explode('.', $k);
 

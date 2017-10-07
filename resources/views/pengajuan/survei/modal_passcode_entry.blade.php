@@ -14,15 +14,3 @@
 		<a href="#" data-dismiss="modal" id="passcode_simpan" class="btn btn-primary">Simpan</a>
 	@endslot
 @endcomponent
-
-@push('js')
-	<script type="text/javascript">
-		
-		//MODAL PARSE DATA ATTRIBUTE//
-		$("#passcode_simpan").on("click", parsingDataPasscode);
-
-		function parsingDataPasscode(){
-			$('#passcode').val($('#passcode_oke').val());
-		}
-	</script>
-@endpush
