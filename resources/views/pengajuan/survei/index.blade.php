@@ -1,5 +1,5 @@
 @push('main')
-	<div class="container bg-white bg-shadow p-4">
+	<div class="container-fluid bg-white bg-shadow p-4">
 		<div class="row">
 			<div class="col">
 				<h4 class='mb-4 text-style text-secondary'>

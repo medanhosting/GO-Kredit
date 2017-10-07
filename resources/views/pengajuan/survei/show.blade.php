@@ -1,5 +1,5 @@
 @push('main')
-	<div class="container bg-white bg-shadow p-4">
+	<div class="container-fluid bg-white bg-shadow p-4">
 		<div class="row">
 			<div class="col">
 				<h4 class='mb-2 text-style text-secondary'>
@@ -34,33 +34,36 @@
 						<hr/>
 
 						@if(!is_null($survei['surveyor']))
-						<h7 class="text-secondary">SURVEYOR</h7>
-						<br/>
-						@foreach($survei['surveyor'] as $k => $v)
-						<h7>{{$v['nama']}}</h7>
-						<br/>
-						@endforeach
+							<h7 class="text-secondary">SURVEYOR</h7>
+							<br/>
+							@foreach($survei['surveyor'] as $k => $v)
+								<h7>{{$v['nama']}}</h7>
+								<br/>
+							@endforeach
 						@endif
 						<hr/>
 
 						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
-						<div class="row">
-							<div class="col">
-								{!! Form::bsText('Tanggal Survei', 'tanggal_survei', $survei['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+							<div class="row">
+								<div class="col">
+									{!! Form::bsText('Tanggal Survei', 'tanggal_survei', $survei['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								{!! Form::bsSubmit('Ubah Tanggal', ['class' => 'btn btn-primary', 'style' => "width:100%"]) !!}
-								{!! Form::close() !!}
+							<div class="row">
+								<div class="col">
+									{!! Form::bsSubmit('Ubah Tanggal', ['class' => 'btn btn-primary', 'style' => "width:100%"]) !!}
+								</div>
 							</div>
-						</div>
+						{!! Form::close() !!}
 						<hr/>
 
 						<h7 class="text-secondary">NASABAH</h7>
-						<p>{{$lokasi['nama']}}</p>
-						<p><i class="fa fa-phone"></i>&nbsp;{{$lokasi['telepon']}}</p>
-						<p><i class="fa fa-map-marker"></i>&nbsp;{{$lokasi['alamat']}}</p>
+						<ul class="fa-ul mt-1">
+							<li class="mb-1"><i class="fa-li fa fa-user mt-1"></i> {{ $lokasi['nama'] }}</li>
+							<li class="mb-1"><i class="fa-li fa fa-phone mt-1"></i> {{ $lokasi['telepon'] }}</li>
+							<li class="mb-1"><i class="fa-li fa fa-map-marker mt-1"></i> {{ $lokasi['alamat'] }}</li>
+						</ul>
+
 						<hr/>
 						<p>Form Survei</p>
 						<a href="{{route('pengajuan.pengajuan.print', ['id' => $survei['pengajuan_id'], 'mode' => 'survei_report', 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" style="width:100%" class="btn btn-primary btn-sm">
@@ -121,41 +124,41 @@
 						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Lingkungan Tinggal', 'character[lingkungan_tinggal]', ['dikenal' => 'Dikenal', 'kurang_dikenal' => 'Kurang Dikenal', 'tidak_dikenal' => 'Tidak Dikenal'], $survei['character']['dokumen_survei']['character']['lingkungan_tinggal'], ['class' => 'clingkungantinggal form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Lingkungan Tinggal', 'character[lingkungan_tinggal]', ['dikenal' => 'Dikenal', 'kurang_dikenal' => 'Kurang Dikenal', 'tidak_dikenal' => 'Tidak Dikenal'], $survei['character']['dokumen_survei']['character']['lingkungan_tinggal'], ['class' => 'clingkungantinggal form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Lingkungan Kerja', 'character[lingkungan_kerja]', ['dikenal' => 'Dikenal', 'kurang_dikenal' => 'Kurang Dikenal', 'tidak_dikenal' => 'Tidak Dikenal'], $survei['character']['dokumen_survei']['character']['lingkungan_kerja'], ['class' => 'clingkungankerja form-control text-info inline-edit'], true) !!}
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col">
-								{!! Form::vSelect('Watak', 'character[watak]', ['baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik'], $survei['character']['dokumen_survei']['character']['watak'], ['class' => 'cwatak form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Lingkungan Kerja', 'character[lingkungan_kerja]', ['dikenal' => 'Dikenal', 'kurang_dikenal' => 'Kurang Dikenal', 'tidak_dikenal' => 'Tidak Dikenal'], $survei['character']['dokumen_survei']['character']['lingkungan_kerja'], ['class' => 'clingkungankerja form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Pola Hidup', 'character[pola_hidup]', ['mewah' => 'Mewah', 'sederhana' => 'Sederhana'], $survei['character']['dokumen_survei']['character']['pola_hidup'], ['class' => 'cpolahidup form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Watak', 'character[watak]', ['baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik'], $survei['character']['dokumen_survei']['character']['watak'], ['class' => 'cwatak form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col">
+								{!! Form::vSelect('Pola Hidup', 'character[pola_hidup]', ['mewah' => 'Mewah', 'sederhana' => 'Sederhana'], $survei['character']['dokumen_survei']['character']['pola_hidup'], ['class' => 'cpolahidup form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						@forelse($survei['character']['dokumen_survei']['character']['informasi'] as $k => $v)
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Informasi '.$k, 'character[informasi][$k]', $v, ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
+								{!! Form::vText('Informasi '.$k, 'character[informasi][$k]', $v, ['class' => 'form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
 							</div>
 						</div>
 						@empty
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Informasi 1', 'character[informasi][1]', null, ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
+								{!! Form::vText('Informasi 1', 'character[informasi][1]', null, ['class' => 'form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Informasi 2', 'character[informasi][2]', null, ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
+								{!! Form::vText('Informasi 2', 'character[informasi][2]', null, ['class' => 'form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
 							</div>
 						</div>
 						@endforelse
@@ -170,32 +173,32 @@
 						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Persaingan Usaha', 'condition[persaingan_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['persaingan_usaha'], ['class' => 'copersainganusaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Persaingan Usaha', 'condition[persaingan_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['persaingan_usaha'], ['class' => 'copersainganusaha form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Prospek Usaha', 'condition[prospek_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['prospek_usaha'], ['class' => 'coprospekusaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Prospek Usaha', 'condition[prospek_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['prospek_usaha'], ['class' => 'coprospekusaha form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Perputaran Usaha', 'condition[perputaran_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'lambat' => 'Lambat'], $survei['condition']['dokumen_survei']['condition']['perputaran_usaha'], ['class' => 'coperputaranusaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Perputaran Usaha', 'condition[perputaran_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'lambat' => 'Lambat'], $survei['condition']['dokumen_survei']['condition']['perputaran_usaha'], ['class' => 'coperputaranusaha form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Pengalaman Usaha / Lama Bekerja', 'condition[pengalaman_usaha]', ['< 1 Tahun' => '< 1 Tahun', '2 - 3 Tahun' => '2 - 3 Tahun', '3 - 5 Tahun' => '3 - 5 Tahun', '> Tahun' => '> Tahun'], $survei['condition']['dokumen_survei']['condition']['pengalaman_usaha'], ['class' => 'copengalamanusaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Pengalaman Usaha / Lama Bekerja', 'condition[pengalaman_usaha]', ['< 1 Tahun' => '< 1 Tahun', '2 - 3 Tahun' => '2 - 3 Tahun', '3 - 5 Tahun' => '3 - 5 Tahun', '> Tahun' => '> Tahun'], $survei['condition']['dokumen_survei']['condition']['pengalaman_usaha'], ['class' => 'copengalamanusaha form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Resiko Usaha Ke Depan', 'condition[resiko_usaha_kedepan]', [null => 'Pilih', 'bagus' => 'Bagus', 'biasa' => 'Biasa', 'suram' => 'Suram'], $survei['condition']['dokumen_survei']['condition']['resiko_usaha_kedepan'], ['class' => 'coresikousaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Resiko Usaha Ke Depan', 'condition[resiko_usaha_kedepan]', [null => 'Pilih', 'bagus' => 'Bagus', 'biasa' => 'Biasa', 'suram' => 'Suram'], $survei['condition']['dokumen_survei']['condition']['resiko_usaha_kedepan'], ['class' => 'coresikousaha form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Jumlah Pelanggan Harian', 'condition[jumlah_pelanggan_harian]', [null => 'Pilih', '0 - 10' => '0 - 10', '10 - 50' => '10 - 50', '50 - 100' => '50 - 100', '> 100' => '> 100'], $survei['condition']['dokumen_survei']['condition']['jumlah_pelanggan_harian'], ['class' => 'cjumlahpelanggan form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Jumlah Pelanggan Harian', 'condition[jumlah_pelanggan_harian]', [null => 'Pilih', '0 - 10' => '0 - 10', '10 - 50' => '10 - 50', '50 - 100' => '50 - 100', '> 100' => '> 100'], $survei['condition']['dokumen_survei']['condition']['jumlah_pelanggan_harian'], ['class' => 'cjumlahpelanggan form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
@@ -208,49 +211,49 @@
 						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Manajemen Usaha', 'capacity[manajemen_usaha]', ['baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik'], $survei['capacity']['dokumen_survei']['capacity']['manajemen_usaha'], ['class' => 'camanajemenusaha form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Manajemen Usaha', 'capacity[manajemen_usaha]', ['baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik'], $survei['capacity']['dokumen_survei']['capacity']['manajemen_usaha'], ['class' => 'camanajemenusaha form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						<h6 class="text-secondary"><strong><u>Penghasilan</u></strong></h6>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Penghasilan Utama', 'capacity[penghasilan][utama]', $survei['capacity']['dokumen_survei']['capacity']['penghasilan']['utama'], ['class' => 'capengahasilanutama mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 3.000.000'], true) !!}
+								{!! Form::vText('Penghasilan Utama', 'capacity[penghasilan][utama]', $survei['capacity']['dokumen_survei']['capacity']['penghasilan']['utama'], ['class' => 'capengahasilanutama mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 3.000.000'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Penghasilan Suami / Istri', 'capacity[penghasilan][pasangan]', $survei['capacity']['dokumen_survei']['capacity']['penghasilan']['pasangan'], ['class' => 'capengahasilanpasangan mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 3.000.000'], true) !!}
+								{!! Form::vText('Penghasilan Suami / Istri', 'capacity[penghasilan][pasangan]', $survei['capacity']['dokumen_survei']['capacity']['penghasilan']['pasangan'], ['class' => 'capengahasilanpasangan mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 3.000.000'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Penghasilan Usaha', 'capacity[penghasilan][usaha]', $survei['capacity']['dokumen_survei']['capacity']['penghasilan']['usaha'], ['class' => 'capengahasilanusaha mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 3.000.000'], true) !!}
+								{!! Form::vText('Penghasilan Usaha', 'capacity[penghasilan][usaha]', $survei['capacity']['dokumen_survei']['capacity']['penghasilan']['usaha'], ['class' => 'capengahasilanusaha mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 3.000.000'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Rincian Penghasilan Utama', 'capacity[penghasilan][rincian]', $survei['capacity']['dokumen_survei']['capacity']['penghasilan']['rincian'], ['class' => 'carincianpenghasilan form-control inline-edit text-info', 'placeholder' => 'Gaji Rutin'], true) !!}
+								{!! Form::vText('Rincian Penghasilan Utama', 'capacity[penghasilan][rincian]', $survei['capacity']['dokumen_survei']['capacity']['penghasilan']['rincian'], ['class' => 'carincianpenghasilan form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Gaji Rutin'], true) !!}
 							</div>
 						</div>
-						<h6 class="text-secondary"><strong><u>Pengeluaran</u></strong></h6>
+						<h6 class="text-secondary mt-4"><strong><u>Pengeluaran</u></strong></h6>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Biaya Rutin', 'capacity[pengeluaran][biaya_rutin]', $survei['capacity']['dokumen_survei']['capacity']['pengeluaran']['biaya_rutin'], ['class' => 'cabiayarutin mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 3.000.000'], true) !!}
-							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								{!! Form::vText('Biaya Angsuran Kredit', 'capacity[pengeluaran][angsuran_kredit]', $survei['capacity']['dokumen_survei']['capacity']['pengeluaran']['angsuran_kredit'], ['class' => 'cabiayaangsuran mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 3.000.000'], true) !!}
+								{!! Form::vText('Biaya Rutin', 'capacity[pengeluaran][biaya_rutin]', $survei['capacity']['dokumen_survei']['capacity']['pengeluaran']['biaya_rutin'], ['class' => 'cabiayarutin mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 3.000.000'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Rincian Biaya Rutin', 'capacity[pengeluaran][rincian]', $survei['capacity']['dokumen_survei']['capacity']['pengeluaran']['rincian'], ['class' => 'carincianpengeluaran form-control inline-edit text-info', 'placeholder' => 'Rumah Tangga'], true) !!}
+								{!! Form::vText('Biaya Angsuran Kredit', 'capacity[pengeluaran][angsuran_kredit]', $survei['capacity']['dokumen_survei']['capacity']['pengeluaran']['angsuran_kredit'], ['class' => 'cabiayaangsuran mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 3.000.000'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Tanggungan Keluarga', 'capacity[tanggungan_keluarga]', $survei['capacity']['dokumen_survei']['capacity']['tanggungan_keluarga'], ['class' => 'catanggungankel form-control inline-edit text-info', 'placeholder' => 'K-1'], true) !!}
+								{!! Form::vText('Rincian Biaya Rutin', 'capacity[pengeluaran][rincian]', $survei['capacity']['dokumen_survei']['capacity']['pengeluaran']['rincian'], ['class' => 'carincianpengeluaran form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rumah Tangga'], true) !!}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								{!! Form::vText('Tanggungan Keluarga', 'capacity[tanggungan_keluarga]', $survei['capacity']['dokumen_survei']['capacity']['tanggungan_keluarga'], ['class' => 'catanggungankel form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'K-1'], true) !!}
 							</div>
 						</div>
 						{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
@@ -264,154 +267,152 @@
 						<h6 class="text-secondary"><strong><u>Rumah</u></strong></h6>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Status Kepemilikan', 'capital[rumah][status]', ['milik_sendiri' => 'Milik Sendiri', 'keluarga' => 'Keluarga', 'dinas' => 'Dinas', 'sewa' => 'Sewa', 'angsuran' => 'KPR/KPA'], $survei['capital']['dokumen_survei']['capital']['rumah']['status'], ['class' => 'caprumahstatus form-control text-info inline-edit'], true) !!}
+								{!! Form::vSelect('Status Kepemilikan', 'capital[rumah][status]', ['milik_sendiri' => 'Milik Sendiri', 'keluarga' => 'Keluarga', 'dinas' => 'Dinas', 'sewa' => 'Sewa', 'angsuran' => 'KPR/KPA'], $survei['capital']['dokumen_survei']['capital']['rumah']['status'], ['class' => 'caprumahstatus form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 
 						<div id="capisewa" @if($survei['capital']['dokumen_survei']['capital']['rumah']['status']!='sewa') style="display:none" @endif>
-						<div class="row">
-							<div class="col">
-								{!! Form::vText('Sewa Sejak', 'capital[rumah][sewa_sejak]', $survei['capital']['dokumen_survei']['capital']['rumah']['sewa_sejak'], ['class' => 'caprumahsewasejak form-control inline-edit text-info', 'placeholder' => '2015'], true) !!}
+							<div class="row">
+								<div class="col">
+									{!! Form::vText('Sewa Sejak', 'capital[rumah][sewa_sejak]', $survei['capital']['dokumen_survei']['capital']['rumah']['sewa_sejak'], ['class' => 'caprumahsewasejak form-control inline-edit border-input w-25 text-info pb-1', 'placeholder' => '2015'], true) !!}
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								{!! Form::vText('Masa Sewa', 'capital[rumah][masa_sewa]', $survei['capital']['dokumen_survei']['capital']['rumah']['masa_sewa'], ['class' => 'caprumahmasasewa form-control inline-edit text-info', 'placeholder' => '2 Tahun'], true) !!}
+							<div class="row">
+								<div class="col">
+									{!! Form::vText('Masa Sewa', 'capital[rumah][masa_sewa]', $survei['capital']['dokumen_survei']['capital']['rumah']['masa_sewa'], ['class' => 'caprumahmasasewa form-control inline-edit border-input text-info pb-1', 'placeholder' => '2'], true, null, null, 'Tahun', ['class_input_group' => 'w-25', 'class_input_group_append' => 'border-0 bg-white']) !!}
+								</div>
 							</div>
-						</div>
 						</div>
 
 						<div id="capiangs" @if($survei['capital']['dokumen_survei']['capital']['rumah']['status']!='angsuran') style="display:none" @endif>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Angsuran Bulanan', 'capital[rumah][angsuran_bulanan]', $survei['capital']['dokumen_survei']['capital']['rumah']['angsuran_bulanan'], ['class' => 'carumahangsuranbulanan mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 3.500.000'], true) !!}
+								{!! Form::vText('Angsuran Bulanan', 'capital[rumah][angsuran_bulanan]', $survei['capital']['dokumen_survei']['capital']['rumah']['angsuran_bulanan'], ['class' => 'carumahangsuranbulanan mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 3.500.000'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Lama Angsuran', 'capital[rumah][lama_angsuran]', $survei['capital']['dokumen_survei']['capital']['rumah']['lama_angsuran'], ['class' => 'caprumahlamaangsuran form-control inline-edit text-info', 'placeholder' => '2 Tahun'], true) !!}
+								{!! Form::vText('Lama Angsuran', 'capital[rumah][lama_angsuran]', $survei['capital']['dokumen_survei']['capital']['rumah']['lama_angsuran'], ['class' => 'caprumahlamaangsuran form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => '2'], true, null, null, 'Tahun',  ['class_input_group' => 'w-25', 'class_input_group_append' => 'border-0 bg-white']) !!}
 							</div>
 						</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Lama Menempati', 'capital[rumah][lama_menempati]', $survei['capital']['dokumen_survei']['capital']['rumah']['lama_menempati'], ['class' => 'caprumahlamamenempati form-control inline-edit text-info', 'placeholder' => '2 Tahun'], true) !!}
+								{!! Form::vText('Lama Menempati', 'capital[rumah][lama_menempati]', $survei['capital']['dokumen_survei']['capital']['rumah']['lama_menempati'], ['class' => 'caprumahlamamenempati form-control inline-edit border-input text-info pb-1 d-inline', 'placeholder' => '2'], true, null, null, 'Tahun', ['class_input_group' => 'w-25', 'class_input_group_append' => 'border-0 bg-white']) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Luas Rumah', 'capital[rumah][luas_rumah]', $survei['capital']['dokumen_survei']['capital']['rumah']['luas_rumah'], ['class' => 'caprumahluas form-control inline-edit text-info', 'placeholder' => '30 * 30 m'], true) !!}
+								{!! Form::vText('Luas Rumah', 'capital[rumah][luas_rumah]', $survei['capital']['dokumen_survei']['capital']['rumah']['luas_rumah'], ['class' => 'caprumahluas form-control inline-edit border-input text-info pb-1', 'placeholder' => '30 * 30 m'], true, null, null, 'M<sup>2</sup>',  ['class_input_group' => 'w-25', 'class_input_group_append' => 'border-0 bg-white']) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Nilai Rumah', 'capital[rumah][nilai_rumah]', $survei['capital']['dokumen_survei']['capital']['rumah']['nilai_rumah'], ['class' => 'caprumahnilai mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 120.000.000'], true) !!}
+								{!! Form::vText('Nilai Rumah', 'capital[rumah][nilai_rumah]', $survei['capital']['dokumen_survei']['capital']['rumah']['nilai_rumah'], ['class' => 'caprumahnilai mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 120.000.000'], true) !!}
 							</div>
 						</div>
-						<h6 class="text-secondary"><strong><u>Kendaraan</u></strong></h6>
+						<h6 class="text-secondary mt-4"><strong><u>Kendaraan</u></strong></h6>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Jumlah Kendaraan Roda 4', 'capital[kendaraan][jumlah_kendaraan_roda_4]', $survei['capital']['dokumen_survei']['capital']['kendaraan']['jumlah_kendaraan_roda_4'], ['class' => 'capkendaraanr4 form-control inline-edit text-info', 'placeholder' => '2'], true) !!}
-							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								{!! Form::vText('Jumlah Kendaraan Roda 2', 'capital[kendaraan][jumlah_kendaraan_roda_2]', $survei['capital']['dokumen_survei']['capital']['kendaraan']['jumlah_kendaraan_roda_2'], ['class' => 'capkendaraanr2 form-control inline-edit text-info', 'placeholder' => '4'], true) !!}
+								{!! Form::vText('Jumlah Kendaraan Roda 4', 'capital[kendaraan][jumlah_kendaraan_roda_4]', $survei['capital']['dokumen_survei']['capital']['kendaraan']['jumlah_kendaraan_roda_4'], ['class' => 'capkendaraanr4 form-control inline-edit border-input w-25 text-info pb-1', 'placeholder' => '2'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Nilai Kendaraan', 'capital[kendaraan][nilai_kendaraan]', $survei['capital']['dokumen_survei']['capital']['kendaraan']['nilai_kendaraan'], ['class' => 'caprumahnilai mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 320.000.000'], true) !!}
-							</div>
-						</div>
-						<h6 class="text-secondary"><strong><u>Usaha</u></strong></h6>
-						<div class="row">
-							<div class="col">
-								{!! Form::vText('Nama Usaha', 'capital[usaha][nama_usaha]', $survei['capital']['dokumen_survei']['capital']['usaha']['nama_usaha'], ['class' => 'capusahanama form-control inline-edit text-info', 'placeholder' => 'UD Maju Terus'], true) !!}
+								{!! Form::vText('Jumlah Kendaraan Roda 2', 'capital[kendaraan][jumlah_kendaraan_roda_2]', $survei['capital']['dokumen_survei']['capital']['kendaraan']['jumlah_kendaraan_roda_2'], ['class' => 'capkendaraanr2 form-control inline-edit border-input w-25 text-info pb-1', 'placeholder' => '4'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Bidang Usaha', 'capital[usaha][bidang_usaha]', $survei['capital']['dokumen_survei']['capital']['usaha']['bidang_usaha'], ['class' => 'capusahabidang form-control inline-edit text-info', 'placeholder' => 'Sembako'], true) !!}
+								{!! Form::vText('Nilai Kendaraan', 'capital[kendaraan][nilai_kendaraan]', $survei['capital']['dokumen_survei']['capital']['kendaraan']['nilai_kendaraan'], ['class' => 'caprumahnilai mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 320.000.000'], true) !!}
+							</div>
+						</div>
+						<h6 class="text-secondary mt-4"><strong><u>Usaha</u></strong></h6>
+						<div class="row">
+							<div class="col">
+								{!! Form::vText('Nama Usaha', 'capital[usaha][nama_usaha]', $survei['capital']['dokumen_survei']['capital']['usaha']['nama_usaha'], ['class' => 'capusahanama form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'UD Maju Terus'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Lama Usaha', 'capital[usaha][lama_usaha]', $survei['capital']['dokumen_survei']['capital']['usaha']['lama_usaha'], ['class' => 'capusahalama form-control inline-edit text-info', 'placeholder' => '2 Tahun'], true) !!}
+								{!! Form::vText('Bidang Usaha', 'capital[usaha][bidang_usaha]', $survei['capital']['dokumen_survei']['capital']['usaha']['bidang_usaha'], ['class' => 'capusahabidang form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Sembako'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vSelect('Status Usaha', 'capital[usaha][status]', ['milik_sendiri' => 'Milik Sendiri', 'milik_keluarga' => 'Milik Keluarga', 'kerjasama_bagi_hasil' => 'Kerjasama Bagi Hasil'], $survei['capital']['dokumen_survei']['capital']['usaha']['status'], ['class' => 'capusahastatus form-control text-info inline-edit'], true) !!}
+								{!! Form::vText('Lama Usaha', 'capital[usaha][lama_usaha]', $survei['capital']['dokumen_survei']['capital']['usaha']['lama_usaha'], ['class' => 'capusahalama form-control inline-edit border-input text-info pb-1', 'placeholder' => '2'], true, null, null, 'Tahun',  ['class_input_group' => 'w-25', 'class_input_group_append' => 'border-0 bg-white']) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Bagi Hasil', 'capital[usaha][bagi_hasil]', $survei['capital']['dokumen_survei']['capital']['usaha']['bagi_hasil'], ['class' => 'capusahabagihasil form-control inline-edit text-info', 'placeholder' => '40 %'], true) !!}
+								{!! Form::vSelect('Status Usaha', 'capital[usaha][status]', ['milik_sendiri' => 'Milik Sendiri', 'milik_keluarga' => 'Milik Keluarga', 'kerjasama_bagi_hasil' => 'Kerjasama Bagi Hasil'], $survei['capital']['dokumen_survei']['capital']['usaha']['status'], ['class' => 'capusahastatus form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Nilai Aset', 'capital[usaha][nilai_aset]', $survei['capital']['dokumen_survei']['capital']['usaha']['nilai_aset'], ['class' => 'capusahanilai mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 320.000.000'], true) !!}
+								{!! Form::vText('Bagi Hasil', 'capital[usaha][bagi_hasil]', $survei['capital']['dokumen_survei']['capital']['usaha']['bagi_hasil'], ['class' => 'capusahabagihasil form-control inline-edit border-input text-info pb-1', 'placeholder' => '40'], true, null, null, '%',  ['class_input_group' => 'w-25', 'class_input_group_append' => 'border-0 bg-white']) !!}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col">
-								{!! Form::vText('Omzet Bulanan', 'capital[usaha][omzet_bulanan]', $survei['capital']['dokumen_survei']['capital']['usaha']['omzet_bulanan'], ['class' => 'capomzetbulanan mask-money form-control inline-edit text-info', 'placeholder' => 'Rp 10.000.000'], true) !!}
+								{!! Form::vText('Nilai Aset', 'capital[usaha][nilai_aset]', $survei['capital']['dokumen_survei']['capital']['usaha']['nilai_aset'], ['class' => 'capusahanilai mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 320.000.000'], true) !!}
 							</div>
 						</div>
-						<h6 class="text-secondary"><strong><u>Hutang</u></strong></h6>
-						<table class="table table-sm table-bordered">
+						<div class="row">
+							<div class="col">
+								{!! Form::vText('Omzet Bulanan', 'capital[usaha][omzet_bulanan]', $survei['capital']['dokumen_survei']['capital']['usaha']['omzet_bulanan'], ['class' => 'capomzetbulanan mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 10.000.000'], true) !!}
+							</div>
+						</div>
+						<h6 class="text-secondary mt-4"><strong><u>Hutang</u></strong></h6>
+						<table class="table table-bordered">
 							<thead class="thead-default">
 								<tr>
-									<th style="border:1px #aaa solid">Lembaga Keuangan</th>
-									<th style="border:1px #aaa solid">Jumlah Pinjaman</th>
-									<th style="border:1px #aaa solid">Jumlah Angsuran</th>
-									<th style="border:1px #aaa solid">Jangka Waktu</th>
-									<th style="border:1px #aaa solid" colspan="2">&nbsp;</th>
+									<th>Lembaga Keuangan</th>
+									<th>Jumlah Pinjaman</th>
+									<th>Jumlah Angsuran</th>
+									<th>Jangka Waktu</th>
+									<th colspan="2">Action</th>
 								</tr>
 							</thead>
 							<tbody id="formHutang">
 								@forelse($survei['capital']['dokumen_survei']['capital']['hutang'] as $k => $v)
 									<tr id="clonedHutang{{$k+1}}" class="clonedHutang">
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][lembaga_keuangan]', $v['lembaga_keuangan'], ['class' => 'klembagakeuangan form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][lembaga_keuangan]', $v['lembaga_keuangan'], ['class' => 'klembagakeuangan form-control text-info inline-edit', 'placeholder' => 'BCA'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jumlah_pinjaman]', $v['jumlah_pinjaman'], ['class' => 'kjumlahpinjaman mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 40.000.000', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jumlah_pinjaman]', $v['jumlah_pinjaman'], ['class' => 'kjumlahpinjaman mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 40.000.000'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jumlah_angsuran]', $v['jumlah_angsuran'], ['class' => 'kjumlahangsuran mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 2.000.000', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jumlah_angsuran]', $v['jumlah_angsuran'], ['class' => 'kjumlahangsuran mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 2.000.000'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jangka_waktu]', $v['jangka_waktu'], ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1 Tahun', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jangka_waktu]', $v['jangka_waktu'], ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1'], true, null, null, 'Tahun',  ['class_input_group' => 'w-50', 'class_input_group_append' => 'border-0 bg-white']) !!}
 										</td>
-										<td style="padding-top:12px;border:1px #aaa solid">
-											<a class="cloneHutang text-info" style="font-size:16px;padding:5px;"><i class="fa fa-copy"></i></a> 
-										</td>
-										<td style="padding-top:12px;border:1px #aaa solid">
-											<a class="removeHutang text-danger" style="font-size:16px;padding:5px;"><i class="fa fa-trash"></i></a>
+										<td class="align-text-top">
+											<a class="cloneHutang text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat hutang"><i class="fa fa-copy fa-lg"></i></a> 
+											&nbsp;&nbsp;&nbsp;
+											<a class="removeHutang text-danger" data-toggle="tooltip" data-placement="bottom" title="hapus hutang"><i class="fa fa-trash fa-lg"></i></a>
 										</td>
 									</tr>
 								@empty
 									<tr id="clonedHutang1" class="clonedHutang">
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang][1][lembaga_keuangan]', null, ['class' => 'klembagakeuangan form-control text-info inline-edit', 'placeholder' => 'BCA', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'capital[hutang][1][lembaga_keuangan]', null, ['class' => 'klembagakeuangan form-control text-info inline-edit', 'placeholder' => 'BCA'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang][1][jumlah_pinjaman]', null, ['class' => 'kjumlahpinjaman form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 60.000.000', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'capital[hutang][1][jumlah_pinjaman]', null, ['class' => 'kjumlahpinjaman form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 60.000.000'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang][1][jumlah_angsuran]', null, ['class' => 'kjumlahangsuran form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 2.000.000', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'capital[hutang][1][jumlah_angsuran]', null, ['class' => 'kjumlahangsuran form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 2.000.000'], true) !!}
 										</td>
-										<td style="border:1px #aaa solid">
-											{!! Form::vText(null, 'capital[hutang][1][jangka_waktu]', null, ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1 Tahun', 'style' => 'padding:7px;'], true) !!}
+										<td class="align-text-top">
+											{!! Form::vText(null, 'capital[hutang][1][jangka_waktu]', null, ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1'], true, null, null, 'Tahun',  ['class_input_group' => 'w-50', 'class_input_group_append' => 'border-0 bg-white']) !!}
 										</td>
-										<td style="padding-top:12px;border:1px #aaa solid">
-											<a class="cloneHutang text-info" style="font-size:16px;padding:5px;"><i class="fa fa-copy"></i></a> 
-										</td>
-										<td style="padding-top:12px;border:1px #aaa solid">
-											<a class="removeHutang text-danger" style="font-size:16px;padding:5px;"><i class="fa fa-trash"></i></a>
+										<td class="align-text-top">
+											<a class="cloneHutang text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat hutang"><i class="fa fa-copy fa-lg"></i></a> 
+											&nbsp;&nbsp;&nbsp;
+											<a class="removeHutang text-danger" data-toggle="tooltip" data-placement="bottom" title="hapus hutang"><i class="fa fa-trash fa-lg"></i></a>
 										</td>
 									</tr>
 								@endforelse
@@ -638,8 +639,8 @@
 										</div>
 									@endforeach
 									@foreach($survei['jaminan_tanah_bangunan'] as $k => $v)
-										@php $jenis = $v['dokumen_survei']['collateral']['jenis'] @endphp
-										<div class="tab-pane  @if($lokasi['agenda']=='jaminan' && $perc[$k]==100) active @endif" id="jaminan{{$v['id']}}" role="tabpanel">
+										@php $jenis = $v['dokumen_survei']['collateral']['jenis']; @endphp
+										<div class="tab-pane  {{ ($lokasi['agenda']=='jaminan' && $perc[$k]==100)) ? 'active' : '' }}" id="jaminan{{$v['id']}}" role="tabpanel">
 											
 											<h6 class="text-secondary"><strong><u>Foto Jaminan</u></strong></h6>
 											<div class="row">

@@ -8,11 +8,11 @@
 	<div class="form-group">
 	@endif
 	@if ($append || $prepend)
-		<div class='input-group'>
+		<div class="input-group {{ ($prepend_append_attributes && isset($prepend_append_attributes['class_input_group']) ? $prepend_append_attributes['class_input_group'] : '') }}">
 	@endif
 
 	@if ($prepend)
-		<div class="input-group-addon">{!! $prepend !!}</div>
+		<div class="input-group-addon {{ ($prepend_append_attributes && isset($prepend_append_attributes['class_input_group_prepend']) ? $prepend_append_attributes['class_input_group_prepend'] : '') }}">{!! $prepend !!}</div>
 	@endif
 
 	@if($errors->has($name)  && $show_error && isset($attributes['class']))
@@ -24,7 +24,7 @@
 	{!! Form::text($name, $value, array_merge(['class' => 'form-control ' . (($errors->has($name)  && $show_error) ? 'is-invalid' : 'is-invalid')], ($attributes ? $attributes : []))) !!}
 
 	@if ($append)
-		<div class="input-group-addon">{!! $append !!}</div>
+		<div class="input-group-addon {{ ($prepend_append_attributes && isset($prepend_append_attributes['class_input_group_append']) ? $prepend_append_attributes['class_input_group_append'] : '') }}">{!! $append !!}</div>
 	@endif
 			
 	@if ($append || $prepend)

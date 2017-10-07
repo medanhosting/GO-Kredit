@@ -68,14 +68,19 @@ $theme-colors: (
   warning: $yellow,
   danger: $red,
   light: $gray-300,
-  dark: $gray-800
+  dark: $gray-700,
+  gray: $gray-500,
+  black: $black
 ) !default;
 
 
 // Components
 //
 // Define common padding and border radius sizes and more
-$border-width: 1px !default
+$border-width:            1px !default;
+$border-radius:          .25rem !default;
+$border-radius-lg:       .3rem !default;
+$border-radius-sm:       .2rem !default
 
 // Brands
 $brand-primary: $green;
@@ -133,6 +138,20 @@ $table-inverse-accent-bg:       rgba($white, .05) !default;
 $table-inverse-hover-bg:        rgba($white, .075) !default;
 $table-inverse-border-color:    lighten($gray-900, 7.5%) !default;
 $table-inverse-color:           $body-bg !default;
+
+
+// Progress bars
+
+$progress-height:               1.2rem !default;
+// $progress-font-size:            .75rem !default;
+// $progress-bg:                   $gray-200 !default;
+// $progress-border-radius:        $border-radius !default;
+// $progress-box-shadow:           inset 0 .1rem .1rem rgba($black,.1) !default;
+// $progress-bar-color:            $white !default;
+// $progress-bar-bg:               theme-color("primary") !default;
+// $progress-bar-animation-timing: 1s linear infinite !default;
+// $progress-bar-transition:       width .6s ease !default
+
 
 // Breadcrumbs
 

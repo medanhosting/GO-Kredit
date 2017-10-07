@@ -1,17 +1,17 @@
 <div class="col-auto col-md-12">
-	{!! Form::vText('Jalan', $prefix.'[alamat]'.$suffix, $alamat['alamat'], ['class' => 'alamat form-control border-input w-100 text-secondary pb-1 '.$inline, 'placeholder' => 'JL. Adi Sucipto Gang 2 Nomor 11'], true) !!}
+	{!! Form::vText('Jalan', $prefix.'[alamat]'.$suffix, $alamat['alamat'], ['class' => 'alamat form-control border-input w-100 text-info pb-1 '.$inline, 'placeholder' => 'JL. Adi Sucipto Gang 2 Nomor 11'], true) !!}
 </div>
 {{--  <div class="row ml-0 mr-0">  --}}
 	<div class="col-auto col-md-12">
-		{!! Form::vText('RT', $prefix.'[rt]'.$suffix, $alamat['rt'], ['class' => 'rt form-control mask-rt-rw border-input w-25 text-secondary pb-1 '.$inline, 'placeholder' => '001'], true) !!}
+		{!! Form::vText('RT', $prefix.'[rt]'.$suffix, $alamat['rt'], ['class' => 'rt form-control mask-rt-rw border-input w-25 text-info pb-1 '.$inline, 'placeholder' => '001'], true) !!}
 	</div>
 	<div class="col-auto col-md-12">
-		{!! Form::vText('RW', $prefix.'[rw]'.$suffix, $alamat['rw'], ['class' => 'rw form-control mask-rt-rw border-input w-25 text-secondary pb-1 '.$inline, 'placeholder' => '002'], true) !!}
+		{!! Form::vText('RW', $prefix.'[rw]'.$suffix, $alamat['rw'], ['class' => 'rw form-control mask-rt-rw border-input w-25 text-info pb-1 '.$inline, 'placeholder' => '002'], true) !!}
 	</div>
 {{--  </div>  --}}
 
 <div class="col-auto col-md-12">
-	{!! Form::vText('Desa/Dusun', $prefix.'[kelurahan]'.$suffix, $alamat['kelurahan'], ['class' => 'kelurahan form-control border-input w-50 text-secondary pb-1 '.$inline, 'placeholder' => 'MERGAN'], true) !!}
+	{!! Form::vText('Desa/Dusun', $prefix.'[kelurahan]'.$suffix, $alamat['kelurahan'], ['class' => 'kelurahan form-control border-input w-50 text-info pb-1 '.$inline, 'placeholder' => 'MERGAN'], true) !!}
 </div>
 
 <div class="col-auto col-md-12">
@@ -20,7 +20,7 @@
 			{!! Form::label('', 'KECAMATAN', ['class' => 'text-uppercase mt-1 mb-1']) !!}
 		</div>
 		<div class="col text-left">
-			<select class="ajax-teritori-kecamatan custom-select {{$inline}} kecamatan form-control inline-edit required border-input w-75 text-secondary pb-1 @if($errors->has($prefix.'[kecamatan]'.$suffix)) is-invalid @endif" name="{{ $prefix }}[kecamatan]{{ $suffix }}" style="width:100%">
+			<select class="ajax-teritori-kecamatan custom-select {{$inline}} kecamatan form-control inline-edit required border-input w-75 text-info pb-1 @if($errors->has($prefix.'[kecamatan]'.$suffix)) is-invalid @endif" name="{{ $prefix }}[kecamatan]{{ $suffix }}" style="width:100%">
 				<option value="{{ $kecamatan }}">{{$kecamatan}}</option>
 			</select>
 			@if ($errors->has($prefix.'[kecamatan]'.$suffix))
@@ -40,7 +40,7 @@
 			{!! Form::label('', 'KOTA/KABUPATEN', ['class' => 'text-uppercase mt-1 mb-1']) !!}
 		</div>
 		<div class="col text-left">
-			<select class="ajax-teritori-kota custom-select {{$inline}} kota form-control required border-input w-75 text-secondary pb-1  @if($errors->has($prefix.'[kota]'.$suffix)) is-invalid @endif" name="{{$prefix}}[kota]{{$suffix}}" style="width:100%">
+			<select class="ajax-teritori-kota custom-select {{$inline}} kota form-control required border-input w-75 text-info pb-1  @if($errors->has($prefix.'[kota]'.$suffix)) is-invalid @endif" name="{{$prefix}}[kota]{{$suffix}}" style="width:100%">
 				<option value="{{$kota}}">{{$kota}}</option>
 			</select>
 			@if ($errors->has($prefix.'[kota]'.$suffix))
