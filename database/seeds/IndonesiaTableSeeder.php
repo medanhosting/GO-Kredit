@@ -74,19 +74,19 @@ class IndonesiaTableSeeder extends Seeder
 			$table->index(['territorial_regensi_id', 'nama']);
 		});
 
-		exit;
+		// exit;
 
-		// village
-		if (($handle = fopen(database_path().'/seeds/csv/villages.csv', "r")) !== FALSE) 
-		{
-			while (($data = fgetcsv($handle, 500, ",")) !== FALSE) 
-			{
-				$attr 		= ['id' => $data[0], 'nama' => $data[2], 'territorial_distrik_id' => $data[1]];
-				$model 		= new Desa;
-				$model->fill($attr);
-				$model->save();
-			}
-			fclose($handle);
-		}
+		// // village
+		// if (($handle = fopen(database_path().'/seeds/csv/villages.csv', "r")) !== FALSE) 
+		// {
+		// 	while (($data = fgetcsv($handle, 500, ",")) !== FALSE) 
+		// 	{
+		// 		$attr 		= ['id' => $data[0], 'nama' => $data[2], 'territorial_distrik_id' => $data[1]];
+		// 		$model 		= new Desa;
+		// 		$model->fill($attr);
+		// 		$model->save();
+		// 	}
+		// 	fclose($handle);
+		// }
 	}
 }

@@ -149,7 +149,7 @@
 							{!! Form::vText('Jangka Waktu', 'jangka_waktu', $analisa['jangka_waktu'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
 						</div>
 					</div>
-					<div class="row">
+					<!-- <div class="row">
 						<div class="col">
 							{!! Form::vText('Limit Angsuran', 'limit_angsuran', $analisa['limit_angsuran'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000'], true) !!}
 						</div>
@@ -158,7 +158,7 @@
 						<div class="col">
 							{!! Form::vText('Limit Jangka Waktu', 'limit_jangka_waktu', $analisa['limit_jangka_waktu'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
 						</div>
-					</div>
+					</div> -->
 
 					<div class="row">
 						<div class="col">

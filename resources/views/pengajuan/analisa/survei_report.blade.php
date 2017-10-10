@@ -10,8 +10,8 @@
 </div> 
 
 <div id="accordion" role="tablist" aria-multiselectable="true">
-	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="character" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+	<div class="card">
+		<div class="card-header" role="tab" id="character">
 			<div class="row">
 				<div class="col-sm-8">
 					CHARACTER
@@ -50,8 +50,8 @@
 		</div>
 	</div>
 
-	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="character" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+	<div class="card">
+		<div class="card-header" role="tab" id="condition">
 			<div class="row">
 				<div class="col-sm-8">
 					CONDITION
@@ -90,8 +90,8 @@
 		</div>
 	</div>
 
-	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="character" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+	<div class="card">
+		<div class="card-header" role="tab" id="capacity">
 			<div class="row">
 				<div class="col-sm-8">
 					CAPACITY
@@ -148,8 +148,8 @@
 		</div>
 	</div>
 
-	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="character" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+	<div class="card">
+		<div class="card-header" role="tab" id="capital">
 			<div class="row">
 				<div class="col-sm-8">
 					CAPITAL
@@ -195,8 +195,8 @@
 		</div>
 	</div>
 
-	<div class="card" style="background-color:#fff;border:none;border-radius:0">
-		<div class="card-header" role="tab" id="character" style="background-color:#aaa;border-bottom:1px solid #eee;border-radius:0">
+	<div class="card">
+		<div class="card-header" role="tab" id="collateral">
 			<div class="row">
 				<div class="col-sm-8">
 					COLLATERAL
@@ -249,6 +249,13 @@
 								</div>
 							@endif
 						</div> 
+						</div> 
+						<div class="row text-justify" style="margin:10px 0px 10px 0px;">
+							@foreach($v0['foto']['arsip_foto'] as $k2 => $v2)
+								<div class="col-sm-6 text-left">
+									<img src="{{$v2['url']}}"  class="img img-fluid" alt="Foto Jaminan" style="max-width: 100%;padding: 15px 0px">
+								</div> 
+							@endforeach
 						</div> 
 						@endif
 					@endforeach

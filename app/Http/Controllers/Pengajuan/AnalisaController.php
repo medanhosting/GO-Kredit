@@ -129,6 +129,8 @@ class AnalisaController extends Controller
 			$data_input 				= request()->all();
 			$data_input['analis']		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 			$data_input['pengajuan_id']	= $id;
+			$data_input['limit_jangka_waktu']	= $data_input['jangka_waktu'];
+			$data_input['limit_angsuran']		= $data_input['kredit_diusulkan'];
 
 			$analisa->fill($data_input);
 			$analisa->save();

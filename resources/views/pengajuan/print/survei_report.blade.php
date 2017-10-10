@@ -293,6 +293,13 @@
 											</div> 
 										</div>
 									@endif
+									<div class="row">
+										@foreach($v0['foto']['arsip_foto'] as $k2 => $v2)
+											<div class="col-xs-6">
+												<img src="{{$v2['url']}}"  class="img img-fluid" alt="Foto Jaminan" style="max-width: 100%;padding: 15px 0px">
+											</div>
+										@endforeach
+									</div>
 								</div> 
 								@endif
 							@endforeach

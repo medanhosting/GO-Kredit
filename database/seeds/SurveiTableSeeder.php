@@ -229,8 +229,23 @@ class SurveiTableSeeder extends Seeder
 			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['angsuran_kredit']	= $this->formatMoneyTo(rand(0,50)*500000);
 			$s_survei_c3['dokumen_survei']['capacity']['pengeluaran']['rincian']		= 'Biaya rumah tangga, pdam, telepon, listrik';
 			$s_survei_c3['dokumen_survei']['capacity']['manajemen_usaha']				= $char_watak[rand(0,2)];
-			$s_survei_c3['dokumen_survei']['capacity']['status_pernikahan']				= $sper[rand(0,4)];
-			$s_survei_c3['dokumen_survei']['capacity']['catatan']						= $cap_catatan[rand(0,1)];
+
+			$tgg 		= $sper[rand(0,4)];
+			if(str_is('K-', $tgg)){
+				$new_t 	= str_replace('K-', '', $tgg);
+				$new_t 	= $new_t * 1250000;
+				$tgg_k 	= $this->formatMoneyTo($new_t + 3000000);
+			}
+			elseif(str_is('TK', $tgg)){
+				$tgg_k 	= 'Rp 3.000.000';
+			}
+			else{
+				$tgg_k 	= 'Rp 1.500.000';
+			}
+
+			$s_survei_c3['dokumen_survei']['capacity']['status_pernikahan']		= $tgg;
+			$s_survei_c3['dokumen_survei']['capacity']['tanggungan_keluarga']	= $tgg_k;
+			$s_survei_c3['dokumen_survei']['capacity']['catatan']				= $cap_catatan[rand(0,1)];
 
 			$s_survei_c4['jenis']	= 'capital';
 			$status_rumah 	= $capi_owner[rand(0,3)];
@@ -564,6 +579,8 @@ class SurveiTableSeeder extends Seeder
 	{
 		$survei_foto['arsip_foto'][0]	= $paket_foto[rand(0,2)];
 		$survei_foto['arsip_foto'][1]	= $paket_foto[rand(0,2)];
+		$survei_foto['arsip_foto'][2]	= $paket_foto[rand(0,2)];
+		$survei_foto['arsip_foto'][3]	= $paket_foto[rand(0,2)];
 
 		return $survei_foto;
 	}
