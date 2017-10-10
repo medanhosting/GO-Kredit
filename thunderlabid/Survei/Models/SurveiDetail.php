@@ -209,7 +209,7 @@ class SurveiDetail extends Model
 		$rules['dokumen_survei.capacity.tanggungan_keluarga']			= ['required_if:jenis,capacity'];
 
 		//CAPITAL
-		$rules['dokumen_survei.capital.rumah.status']			= ['required_if:jenis,capital','in:milik_sendiri,keluarga,dinas,sewa'];
+		$rules['dokumen_survei.capital.rumah.status']			= ['required_if:jenis,capital','in:milik_sendiri,keluarga,dinas,sewa,angsuran'];
 		$rules['dokumen_survei.capital.rumah.sewa_sejak']		= ['required_if:dokumen_survei.capital.rumah.status,sewa'];
 		$rules['dokumen_survei.capital.rumah.masa_sewa']		= ['required_if:dokumen_survei.capital.rumah.status,sewa'];
 		$rules['dokumen_survei.capital.rumah.angsuran_bulanan']	= ['required_if:dokumen_survei.capital.rumah.status,angsuran'];
