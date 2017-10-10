@@ -765,7 +765,7 @@
 											</div>
 											<div class="row">
 												<div class="col">
-													{!! Form::vSelect('Lantai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][lantai_bangunan]', ['keramik' => 'Keramik', 'tegel_biasa' => 'Tegel Biasa'], $v['dokumen_survei']['collateral'][$jenis]['lantai_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}colnilaitaxbpkb
+													{!! Form::vSelect('Lantai Bangunan', 'collateral['.$v['id'].']['.$jenis.'][lantai_bangunan]', ['keramik' => 'Keramik', 'tegel_biasa' => 'Tegel Biasa'], $v['dokumen_survei']['collateral'][$jenis]['lantai_bangunan'], ['class' => 'form-control text-info inline-edit'], true) !!}
 												</div>
 											</div>
 											<div class="row">
