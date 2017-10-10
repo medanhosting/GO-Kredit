@@ -469,7 +469,7 @@ class SurveiDetail extends Model
 		$rules['usaha.bidang_usaha']	= ['required_if:pekerjaan,wiraswasta'];
 		$rules['usaha.lama_usaha']		= ['required_if:pekerjaan,wiraswasta'];
 		$rules['usaha.status']			= ['required_if:pekerjaan,wiraswasta'];
-		$rules['usaha.bagi_hasil']		= ['required_if:pekerjaan,wiraswasta'];
+		$rules['usaha.bagi_hasil']		= ['required_if:usaha.status,kerjasama_bagi_hasil'];
 		$rules['usaha.nilai_aset']		= ['required_if:pekerjaan,wiraswasta'];
 		$rules['usaha.omzet_bulanan']	= ['required_if:pekerjaan,wiraswasta'];
 
