@@ -272,7 +272,7 @@
 											<a class="cloneKeluarga text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat keluarga">
 												<i class="fa fa-copy fa-lg"></i>
 											</a>
-											&nbsp;&nbsp;nbsp;
+											&nbsp;&nbsp;&nbsp;
 											<a class="removeKeluarga text-danger" data-toggle="tooltip" data-placement="bottom" title="hapus keluarga">
 												<i class="fa fa-trash fa-lg"></i>
 											</a>
