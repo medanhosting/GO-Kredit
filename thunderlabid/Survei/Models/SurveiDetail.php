@@ -522,7 +522,7 @@ class SurveiDetail extends Model
 		$rules['harga_taksasi']		= ['required'];
 		$rules['persentasi_bank']	= ['required'];
 		$rules['harga_bank']		= ['required'];
-		$rules['has_foto']			= ['required'];
+		$rules['has_foto']			= ['required', 'between:1,1'];
 
 		return $rules;
 	}
