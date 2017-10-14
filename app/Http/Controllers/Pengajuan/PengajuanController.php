@@ -201,10 +201,17 @@ class PengajuanController extends Controller
 				throw new Exception("Permohonan Kredit tidak ditemukan", 1);
 			}
 
+			if(is_null(request()->get('analis')['nip'])){
+				throw new Exception("Analis Belum dipilih", 1);
+			}
+
 			DB::BeginTransaction();
 
 			$analis['nip']			= request()->get('analis')['nip'];
 			$analis['nama']			= Orang::where('nip', request()->get('analis')['nip'])->first()['nama'];
+			if(is_null($analis['nama'])){
+				throw new Exception("Analis Tidak Valid", 1);
+			}
 
 			$status 				= new Status;
 			$status->pengajuan_id 	= $permohonan['id'];
