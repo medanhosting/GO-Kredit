@@ -11,7 +11,7 @@ use Thunderlabid\Survei\Models\Survei;
 
 use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
-use Exception, Auth;
+use Exception, Auth, Validator;
 use Carbon\Carbon;
 
 use Thunderlabid\Pengajuan\Traits\IDRTrait;
@@ -112,6 +112,37 @@ class PutusanController extends Controller
 	
 			$pimpinan 		= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('orang_id', Auth::user()['id'])->active(Carbon::now())->first();
 
+			$putusan 				= Putusan::where('pengajuan_id', $id)->first();
+
+			$checker 	= [];
+			$complete 	= 0;
+			$total 		= 0;
+
+			//checker character
+			$r_putusan 	= Putusan::rule_of_valid();
+			$total 		= $total + count($r_putusan);
+
+			if($putusan)
+			{
+				$validator 	= Validator::make($putusan->toArray(), $r_putusan);
+				if ($validator->fails())
+				{
+					$complete 				= $complete + (count($r_putusan) - count($validator->messages()));
+					$checker['putusan'] 	= false;
+				}
+				else
+				{
+					$complete 				= $complete + count($r_putusan);
+					$checker['putusan'] 	= true;
+				}
+			}
+			else
+			{
+				$checker['putusan'] 		= false;
+			}
+
+			$percentage 	= floor(($complete / max($total, 1)) * 100);
+
 			view()->share('permohonan', $permohonan);
 			view()->share('survei', $survei);
 
@@ -119,9 +150,8 @@ class PutusanController extends Controller
 			view()->share('breadcrumb', $breadcrumb);
 			view()->share('status', 'putusan');
 		
-			$putusan 				= Putusan::where('pengajuan_id', $id)->first();
 
-			$this->layout->pages 	= view('pengajuan.putusan.show', compact('r_nasabah', 'r_jaminan', 'putusan', 'pimpinan'));
+			$this->layout->pages 	= view('pengajuan.putusan.show', compact('r_nasabah', 'r_jaminan', 'putusan', 'pimpinan', 'checker', 'percentage'));
 			return $this->layout;
 
 		} catch (Exception $e) {

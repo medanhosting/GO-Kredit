@@ -21,7 +21,45 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-6">
+			<div class="col-3">
+				@stack('menu_sidebar')
+				<div class="card text-left">
+					<div class="card-body">
+						<h6 class="card-title">ANALISA KREDIT</h6>
+
+						<br/>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
+						</div>
+						<hr/>
+
+						@if(!is_null($analisa['analis']))
+							<h7 class="text-secondary">ANALIS</h7>
+							<br/>
+							<h7>{{$analisa['analis']['nama']}}</h7>
+							<br/>
+							<hr/>
+						@endif
+
+						<h7 class="text-secondary">NASABAH</h7>
+						<ul class="fa-ul mt-1">
+							<li class="mb-1"><i class="fa-li fa fa-user mt-1"></i> {{ $permohonan['nasabah']['nama'] }}</li>
+							<li class="mb-1"><i class="fa-li fa fa-phone mt-1"></i> {{ $permohonan['nasabah']['telepon'] }}</li>
+							<li class="mb-1"><i class="fa-li fa fa-map-marker mt-1"></i> {{ implode(', ', $permohonan['nasabah']['alamat']) }}</li>
+						</ul>
+
+						@if($percentage==100)
+						<hr/>
+						<p>Analisa Sudah Lengkap</p>
+							<a data-toggle="modal" data-target="#ajukan-putusan" data-action="{{route('pengajuan.pengajuan.assign_putusan', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'analisa'])}}" class="modal_putusan btn btn-primary btn-sm text-white" style="width: 100%">
+								Ajukan Ke Komite Kredit
+							</a> 
+						@endif
+					</div>
+				</div>
+			</div>
+
+			<div class="col">
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs" role="tablist">
 					<li class="nav-item">
@@ -39,6 +77,11 @@
 							Riwayat Kredit Nasabah 
 						</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#fanalisa" role="tab">
+							Form Analisa @if(!$checker['analisa']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
+						</a>
+					</li>
 				</ul>
 				
 				<!-- Tab panes -->
@@ -46,7 +89,7 @@
 					<div class="tab-pane active" id="overview" role="tabpanel">
 						@include('pengajuan.analisa.permohonan_kredit')
 
-						@if(!is_null($analisa['id']))
+						<!-- @if(!is_null($analisa['id']))
 							<div class="row">
 								<div class="col-sm-12 text-right">
 									Analisa Sudah Lengkap.
@@ -55,7 +98,7 @@
 									</a> 
 								</div>
 							</div>
-						@endif
+						@endif -->
 					</div>
 
 					<div class="tab-pane" id="hasil_survei" role="tabpanel">
@@ -98,88 +141,89 @@
 							</div>
 						</div>
 					</div>
+
+					<div class="tab-pane" id="fanalisa" role="tabpanel">
+						<div class="clearfix">&nbsp;</div>
+						<div class="clearfix">&nbsp;</div>
+						{!! Form::open(['url' => route('pengajuan.analisa.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+							<div class="row">
+								<div class="col">
+									{!! Form::vText('Tanggal Analisa', 'tanggal', $analisa['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									{!! Form::vSelect('Character', 'character', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['character'], ['class' => 'form-control text-info inline-edit'], true) !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									{!! Form::vSelect('Condition', 'condition', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['condition'], ['class' => 'form-control text-info inline-edit'], true) !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									{!! Form::vSelect('Capacity', 'capacity', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['capacity'], ['class' => 'form-control text-info inline-edit'], true) !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									{!! Form::vSelect('Capital', 'capital', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['capital'], ['class' => 'form-control text-info inline-edit'], true) !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									{!! Form::vSelect('Collateral', 'collateral', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['collateral'], ['class' => 'form-control text-info inline-edit'], true) !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									{!! Form::vSelect('Jenis Pinjaman', 'jenis_pinjaman', ['pa' => 'PA', 'pt' => 'PT'], $analisa['jenis_pinjaman'], ['class' => 'form-control text-info inline-edit'], true) !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									{!! Form::vText('Suku Bunga', 'suku_bunga', $analisa['suku_bunga'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									{!! Form::vText('Jangka Waktu', 'jangka_waktu', $analisa['jangka_waktu'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
+								</div>
+							</div>
+							<!-- <div class="row">
+								<div class="col">
+									{!! Form::vText('Limit Angsuran', 'limit_angsuran', $analisa['limit_angsuran'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000'], true) !!}
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									{!! Form::vText('Limit Jangka Waktu', 'limit_jangka_waktu', $analisa['limit_jangka_waktu'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
+								</div>
+							</div> -->
+
+							<div class="row">
+								<div class="col">
+									{!! Form::vText('Kredit Diusulkan', 'kredit_diusulkan', $analisa['kredit_diusulkan'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000'], true) !!}
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col">
+									{!! Form::vText('Angsuran Pokok', 'angsuran_pokok', $analisa['angsuran_pokok'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 500.000'], true) !!}
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col">
+									{!! Form::vText('Angsuran Bunga', 'angsuran_bunga', $analisa['angsuran_bunga'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 30.000'], true) !!}
+								</div>
+							</div>
+						{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
+						{!! Form::close() !!}
+
+					</div>
 				</div>
-			</div>
-			<div class="col-6">
-				<div class="clearfix">&nbsp;</div>
-				<div class="clearfix">&nbsp;</div>
-				{!! Form::open(['url' => route('pengajuan.analisa.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
-					<div class="row">
-						<div class="col">
-							{!! Form::vText('Tanggal Analisa', 'tanggal', $analisa['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							{!! Form::vSelect('Character', 'character', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['character'], ['class' => 'form-control text-info inline-edit'], true) !!}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							{!! Form::vSelect('Condition', 'condition', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['condition'], ['class' => 'form-control text-info inline-edit'], true) !!}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							{!! Form::vSelect('Capacity', 'capacity', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['capacity'], ['class' => 'form-control text-info inline-edit'], true) !!}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							{!! Form::vSelect('Capital', 'capital', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['capital'], ['class' => 'form-control text-info inline-edit'], true) !!}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							{!! Form::vSelect('Collateral', 'collateral', ['sangat_baik' => 'Sangat Baik', 'baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik','buruk' => 'Buruk'], $analisa['collateral'], ['class' => 'form-control text-info inline-edit'], true) !!}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							{!! Form::vSelect('Jenis Pinjaman', 'jenis_pinjaman', ['pa' => 'PA', 'pt' => 'PT'], $analisa['jenis_pinjaman'], ['class' => 'form-control text-info inline-edit'], true) !!}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							{!! Form::vText('Suku Bunga', 'suku_bunga', $analisa['suku_bunga'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '0.4'], true) !!}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							{!! Form::vText('Jangka Waktu', 'jangka_waktu', $analisa['jangka_waktu'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
-						</div>
-					</div>
-					<!-- <div class="row">
-						<div class="col">
-							{!! Form::vText('Limit Angsuran', 'limit_angsuran', $analisa['limit_angsuran'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000'], true) !!}
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							{!! Form::vText('Limit Jangka Waktu', 'limit_jangka_waktu', $analisa['limit_jangka_waktu'], ['class' => 'form-control inline-edit text-info', 'placeholder' => '12'], true) !!}
-						</div>
-					</div> -->
-
-					<div class="row">
-						<div class="col">
-							{!! Form::vText('Kredit Diusulkan', 'kredit_diusulkan', $analisa['kredit_diusulkan'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 6.000.000'], true) !!}
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col">
-							{!! Form::vText('Angsuran Pokok', 'angsuran_pokok', $analisa['angsuran_pokok'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 500.000'], true) !!}
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col">
-							{!! Form::vText('Angsuran Bunga', 'angsuran_bunga', $analisa['angsuran_bunga'], ['class' => 'form-control inline-edit text-info mask-money', 'placeholder' => 'Rp 30.000'], true) !!}
-						</div>
-					</div>
-				{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
-				{!! Form::close() !!}
-				
 			</div>
 		</div>
 		<div class="clearfix">&nbsp;</div>

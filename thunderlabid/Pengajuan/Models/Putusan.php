@@ -228,4 +228,19 @@ class Putusan extends Model
 	{
 		return $this->errors;
 	}
+
+	public static function rule_of_valid()
+	{
+		$rules['tanggal']			= ['required'];
+		$rules['plafon_pinjaman']	= ['required'];
+		$rules['suku_bunga']		= ['required'];
+		$rules['jangka_waktu']		= ['required'];
+		$rules['perc_provisi']		= ['required'];
+		$rules['provisi']			= ['required'];
+		$rules['administrasi']		= ['required'];
+		$rules['legal']				= ['required'];
+		$rules['putusan']			= ['required'];
+
+		return $rules;
+	}
 }

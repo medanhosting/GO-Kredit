@@ -198,4 +198,24 @@ class Analisa extends Model
 	{
 		return $this->errors;
 	}
+
+	public static function rule_of_valid()
+	{
+		$rules['tanggal']			= ['required'];
+		$rules['character']			= ['required'];
+		$rules['capacity']			= ['required'];
+		$rules['capital']			= ['required'];
+		$rules['condition']			= ['required'];
+		$rules['collateral']		= ['required'];
+		$rules['jenis_pinjaman']	= ['required'];
+		$rules['suku_bunga']		= ['required'];
+		$rules['jangka_waktu']		= ['required'];
+		$rules['limit_angsuran']	= ['required'];
+		$rules['limit_jangka_waktu']= ['required'];
+		$rules['kredit_diusulkan']	= ['required'];
+		$rules['angsuran_pokok']	= ['required'];
+		$rules['angsuran_bunga']	= ['required'];
+
+		return $rules;
+	}
 }

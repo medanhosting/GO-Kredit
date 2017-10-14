@@ -48,23 +48,23 @@ class PerhitunganBunga
 
 			if($p_pinjaman < 25000000)
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.70)/12; 
+				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.70); 
 			}
 			elseif($p_pinjaman < 50000000)
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.60)/12; 
+				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.60); 
 			}
 			elseif($p_pinjaman < 100000000)
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.50)/12; 
+				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.50); 
 			}
 			elseif($p_pinjaman < 200000000)
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.40)/12; 
+				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.40); 
 			}
 			else
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.30)/12; 
+				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.30); 
 			}
 
 			if(!is_null($this->bunga_per_bulan) && $this->bunga_per_bulan > 0)
@@ -77,9 +77,10 @@ class PerhitunganBunga
 
 			//bunga tahunan
 			$bulan 			= ceil($est_bulan);
-			$tahun 		 	= ceil($bulan/12);
+			// $tahun 		 	= ceil($bulan/12);
 
-			$total_bunga  	= $p_pinjaman * (($rincian['bunga_per_tahun'] * $tahun)/100);
+			// $total_bunga  	= $p_pinjaman * (($rincian['bunga_per_tahun'] * $tahun)/100);
+			$total_bunga  	= $p_pinjaman * (($rincian['bunga_per_bulan'] * $bulan)/100);
 			// $bulan 			= ceil(($p_pinjaman + $total_bunga)/$k_angs);
 
 			//kredit diusulkan
@@ -126,23 +127,23 @@ class PerhitunganBunga
 
 			if($p_pinjaman < 25000000)
 			{
-				$rincian['bunga_per_bulan']	= 2.80/6; 
+				$rincian['bunga_per_bulan']	= 2.80; 
 			}
 			elseif($p_pinjaman < 50000000)
 			{
-				$rincian['bunga_per_bulan']	= 2.70/6; 
+				$rincian['bunga_per_bulan']	= 2.70; 
 			}
 			elseif($p_pinjaman < 100000000)
 			{
-				$rincian['bunga_per_bulan']	= 2.60/6; 
+				$rincian['bunga_per_bulan']	= 2.60; 
 			}
 			elseif($p_pinjaman < 200000000)
 			{
-				$rincian['bunga_per_bulan']	= 2.50/6; 
+				$rincian['bunga_per_bulan']	= 2.50; 
 			}
 			else
 			{
-				$rincian['bunga_per_bulan']	= 2.40/6; 
+				$rincian['bunga_per_bulan']	= 2.40; 
 			}
 
 			if(!is_null($this->bunga_per_bulan) && $this->bunga_per_bulan > 0)

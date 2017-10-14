@@ -15,7 +15,7 @@ use Thunderlabid\Manajemen\Models\Orang;
 
 use Thunderlabid\Log\Models\Kredit;
 
-use Exception, Auth;
+use Exception, Auth, Validator;
 use Carbon\Carbon;
 
 class AnalisaController extends Controller
@@ -108,7 +108,36 @@ class AnalisaController extends Controller
 		
 			$analisa 		= Analisa::where('pengajuan_id', $id)->first();
 
-			$this->layout->pages 	= view('pengajuan.analisa.show', compact('r_nasabah', 'r_jaminan', 'analisa'));
+			$checker 	= [];
+			$complete 	= 0;
+			$total 		= 0;
+
+			//checker character
+			$r_analisa 	= Analisa::rule_of_valid();
+			$total 		= $total + count($r_analisa);
+
+			if($analisa)
+			{
+				$validator 	= Validator::make($analisa->toArray(), $r_analisa);
+				if ($validator->fails())
+				{
+					$complete 				= $complete + (count($r_analisa) - count($validator->messages()));
+					$checker['analisa'] 	= false;
+				}
+				else
+				{
+					$complete 				= $complete + count($r_analisa);
+					$checker['analisa'] 	= true;
+				}
+			}
+			else
+			{
+				$checker['analisa'] 		= false;
+			}
+
+			$percentage 	= floor(($complete / max($total, 1)) * 100);
+
+			$this->layout->pages 	= view('pengajuan.analisa.show', compact('r_nasabah', 'r_jaminan', 'analisa', 'checker', 'percentage'));
 			return $this->layout;
 
 		} catch (Exception $e) {
