@@ -87,10 +87,10 @@ class PerhitunganBunga
 			$kredit_update 	= $bulan * $k_angs;
 
 			$rincian['lama_angsuran']	= $bulan;
-			$rincian['provisi']			= $this->formatMoneyTo((0.5 * $p_pinjaman)/100);
-			$rincian['administrasi']	= $this->formatMoneyTo(10000);
-			$rincian['legal']			= $this->formatMoneyTo(50000);
-			$rincian['pinjaman_bersih']	= $this->formatMoneyTo($p_pinjaman - ((0.5 * $p_pinjaman)/100) - 60000);
+			$rincian['provisi']			= $this->formatMoneyTo((1 * $p_pinjaman)/100);
+			$rincian['administrasi']	= $this->formatMoneyTo((1 * $p_pinjaman)/100);
+			$rincian['legal']			= $this->formatMoneyTo((1 * $p_pinjaman)/100);
+			$rincian['pinjaman_bersih']	= $this->formatMoneyTo($p_pinjaman - ((3 * $p_pinjaman)/100));
 			$sisa_pinjaman 				= $p_pinjaman;
 
 			foreach (range(1, $bulan) as $k) 
@@ -158,10 +158,10 @@ class PerhitunganBunga
 
 			//kredit diusulkan
 			$rincian['lama_angsuran']	= $bulan;
-			$rincian['provisi']			= $this->formatMoneyTo((0.5 * $p_pinjaman)/100);
-			$rincian['administrasi']	= $this->formatMoneyTo(10000);
-			$rincian['legal']			= $this->formatMoneyTo(50000);
-			$rincian['pinjaman_bersih']	= $this->formatMoneyTo($p_pinjaman - ((0.5 * $p_pinjaman)/100) - 60000);
+			$rincian['provisi']			= $this->formatMoneyTo((1 * $p_pinjaman)/100);
+			$rincian['administrasi']	= $this->formatMoneyTo((1 * $p_pinjaman)/100);
+			$rincian['legal']			= $this->formatMoneyTo((1 * $p_pinjaman)/100);
+			$rincian['pinjaman_bersih']	= $this->formatMoneyTo($p_pinjaman - ((3 * $p_pinjaman)/100));
 			$sisa_pinjaman 				= $p_pinjaman;
 
 			foreach (range(1, $bulan-1) as $k) 
