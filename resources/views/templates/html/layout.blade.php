@@ -155,7 +155,9 @@
 	<body class=''>
 		<nav class="navbar navbar-expand navbar-dark bg-success text-white main">
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-				<a class="navbar-brand" href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}">{{ config('app.name') }}</a>
+				<a class="navbar-brand" href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}"  style="padding-top: 0px !important; margin-top: 0px !important;">
+					<img src="{{url('/images/logo.png')}}" class="img img-fluid">
+				</a>
 				<ul class="navbar-nav mr-auto mt-lg-0">
 					<li class="nav-item btn btn-outline-primary {{ str_is('dashboard', $active_menu) ? 'active' : '' }}">
 						<a class="nav-link text-white" href="#" data-toggle='modal' data-target='#select_social_media'>
