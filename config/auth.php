@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => Thunderlabid\Auths\Models\User::class,
+            'model' => Thunderlabid\Manajemen\Models\Orang::class,
         ],
 
         // 'users' => [

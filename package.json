@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "axios": "^0.16.2",
-    "bootstrap-sass": "^3.3.7",
+    "bootstrap": "^4.0.0-beta",
     "cross-env": "^5.0.1",
     "jquery": "^3.1.1",
     "laravel-mix": "^1.0",
@@ -20,6 +20,7 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
-    "flatpickr": "^3.0.7"
+    "flatpickr": "^3.0.7",
+    "inputmask": "^3.3.8"
   }
 }

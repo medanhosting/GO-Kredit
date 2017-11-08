@@ -13,6 +13,6 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         //
-        User::create(['name'	=> 'Erick Mo', 'email' => 'mo@thunderlab.id', 'password' => '123123']);
+        User::create(['name'	=> 'Agil Ma', 'email' => 'agil@thunderlab.id', 'password' => '123qwe']);
     }
 }

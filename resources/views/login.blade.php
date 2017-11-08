@@ -1,5 +1,5 @@
 @push('logo')
-	<img class="card-img-top" src="/images/bg.jpg">
+	<img class="card-img-top" src="/images/background.jpg">
 @endpush
 
 @push('title')
@@ -8,16 +8,23 @@
 
 @push('body')
 	{!! Form::open(['url' => route('login.post'), 'method' => 'post']) !!}
-	{!! Form::bsText(null, 'email', null, ['placeholder' => 'email']) !!}
+	{!! Form::bsText(null, 'nip', null, ['placeholder' => 'nip', 'class' => 'setfocus form-control']) !!}
 	{!! Form::bsPassword(null, 'password', ['placeholder' => 'password']) !!}
-	<a href='{{ route('forget_password') }}'>Forget my password</a>
+	<!-- <a href='{{ route('forget_password') }}'>Forget my password</a> -->
 	{!! Form::bsSubmit('LOGIN', ['class' => 'btn btn-primary float-right']) !!}
 
 	{!! Form::close() !!}
-	<p class='pt-3'>
+	<p class='pt-5'>
 		<hr>
 	</p>
 	<p class='text-center'>
-		Not a member? <a href='{{ route('register') }}'>Sign up now</a>
 	</p>
+@endpush
+
+@push ('js')
+	<script>
+		$(document).ready(function(){
+			$('.setfocus').focus();
+		});
+	</script>
 @endpush

@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -14,3 +13,10 @@
 
 
 // const flatpickr = require("flatpickr");
+// 
+
+// call plugin
+require ('./plugins');
+
+// module UI for use plugin jquery.inputmask
+require ('./plugins/jquery.inputmask/form-inputmask')
