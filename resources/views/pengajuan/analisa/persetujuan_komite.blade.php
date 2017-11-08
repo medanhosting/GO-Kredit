@@ -51,19 +51,19 @@
 		<div class="col-sm-12 text-left">
 			Jaminan
 		</div>
-		<ol class="row">
-			@foreach($survei['collateral'] as $k => $v)
-				<li class="col-sm-6" style="padding:15px;">
-					{{strtoupper($v['dokumen_survei']['collateral']['jenis'])}}<br/>
-					@foreach($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']] as $k2 => $v2)
-						@if(in_array($k2, ['nomor_sertifikat', 'atas_nama_sertifikat', 'nilai_tanah', 'nilai_bangunan', 'harga_taksasi', 'nomor_bpkb', 'merk', 'tipe', 'atas', 'atas_nama', 'tahun', 'harga_bank']))
-							{{str_replace('_',' ',$k2)}} {{str_replace('_',' ',$v2)}} <br/>
-						@endif
-					@endforeach
-				</li>
-			@endforeach
-		</ol>
 	</div>
+	<ol class="row">
+		@foreach($survei['collateral'] as $k => $v)
+			<li class="col-sm-6" style="padding:15px;">
+				{{strtoupper($v['dokumen_survei']['collateral']['jenis'])}}<br/>
+				@foreach($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']] as $k2 => $v2)
+					@if(in_array($k2, ['nomor_sertifikat', 'atas_nama_sertifikat', 'nilai_tanah', 'nilai_bangunan', 'harga_taksasi', 'nomor_bpkb', 'merk', 'tipe', 'atas', 'atas_nama', 'tahun', 'harga_bank']))
+						{{str_replace('_',' ',$k2)}} {{str_replace('_',' ',$v2)}} <br/>
+					@endif
+				@endforeach
+			</li>
+		@endforeach
+	</ol>
 	<div class="row text-justify">
 		<div class="col-sm-12 text-left">
 			{{strtoupper($permohonan['putusan']['putusan'])}} dengan catatan {{strtoupper($permohonan['putusan']['catatan'])}}
