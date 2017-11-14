@@ -158,33 +158,35 @@
 				<a class="navbar-brand" href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}"  style="padding-top: 0px !important; margin-top: 0px !important;">
 					<img src="{{url('/images/logo.png')}}" class="img img-fluid">
 				</a>
-				<ul class="navbar-nav mr-auto mt-lg-0">
-					<li class="nav-item btn btn-outline-primary {{ str_is('dashboard', $active_menu) ? 'active' : '' }}">
-						<a class="nav-link text-white" href="#" data-toggle='modal' data-target='#select_social_media'>
-							@if ($active_account)
-								{!! Form::bsIcon($active_account->type) !!} {{ $active_account->name }}
-							@else
-								<i class="fa fa-building-o"></i>&nbsp;&nbsp;&nbsp; {{$kantor_aktif['nama']}} &nbsp;&nbsp;&nbsp;&nbsp;
-							@endif
-							<i class='fa fa-caret-down'></i>
-						</a>
-					</li>
-				</ul>
-				<ul class="navbar-nav ml-auto mt-lg-0">
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<div class='d-none d-sm-inline'>
-								<i class="fa fa-user-circle"></i>&nbsp;&nbsp;&nbsp; {{ $me->email }} &nbsp;&nbsp;&nbsp;
+				@if (!Route::is('privacy.policy'))
+					<ul class="navbar-nav mr-auto mt-lg-0">
+						<li class="nav-item btn btn-outline-primary {{ str_is('dashboard', $active_menu) ? 'active' : '' }}">
+							<a class="nav-link text-white" href="#" data-toggle='modal' data-target='#select_social_media'>
+								@if ($active_account)
+									{!! Form::bsIcon($active_account->type) !!} {{ $active_account->name }}
+								@else
+									<i class="fa fa-building-o"></i>&nbsp;&nbsp;&nbsp; {{$kantor_aktif['nama']}} &nbsp;&nbsp;&nbsp;&nbsp;
+								@endif
+								<i class='fa fa-caret-down'></i>
+							</a>
+						</li>
+					</ul>
+					<ul class="navbar-nav ml-auto mt-lg-0">
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<div class='d-none d-sm-inline'>
+									<i class="fa fa-user-circle"></i>&nbsp;&nbsp;&nbsp; {{ $me->email }} &nbsp;&nbsp;&nbsp;
+								</div>
+								<span class='d-sm-none'><i class='fa fa-user'></i></span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+								<a class="dropdown-item" href="{{ route('password.get', ['kantor_aktif_id' => $kantor_aktif['id']]) }}">Ganti Password</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
 							</div>
-							<span class='d-sm-none'><i class='fa fa-user'></i></span>
-						</a>
-						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="{{ route('password.get', ['kantor_aktif_id' => $kantor_aktif['id']]) }}">Ganti Password</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="{{ route('logout') }}">Logout</a>
-						</div>
-					</li>
-				</ul>
+						</li>
+					</ul>
+				@endif
 			</div>
 		</nav>
 
