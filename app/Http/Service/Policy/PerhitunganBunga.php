@@ -15,6 +15,9 @@ class PerhitunganBunga
 	protected $pengajuan_kredit;
 	protected $kemampuan_angsur;
 	protected $bunga_per_bulan;
+	protected $perc_provisi;
+	protected $perc_administrasi;
+	protected $perc_legal;
 
 	/**
 	 * Create a new job instance.
@@ -22,11 +25,14 @@ class PerhitunganBunga
 	 * @param  $file
 	 * @return void
 	 */
-	public function __construct($pengajuan_kredit, $kemampuan_angsur = 'Rp 0', $bunga_per_bulan = null)
+	public function __construct($pengajuan_kredit, $kemampuan_angsur = 'Rp 0', $bunga_per_bulan = null, $perc_provisi = 0.01, $perc_administrasi = 0.01, $perc_legal = 0.01)
 	{
 		$this->pengajuan_kredit 	= $pengajuan_kredit;
 		$this->kemampuan_angsur 	= $kemampuan_angsur;
 		$this->bunga_per_bulan 		= $bunga_per_bulan;
+		$this->perc_provisi 		= $perc_provisi;
+		$this->perc_administrasi 	= $perc_administrasi;
+		$this->perc_legal 			= $perc_legal;
 	}
 
 	/**
@@ -87,10 +93,11 @@ class PerhitunganBunga
 			$kredit_update 	= $bulan * $k_angs;
 
 			$rincian['lama_angsuran']	= $bulan;
-			$rincian['provisi']			= $this->formatMoneyTo((1 * $p_pinjaman)/100);
-			$rincian['administrasi']	= $this->formatMoneyTo((1 * $p_pinjaman)/100);
-			$rincian['legal']			= $this->formatMoneyTo((1 * $p_pinjaman)/100);
+			$rincian['provisi']			= $this->formatMoneyTo($p_pinjaman * $this->perc_provisi);
+			$rincian['administrasi']	= $this->formatMoneyTo($p_pinjaman * $this->perc_administrasi);
+			$rincian['legal']			= $this->formatMoneyTo($p_pinjaman * $this->perc_legal);
 			$rincian['pinjaman_bersih']	= $this->formatMoneyTo($p_pinjaman - ((3 * $p_pinjaman)/100));
+			$rincian['total_pinjaman']	= $this->formatMoneyTo($p_pinjaman);
 			$sisa_pinjaman 				= $p_pinjaman;
 
 			foreach (range(1, $bulan) as $k) 
@@ -158,10 +165,11 @@ class PerhitunganBunga
 
 			//kredit diusulkan
 			$rincian['lama_angsuran']	= $bulan;
-			$rincian['provisi']			= $this->formatMoneyTo((1 * $p_pinjaman)/100);
-			$rincian['administrasi']	= $this->formatMoneyTo((1 * $p_pinjaman)/100);
-			$rincian['legal']			= $this->formatMoneyTo((1 * $p_pinjaman)/100);
+			$rincian['provisi']			= $this->formatMoneyTo($p_pinjaman * $this->perc_provisi);
+			$rincian['administrasi']	= $this->formatMoneyTo($p_pinjaman * $this->perc_administrasi);
+			$rincian['legal']			= $this->formatMoneyTo($p_pinjaman * $this->perc_legal);
 			$rincian['pinjaman_bersih']	= $this->formatMoneyTo($p_pinjaman - ((3 * $p_pinjaman)/100));
+			$rincian['total_pinjaman']	= $this->formatMoneyTo($p_pinjaman);
 			$sisa_pinjaman 				= $p_pinjaman;
 
 			foreach (range(1, $bulan-1) as $k) 
