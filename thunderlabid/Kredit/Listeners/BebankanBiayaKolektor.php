@@ -11,6 +11,7 @@ use Thunderlabid\Kredit\Models\Angsuran;
 use Thunderlabid\Kredit\Models\AngsuranDetail;
 
 use App\Service\Traits\IDRTrait;
+use Config;
 
 class BebankanBiayaKolektor
 {
@@ -40,7 +41,7 @@ class BebankanBiayaKolektor
 
 		$a_detail 				= new AngsuranDetail;
 		$a_detail->angsuran_id 	= $angsuran['id'];
-		$a_detail->ref_id 		= $model->id;
+		$a_detail->ref_id 		= (string)$model->id;
 		$a_detail->tag 			= 'collector';
 		$a_detail->amount 		= $this->formatMoneyTo(Config::get('kredit.biaya_kolektor'));
 		$a_detail->description 	= 'Penagihan tanggal '.$model->collected_at;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Member\Models;
+namespace Thunderlabid\Kredit\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,14 +20,14 @@ use App\Exceptions\AppException;
 ////////////
 // EVENTS //
 ////////////
-use Thunderlabid\Member\Events\MutasiJaminan\MutasiJaminanCreated;
-use Thunderlabid\Member\Events\MutasiJaminan\MutasiJaminanCreating;
-use Thunderlabid\Member\Events\MutasiJaminan\MutasiJaminanUpdated;
-use Thunderlabid\Member\Events\MutasiJaminan\MutasiJaminanUpdating;
-use Thunderlabid\Member\Events\MutasiJaminan\MutasiJaminanDeleted;
-use Thunderlabid\Member\Events\MutasiJaminan\MutasiJaminanDeleting;
-use Thunderlabid\Member\Events\MutasiJaminan\MutasiJaminanRestored;
-use Thunderlabid\Member\Events\MutasiJaminan\MutasiJaminanRestoring;
+use Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanCreated;
+use Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanCreating;
+use Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanUpdated;
+use Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanUpdating;
+use Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanDeleted;
+use Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanDeleting;
+use Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanRestored;
+use Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanRestoring;
 
 class MutasiJaminan extends Model
 {
@@ -39,7 +39,7 @@ class MutasiJaminan extends Model
 	protected $appends	= [];
 	protected $rules	= [];
 	protected $errors;
-	protected $dispatchesEvents = [
+	protected $events = [
         'created' 	=> MutasiJaminanCreated::class,
         'creating' 	=> MutasiJaminanCreating::class,
         'updated' 	=> MutasiJaminanUpdated::class,
@@ -83,6 +83,11 @@ class MutasiJaminan extends Model
 		$this->attributes['taken_at']	= $this->formatDateTimeFrom($variable);
 	}
 
+	public function setDocumentsAttribute($variable)
+	{
+		$this->attributes['documents']	= json_encode($variable);
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
 	// ------------------------------------------------------------------------------------------------------------
@@ -98,7 +103,7 @@ class MutasiJaminan extends Model
 		//////////////////
 		$rules['nomor_kredit'] 		= ['required', 'string'];
 		$rules['stored_at'] 		= ['required', 'date_format:"Y-m-d H:i:s"'];
-		$rules['taken_at'] 			= ['required', 'date_format:"Y-m-d H:i:s"'];
+		$rules['taken_at'] 			= ['nullable', 'date_format:"Y-m-d H:i:s"'];
 
 		//////////////
 		// Validate //
@@ -126,5 +131,10 @@ class MutasiJaminan extends Model
 	public function getTakenAtAttribute($variable)
 	{
 		return $this->formatDateTimeTo($this->attributes['taken_at']);
+	}
+
+	public function getDocumentsAttribute($variable)
+	{
+		return json_decode($this->attributes['documents'], true);
 	}
 }

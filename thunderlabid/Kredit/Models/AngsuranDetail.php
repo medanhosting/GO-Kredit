@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Member\Models;
+namespace Thunderlabid\Kredit\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,14 +19,14 @@ use App\Exceptions\AppException;
 ////////////
 // EVENTS //
 ////////////
-use Thunderlabid\Member\Events\AngsuranDetail\AngsuranDetailCreated;
-use Thunderlabid\Member\Events\AngsuranDetail\AngsuranDetailCreating;
-use Thunderlabid\Member\Events\AngsuranDetail\AngsuranDetailUpdated;
-use Thunderlabid\Member\Events\AngsuranDetail\AngsuranDetailUpdating;
-use Thunderlabid\Member\Events\AngsuranDetail\AngsuranDetailDeleted;
-use Thunderlabid\Member\Events\AngsuranDetail\AngsuranDetailDeleting;
-use Thunderlabid\Member\Events\AngsuranDetail\AngsuranDetailRestored;
-use Thunderlabid\Member\Events\AngsuranDetail\AngsuranDetailRestoring;
+use Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreated;
+use Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreating;
+use Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdated;
+use Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdating;
+use Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailDeleted;
+use Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailDeleting;
+use Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailRestored;
+use Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailRestoring;
 
 class AngsuranDetail extends Model
 {
@@ -39,7 +39,7 @@ class AngsuranDetail extends Model
 	protected $rules	= [];
 	protected $errors;
 
-	protected $dispatchesEvents = [
+	protected $events = [
         'created' 	=> AngsuranDetailCreated::class,
         'creating' 	=> AngsuranDetailCreating::class,
         'updated' 	=> AngsuranDetailUpdated::class,
@@ -75,7 +75,7 @@ class AngsuranDetail extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	public function setAmountAttribute($variable)
 	{
-		$this->attributes['amount']	= $this->formatDateTimeFrom($variable);
+		$this->attributes['amount']	= $this->formatMoneyFrom($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

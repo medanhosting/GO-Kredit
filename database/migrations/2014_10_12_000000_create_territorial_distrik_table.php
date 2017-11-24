@@ -13,6 +13,7 @@ class CreateTerritorialDistrikTable extends Migration
 	 */
 	public function up()
 	{
+		return true;
 		Schema::create('territorial_distrik', function (Blueprint $table) {
 			$table->string('id');
 			$table->string('territorial_regensi_id');
@@ -29,6 +30,6 @@ class CreateTerritorialDistrikTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('territorial_distrik');
+		// Schema::dropIfExists('territorial_distrik');
 	}
 }

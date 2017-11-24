@@ -13,6 +13,7 @@ class AddTerritorialIndexTable extends Migration
 	 */
 	public function up()
 	{
+		return true;
 		Schema::table('territorial_desa', function (Blueprint $table) {
 			$table->index(['deleted_at', 'nama']);
 		});

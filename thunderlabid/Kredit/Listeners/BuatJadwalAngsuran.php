@@ -35,9 +35,16 @@ class BuatJadwalAngsuran
 	{
 		$model 	= $event->data;
 
-		$pb 	= new PerhitunganBunga($model->plafon_angsuran, 'Rp 0', $model->suku_bunga/12, $model->provisi, $model->administrasi, $model->legal);
+		$pb 	= new PerhitunganBunga($model->plafon_pinjaman, 'Rp 0', $model->suku_bunga, $model->provisi, $model->administrasi, $model->legal, $model->jangka_waktu);
 
+		if(str_is($model->jenis_pinjaman, 'pt')){
+			$pb 	= $pb->pt();
+		}else{
+			$pb 	= $pb->pa();
+		}
 
+		$all_angs 	= Angsuran::where('nomor_kredit', $model->nomor_kredit)->delete();
+		
 		foreach ($pb['angsuran'] as $k => $v) {
 			$angsuran 					= new Angsuran;
 			$angsuran->nomor_kredit 	= $model->nomor_kredit;

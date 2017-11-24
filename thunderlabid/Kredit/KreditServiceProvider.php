@@ -42,6 +42,11 @@ class KreditServiceProvider extends ServiceProvider
 		//////////////////////////
 		Event::listen('Thunderlabid\Kredit\Events\Aktif\AktifCreated', 'Thunderlabid\Kredit\Listeners\BuatJadwalAngsuran');
 
+		/////////////////////////////////
+		// AUTO DELETE DETAIL ANGSURAN //
+		/////////////////////////////////
+		Event::listen('Thunderlabid\Kredit\Events\Angsuran\AngsuranDeleting', 'Thunderlabid\Kredit\Listeners\AutoDeleteDetailAngsuran');
+
 		/////////////////////////
 		// Tandai Kredit Lunas //
 		/////////////////////////

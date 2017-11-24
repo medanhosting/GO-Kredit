@@ -34,6 +34,8 @@ class TandaiJaminanMasuk
 		$model 		= $event->data;
 		$survei 	= Survei::where('pengajuan_id', $model->nomor_pengajuan)->with(['collateral'])->first();
 
+		$jaminan 	= MutasiJaminan::where('nomor_kredit', $model->nomor_kredit)->get();
+
 		foreach ($survei['collateral'] as $k => $v) {
 			$m_jaminan 					= new MutasiJaminan;
 			$m_jaminan->nomor_kredit 	= $model->nomor_kredit;

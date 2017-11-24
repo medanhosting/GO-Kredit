@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Member\Models;
+namespace Thunderlabid\Kredit\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,14 +20,14 @@ use App\Exceptions\AppException;
 ////////////
 // EVENTS //
 ////////////
-use Thunderlabid\Member\Events\Penagihan\PenagihanCreated;
-use Thunderlabid\Member\Events\Penagihan\PenagihanCreating;
-use Thunderlabid\Member\Events\Penagihan\PenagihanUpdated;
-use Thunderlabid\Member\Events\Penagihan\PenagihanUpdating;
-use Thunderlabid\Member\Events\Penagihan\PenagihanDeleted;
-use Thunderlabid\Member\Events\Penagihan\PenagihanDeleting;
-use Thunderlabid\Member\Events\Penagihan\PenagihanRestored;
-use Thunderlabid\Member\Events\Penagihan\PenagihanRestoring;
+use Thunderlabid\Kredit\Events\Penagihan\PenagihanCreated;
+use Thunderlabid\Kredit\Events\Penagihan\PenagihanCreating;
+use Thunderlabid\Kredit\Events\Penagihan\PenagihanUpdated;
+use Thunderlabid\Kredit\Events\Penagihan\PenagihanUpdating;
+use Thunderlabid\Kredit\Events\Penagihan\PenagihanDeleted;
+use Thunderlabid\Kredit\Events\Penagihan\PenagihanDeleting;
+use Thunderlabid\Kredit\Events\Penagihan\PenagihanRestored;
+use Thunderlabid\Kredit\Events\Penagihan\PenagihanRestoring;
 
 class Penagihan extends Model
 {
@@ -40,7 +40,7 @@ class Penagihan extends Model
 	protected $rules	= [];
 	protected $errors;
 
-	protected $dispatchesEvents = [
+	protected $events = [
         'created' 	=> PenagihanCreated::class,
         'creating' 	=> PenagihanCreating::class,
         'updated' 	=> PenagihanUpdated::class,

@@ -92,10 +92,14 @@ class EventServiceProvider extends ServiceProvider
 		//SURVEI DETAIL COLLATERAL AUTO CREATE
 		Event::listen('Thunderlabid\Survei\Events\Survei\SurveiCreated', 'App\Listeners\CreateCollateralSurveiDetail');
 
-
 		//////////////////////////
 		// Tandai Jaminan Masuk //
 		//////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\Aktif\AktifCreated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanMasuk');
+		Event::listen('Thunderlabid\Kredit\Events\Aktif\AktifCreated', 'App\Listeners\TandaiJaminanMasuk');
+
+		///////////////////////////////
+		// Aktivasi Kredit Disetujui //
+		///////////////////////////////
+		Event::listen('App\Events\AktivasiKredit', 'App\Listeners\AktivasiKreditDisetujui');
 	}
 }

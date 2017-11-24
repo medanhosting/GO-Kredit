@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Member\Models;
+namespace Thunderlabid\Kredit\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,14 +19,14 @@ use App\Exceptions\AppException;
 ////////////
 // EVENTS //
 ////////////
-use Thunderlabid\Member\Events\Angsuran\AngsuranCreated;
-use Thunderlabid\Member\Events\Angsuran\AngsuranCreating;
-use Thunderlabid\Member\Events\Angsuran\AngsuranUpdated;
-use Thunderlabid\Member\Events\Angsuran\AngsuranUpdating;
-use Thunderlabid\Member\Events\Angsuran\AngsuranDeleted;
-use Thunderlabid\Member\Events\Angsuran\AngsuranDeleting;
-use Thunderlabid\Member\Events\Angsuran\AngsuranRestored;
-use Thunderlabid\Member\Events\Angsuran\AngsuranRestoring;
+use Thunderlabid\Kredit\Events\Angsuran\AngsuranCreated;
+use Thunderlabid\Kredit\Events\Angsuran\AngsuranCreating;
+use Thunderlabid\Kredit\Events\Angsuran\AngsuranUpdated;
+use Thunderlabid\Kredit\Events\Angsuran\AngsuranUpdating;
+use Thunderlabid\Kredit\Events\Angsuran\AngsuranDeleted;
+use Thunderlabid\Kredit\Events\Angsuran\AngsuranDeleting;
+use Thunderlabid\Kredit\Events\Angsuran\AngsuranRestored;
+use Thunderlabid\Kredit\Events\Angsuran\AngsuranRestoring;
 
 class Angsuran extends Model
 {
@@ -40,7 +40,7 @@ class Angsuran extends Model
 	protected $rules	= [];
 	protected $errors;
 
-	protected $dispatchesEvents = [
+	protected $events = [
         'created' 	=> AngsuranCreated::class,
         'creating' 	=> AngsuranCreating::class,
         'updated' 	=> AngsuranUpdated::class,
@@ -62,6 +62,9 @@ class Angsuran extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
+    public function details(){
+    	return $this->hasMany(AngsuranDetail::class, 'angsuran_id');
+    }
 
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
@@ -121,12 +124,12 @@ class Angsuran extends Model
 
 	public function getIssuedAtAttribute($variable)
 	{
-		return $this->formatMoneyTo($this->attributes['issued_at']);
+		return $this->formatDateTimeTo($this->attributes['issued_at']);
 	}
 
 	public function getPaidAtAttribute($variable)
 	{
-		return $this->formatMoneyTo($this->attributes['paid_at']);
+		return $this->formatDateTimeTo($this->attributes['paid_at']);
 	}
 
 }

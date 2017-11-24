@@ -17,6 +17,7 @@ class CreateKreditAktifTable extends Migration
 			$table->increments('id');
 			$table->string('nomor_kredit');
 			$table->string('nomor_pengajuan');
+			$table->string('jenis_pinjaman');
 			$table->text('nasabah');
 			$table->double('plafon_pinjaman');
 			$table->double('suku_bunga');
@@ -27,7 +28,7 @@ class CreateKreditAktifTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'pengajuan_id']);
+            $table->index(['deleted_at', 'nomor_pengajuan']);
 		});
 	}
 

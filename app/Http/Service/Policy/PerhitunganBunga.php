@@ -25,7 +25,7 @@ class PerhitunganBunga
 	 * @param  $file
 	 * @return void
 	 */
-	public function __construct($pengajuan_kredit, $kemampuan_angsur = 'Rp 0', $bunga_per_bulan = null, $perc_provisi = 0.01, $perc_administrasi = 0.01, $perc_legal = 0.01)
+	public function __construct($pengajuan_kredit, $kemampuan_angsur = 'Rp 0', $bunga_per_bulan = null, $perc_provisi = 0.01, $perc_administrasi = 0.01, $perc_legal = 0.01, $jangka_waktu = null)
 	{
 		$this->pengajuan_kredit 	= $pengajuan_kredit;
 		$this->kemampuan_angsur 	= $kemampuan_angsur;
@@ -33,6 +33,7 @@ class PerhitunganBunga
 		$this->perc_provisi 		= $perc_provisi;
 		$this->perc_administrasi 	= $perc_administrasi;
 		$this->perc_legal 			= $perc_legal;
+		$this->jangka_waktu 		= $jangka_waktu;
 	}
 
 	/**
@@ -50,7 +51,11 @@ class PerhitunganBunga
 			$k_angs 		= $this->formatMoneyFrom($rincian['kemampuan_angsur']);
 			$p_pinjaman 	= $this->formatMoneyFrom($rincian['pokok_pinjaman']);
 
-			$est_bulan 		= $p_pinjaman / ($k_angs - ($p_pinjaman*0.02*(1/12)));
+			if(is_null($this->jangka_waktu)){
+				$est_bulan 		= $p_pinjaman / abs($k_angs - ($p_pinjaman*0.02*(1/12)));
+			}else{
+				$est_bulan 		= $this->jangka_waktu;
+			}
 
 			if($p_pinjaman < 25000000)
 			{

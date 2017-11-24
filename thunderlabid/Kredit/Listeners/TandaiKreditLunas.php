@@ -34,21 +34,20 @@ class TandaiKreditLunas
 	 */
 	public function handle($event)
 	{
-		$model	= $event->data;
+		$model		= $event->data;
 
 		if(!is_null($model->paid_at)){
-			$th 		= new PerhitunganBunga($model->aktif->plafon_angsuran, 'Rp 0', $model->aktif->suku_bunga/12, $model->aktif->provisi, $model->aktif->administrasi, $model->aktif->legal);
+			//check tag pelunasan
+			$has_paid 	= AngsuranDetail::where('angsuran_id', $model->id)->where('tag', 'pelunasan')->sum('amount');
 
-			$angsuran 	= Angsuran::where('nomor_kredit', $model->nomor_kredit)->get(['id'])->toArray();
+			$ny_paid 	= Angsuran::where('nomor_kredit', $model->nomor_kredit)->wherenull('paid_at')->get();
 
-			$ids 		= array_column($angsuran, 'id');
+			$ids 		= array_column($ny_paid->toArray(), 'id');
+			
+			$hasnt_paid	= AngsuranDetail::whereIn('angsuran_id', $ids)->where('tag', '<>', 'bunga')->sum('amount');
 
-			$sum	 	= AngsuranDetail::whereIn('angsuran_id', $ids)->selectraw('sum(amount) as lunas')->first();
-
-			//re - check cara hitung pinjaman lunas
-			if($this->formatMoneyTo($th['total_pinjaman']) <= $sum['lunas']){
-				$not_yet_paid 	= Angsuran::where('nomor_kredit', $model->nomor_kredit)->wherenull('paid_at')->get();
-				foreach ($not_yet_paid as $k => $v) {
+			if($has_paid >= $hasnt_paid){
+				foreach ($ny_paid as $k => $v) {
 					$v->delete();
 				}
 			}

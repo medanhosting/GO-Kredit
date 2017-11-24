@@ -13,6 +13,7 @@ class CreateTerritorialDesaTable extends Migration
 	 */
 	public function up()
 	{
+		return true;
 		Schema::create('territorial_desa', function (Blueprint $table) {
 			$table->string('id');
 			$table->string('territorial_distrik_id');
@@ -29,6 +30,6 @@ class CreateTerritorialDesaTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('territorial_desa');
+		// Schema::dropIfExists('territorial_desa');
 	}
 }

@@ -13,6 +13,7 @@ class CreateTerritorialNegaraTable extends Migration
 	 */
 	public function up()
 	{
+		return true;
 		Schema::create('territorial_negara', function (Blueprint $table) {
 			$table->string('id');
 			$table->string('nama');
@@ -28,6 +29,6 @@ class CreateTerritorialNegaraTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('territorial_negara');
+		// Schema::dropIfExists('territorial_negara');
 	}
 }

@@ -13,6 +13,7 @@ class CreateTerritorialRegensiTable extends Migration
 	 */
 	public function up()
 	{
+		return true;
 		Schema::create('territorial_regensi', function (Blueprint $table) {
 			$table->string('id');
 			$table->string('territorial_provinsi_id');
@@ -29,6 +30,6 @@ class CreateTerritorialRegensiTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('territorial_regensi');
+		// Schema::dropIfExists('territorial_regensi');
 	}
 }

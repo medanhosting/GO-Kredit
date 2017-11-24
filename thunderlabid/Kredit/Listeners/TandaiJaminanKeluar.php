@@ -34,6 +34,7 @@ class TandaiJaminanKeluar
 		$model	= $event->data;
 
 		$not_yet_paid 	= Angsuran::where('nomor_kredit', $model->nomor_kredit)->wherenull('paid_at')->count();
+
 		if(!$not_yet_paid){
 			$jaminan 	= MutasiJaminan::where('nomor_kredit', $model->nomor_kredit)->get();
 			foreach ($jaminan as $k => $v) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Member\Models;
+namespace Thunderlabid\Kredit\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,28 +20,28 @@ use App\Exceptions\AppException;
 ////////////
 // EVENTS //
 ////////////
-use Thunderlabid\Member\Events\Aktif\AktifCreated;
-use Thunderlabid\Member\Events\Aktif\AktifCreating;
-use Thunderlabid\Member\Events\Aktif\AktifUpdated;
-use Thunderlabid\Member\Events\Aktif\AktifUpdating;
-use Thunderlabid\Member\Events\Aktif\AktifDeleted;
-use Thunderlabid\Member\Events\Aktif\AktifDeleting;
-use Thunderlabid\Member\Events\Aktif\AktifRestored;
-use Thunderlabid\Member\Events\Aktif\AktifRestoring;
+use Thunderlabid\Kredit\Events\Aktif\AktifCreated;
+use Thunderlabid\Kredit\Events\Aktif\AktifCreating;
+use Thunderlabid\Kredit\Events\Aktif\AktifUpdated;
+use Thunderlabid\Kredit\Events\Aktif\AktifUpdating;
+use Thunderlabid\Kredit\Events\Aktif\AktifDeleted;
+use Thunderlabid\Kredit\Events\Aktif\AktifDeleting;
+use Thunderlabid\Kredit\Events\Aktif\AktifRestored;
+use Thunderlabid\Kredit\Events\Aktif\AktifRestoring;
 
 class Aktif extends Model
 {
 	use IDRTrait;
 
 	protected $table 	= 'k_aktif';
-	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal'];
+	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'jenis_pinjaman', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
 	protected $rules	= [];
 	protected $errors;
 
-	protected $dispatchesEvents = [
+	protected $events = [
         'created' 	=> AktifCreated::class,
         'creating' 	=> AktifCreating::class,
         'updated' 	=> AktifUpdated::class,
@@ -88,6 +88,11 @@ class Aktif extends Model
 	public function setLegalAttribute($variable)
 	{
 		$this->attributes['legal']				= $this->formatMoneyFrom($variable);
+	}
+
+	public function setNasabahAttribute($variable)
+	{
+		$this->attributes['nasabah']			= json_encode($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -146,4 +151,8 @@ class Aktif extends Model
 		return $this->formatMoneyTo($this->attributes['legal']);
 	}
 
+	public function getNasabahAttribute($variable)
+	{
+		return json_decode($this->attributes['nasabah'], true);
+	}
 }

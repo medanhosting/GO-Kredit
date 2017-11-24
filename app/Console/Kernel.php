@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\PengajuanExpiredChecker::class,
+        \App\Console\Commands\HitungDendaAngsuran::class,
     ];
 
     /**
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command(Commands\HitungDendaAngsuran::class)->dailyAt('12:00');
         $schedule->command(Commands\PengajuanExpiredChecker::class)->dailyAt('01:00');
     }
 

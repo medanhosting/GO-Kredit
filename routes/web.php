@@ -101,6 +101,34 @@
 
 
 Route::get('/test', function() {
-	$api = new Thunderlabid\Instagramapi\API('3290936526.5128893.67c47da60f00415cb35444c693584f2b');
-	dd($api->self_followed_by());
+
+	$mutasi 	= Thunderlabid\Kredit\Models\MutasiJaminan::where('nomor_kredit', 'K.1711.0001')->get();
+
+	$kredit 	= Thunderlabid\Pengajuan\Models\Putusan::where('pengajuan_id', '1711.1711.0002.0001')->first();
+
+	// event(new App\Events\AktivasiKredit($kredit));	
+
+	$now_a 		= Thunderlabid\Kredit\Models\Angsuran::where('nomor_kredit', 'K.1711.0001')->wherenull('paid_at')->orderby('issued_at', 'asc')->first();
+
+	$hasil 		= App\Http\Service\Policy\PelunasanAngsuran::hitung('K.1711.0001', $now_a['id']);
+	return $hasil;
+
+	$later_a 	= Thunderlabid\Kredit\Models\Angsuran::where('nomor_kredit', 'K.1711.0001')->wherenull('paid_at')->orderby('issued_at', 'asc')->skip(1)->take(200)->get();
+
+	//NEXT
+	$ids 		= array_column($later_a->toArray(), 'id');
+
+	$pelunasan 	= Thunderlabid\Kredit\Models\AngsuranDetail::whereIn('angsuran_id', $ids)->where('tag', '<>', 'bunga')->sum('amount');
+
+	$ne 	= new Thunderlabid\Kredit\Models\AngsuranDetail;
+	$ne->angsuran_id 	= $now_a->id;
+	$ne->tag 			= 'pelunasan';
+	$ne->amount 		= 'Rp '.number_format($pelunasan,0, "," ,".");
+	$ne->description 	= 'Pelunasan Tagihan';
+	$ne->save();
+
+	$now_a->paid_at 	= Carbon\Carbon::now()->format('d/m/Y H:i');
+	$now_a->save();
+
+	// event(new App\Events\AktivasiKredit($kredit));	
 });
