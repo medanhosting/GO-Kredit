@@ -17,6 +17,7 @@ class CreateKreditAktifTable extends Migration
 			$table->increments('id');
 			$table->string('nomor_kredit');
 			$table->string('nomor_pengajuan');
+			$table->string('kode_kantor');
 			$table->string('jenis_pinjaman');
 			$table->text('nasabah');
 			$table->double('plafon_pinjaman');

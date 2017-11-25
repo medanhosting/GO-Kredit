@@ -185,8 +185,12 @@
 				</div>
 			</div>
 		</div> -->
+		<div class="clearfix">&nbsp;</div>
+		<div class="clearfix">&nbsp;</div>
+		<div class="clearfix">&nbsp;</div>
+		@include('dashboard.menu.kredit')
 	</div>
-
+	
 	@if($is_holder)
 	<div class="container bg-white p-4 bg-shadow">
 		<div class="row">

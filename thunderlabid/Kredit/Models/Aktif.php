@@ -34,7 +34,7 @@ class Aktif extends Model
 	use IDRTrait;
 
 	protected $table 	= 'k_aktif';
-	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'jenis_pinjaman', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal'];
+	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'jenis_pinjaman', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal', 'kode_kantor'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
@@ -108,6 +108,7 @@ class Aktif extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
+		$rules['kode_kantor'] 		= ['required', 'string'];
 		$rules['nomor_kredit'] 		= ['required', 'string'];
 		$rules['nomor_pengajuan'] 	= ['required', 'string'];
 		$rules['nasabah'] 			= ['required'];

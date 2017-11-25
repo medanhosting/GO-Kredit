@@ -15,6 +15,7 @@ class CreateKreditAngsuranTable extends Migration
 	{
 		Schema::create('k_angsuran', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('kode_kantor');
 			$table->string('nomor_kredit');
 			$table->datetime('issued_at');
 			$table->datetime('paid_at')->nullable();

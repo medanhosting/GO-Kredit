@@ -46,8 +46,4 @@ trait IDRTrait {
 
 		return 'Rp '.number_format($value,0, "," ,".");
 	}
-
-	 public static function instance() {
-        return new IDRTrait();
-    }
 }

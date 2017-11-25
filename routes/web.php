@@ -67,6 +67,10 @@
 			Route::get('/realisasi/{id}/print/{mode}',		['as'	=> 'pengajuan.print', 	'uses' => 'PengajuanController@print', 'middleware' => 'scope:realisasi']);
 		});
 		
+		Route::prefix('kredit')->namespace('Kredit')->as('kredit.')->group( function() {
+			Route::resource('angsuran', 	'AngsuranController');
+		});
+
 		Route::prefix('manajemen')->namespace('Manajemen')->as('manajemen.')->group( function() {
 			Route::resource('kantor', 		'KantorController');
 			Route::post('kantor/batch', 	['uses' => 'KantorController@batch', 	'as' => 'kantor.batch']);
@@ -106,7 +110,7 @@ Route::get('/test', function() {
 
 	$kredit 	= Thunderlabid\Pengajuan\Models\Putusan::where('pengajuan_id', '1711.1711.0002.0001')->first();
 
-	// event(new App\Events\AktivasiKredit($kredit));	
+	event(new App\Events\AktivasiKredit($kredit));	
 
 	$now_a 		= Thunderlabid\Kredit\Models\Angsuran::where('nomor_kredit', 'K.1711.0001')->wherenull('paid_at')->orderby('issued_at', 'asc')->first();
 

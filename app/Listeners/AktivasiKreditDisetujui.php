@@ -49,6 +49,7 @@ class AktivasiKreditDisetujui
 			$aktif->provisi 		= $model->perc_provisi;
 			$aktif->administrasi 	= $model->administrasi;
 			$aktif->legal 			= $model->legal;
+			$aktif->kode_kantor 	= $model->pengajuan->kode_kantor;
 			$aktif->save();
 		}
 	}

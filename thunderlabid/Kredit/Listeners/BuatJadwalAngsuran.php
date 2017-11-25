@@ -47,6 +47,7 @@ class BuatJadwalAngsuran
 		
 		foreach ($pb['angsuran'] as $k => $v) {
 			$angsuran 					= new Angsuran;
+			$angsuran->kode_kantor 		= $model->kode_kantor;
 			$angsuran->nomor_kredit 	= $model->nomor_kredit;
 			$angsuran->issued_at 		= Carbon::now()->addmonths($k)->format('d/m/Y H:i');
 			$angsuran->save();
@@ -55,12 +56,14 @@ class BuatJadwalAngsuran
 			$a_detail->angsuran_id 	= $angsuran->id;
 			$a_detail->tag 			= 'pokok';
 			$a_detail->amount 		= $v['angsuran_pokok'];
+			$a_detail->description 	= 'Angsuran Pokok Bulan Ke - '.$k;
 			$a_detail->save();
 
 			$a_detail 	= new AngsuranDetail;
 			$a_detail->angsuran_id 	= $angsuran->id;
 			$a_detail->tag 			= 'bunga';
 			$a_detail->amount 		= $v['angsuran_bunga'];
+			$a_detail->description 	= 'Angsuran Bunga Bulan Ke - '.$k;
 			$a_detail->save();
 		}
 	}

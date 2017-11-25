@@ -33,7 +33,7 @@ class Angsuran extends Model
 	use WaktuTrait;
 	
 	protected $table 	= 'k_angsuran';
-	protected $fillable = ['nomor_kredit', 'issued_at', 'paid_at'];
+	protected $fillable = ['nomor_kredit', 'issued_at', 'paid_at', 'kode_kantor'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
@@ -62,10 +62,13 @@ class Angsuran extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
+    public function kredit(){
+    	return $this->belongsto(Aktif::class, 'nomor_kredit', 'nomor_kredit');
+    }
+
     public function details(){
     	return $this->hasMany(AngsuranDetail::class, 'angsuran_id');
     }
-
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------
@@ -73,6 +76,10 @@ class Angsuran extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
+    public function scopeCountAmount($query){
+    	return $query->select('k_angsuran.*')
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_angsuran.id = td.angsuran_id and td.deleted_at is null) as amount"));
+    }
 
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
@@ -100,6 +107,7 @@ class Angsuran extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
+		$rules['kode_kantor'] 		= ['required', 'string'];
 		$rules['nomor_kredit'] 		= ['required', 'string'];
 		$rules['issued_at'] 		= ['required', 'date_format:"Y-m-d H:i:s"'];
 		$rules['paid_at'] 			= ['nullable', 'date_format:"Y-m-d H:i:s"'];

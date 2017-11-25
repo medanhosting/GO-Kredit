@@ -11,6 +11,10 @@ class PelunasanAngsuran
 {
 	use IDRTrait;
 
+	public static function instance() {
+        return new PelunasanAngsuran();
+    }
+	
 	/**
 	 * Execute the job.
 	 *
