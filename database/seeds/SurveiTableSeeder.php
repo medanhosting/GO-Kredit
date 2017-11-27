@@ -183,12 +183,12 @@ class SurveiTableSeeder extends Seeder
 		$this->faker 		= \Faker\Factory::create();
 
 		//SIMPAN JAMINAN
-		$pengajuan 		= Pengajuan::skip(0)->take(rand(ceil(Pengajuan::count()/4),ceil(Pengajuan::count()/2)))->get();
+		$pengajuan 		= Pengajuan::skip(0)->take(rand(ceil(Pengajuan::count()/2),ceil(Pengajuan::count()/1)))->get();
 
 		foreach ($pengajuan as $key => $value) 
 		{
 			//character
-			$survei['tanggal']		= Carbon::now()->subHours(rand(24,47))->format('d/m/Y H:i');
+			$survei['tanggal']		= Carbon::now()->subDays(rand(120,129))->format('d/m/Y H:i');
 			$survei['kode_kantor']	= $value['kode_kantor'];
 			$survei['pengajuan_id'] = $value['id'];
 

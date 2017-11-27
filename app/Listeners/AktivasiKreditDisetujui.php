@@ -49,6 +49,7 @@ class AktivasiKreditDisetujui
 			$aktif->provisi 		= $model->perc_provisi;
 			$aktif->administrasi 	= $model->administrasi;
 			$aktif->legal 			= $model->legal;
+			$aktif->tanggal 		= $model->tanggal;
 			$aktif->kode_kantor 	= $model->pengajuan->kode_kantor;
 			$aktif->save();
 		}
@@ -57,12 +58,12 @@ class AktivasiKreditDisetujui
 	protected function generateNomorKredit($model)
 	{
 		$first_letter       = 'K.'.Carbon::now()->format('ym').'.';
-		$prev_data          = Aktif::where('nomor_kredit', 'like', $first_letter.'%')->orderby('id', 'desc')->first();
+		$prev_data          = Aktif::where('nomor_kredit', 'like', $first_letter.'%')->orderby('nomor_kredit', 'desc')->first();
 
 		if($prev_data)
 		{
-			$last_letter	= explode('.', $prev_data['id']);
-			$last_letter	= ((int)$last_letter[3] * 1) + 1;
+			$last_letter	= explode('.', $prev_data['nomor_kredit']);
+			$last_letter	= ((int)$last_letter[2] * 1) + 1;
 		}
 		else
 		{

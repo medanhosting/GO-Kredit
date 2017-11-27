@@ -8,6 +8,8 @@ use Thunderlabid\Pengajuan\Models\Analisa;
 
 use Thunderlabid\Pengajuan\Traits\IDRTrait;
 
+use App\Http\Service\Policy\PerhitunganBunga;
+
 use Carbon\Carbon;
 
 class AnalisaTableSeeder extends Seeder
@@ -29,7 +31,7 @@ class AnalisaTableSeeder extends Seeder
 		$jk   		= ['pa', 'pt'];
 		$hsl_survei = ['sangat_baik', 'baik', 'cukup_baik', 'tidak_baik', 'buruk'];
 
-		$pengajuan 	= Pengajuan::status('survei')->skip(0)->take(rand(ceil(Pengajuan::status('survei')->count()/4),ceil(Pengajuan::status('survei')->count()/2)))->get();
+		$pengajuan 	= Pengajuan::status('survei')->skip(0)->take(rand(ceil(Pengajuan::status('survei')->count()/2),ceil(Pengajuan::status('survei')->count()/1)))->get();
 
 		//BASIC PENGAJUAN
 		foreach ($pengajuan as $key => $value) 
@@ -37,7 +39,7 @@ class AnalisaTableSeeder extends Seeder
 			$data['pengajuan_id']	= $value['id'];
 			$data['analis']['nip']	= Orang::first()['nip'];
 			$data['analis']['nama']	= Orang::first()['nama'];
-			$data['tanggal']		= Carbon::now()->subHours(rand(12,23))->format('d/m/Y H:i');
+			$data['tanggal']		= Carbon::now()->subdays(rand(110,119))->format('d/m/Y H:i');
 			$data['character']		= $hsl_survei[rand(0,4)];
 			$data['capacity']		= $hsl_survei[rand(0,4)];
 			$data['capital']		= $hsl_survei[rand(0,4)];
@@ -45,26 +47,16 @@ class AnalisaTableSeeder extends Seeder
 			$data['collateral']		= $hsl_survei[rand(0,4)];
 			$data['jenis_pinjaman']	= 'pa';
 
-			$suku_bunga				= (rand(100,500)/1000);
+			$hitung 	= new PerhitunganBunga($value['pokok_pinjaman'], $value['kemampuan_angsur']);
+			$hitung 	= $hitung->pa();
 
-			//kemampuan angsur 
-			$k_angs 		= $this->formatMoneyFrom($value['kemampuan_angsur']);
-			$p_pinjaman 	= $this->formatMoneyFrom($value['pokok_pinjaman']);
-
-			//bunga tahunan
-			$total_bunga  	= $p_pinjaman * $suku_bunga;
-			$bulan 			= ceil(($p_pinjaman + $total_bunga)/$k_angs);
-
-			//kredit diusulkan
-			$kredit_update 	= $bulan * $k_angs;
-
-			$data['jangka_waktu']		= $bulan;
-			$data['suku_bunga']			= $suku_bunga;
-			$data['limit_angsuran']		= $this->formatMoneyTo($k_angs);
-			$data['limit_jangka_waktu']	= $bulan;
-			$data['kredit_diusulkan']	= $this->formatMoneyTo($kredit_update - $total_bunga);
-			$data['angsuran_pokok']		= $this->formatMoneyTo($p_pinjaman / $data['jangka_waktu']);
-			$data['angsuran_bunga']		= $this->formatMoneyTo($total_bunga / $data['jangka_waktu']);
+			$data['jangka_waktu']		= $hitung['lama_angsuran'];
+			$data['suku_bunga']			= $hitung['bunga_per_bulan'];
+			$data['limit_angsuran']		= $hitung['kemampuan_angsur'];
+			$data['limit_jangka_waktu']	= $hitung['lama_angsuran'];
+			$data['kredit_diusulkan']	= $hitung['pokok_pinjaman'];
+			$data['angsuran_pokok']		= $hitung['angsuran'][1]['angsuran_pokok'];
+			$data['angsuran_bunga']		= $hitung['angsuran'][1]['angsuran_bunga'];
 
 			$analisa = Analisa::create($data);
 		}

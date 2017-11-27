@@ -26,6 +26,7 @@ class CreateKreditAktifTable extends Migration
 			$table->integer('provisi');
 			$table->double('administrasi');
 			$table->double('legal');
+			$table->datetime('tanggal');
 			$table->timestamps();
 			$table->softDeletes();
 			

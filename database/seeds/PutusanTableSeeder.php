@@ -32,13 +32,13 @@ class PutusanTableSeeder extends Seeder
 		$stts_kptsn 	= ['setuju', 'tolak'];
 		$opsi 			= ['ada', 'tidak_ada', 'cadangkan'];
 
-		$pengajuan 	= Analisa::skip(0)->take(rand(ceil(Analisa::count()/4),ceil(Analisa::count()/2)))->get();
+		$pengajuan 	= Analisa::skip(0)->take(rand(ceil(Analisa::count()/2),ceil(Analisa::count()/1)))->get();
 
 		//BASIC PENGAJUAN
 		foreach ($pengajuan as $key => $value) 
 		{
 			$data['pengajuan_id']	= $value['pengajuan_id'];
-			$data['tanggal']		= Carbon::now()->subHours(rand(1,11))->format('d/m/Y H:i');
+			$data['tanggal']		= Carbon::now()->subdays(rand(100,109))->format('d/m/Y H:i');
 			$data['pembuat_keputusan']['nip']	= Orang::first()['nip'];
 			$data['pembuat_keputusan']['nama']	= Orang::first()['nama'];
 			$data['plafon_pinjaman']			= $value['kredit_diusulkan'];

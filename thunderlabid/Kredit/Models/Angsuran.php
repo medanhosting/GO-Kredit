@@ -8,7 +8,9 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\MessageBag;
 use Illuminate\Database\Eloquent\Model;
 
+use Config;
 use Validator;
+use Carbon\Carbon;
 use App\Service\Traits\WaktuTrait;
 
 ///////////////
@@ -35,21 +37,21 @@ class Angsuran extends Model
 	protected $table 	= 'k_angsuran';
 	protected $fillable = ['nomor_kredit', 'issued_at', 'paid_at', 'kode_kantor'];
 	protected $hidden 	= [];
-	protected $appends	= [];
+	protected $appends	= ['jatuh_tempo'];
 
 	protected $rules	= [];
 	protected $errors;
 
 	protected $events = [
-        'created' 	=> AngsuranCreated::class,
-        'creating' 	=> AngsuranCreating::class,
-        'updated' 	=> AngsuranUpdated::class,
-        'updating' 	=> AngsuranUpdating::class,
-        'deleted' 	=> AngsuranDeleted::class,
-        'deleting' 	=> AngsuranDeleting::class,
-        'restoring' => AngsuranRestoring::class,
-        'restored' 	=> AngsuranRestored::class,
-    ];
+		'created' 	=> AngsuranCreated::class,
+		'creating' 	=> AngsuranCreating::class,
+		'updated' 	=> AngsuranUpdated::class,
+		'updating' 	=> AngsuranUpdating::class,
+		'deleted' 	=> AngsuranDeleted::class,
+		'deleting' 	=> AngsuranDeleting::class,
+		'restoring' => AngsuranRestoring::class,
+		'restored' 	=> AngsuranRestored::class,
+	];
 
 	// ------------------------------------------------------------------------------------------------------------
 	// CONSTRUCT
@@ -62,24 +64,37 @@ class Angsuran extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
-    public function kredit(){
-    	return $this->belongsto(Aktif::class, 'nomor_kredit', 'nomor_kredit');
-    }
+	public function kredit(){
+		return $this->belongsto(Aktif::class, 'nomor_kredit', 'nomor_kredit');
+	}
 
-    public function details(){
-    	return $this->hasMany(AngsuranDetail::class, 'angsuran_id');
-    }
+	public function details(){
+		return $this->hasMany(AngsuranDetail::class, 'angsuran_id');
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------
+	public function HitungTotalHutang($nomor_kredit){
+		$ids = array_column(Angsuran::where('nomor_kredit', $nomor_kredit)->get(['id'])->toArray(), 'id');
+		return AngsuranDetail::whereIn('angsuran_id', $ids)->where('tag', 'pokok')->sum('amount');
+	}
+
+	public function HitungHutangDibayar($nomor_kredit){
+		$ids = array_column(Angsuran::where('nomor_kredit', $nomor_kredit)->wherenotnull('paid_at')->get(['id'])->toArray(), 'id');
+		return AngsuranDetail::whereIn('angsuran_id', $ids)->where('tag', 'pokok')->sum('amount');
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
-    public function scopeCountAmount($query){
-    	return $query->select('k_angsuran.*')
+	public function scopeCountAmount($query){
+		return $query->select('k_angsuran.*')
 			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_angsuran.id = td.angsuran_id and td.deleted_at is null) as amount"));
-    }
+	}
+
+	public function scopeLihatJatuhTempo($query, Carbon $value){
+		return $query->where('issued_at', '<=', $value->format('Y-m-d H:i:s'));
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
@@ -138,6 +153,10 @@ class Angsuran extends Model
 	public function getPaidAtAttribute($variable)
 	{
 		return $this->formatDateTimeTo($this->attributes['paid_at']);
+	}
+
+	public function getJatuhTempoAttribute($variable){
+		return Carbon::parse($this->attributes['issued_at'])->addDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i');
 	}
 
 }

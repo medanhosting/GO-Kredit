@@ -19,10 +19,10 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($angsuran as $k => $v)
+						@forelse($angsuran as $k => $v)
 							<tr>
 								<td>
-									{{$v['nomor_kredit']}}
+									{{$v['nomor_kredit']}} / {{$v['id']}}
 								</td>
 								<td>
 									{{$v['kredit']['nasabah']['nama']}}
@@ -34,10 +34,22 @@
 									{{Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['issued_at'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
 								</td>
 								<td>
-									<a href="{{route('kredit.angsuran.show', ['id' => $v['id'], 'kantor_aktif_id' => $v['kode_kantor']])}}">Bayar</a>
+									<a href="{{route('kredit.angsuran.show', ['id' => $v['id'], 'kantor_aktif_id' => $v['kode_kantor']])}}">
+										@if(is_null($v['paid_at']))
+											Bayar
+										@else
+											Lihat
+										@endif
+									</a>
 								</td>
 							</tr>
-						@endforeach
+						@empty
+							<tr>
+								<td colspan="5">
+									<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
+								</td>
+							</tr>
+						@endforelse
 					</tbody>
 				</table>
 			</div>

@@ -68,7 +68,9 @@
 		});
 		
 		Route::prefix('kredit')->namespace('Kredit')->as('kredit.')->group( function() {
-			Route::resource('angsuran', 	'AngsuranController');
+			Route::resource('angsuran', 		'AngsuranController');
+			Route::get('/angsuran/print/{id}',	['as'	=> 'angsuran.print', 	'uses' => 'AngsuranController@print']);
+			Route::resource('penagihan', 		'PenagihanController');
 		});
 
 		Route::prefix('manajemen')->namespace('Manajemen')->as('manajemen.')->group( function() {

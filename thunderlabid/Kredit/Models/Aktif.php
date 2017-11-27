@@ -9,8 +9,9 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Database\Eloquent\Model;
 
 use Validator;
-
+use Carbon\Carbon;
 use App\Service\Traits\IDRTrait;
+use App\Service\Traits\WaktuTrait;
 
 ///////////////
 // Exception //
@@ -32,9 +33,10 @@ use Thunderlabid\Kredit\Events\Aktif\AktifRestoring;
 class Aktif extends Model
 {
 	use IDRTrait;
+	use WaktuTrait;
 
 	protected $table 	= 'k_aktif';
-	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'jenis_pinjaman', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal', 'kode_kantor'];
+	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'jenis_pinjaman', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal', 'kode_kantor', 'tanggal'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
@@ -63,6 +65,13 @@ class Aktif extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
+    public function angsuran(){
+    	return $this->hasMany(Angsuran::class, 'nomor_kredit', 'nomor_kredit');
+    }
+
+    public function penagihan(){
+    	return $this->hasMany(Penagihan::class, 'nomor_kredit', 'nomor_kredit');
+    }
 
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
@@ -71,6 +80,14 @@ class Aktif extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
+	public function scopeHitungTunggakan($query, Carbon $value){
+		return $query->select('k_aktif.*')
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td join k_angsuran where k_angsuran.id = td.angsuran_id and k_angsuran.nomor_kredit = k_aktif.nomor_kredit and td.deleted_at is null and k_angsuran.deleted_at is null and k_angsuran.paid_at is null and k_angsuran.issued_at <= '".$value->format('Y-m-d H:i:s')."') as tunggakan"));
+	}
+
+	public function scopeLihatJatuhTempo($query, Carbon $value){
+		return $query->selectraw(\DB::raw("(select issued_at from k_angsuran where k_angsuran.nomor_kredit = k_aktif.nomor_kredit and k_angsuran.deleted_at is null and k_angsuran.paid_at is null and k_angsuran.issued_at <= '".$value->format('Y-m-d H:i:s')."' order by k_angsuran.issued_at asc limit 1 ) as issued_at"));
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
@@ -88,6 +105,11 @@ class Aktif extends Model
 	public function setLegalAttribute($variable)
 	{
 		$this->attributes['legal']				= $this->formatMoneyFrom($variable);
+	}
+
+	public function setTanggalAttribute($variable)
+	{
+		$this->attributes['tanggal']			= $this->formatDateTimeFrom($variable);
 	}
 
 	public function setNasabahAttribute($variable)
@@ -150,6 +172,11 @@ class Aktif extends Model
 	public function getLegalAttribute($variable)
 	{
 		return $this->formatMoneyTo($this->attributes['legal']);
+	}
+
+	public function getTanggalAttribute($variable)
+	{
+		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 
 	public function getNasabahAttribute($variable)

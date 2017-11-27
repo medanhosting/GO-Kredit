@@ -57,24 +57,27 @@ class HitungDendaAngsuran extends Command
 	{
 		$limit 		= Carbon::now()->subDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->startOfDay();
 
-		$angsuran 	= Angsuran::wherenull('paid_at')->where('issued_at', '<', $limit->format('Y-m-d H:i:s'))->get();
+		$angsuran 	= Angsuran::wherenull('paid_at')->where('issued_at', '<=', $limit->format('Y-m-d H:i:s'))->with(['kredit'])->get();
 
 		$denda_bulanan 	= Config::get('kredit.denda_perbulan');
 
 		foreach ($angsuran as $k => $v) {
-			$diff_months 	= Carbon::now()->diffInMonths($limit) + 1;
+			$diff_months 	= Carbon::createFromFormat('d/m/Y H:i', $v['issued_at'])->diffInMonths($limit) + 1;
 
 			$a_detail 		= AngsuranDetail::where('angsuran_id', $v['id'])->where('tag', 'denda')->count();
 
-			foreach (range(1, ($diff_months - $a_detail)) as $k2) {
-				$bulan 		= Carbon::createFromFormat('d/m/Y H:i', $v->issued_at)->addmonths($a_detail + $k2);
+			if($diff_months > $a_detail){
+				foreach (range(1, ($diff_months - $a_detail)) as $k2) {
 
-				$new_d 		= new AngsuranDetail;
-				$new_d->angsuran_id 	= $v['id'];
-				$new_d->tag 			= 'denda';
-				$new_d->amount 			= $this->formatMoneyTo($denda_bulanan);
-				$new_d->description 	= 'Denda bulan ke - '.$bulan->format('N').' tahun '.$bulan->format('Y');
-				$new_d->save();
+					$bulan 	= Carbon::createFromFormat('d/m/Y H:i', $v->kredit->tanggal)->diffInMonths(Carbon::createFromFormat('d/m/Y H:i', $v->issued_at));
+
+					$new_d 		= new AngsuranDetail;
+					$new_d->angsuran_id 	= $v['id'];
+					$new_d->tag 			= 'denda';
+					$new_d->amount 			= $this->formatMoneyTo($denda_bulanan);
+					$new_d->description 	= 'Denda bulan ke - '.($k2 + $bulan - 1);
+					$new_d->save();
+				}
 			}
 		}
 	}

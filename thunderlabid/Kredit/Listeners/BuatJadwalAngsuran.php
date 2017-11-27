@@ -46,10 +46,10 @@ class BuatJadwalAngsuran
 		$all_angs 	= Angsuran::where('nomor_kredit', $model->nomor_kredit)->delete();
 		
 		foreach ($pb['angsuran'] as $k => $v) {
-			$angsuran 					= new Angsuran;
-			$angsuran->kode_kantor 		= $model->kode_kantor;
-			$angsuran->nomor_kredit 	= $model->nomor_kredit;
-			$angsuran->issued_at 		= Carbon::now()->addmonths($k)->format('d/m/Y H:i');
+			$angsuran 				= new Angsuran;
+			$angsuran->kode_kantor 	= $model->kode_kantor;
+			$angsuran->nomor_kredit = $model->nomor_kredit;
+			$angsuran->issued_at 	= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->addmonths($k)->format('d/m/Y H:i');
 			$angsuran->save();
 
 			$a_detail 	= new AngsuranDetail;

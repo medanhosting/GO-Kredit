@@ -63,6 +63,7 @@ class KreditServiceProvider extends ServiceProvider
 	public function register()
 	{
 		Config::set('kredit.biaya_kolektor', 50000);
+		Config::set('kredit.selisih_penagihan_hari', 5);
 		Config::set('kredit.batas_pembayaran_angsuran_hari', 7);
 		Config::set('kredit.denda_perbulan', 30000);
 	}

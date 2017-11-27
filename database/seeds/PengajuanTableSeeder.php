@@ -152,7 +152,7 @@ class PengajuanTableSeeder extends Seeder
 
 			$pengajuan 	= Pengajuan::create($data);
 			$status 	= Status::where('pengajuan_id', $pengajuan['id'])->orderby('created_at', 'desc')->first();
-			$status->tanggal 	= Carbon::now()->subHours(rand(48,72))->format('d/m/Y h:i');
+			$status->tanggal 	= Carbon::now()->subDays(rand(130,240))->format('d/m/Y h:i');
 			$status->save();
 		}
 

@@ -206,7 +206,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col text-center">
-						{{ config('app.name') }}.com &copy; {{ date('Y') }} - Developed by <a href='http://thunderlab.id' target='_blank'>Thunderlab.id</a>
+						{{ config('app.name') }} &copy; {{ date('Y') }} - Developed by <a href='http://thunderlab.id' target='_blank'>Thunderlab.id</a>
 					</div>
 				</div>
 			</div>
