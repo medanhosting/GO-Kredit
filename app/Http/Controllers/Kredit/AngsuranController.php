@@ -24,7 +24,7 @@ class AngsuranController extends Controller
 
 	public function index () 
 	{
-		$today 		= Carbon::now();
+		$today 		= Carbon::now()->addDays(15);
 
 		$angsuran 	= Angsuran::lihatJatuhTempo($today)->countAmount()->where('kode_kantor', request()->get('kantor_aktif_id'))->paginate();
 
@@ -36,7 +36,7 @@ class AngsuranController extends Controller
 	}
 
 	public function show($id) {
-		$today 		= Carbon::now();
+		$today 		= Carbon::now()->addDays(15);
 
 		$angsuran 	= Angsuran::countAmount()->where('kode_kantor', request()->get('kantor_aktif_id'))->where('k_angsuran.id', $id)->with(['details'])->first();
 

@@ -15,6 +15,7 @@ class CreateKreditMutasiJaminanTable extends Migration
 	{
 		Schema::create('k_mutasi_jaminan', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('kode_kantor');
 			$table->string('nomor_kredit');
 			$table->datetime('stored_at');
 			$table->datetime('taken_at')->nullable();

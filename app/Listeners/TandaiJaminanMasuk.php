@@ -38,6 +38,7 @@ class TandaiJaminanMasuk
 
 		foreach ($survei['collateral'] as $k => $v) {
 			$m_jaminan 					= new MutasiJaminan;
+			$m_jaminan->kode_kantor 	= $model->kode_kantor;
 			$m_jaminan->nomor_kredit 	= $model->nomor_kredit;
 			$m_jaminan->stored_at 		= Carbon::now()->format('d/m/Y H:i');
 			$m_jaminan->documents 		= $v->dokumen_survei['collateral'];

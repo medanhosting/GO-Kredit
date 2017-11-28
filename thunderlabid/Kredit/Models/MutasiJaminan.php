@@ -34,7 +34,7 @@ class MutasiJaminan extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_mutasi_jaminan';
-	protected $fillable = ['nomor_kredit', 'stored_at', 'taken_at', 'documents'];
+	protected $fillable = ['nomor_kredit', 'kode_kantor', 'stored_at', 'taken_at', 'documents'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];
@@ -101,6 +101,7 @@ class MutasiJaminan extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
+		$rules['kode_kantor'] 		= ['required', 'string'];
 		$rules['nomor_kredit'] 		= ['required', 'string'];
 		$rules['stored_at'] 		= ['required', 'date_format:"Y-m-d H:i:s"'];
 		$rules['taken_at'] 			= ['nullable', 'date_format:"Y-m-d H:i:s"'];
