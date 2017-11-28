@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\MessageBag;
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, Config;
 use Carbon\Carbon;
 use App\Service\Traits\IDRTrait;
 use App\Service\Traits\WaktuTrait;
@@ -86,7 +86,16 @@ class Aktif extends Model
 	}
 
 	public function scopeLihatJatuhTempo($query, Carbon $value){
-		return $query->selectraw(\DB::raw("(select issued_at from k_angsuran where k_angsuran.nomor_kredit = k_aktif.nomor_kredit and k_angsuran.deleted_at is null and k_angsuran.paid_at is null and k_angsuran.issued_at <= '".$value->format('Y-m-d H:i:s')."' order by k_angsuran.issued_at asc limit 1 ) as issued_at"));
+		return $query->selectraw(\DB::raw("(select issued_at from k_angsuran where k_angsuran.nomor_kredit = k_aktif.nomor_kredit and k_angsuran.deleted_at is null and k_angsuran.paid_at is null and k_angsuran.issued_at <= '".$value->format('Y-m-d H:i:s')."' order by k_angsuran.issued_at asc limit 1 ) as issued_at"))
+		->wherehas('angsuran', function($q)use($value){$q->wherenull('paid_at')->where('issued_at', '<=', $value->format('Y-m-d H:i:s'));});
+	}
+
+	public function scopeCekTunggakan($query, Carbon $value){
+		return $query->select('k_aktif.*')
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td join k_angsuran where k_angsuran.id = td.angsuran_id and k_angsuran.nomor_kredit = k_aktif.nomor_kredit and td.deleted_at is null and k_angsuran.deleted_at is null and (k_angsuran.paid_at is null or datediff(k_angsuran.paid_at, k_angsuran.issued_at) > ".Config::get('kredit.batas_pembayaran_angsuran_hari').") and k_angsuran.issued_at <= '".$value->format('Y-m-d H:i:s')."') as tunggakan"))
+			->selectraw(\DB::raw("(select issued_at from k_angsuran where k_angsuran.nomor_kredit = k_aktif.nomor_kredit and k_angsuran.deleted_at is null and (k_angsuran.paid_at is null or datediff(k_angsuran.paid_at, k_angsuran.issued_at) > ".Config::get('kredit.batas_pembayaran_angsuran_hari').") and k_angsuran.issued_at <= '".$value->format('Y-m-d H:i:s')."' order by k_angsuran.issued_at asc limit 1 ) as issued_at"))
+			->wherehas('angsuran', function($q)use($value){$q->where(function($q){$q->wherenull('paid_at')->orwhereraw(\DB::raw('datediff(paid_at, issued_at) > '.Config::get('kredit.batas_pembayaran_angsuran_hari')));})->where('issued_at', '<=', $value->format('Y-m-d H:i:s'));})
+		;
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

@@ -5,52 +5,52 @@
 		<div class="row">
 			<div class="col">
 				<h4 class='mb-4 text-style text-secondary'>
-					<span class="text-uppercase">Mutasi Jaminan</span> 
+					<span class="text-uppercase">Laporan Pengembalian Jaminan</span> 
 					<small><small>@if($jaminan->currentPage() > 1) Halaman {{$jaminan->currentPage()}} @endif</small></small>
 				</h4>
 
-				<div class="row">
-					<div class="col-12">
-						<form action="{{route('kredit.jaminan.index', request()->all())}}" method="GET">
-							 <div class="input-group">
-							 	@foreach(request()->all() as $k => $v)
-							 		@if(!str_is($k, 'q'))
-								 		<input type="hidden" name="{{$k}}" value="{{$v}}">
-							 		@endif
-							 	@endforeach
-								<input type="text" name="q" class="form-control" placeholder="cari nomor sertifikat / bpkb atau nomor kredit" value="{{request()->get('q')}}">
-								<span class="input-group-btn">
-									<button class="btn btn-secondary" type="submit" style="background-color:#fff;color:#aaa;border-color:#ccc;border-radius: 0px">Go!</button>
-								</span>
-							</div>
-						</form>
+				{{-- SEARCH --}}
+				{!! Form::open(['method' => "GET"]) !!}
+					@foreach(request()->all() as $k => $v)
+				 		@if(!str_is($k, 'q'))
+					 		<input type="hidden" name="{{$k}}" value="{{$v}}">
+				 		@endif
+				 	@endforeach
+					<div class="form-row">
+						<div class='col-sm-6 order-1'>{!! Form::bsText(null, 'q', null, ['placeholder' => 'search']) !!}</div>
+						<div class='col-auto order-3'>{!! Form::bsSubmit('<i class="fa fa-search"></i>', ['class' => 'btn btn-primary']) !!}</div>
 					</div>
-				</div>
+				{!! Form::close() !!}
+
 				<div class="clearfix">&nbsp;</div>
 				<table class="table table-hover">
 					<thead>
 						<tr class="text-center">
 							<th class="text-left">#</th>
+							<th>Nasabah</th>
 							<th>Dokumen</th>
-							<th>&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
 						@php $lua = null @endphp
 						@forelse($jaminan as $k => $v)
-							@if($lua != $v['updated_at']->format('d/m/Y'))
+							@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['taken_at'])->format('d/m/Y') @endphp
+							@if($lua != $pa)
 								<tr>
 									<td colspan="3" class="bg-light">
-										{{$v['updated_at']->format('d/m/Y')}}
+										{{$pa}}
 									</td>
 								</tr>
-								@php $lua = $v['updated_at']->format('d/m/Y') @endphp
+								@php $lua = $pa @endphp
 							@endif
 							<tr class="text-center">
 								<td class="text-left">
 									{{$v['nomor_kredit']}}
 								</td>
 								<td class="text-left">
+									{{$v['kredit']['nasabah']['nama']}}
+								</td>
+								<td class="text-right">
 									@if(str_is($v['documents']['jenis'], 'shm'))
 										<h6>SHM</h6>
 										Nomor Sertifikat {{$v['documents']['shm']['nomor_sertifikat']}}<br/>
@@ -63,13 +63,6 @@
 										<h6>BPKB</h6>
 										Nomor BPKB {{$v['documents']['bpkb']['nomor_bpkb']}}<br/>
 										Kendaraan {{str_replace('_', ' ', $v['documents']['bpkb']['jenis'])}} - {{$v['documents']['bpkb']['merk']}} , {{$v['documents']['bpkb']['tipe']}} ({{$v['documents']['bpkb']['tahun']}})
-									@endif
-								</td>
-								<td>
-									@if(is_null($v['taken_at']))
-										<i class="fa fa-arrow-down text-success"></i>
-									@else
-										<i class="fa fa-arrow-up text-danger"></i>
 									@endif
 								</td>
 							</tr>

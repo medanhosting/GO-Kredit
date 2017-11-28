@@ -24,9 +24,16 @@ class AngsuranController extends Controller
 
 	public function index () 
 	{
-		$today 		= Carbon::now()->addDays(15);
+		$today 		= Carbon::now();
 
-		$angsuran 	= Angsuran::lihatJatuhTempo($today)->countAmount()->where('kode_kantor', request()->get('kantor_aktif_id'))->paginate();
+		$angsuran 	= Angsuran::lihatJatuhTempo($today)->countAmount()->where('kode_kantor', request()->get('kantor_aktif_id'));
+
+		if(request()->has('q')){
+			$look 		= '%'.request()->get('q').'%';
+			$angsuran 	= $angsuran->where(function($q)use($look){$q->where('nomor_kredit', 'like', $look)->orwherehas('kredit', function($q2)use($look){$q2->where('nasabah->nama', 'like', $look);});});
+		}
+
+		$angsuran 	= $angsuran->paginate();
 
 		view()->share('angsuran', $angsuran);
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
@@ -36,7 +43,7 @@ class AngsuranController extends Controller
 	}
 
 	public function show($id) {
-		$today 		= Carbon::now()->addDays(15);
+		$today 		= Carbon::now();
 
 		$angsuran 	= Angsuran::countAmount()->where('kode_kantor', request()->get('kantor_aktif_id'))->where('k_angsuran.id', $id)->with(['details'])->first();
 

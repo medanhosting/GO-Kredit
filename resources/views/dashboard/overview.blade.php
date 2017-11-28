@@ -263,6 +263,10 @@
 				@endif
 			</div>
 		</div>
+		<div class="clearfix">&nbsp;</div>
+		<div class="clearfix">&nbsp;</div>
+		<div class="clearfix">&nbsp;</div>
+		@include('dashboard.menu.report')
 	</div>
 	@endif
 @endpush

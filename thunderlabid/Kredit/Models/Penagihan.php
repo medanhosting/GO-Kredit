@@ -73,6 +73,11 @@ class Penagihan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
+	public function scopeHitungTunggakan($query){
+		return $query->select('k_penagihan.*')
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td join k_angsuran where k_angsuran.id = td.angsuran_id and k_angsuran.nomor_kredit = k_penagihan.nomor_kredit and td.deleted_at is null and k_angsuran.deleted_at is null and k_angsuran.paid_at >= k_penagihan.collected_at and k_angsuran.issued_at <= k_penagihan.collected_at) as tunggakan"))
+			->selectraw(\DB::raw("(select issued_at from k_angsuran where k_angsuran.nomor_kredit = k_penagihan.nomor_kredit and k_angsuran.deleted_at is null and k_angsuran.paid_at >= k_penagihan.collected_at and k_angsuran.issued_at <= k_penagihan.collected_at order by issued_at asc limit 1) as issued_at"));
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR

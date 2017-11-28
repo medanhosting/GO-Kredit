@@ -5,40 +5,47 @@
 		<div class="row">
 			<div class="col">
 				<h4 class='mb-4 text-style text-secondary'>
-					<span class="text-uppercase">Daftar Tunggakan</span> 
+					<span class="text-uppercase">Laporan Tunggakan</span> 
 					<small><small>@if($tunggakan->currentPage() > 1) Halaman {{$tunggakan->currentPage()}} @endif</small></small>
 				</h4>
-				<div class="row">
-					<div class="col-12">
-						<form action="{{route('kredit.penagihan.index', request()->all())}}" method="GET">
-							 <div class="input-group">
-							 	@foreach(request()->all() as $k => $v)
-							 		@if(!str_is($k, 'q'))
-								 		<input type="hidden" name="{{$k}}" value="{{$v}}">
-							 		@endif
-							 	@endforeach
-								<input type="text" name="q" class="form-control" placeholder="cari nama nasabah atau nomor kredit" value="{{request()->get('q')}}">
-								<span class="input-group-btn">
-									<button class="btn btn-secondary" type="submit" style="background-color:#fff;color:#aaa;border-color:#ccc;border-radius: 0px">Go!</button>
-								</span>
-							</div>
-						</form>
+
+				{{-- SEARCH --}}
+				{!! Form::open(['method' => "GET"]) !!}
+					@foreach(request()->all() as $k => $v)
+				 		@if(!str_is($k, 'q'))
+					 		<input type="hidden" name="{{$k}}" value="{{$v}}">
+				 		@endif
+				 	@endforeach
+					<div class="form-row">
+						<div class='col-sm-6 order-1'>{!! Form::bsText(null, 'q', null, ['placeholder' => 'search']) !!}</div>
+						<!-- <div class='col-sm-1 order-2'>{!! Form::bsSelect(null, 'periode', ['daily' => 'Daily', 'monthly' => 'Monthly', 'yearly' => 'Yearly'], null) !!}</div> -->
+						<div class='col-auto order-3'>{!! Form::bsSubmit('<i class="fa fa-search"></i>', ['class' => 'btn btn-primary']) !!}</div>
 					</div>
-				</div>
+				{!! Form::close() !!}
+
 				<div class="clearfix">&nbsp;</div>
 				<table class="table table-hover">
 					<thead>
 						<tr class="text-center">
 							<th class="text-left">#</th>
-							<th class="text-left">Nasabah</th>
+							<th>Nasabah</th>
 							<th>Total Tunggakan</th>
 							<th>Jatuh Tempo</th>
-							<th>Total Penagihan</th>
 							<th>&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
+						@php $lua = null @endphp
 						@forelse($tunggakan as $k => $v)
+							@php $pa = \Carbon\Carbon::parse($v['issued_at'])->format('d/m/Y') @endphp
+							@if($lua != $pa)
+								<tr>
+									<td colspan="5" class="bg-light">
+										{{$pa}}
+									</td>
+								</tr>
+								@php $lua = $pa @endphp
+							@endif
 							<tr class="text-center">
 								<td class="text-left">
 									{{$v['nomor_kredit']}}
@@ -53,15 +60,11 @@
 									{{Carbon\Carbon::parse($v['issued_at'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
 								</td>
 								<td>
-									{{$v->penagihan->count()}}
-								</td>
-								<td>
-									<a href="{{route('kredit.penagihan.show', ['id' => $v['nomor_kredit'], 'kantor_aktif_id' => $v['kode_kantor']])}}">Buatkan Jadwal Penagihan</a>
 								</td>
 							</tr>
 						@empty
 							<tr>
-								<td colspan="6">
+								<td colspan="5">
 									<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
 								</td>
 							</tr>

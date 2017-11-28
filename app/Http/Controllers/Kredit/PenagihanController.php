@@ -26,7 +26,16 @@ class PenagihanController extends Controller
 	{
 		$today 		= Carbon::now()->subDays(Config::get('kredit.batas_pembayaran_angsuran_hari'));
 
-		$tunggakan 	= Aktif::hitungtunggakan($today)->lihatJatuhTempo($today)->where('kode_kantor', request()->get('kantor_aktif_id'))->paginate();
+		$tunggakan 	= Aktif::hitungtunggakan($today)->lihatJatuhTempo($today)->where('kode_kantor', request()->get('kantor_aktif_id'));
+
+		if(request()->has('q')){
+			$look 	= '%'.request()->get('q').'%';
+			$tunggakan  	= $tunggakan->where(function($q)use($look){
+				$q->where('nomor_kredit', 'like', $look)->orwhere('nasabah->nama', 'like', $look);
+			});
+		}
+
+		$tunggakan 	= $tunggakan->paginate();
 
 		view()->share('tunggakan', $tunggakan);
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));

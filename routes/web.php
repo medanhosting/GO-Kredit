@@ -72,6 +72,11 @@
 			Route::get('/angsuran/print/{id}',	['as'	=> 'angsuran.print', 	'uses' => 'AngsuranController@print']);
 			Route::resource('penagihan', 		'PenagihanController');
 			Route::resource('jaminan', 			'JaminanController');
+			
+			Route::get('/report/angsuran',		['as'	=> 'report.angsuran', 	'uses' => 'ReportController@angsuran']);
+			Route::get('/report/penagihan',		['as'	=> 'report.penagihan', 	'uses' => 'ReportController@penagihan']);
+			Route::get('/report/tunggakan',		['as'	=> 'report.tunggakan', 	'uses' => 'ReportController@tunggakan']);
+			Route::get('/report/jaminan',		['as'	=> 'report.jaminan', 	'uses' => 'ReportController@jaminan']);
 		});
 
 		Route::prefix('manajemen')->namespace('Manajemen')->as('manajemen.')->group( function() {

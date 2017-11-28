@@ -8,6 +8,24 @@
 					<span class="text-uppercase">Daftar Angsuran</span> 
 					<small><small>@if($angsuran->currentPage() > 1) Halaman {{$angsuran->currentPage()}} @endif</small></small>
 				</h4>
+				<div class="row">
+					<div class="col-12">
+						<form action="{{route('kredit.angsuran.index', request()->all())}}" method="GET">
+							 <div class="input-group">
+							 	@foreach(request()->all() as $k => $v)
+							 		@if(!str_is($k, 'q'))
+								 		<input type="hidden" name="{{$k}}" value="{{$v}}">
+							 		@endif
+							 	@endforeach
+								<input type="text" name="q" class="form-control" placeholder="cari nama nasabah atau nomor kredit" value="{{request()->get('q')}}">
+								<span class="input-group-btn">
+									<button class="btn btn-secondary" type="submit" style="background-color:#fff;color:#aaa;border-color:#ccc;border-radius: 0px">Go!</button>
+								</span>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="clearfix">&nbsp;</div>
 				<table class="table table-hover">
 					<thead>
 						<tr>
