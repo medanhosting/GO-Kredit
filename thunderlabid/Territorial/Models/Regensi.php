@@ -28,7 +28,7 @@ class Regensi extends Model
 
 	protected $table	= 'territorial_regensi';
 	protected $fillable	= ['id', 'territorial_provinsi_id', 'nama'];
-	protected $hidden	= [];
+	protected $hidden	= ['territorial_provinsi_id', 'created_at', 'updated_at', 'deleted_at'];
 	protected $dates	= [];
 
 	protected $rules	= [];

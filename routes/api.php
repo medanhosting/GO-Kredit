@@ -49,3 +49,8 @@ Route::middleware('device')->group( function() {
 		return Response::json(['status' => 1, 'data' => ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'minimum_bpkb' => Carbon\Carbon::now()->subYears(25)->format('Y'), 'remain_pengajuan' => (3 - $jlh_pengajuan), 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3]]);
 	});
 });
+
+
+Route::group(['namespace' => 'OpenSource'], function(){
+	Route::any('/indonesia',	['uses' => 'IndonesiaController@index']);
+});
