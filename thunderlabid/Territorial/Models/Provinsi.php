@@ -28,7 +28,7 @@ class Provinsi extends Model
 
 	protected $table	= 'territorial_provinsi';
 	protected $fillable	= ['id', 'territorial_negara_id', 'nama'];
-	protected $hidden	= ['territorial_negara_id', 'created_at', 'updated_at', 'deleted_at'];
+	protected $hidden	= [];
 	protected $dates	= [];
 
 	protected $rules	= [];

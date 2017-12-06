@@ -28,7 +28,7 @@ class Distrik extends Model
 
 	protected $table	= 'territorial_distrik';
 	protected $fillable	= ['id', 'territorial_regensi_id', 'nama'];
-	protected $hidden	= ['created_at', 'updated_at', 'deleted_at'];
+	protected $hidden	= [];
 	protected $dates	= [];
 
 	protected $rules	= [];
