@@ -23,8 +23,14 @@ class DashboardController extends Controller
 				$holder_scopes	= PenempatanKaryawan::where('orang_id', $this->me['id'])->active($hari_ini)->where('kantor_id', $value['id'])->first();
 			}
 		}
+
+		$start 		= Carbon::parse('first day of this month')->startOfDay();
+		$end 		= Carbon::parse('last day of this month')->endOfDay();
+
 		//atur menu scopes
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+		view()->share('end', $end);
+		view()->share('start', $start);
 		
 		$this->layout->pages 	= view('dashboard.overview', compact('is_holder', 'holder_scopes'));
 		return $this->layout;

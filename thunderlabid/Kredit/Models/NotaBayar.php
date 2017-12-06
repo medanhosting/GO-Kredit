@@ -21,21 +21,24 @@ use App\Exceptions\AppException;
 ////////////
 // EVENTS //
 ////////////
-use Thunderlabid\Kredit\Events\Angsuran\AngsuranCreated;
-use Thunderlabid\Kredit\Events\Angsuran\AngsuranCreating;
-use Thunderlabid\Kredit\Events\Angsuran\AngsuranUpdated;
-use Thunderlabid\Kredit\Events\Angsuran\AngsuranUpdating;
-use Thunderlabid\Kredit\Events\Angsuran\AngsuranDeleted;
-use Thunderlabid\Kredit\Events\Angsuran\AngsuranDeleting;
-use Thunderlabid\Kredit\Events\Angsuran\AngsuranRestored;
-use Thunderlabid\Kredit\Events\Angsuran\AngsuranRestoring;
+use Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreated;
+use Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreating;
+use Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdated;
+use Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating;
+use Thunderlabid\Kredit\Events\NotaBayar\NotaBayarDeleted;
+use Thunderlabid\Kredit\Events\NotaBayar\NotaBayarDeleting;
+use Thunderlabid\Kredit\Events\NotaBayar\NotaBayarRestored;
+use Thunderlabid\Kredit\Events\NotaBayar\NotaBayarRestoring;
 
-class Angsuran extends Model
+use Thunderlabid\Kredit\Models\Traits\FakturTrait;
+
+class NotaBayar extends Model
 {
 	use WaktuTrait;
+	use FakturTrait;
 	
-	protected $table 	= 'k_angsuran';
-	protected $fillable = ['nomor_kredit', 'issued_at', 'paid_at', 'kode_kantor'];
+	protected $table 	= 'k_nota_bayar';
+	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'nip_karyawan'];
 	protected $hidden 	= [];
 	protected $appends	= ['jatuh_tempo'];
 
@@ -43,14 +46,14 @@ class Angsuran extends Model
 	protected $errors;
 
 	protected $events = [
-		'created' 	=> AngsuranCreated::class,
-		'creating' 	=> AngsuranCreating::class,
-		'updated' 	=> AngsuranUpdated::class,
-		'updating' 	=> AngsuranUpdating::class,
-		'deleted' 	=> AngsuranDeleted::class,
-		'deleting' 	=> AngsuranDeleting::class,
-		'restoring' => AngsuranRestoring::class,
-		'restored' 	=> AngsuranRestored::class,
+		'created' 	=> NotaBayarCreated::class,
+		'creating' 	=> NotaBayarCreating::class,
+		'updated' 	=> NotaBayarUpdated::class,
+		'updating' 	=> NotaBayarUpdating::class,
+		'deleted' 	=> NotaBayarDeleted::class,
+		'deleting' 	=> NotaBayarDeleting::class,
+		'restoring' => NotaBayarRestoring::class,
+		'restored' 	=> NotaBayarRestored::class,
 	];
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -69,44 +72,35 @@ class Angsuran extends Model
 	}
 
 	public function details(){
-		return $this->hasMany(AngsuranDetail::class, 'angsuran_id');
+		return $this->hasMany(AngsuranDetail::class, 'nota_bayar_id');
 	}
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------
-	public function HitungTotalHutang($nomor_kredit){
-		$ids = array_column(Angsuran::where('nomor_kredit', $nomor_kredit)->get(['id'])->toArray(), 'id');
-		return AngsuranDetail::whereIn('angsuran_id', $ids)->where('tag', 'pokok')->sum('amount');
-	}
-
-	public function HitungHutangDibayar($nomor_kredit){
-		$ids = array_column(Angsuran::where('nomor_kredit', $nomor_kredit)->wherenotnull('paid_at')->get(['id'])->toArray(), 'id');
-		return AngsuranDetail::whereIn('angsuran_id', $ids)->where('tag', 'pokok')->sum('amount');
-	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
-	public function scopeCountAmount($query){
-		return $query->select('k_angsuran.*')
-			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_angsuran.id = td.angsuran_id and td.deleted_at is null) as amount"));
+	public function scopeDisplaying($query){
+		return $query->select('k_nota_bayar.*')
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'pokok' and td.deleted_at is null) as pokok"))
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'bunga' and td.deleted_at is null) as bunga"))
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'denda' and td.deleted_at is null) as denda"))
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'collector' and td.deleted_at is null) as collector"))
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.deleted_at is null) as subtotal"));
 	}
 
-	public function scopeLihatJatuhTempo($query, Carbon $value){
-		return $query->where('issued_at', '<=', $value->format('Y-m-d H:i:s'));
+	public function scopeCountAmount($query){
+		return $query->select('k_nota_bayar.*')
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.deleted_at is null) as amount"));
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
 	// ------------------------------------------------------------------------------------------------------------
-	public function setIssuedAtAttribute($variable)
+	public function setTanggalAttribute($variable)
 	{
-		$this->attributes['issued_at']	= $this->formatDateTimeFrom($variable);
-	}
-
-	public function setPaidAtAttribute($variable)
-	{
-		$this->attributes['paid_at']	= $this->formatDateTimeFrom($variable);
+		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -122,10 +116,9 @@ class Angsuran extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['kode_kantor'] 		= ['required', 'string'];
+		$rules['nomor_faktur'] 		= ['required', 'string'];
 		$rules['nomor_kredit'] 		= ['required', 'string'];
-		$rules['issued_at'] 		= ['required', 'date_format:"Y-m-d H:i:s"'];
-		$rules['paid_at'] 			= ['nullable', 'date_format:"Y-m-d H:i:s"'];
+		$rules['tanggal'] 			= ['required', 'date_format:"Y-m-d H:i:s"'];
 
 		//////////////
 		// Validate //
@@ -145,18 +138,13 @@ class Angsuran extends Model
 		return $this->errors;
 	}
 
-	public function getIssuedAtAttribute($variable)
+	public function getTanggalAttribute($variable)
 	{
-		return $this->formatDateTimeTo($this->attributes['issued_at']);
-	}
-
-	public function getPaidAtAttribute($variable)
-	{
-		return $this->formatDateTimeTo($this->attributes['paid_at']);
+		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 
 	public function getJatuhTempoAttribute($variable){
-		return Carbon::parse($this->attributes['issued_at'])->addDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i');
+		return Carbon::parse($this->attributes['tanggal'])->addDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i');
 	}
 
 }

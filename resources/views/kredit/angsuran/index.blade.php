@@ -31,8 +31,8 @@
 						<tr>
 							<th>#</th>
 							<th>Nasabah</th>
-							<th>Total Angsuran</th>
-							<th>Jatuh Tempo</th>
+							<th>Total Hutang</th>
+							<th>Sisa Angsuran</th>
 							<th>&nbsp;</th>
 						</tr>
 					</thead>
@@ -40,24 +40,20 @@
 						@forelse($angsuran as $k => $v)
 							<tr>
 								<td>
-									{{$v['nomor_kredit']}} / {{$v['id']}}
+									{{$v['nomor_kredit']}}
 								</td>
 								<td>
 									{{$v['kredit']['nasabah']['nama']}}
 								</td>
 								<td>
-									{{$idr->formatMoneyTo($v['amount'])}}
+									{{$idr->formatMoneyTo($v['total_hutang'])}}
 								</td>
 								<td>
-									{{Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['issued_at'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
+									{{$idr->formatMoneyTo($v['sisa_angsuran'])}}
 								</td>
 								<td>
-									<a href="{{route('kredit.angsuran.show', ['id' => $v['id'], 'kantor_aktif_id' => $v['kode_kantor']])}}">
-										@if(is_null($v['paid_at']))
-											Bayar
-										@else
-											Lihat
-										@endif
+									<a href="{{route('kredit.angsuran.show', ['id' => $v['nomor_kredit'], 'kantor_aktif_id' => $v['kredit']['kode_kantor']])}}">
+										Lihat
 									</a>
 								</td>
 							</tr>

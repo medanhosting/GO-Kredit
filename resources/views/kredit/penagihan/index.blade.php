@@ -44,19 +44,19 @@
 									{{$v['nomor_kredit']}}
 								</td>
 								<td class="text-left">
-									{{$v['nasabah']['nama']}}
+									{{$v['kredit']['nasabah']['nama']}}
 								</td>
 								<td class="text-right">
 									{{$idr->formatMoneyTo($v['tunggakan'])}}
 								</td>
 								<td>
-									{{Carbon\Carbon::parse($v['issued_at'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
+									{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
 								</td>
 								<td>
-									{{$v->penagihan->count()}}
+									{{$v->kredit->penagihan->count()}}
 								</td>
 								<td>
-									<a href="{{route('kredit.penagihan.show', ['id' => $v['nomor_kredit'], 'kantor_aktif_id' => $v['kode_kantor']])}}">Buatkan Jadwal Penagihan</a>
+									<a href="{{route('kredit.penagihan.show', ['id' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif['id']])}}">Buatkan Jadwal Penagihan</a>
 								</td>
 							</tr>
 						@empty

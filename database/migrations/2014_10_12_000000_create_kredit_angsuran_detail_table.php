@@ -15,15 +15,18 @@ class CreateKreditAngsuranDetailTable extends Migration
 	{
 		Schema::create('k_angsuran_detail', function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('angsuran_id');
-			$table->string('ref_id')->nullable();
-			$table->string('tag')->nullable();
+			$table->string('nota_bayar_id')->nullable();
+			$table->string('nomor_kredit');
+			$table->datetime('tanggal');
+			$table->integer('nth')->nullable();
+			$table->string('tag');
 			$table->double('amount');
 			$table->text('description')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'angsuran_id']);
+            $table->index(['deleted_at', 'nomor_kredit']);
+            $table->index(['deleted_at', 'nota_bayar_id']);
 		});
 	}
 

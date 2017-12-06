@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Kredit\Events\Angsuran;
+namespace Thunderlabid\Kredit\Events\NotaBayar;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -10,9 +10,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-use Thunderlabid\Kredit\Models\Angsuran;
+use Thunderlabid\Kredit\Models\NotaBayar;
 
-class AngsuranDeleted
+class NotaBayarUpdating
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,7 +22,7 @@ class AngsuranDeleted
      *
      * @return void
      */
-    public function __construct(Angsuran $data)
+    public function __construct(NotaBayar $data)
     {
         $this->data = $data;
     }

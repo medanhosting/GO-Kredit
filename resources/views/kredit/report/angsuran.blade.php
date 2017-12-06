@@ -6,7 +6,6 @@
 			<div class="col">
 				<h4 class='mb-4 text-style text-secondary'>
 					<span class="text-uppercase">Laporan Penerimaan Angsuran</span> 
-					<small><small>@if($angsuran->currentPage() > 1) Halaman {{$angsuran->currentPage()}} @endif</small></small>
 				</h4>
 
 				{{-- SEARCH --}}
@@ -29,19 +28,22 @@
 						<tr class="text-center">
 							<th class="text-left">#</th>
 							<th>Nasabah</th>
-							<th>Jumlah Dibayarkan</th>
-							<th>&nbsp;</th>
+							<th>Pokok</th>
+							<th>Bunga</th>
+							<th>Denda</th>
+							<th>Collector</th>
+							<th>Subtotal</th>
 						</tr>
 					</thead>
 					<tbody>
 						@php $lua = null @endphp
 						@forelse($angsuran as $k => $v)
-							@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['paid_at'])->format('d/m/Y') @endphp
+							@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
 							@if($lua != $pa)
 								<tr>
-									<td colspan="4" class="bg-light">
+									<th colspan="7" class="bg-light">
 										{{$pa}}
-									</td>
+									</th>
 								</tr>
 								@php $lua = $pa @endphp
 							@endif
@@ -53,17 +55,50 @@
 									{{$v['kredit']['nasabah']['nama']}}
 								</td>
 								<td class="text-right">
-									{{$idr->formatMoneyTo($v['amount'])}}
+									{{$idr->formatMoneyTo($v['pokok'])}}
 								</td>
-								<td></td>
+								<td class="text-right">
+									{{$idr->formatMoneyTo($v['bunga'])}}
+								</td>
+								<td class="text-right">
+									{{$idr->formatMoneyTo($v['denda'])}}
+								</td>
+								<td class="text-right">
+									{{$idr->formatMoneyTo($v['collector'])}}
+								</td>
+								<td class="text-right">
+									{{$idr->formatMoneyTo($v['subtotal'])}}
+								</td>
 							</tr>
 						@empty
-							<tr>
-								<td colspan="4">
+							<!-- <tr>
+								<td colspan="7">
 									<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
 								</td>
-							</tr>
+							</tr> -->
 						@endforelse
+						
+						<tr class="bg-light text-right">
+							<th colspan="2" class="text-left">
+								Total
+							</th>
+							<th>
+								{{$idr->formatMoneyTo($total['pokok'])}}
+							</th>
+							<th>
+								{{$idr->formatMoneyTo($total['bunga'])}}
+							</th>
+							<th>
+								{{$idr->formatMoneyTo($total['denda'])}}
+							</th>
+							<th>
+								{{$idr->formatMoneyTo($total['collector'])}}
+							</th>
+							<th>
+								{{$idr->formatMoneyTo($total['subtotal'])}}
+							</th>
+						</tr>
+
 					</tbody>
 				</table>
 			</div>

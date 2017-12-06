@@ -31,6 +31,7 @@ class CreateKreditAktifTable extends Migration
 			$table->softDeletes();
 			
             $table->index(['deleted_at', 'nomor_pengajuan']);
+            $table->index(['deleted_at', 'nomor_kredit']);
 		});
 	}
 

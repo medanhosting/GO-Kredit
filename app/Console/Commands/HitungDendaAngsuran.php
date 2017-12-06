@@ -57,26 +57,25 @@ class HitungDendaAngsuran extends Command
 	{
 		$limit 		= Carbon::now()->subDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->startOfDay();
 
-		$angsuran 	= Angsuran::wherenull('paid_at')->where('issued_at', '<=', $limit->format('Y-m-d H:i:s'))->with(['kredit'])->get();
+		$angsuran 	= AngsuranDetail::wherenull('nota_bayar_id')->selectraw('min(tanggal) as tanggal')->selectraw('nomor_kredit')->selectraw('nth')->where('tanggal', '<=', $limit->format('Y-m-d H:i:s'))->groupby(\DB::raw('nomor_kredit, nth'))->get();
 
-		$denda_bulanan 	= Config::get('kredit.denda_perbulan');
+		$db 		= Config::get('kredit.denda_perbulan');
 
 		foreach ($angsuran as $k => $v) {
-			$diff_months 	= Carbon::createFromFormat('d/m/Y H:i', $v['issued_at'])->diffInMonths($limit) + 1;
+			$now 	= Carbon::createFromFormat('d/m/Y H:i', $v['tanggal'])->diffInMonths($limit) + 1;
 
-			$a_detail 		= AngsuranDetail::where('angsuran_id', $v['id'])->where('tag', 'denda')->count();
+			$td		= AngsuranDetail::where('nomor_kredit', $v['nomor_kredit'])->where('tag', 'denda')->where('nth', $v['nth'])->count();
 
-			if($diff_months > $a_detail){
-				foreach (range(1, ($diff_months - $a_detail)) as $k2) {
-
-					$bulan 	= Carbon::createFromFormat('d/m/Y H:i', $v->kredit->tanggal)->diffInMonths(Carbon::createFromFormat('d/m/Y H:i', $v->issued_at));
-
-					$new_d 		= new AngsuranDetail;
-					$new_d->angsuran_id 	= $v['id'];
-					$new_d->tag 			= 'denda';
-					$new_d->amount 			= $this->formatMoneyTo($denda_bulanan);
-					$new_d->description 	= 'Denda bulan ke - '.($k2 + $bulan - 1);
-					$new_d->save();
+			if($now > $td){
+				foreach (range(1, ($now - $td)) as $k2) {
+					$d_d 				= new AngsuranDetail;
+					$d_d->nomor_kredit 	= $v['nomor_kredit'];
+					$d_d->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+					$d_d->nth 			= $v['nth'];
+					$d_d->tag 			= 'denda';
+					$d_d->amount 		= $this->formatMoneyTo($db);
+					$d_d->description 	= 'Denda Bulan Ke - '.($k2 + $td);
+					$d_d->save();
 				}
 			}
 		}

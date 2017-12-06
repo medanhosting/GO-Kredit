@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Kredit;
 
 use App\Http\Controllers\Controller;
 
-use Thunderlabid\Kredit\Models\Angsuran;
+use Thunderlabid\Kredit\Models\Aktif;
+use Thunderlabid\Kredit\Models\NotaBayar;
 use Thunderlabid\Kredit\Models\AngsuranDetail;
-use App\Http\Service\Policy\PelunasanAngsuran;
-use Carbon\Carbon, Exception, DB, Config;
+use Carbon\Carbon, Exception, DB, Config, Auth;
 
 use App\Service\Traits\IDRTrait;
 
@@ -26,14 +26,14 @@ class AngsuranController extends Controller
 	{
 		$today 		= Carbon::now();
 
-		$angsuran 	= Angsuran::lihatJatuhTempo($today)->countAmount()->where('kode_kantor', request()->get('kantor_aktif_id'));
+		$angsuran 	= AngsuranDetail::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
 
 		if(request()->has('q')){
 			$look 		= '%'.request()->get('q').'%';
 			$angsuran 	= $angsuran->where(function($q)use($look){$q->where('nomor_kredit', 'like', $look)->orwherehas('kredit', function($q2)use($look){$q2->where('nasabah->nama', 'like', $look);});});
 		}
 
-		$angsuran 	= $angsuran->paginate();
+		$angsuran 	= $angsuran->selectraw('nomor_kredit')->selectraw('sum(amount) as total_hutang')->selectraw(\DB::raw('SUM(IFNULL(nota_bayar_id,amount)) as sisa_angsuran'))->groupby('nomor_kredit')->with(['kredit'])->paginate();
 
 		view()->share('angsuran', $angsuran);
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
@@ -45,28 +45,41 @@ class AngsuranController extends Controller
 	public function show($id) {
 		$today 		= Carbon::now();
 
-		$angsuran 	= Angsuran::countAmount()->where('kode_kantor', request()->get('kantor_aktif_id'))->where('k_angsuran.id', $id)->with(['details'])->first();
+		if(request()->has('nota_bayar_id')){
+			$angsuran 			= NotaBayar::where('id', request()->get('nota_bayar_id'))->where('nomor_kredit', $id)->firstorfail();
+		}else{
+			$angsuran['nomor_faktur']	= NotaBayar::generatenomorfaktur($id);
+		}
 
-		$get_id 	= Angsuran::where('nomor_kredit', $angsuran->nomor_kredit)->get(['id']);
-		$ids 		= array_column($get_id->toArray(), 'id');
+		$angsuran['kredit']		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
 
-		$t_hutang 	= Angsuran::hitungTotalHutang($angsuran->nomor_kredit);
-		$t_lunas 	= Angsuran::hitungHutangDibayar($angsuran->nomor_kredit);
+		$angsuran['details'] 	= AngsuranDetail::displaying()->where('nomor_kredit', $id);
+
+		if(request()->has('nth')){
+			$angsuran['details']	= $angsuran['details']->whereIn('nth', request()->get('nth'));
+			view()->share('bayar', true);
+		}
+		if(request()->has('nota_bayar_id')){
+			$angsuran['details']	= $angsuran['details']->where('nota_bayar_id', request()->get('nota_bayar_id'));
+			view()->share('lunas', true);
+		}
+		
+		$angsuran['details'] 	= $angsuran['details']->get()->toArray();
+
+		$total		= array_sum(array_column($angsuran['details'], 'subtotal'));
+		$t_hutang 	= (string)AngsuranDetail::hitungTotalHutang($id) * 1;
+		$t_lunas 	= $total + ((string)AngsuranDetail::hitungHutangDibayar($id, $angsuran['id']) * 1);
+		// $t_lunas 	= (string)AngsuranDetail::hitungHutangDibayar($id) * 1;
 		$s_hutang 	= $t_hutang - $t_lunas;
 
-		if(request()->has('pelunasan') && request()->get('pelunasan')){
-			$lunas 	= $this->formatMoneyFrom(PelunasanAngsuran::hitung($angsuran['nomor_kredit'], $angsuran['id']));
-			view()->share('lunas', $lunas);
-
-			$t_lunas 	= $t_lunas + $lunas;
-			$s_hutang 	= $t_hutang - $t_lunas;
-		}
 
 		view()->share('t_hutang', $this->formatMoneyTo($t_hutang));
 		view()->share('s_hutang', $this->formatMoneyTo($s_hutang));
 		view()->share('t_lunas', $this->formatMoneyTo($t_lunas));
 		view()->share('angsuran', $angsuran);
 		view()->share('today', $today);
+		view()->share('total', $total);
+		view()->share('id', $id);
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 		$this->layout->pages 	= view('kredit.angsuran.show');
@@ -76,30 +89,31 @@ class AngsuranController extends Controller
 	public function update($id){
 		try {
 
-			$angsuran 	= Angsuran::where('kode_kantor', request()->get('kantor_aktif_id'))->where('id', $id)->first();
+			$kredit		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
 
-			if(!$angsuran){
+			if(!$kredit){
 				throw new Exception("Data angsuran tidak ada", 1);
 			}
 
+			$angsuran 	= AngsuranDetail::where('nomor_kredit', $id)->whereIn('nth', request()->get('nth'))->get();
+
 			DB::BeginTransaction();
-			if(request()->has('pelunasan') && request()->get('pelunasan')){
-				//create new angsuran
-				$lunas 	= PelunasanAngsuran::hitung($angsuran['nomor_kredit'], $angsuran['id']);
-				$a_d 	= new AngsuranDetail;
-				$a_d->angsuran_id 	= $id;
-				$a_d->tag 			= 'pelunasan';
-				$a_d->amount 		= $lunas;
-				$a_d->description 	= 'Pelunasan Angsuran';
-				$a_d->save();
+
+			$paid_at 	= new NotaBayar;
+			$paid_at->nomor_kredit 	= $id;
+			$paid_at->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$paid_at->nip_karyawan 	= Auth::user()['nip'];
+			$paid_at->nomor_faktur 	= NotaBayar::generatenomorfaktur($id);
+			$paid_at->save();
+
+			foreach ($angsuran as $k => $v) {
+				$v->nota_bayar_id 	= $paid_at->id;
+				$v->save();
 			}
-		
-			$angsuran->paid_at 	= Carbon::now()->format('d/m/Y H:i');
-			$angsuran->save();
 
 			DB::commit();
 
-			return redirect()->route('kredit.angsuran.show', ['id' => $id, 'kantor_aktif_id' => $angsuran['kode_kantor']]);
+			return redirect()->route('kredit.angsuran.show', ['id' => $id, 'kantor_aktif_id' => $kredit['kode_kantor'], 'nota_bayar_id' => $paid_at->id]);
 		} catch (Exception $e) {
 			DB::rollback();
 			return redirect()->back()->withErrors($e->getMessage());
@@ -108,16 +122,17 @@ class AngsuranController extends Controller
 
 	public function print($id) {
 		try {
-			$angsuran 	= Angsuran::countAmount()->wherenotnull('paid_at')->where('kode_kantor', request()->get('kantor_aktif_id'))->where('k_angsuran.id', $id)->with(['details'])->first();
+			$angsuran				= NotaBayar::where('nomor_faktur', $id)->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->with(['kredit'])->first()->toArray();
 
-			if(!$angsuran){
-				throw new Exception("Data angsuran tidak ada", 1);
-			}
+			$angsuran['details'] 	= AngsuranDetail::displaying()->where('nomor_kredit', $angsuran['nomor_kredit'])->where('nota_bayar_id', $angsuran['id'])->get()->toArray();
 
-			$t_hutang 	= Angsuran::hitungTotalHutang($angsuran->nomor_kredit);
-			$t_lunas 	= Angsuran::hitungHutangDibayar($angsuran->nomor_kredit);
+			$total		= array_sum(array_column($angsuran['details'], 'subtotal'));
+
+			$t_hutang 	= (string)AngsuranDetail::hitungTotalHutang($angsuran['nomor_kredit']) * 1;
+			$t_lunas 	= $total + ((string)AngsuranDetail::hitungHutangDibayar($angsuran['nomor_kredit'], $angsuran['id']) * 1);
 			$s_hutang 	= $t_hutang - $t_lunas;
 
+			view()->share('total', $total);
 			view()->share('t_hutang', $this->formatMoneyTo($t_hutang));
 			view()->share('s_hutang', $this->formatMoneyTo($s_hutang));
 			view()->share('t_lunas', $this->formatMoneyTo($t_lunas));

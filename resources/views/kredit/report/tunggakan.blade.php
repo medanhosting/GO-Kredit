@@ -6,7 +6,6 @@
 			<div class="col">
 				<h4 class='mb-4 text-style text-secondary'>
 					<span class="text-uppercase">Laporan Tunggakan</span> 
-					<small><small>@if($tunggakan->currentPage() > 1) Halaman {{$tunggakan->currentPage()}} @endif</small></small>
 				</h4>
 
 				{{-- SEARCH --}}
@@ -37,7 +36,7 @@
 					<tbody>
 						@php $lua = null @endphp
 						@forelse($tunggakan as $k => $v)
-							@php $pa = \Carbon\Carbon::parse($v['issued_at'])->format('d/m/Y') @endphp
+							@php $pa = \Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
 							@if($lua != $pa)
 								<tr>
 									<td colspan="5" class="bg-light">
@@ -51,13 +50,13 @@
 									{{$v['nomor_kredit']}}
 								</td>
 								<td class="text-left">
-									{{$v['nasabah']['nama']}}
+									{{$v['kredit']['nasabah']['nama']}}
 								</td>
 								<td class="text-right">
 									{{$idr->formatMoneyTo($v['tunggakan'])}}
 								</td>
 								<td>
-									{{Carbon\Carbon::parse($v['issued_at'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
+									{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
 								</td>
 								<td>
 								</td>

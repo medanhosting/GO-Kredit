@@ -23,10 +23,10 @@ class JaminanController extends Controller
 
 	public function index () 
 	{
-		$jaminan 	= MutasiJaminan::where('kode_kantor', request()->get('kantor_aktif_id'));
+		$jaminan 	= MutasiJaminan::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
 		if(request()->has('q')){
 			$look 		= '%'.request()->get('q').'%';
-			$jaminan 	= $jaminan->where(function($q)use($look){
+			$jaminan 	= $jaminan->wherehas('kredit', function($q)use($look){
 				$q->where('nomor_kredit', 'like', $look)->orwhere('documents', 'like', $look);
 			});
 		}

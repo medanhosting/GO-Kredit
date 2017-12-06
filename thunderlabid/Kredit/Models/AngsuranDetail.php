@@ -9,7 +9,9 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Database\Eloquent\Model;
 
 use Validator;
+use Carbon\Carbon;
 use App\Service\Traits\IDRTrait;
+use App\Service\Traits\WaktuTrait;
 
 ///////////////
 // Exception //
@@ -31,9 +33,10 @@ use Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailRestoring;
 class AngsuranDetail extends Model
 {
 	use IDRTrait;
+	use WaktuTrait;
 	
 	protected $table 	= 'k_angsuran_detail';
-	protected $fillable = ['angsuran_id', 'ref_id', 'tag', 'amount', 'description'];
+	protected $fillable = ['nota_bayar_id', 'nomor_kredit', 'tanggal', 'nth', 'tag', 'amount', 'description'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];
@@ -61,6 +64,9 @@ class AngsuranDetail extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
+	public function kredit(){
+		return $this->belongsto(Aktif::class, 'nomor_kredit', 'nomor_kredit');
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
@@ -69,13 +75,73 @@ class AngsuranDetail extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
+	public function scopeDisplaying($query){
+		return $query->selectraw(\DB::raw('SUM(IF(tag="denda",amount,0)) as denda'))->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))->selectraw(\DB::raw('SUM(IF(tag="collector",amount,0)) as collector'))->selectraw('sum(amount) as subtotal')->selectraw('min(tanggal) as tanggal_bayar')->selectraw('min(nota_bayar_id) as nota_bayar_id')->selectraw('nth')->groupby('nth');
+	}
+
+	public function scopeLihatJatuhTempo($query, Carbon $value){
+		return $query->where(function($q)use($value){
+			$q->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))->orwherein('tag', ['denda', 'collector']);	
+		});
+	}
+
+	public function scopeCountAmount($query){
+		return $query
+			->selectraw('nomor_kredit')
+			->selectraw('min(tanggal) as tanggal')
+			->selectraw("sum(amount) as amount")
+			->selectraw("max(nota_bayar_id) as nota_bayar_id")
+			->groupby('nomor_kredit');
+	}
+
+	public function scopeHitungTunggakan($query){
+		return $query
+			->selectraw('nomor_kredit')
+			->selectraw('min(tanggal) as tanggal')
+			->selectraw("sum(amount) as tunggakan")
+			->selectraw("max(nota_bayar_id) as nota_bayar_id")
+			->wherenull('nota_bayar_id')
+			->groupby('nomor_kredit');
+	}
+
+	public function scopeHitungTunggakanBeberapaWaktuLalu($query, Carbon $value){
+		return $query
+			->selectraw('nomor_kredit')
+			->selectraw('min(tanggal) as tanggal')
+			->selectraw("sum(amount) as tunggakan")
+			->selectraw("max(nota_bayar_id) as nota_bayar_id")
+			->where(function($q)use($value){
+				$q->wherenull('nota_bayar_id')
+				->orwhereraw(\DB::raw('(select nb.tanggal from k_nota_bayar as nb where nb.id = k_angsuran_detail.nota_bayar_id and nb.tanggal >= "'.$value->format('Y-m-d H:i:s').'" limit 1) >= k_angsuran_detail.tanggal'))
+				;
+			})
+			->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
+			->groupby('nomor_kredit');
+	}
+	
+	public function scopeHitungTotalHutang($query, $nomor_kredit){
+		return $query->where('nomor_kredit', $nomor_kredit)->sum('amount');
+	}
+
+	public function scopeHitungHutangDibayar($query, $nomor_kredit, $nota_bayar_id = null){
+		if(!is_null($nota_bayar_id)){
+			return $query->where('nomor_kredit', $nomor_kredit)->where('nota_bayar_id', '<', $nota_bayar_id)->sum('amount');
+		}
+		return $query->where('nomor_kredit', $nomor_kredit)->wherenotnull('nota_bayar_id')->sum('amount');
+	}
+
 
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
 	// ------------------------------------------------------------------------------------------------------------
+	public function setTanggalAttribute($variable)
+	{
+		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
+	}
+
 	public function setAmountAttribute($variable)
 	{
-		$this->attributes['amount']	= $this->formatMoneyFrom($variable);
+		$this->attributes['amount']		= $this->formatMoneyFrom($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -91,9 +157,11 @@ class AngsuranDetail extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['angsuran_id']	= ['required'];
-		$rules['ref_id']		= ['nullable', 'string'];
-		$rules['tag']			= ['nullable', 'string'];
+		$rules['nota_bayar_id']	= ['nullable', 'exists:k_nota_bayar,id'];
+		$rules['nomor_kredit']	= ['required', 'exists:k_aktif,nomor_kredit'];
+		$rules['tanggal'] 		= ['required', 'date_format:"Y-m-d H:i:s"'];
+		$rules['nth']			= ['nullable', 'numeric'];
+		$rules['tag']			= ['required', 'string'];
 		$rules['amount'] 		= ['required', 'numeric'];
 
 		//////////////
@@ -117,5 +185,10 @@ class AngsuranDetail extends Model
 	public function getAmountAttribute($variable)
 	{
 		return $this->formatMoneyTo($this->attributes['amount']);
+	}
+
+	public function getTanggalAttribute($variable)
+	{
+		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 }

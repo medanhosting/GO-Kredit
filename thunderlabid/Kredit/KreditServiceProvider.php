@@ -16,9 +16,9 @@ class KreditServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Kredit\Events\Aktif\AktifUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\Aktif\AktifDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
-		Event::listen('Thunderlabid\Kredit\Events\Angsuran\AngsuranCreating', 'Thunderlabid\Kredit\Listeners\Saving');
-		Event::listen('Thunderlabid\Kredit\Events\Angsuran\AngsuranUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
-		Event::listen('Thunderlabid\Kredit\Events\Angsuran\AngsuranDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
+		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
 		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
@@ -42,22 +42,11 @@ class KreditServiceProvider extends ServiceProvider
 		//////////////////////////
 		Event::listen('Thunderlabid\Kredit\Events\Aktif\AktifCreated', 'Thunderlabid\Kredit\Listeners\BuatJadwalAngsuran');
 
-		/////////////////////////////////
-		// AUTO DELETE DETAIL ANGSURAN //
-		/////////////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\Angsuran\AngsuranDeleting', 'Thunderlabid\Kredit\Listeners\AutoDeleteDetailAngsuran');
-
-		/////////////////////////
-		// Tandai Kredit Lunas //
-		/////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\Angsuran\AngsuranCreated', 'Thunderlabid\Kredit\Listeners\TandaiKreditLunas');
-		Event::listen('Thunderlabid\Kredit\Events\Angsuran\AngsuranUpdated', 'Thunderlabid\Kredit\Listeners\TandaiKreditLunas');
-
 		///////////////////////////
 		// Tandai Jaminan Keluar //
 		///////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\Angsuran\AngsuranCreated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
-		Event::listen('Thunderlabid\Kredit\Events\Angsuran\AngsuranUpdated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
+		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
+		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
 	}
 
 	public function register()

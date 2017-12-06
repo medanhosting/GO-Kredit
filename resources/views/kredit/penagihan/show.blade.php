@@ -20,26 +20,36 @@
 			<div class="col-sm-12">
 				<h3>TUNGGAKAN</h3>
 				<table class="table table-bordered table-hover">
-					<tbody>
-						@php $total_tunggakan 	= 0 @endphp
-						@foreach($tunggakan as $k => $v)
-							<tr>
-								<th colspan="3">Angsuran {{$v['nomor_kredit']}} / {{$v['id']}}</th>
-							</tr>
-							@foreach($v->details as $kd => $vd)
-							<tr>
-								<td>{{$k+$kd+1}}</td>
-								<td>{{$vd['description']}}</td>
-								<td class="text-right">{{$vd['amount']}}</td>
-							</tr>
-							@endforeach
-							@php $total_tunggakan 	= $total_tunggakan + $v['amount'] @endphp
-						@endforeach
+					<thead>
 						<tr>
-							<th colspan="2">Total</th>
-							<th class="text-right">{{$idr->formatMoneyTo($total_tunggakan)}}</th>
+							<th width="5">No</th>
+							<th>Jatuh Tempo</th>
+							<th>Pokok</th>
+							<th>Bunga</th>
+							<th>Denda</th>
+							<th>Biaya Kolektor</th>
+							<th class="text-right">Jumlah</th>
 						</tr>
+					</thead>
+					<tbody>
+						@foreach($tunggakan as $k => $v)
+						<tr>
+							<td>{{$k+1}}</td>
+							<td class="text-left">{{Carbon\Carbon::parse($v['tanggal_bayar'])->addDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}</td>
+							<td class="text-right">{{$idr->formatMoneyTo($v['pokok'])}}</td>
+							<td class="text-right">{{$idr->formatMoneyTo($v['bunga'])}}</td>
+							<td class="text-right">{{$idr->formatMoneyTo($v['denda'])}}</td>
+							<td class="text-right">{{$idr->formatMoneyTo($v['collector'])}}</td>
+							<td class="text-right">{{$idr->formatMoneyTo($v['subtotal'])}}</td>
+						</tr>
+						@endforeach
 					</tbody>
+					<tfoot>
+						<tr>
+							<th colspan="6">Total</th>
+							<th class="text-right">{{$idr->formatMoneyTo($total)}}</th>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 		</div>
@@ -60,7 +70,7 @@
 						@forelse($penagihan as $k => $v)
 							<tr>
 								<td>{{$k+1}}</td>
-								<td>{{$v['collected_at']}}</td>
+								<td>{{$v['tanggal']}}</td>
 								<td>{{$v['kredit']['nasabah']['nama']}}</td>
 								<td>{{implode(', ', $v['kredit']['nasabah']['alamat'])}}</td>
 							</tr>
@@ -85,7 +95,7 @@
 		@slot ('body')
 			<p>Tanggal penagihan ditandai sesuai dengan pengisian tanggal berikut</p>
 
-			{!! Form::bsText('Tanggal Penagihan', 'collected_at', $today->format('d/m/Y H:i'), ['class' => 'form-control mask-date-time']) !!}
+			{!! Form::bsText('Tanggal Penagihan', 'tanggal', $today->format('d/m/Y H:i'), ['class' => 'form-control mask-date-time']) !!}
 			{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
 		@endslot
 

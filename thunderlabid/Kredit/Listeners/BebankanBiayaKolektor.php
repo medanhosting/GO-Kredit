@@ -11,7 +11,7 @@ use Thunderlabid\Kredit\Models\Angsuran;
 use Thunderlabid\Kredit\Models\AngsuranDetail;
 
 use App\Service\Traits\IDRTrait;
-use Config;
+use Config, Carbon\Carbon;
 
 class BebankanBiayaKolektor
 {
@@ -34,17 +34,20 @@ class BebankanBiayaKolektor
 	 */
 	public function handle($event)
 	{
-		$model 					= $event->data;
+		$model		= $event->data;
 
-		//BUTUH PENGECEKAN PUTUSAN
-		$angsuran 				= Angsuran::where('nomor_kredit', $model->nomor_kredit)->wherenull('paid_at')->orderby('issued_at', 'asc')->first();
+		$limit 		= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->subDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->startOfDay();
 
-		$a_detail 				= new AngsuranDetail;
-		$a_detail->angsuran_id 	= $angsuran['id'];
-		$a_detail->ref_id 		= (string)$model->id;
-		$a_detail->tag 			= 'collector';
-		$a_detail->amount 		= $this->formatMoneyTo(Config::get('kredit.biaya_kolektor'));
-		$a_detail->description 	= 'Penagihan tanggal '.$model->collected_at;
-		$a_detail->save();
+		//check tunggakan terakhir
+		$last 		= AngsuranDetail::wherenull('nota_bayar_id')->where('nomor_kredit', $model->nomor_kredit)->where('tanggal', '<=', $limit->format('Y-m-d H:i:s'))->orderby('nth', 'asc')->first();
+
+		$a_d				= new AngsuranDetail;
+		$a_d->nomor_kredit 	= $model['nomor_kredit'];
+		$a_d->tanggal 		= $model['tanggal'];
+		$a_d->nth 			= $last['nth'];
+		$a_d->tag 			= 'collector';
+		$a_d->amount 		= $this->formatMoneyTo(Config::get('kredit.biaya_kolektor'));
+		$a_d->description 	= 'Biaya penagihan tanggal '.$model->tanggal;
+		$a_d->save();
 	}
 }

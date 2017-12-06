@@ -53,9 +53,9 @@
 				NO NASABAH 
 				</div>
 				<div class="col-xs-2">
-				: {{is_null($angsuran['issued_at']) ? Carbon\Carbon::now()->format('d/m/Y H:i') : $angsuran['issued_at'] }}
+				: {{is_null($angsuran['tanggal']) ? Carbon\Carbon::now()->format('d/m/Y H:i') : $angsuran['tanggal'] }}
 				<br>
-				: {{$angsuran['nomor_kredit']}} / {{$angsuran['id']}}
+				: {{$angsuran['nomor_faktur']}}
 				<br>
 				: {{$angsuran['kredit']['nasabah']['id']}}
 				</div>
@@ -67,14 +67,14 @@
 				DITERIMA DARI
 				<br>SEJUMLAH UANG
 				</div>
-				<div class="col-xs-2">
+				<div class="col-xs-3">
 				 : {{$angsuran['kredit']['nasabah']['nama']}}
 				 <br>
-				 : {{$idr->formatMoneyTo($angsuran['amount'])}}
+				 : {{$idr->formatMoneyTo($total)}}
 				</div>
-				<div class="col-xs-8 text-left">
+				<div class="col-xs-7 text-left">
 				 <br>
- 				({{ucwords($idr::terbilang($angsuran['amount']))}} Rupiah)
+ 				({{ucwords($idr::terbilang($total))}} Rupiah)
 				</div>
 			</div>
 			<div class="clearifx">&nbsp;</div>
@@ -85,23 +85,31 @@
 						<thead>
 							<tr>
 								<th width="5">No</th>
-								<th>Keterangan</th>
+								<th>Jatuh Tempo</th>
+								<th>Pokok</th>
+								<th>Bunga</th>
+								<th>Denda</th>
+								<th>Biaya Kolektor</th>
 								<th class="text-right">Jumlah</th>
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($angsuran->details as $k => $v)
+							@foreach($angsuran['details'] as $k => $v)
 							<tr>
 								<td>{{$k+1}}</td>
-								<td>{{$v['description']}}</td>
-								<td class="text-right">{{$v['amount']}}</td>
+								<td class="text-left">{{Carbon\Carbon::parse($v['tanggal_bayar'])->addDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['pokok'])}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['bunga'])}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['denda'])}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['collector'])}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['subtotal'])}}</td>
 							</tr>
 							@endforeach
 						</tbody>
 						<tfoot>
 							<tr>
-								<th colspan="2">Total</th>
-								<th class="text-right">{{$idr->formatMoneyTo($angsuran['amount'])}}</th>
+								<th colspan="6">Total</th>
+								<th class="text-right">{{$idr->formatMoneyTo($total)}}</th>
 							</tr>
 						</tfoot>
 					</table>
@@ -109,31 +117,27 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-2">
+					<br>
 					TOTAL HUTANG<br>
 					TOTAL ANGSURAN<br>
-					SISA HUTANG<br><br>
-					STATUS<br>
-					JATUH TEMPO
+					SISA HUTANG<br>
 				</div>
-				<div class="col-xs-2">
+				<div class="col-xs-2 text-right">
+					<br>
 					{{$t_hutang}}<br>
 					{{$t_lunas}}<br>
-					{{$s_hutang}}<br><br>
-					{{(is_null($angsuran->paid_at) ? 'BELUM LUNAS' : 'LUNAS')}}<br>
-					{{$angsuran->jatuh_tempo}}
+					{{$s_hutang}}<br>
 				</div>
 				<div class="col-xs-4">
-				CATATAN
+				<!-- CATATAN
 				<div style="border:1px solid #000">
 					&nbsp;<br/>
 					&nbsp;<br/>
 					&nbsp;<br/>
-					&nbsp;<br/>
-				</div>
+				</div> -->
 				</div>
 				<div class="col-xs-4 text-right">
-				{{is_null($angsuran['paid_at']) ? Carbon\Carbon::now()->format('d/m/Y H:i') : $angsuran['paid_at'] }}
-				<br/>
+				{{is_null($angsuran['tanggal']) ? Carbon\Carbon::now()->format('d/m/Y H:i') : $angsuran['tanggal'] }}
 				<br/>
 				<br/>
 				<br/>

@@ -34,7 +34,7 @@ class MutasiJaminan extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_mutasi_jaminan';
-	protected $fillable = ['nomor_kredit', 'kode_kantor', 'stored_at', 'taken_at', 'documents'];
+	protected $fillable = ['nomor_kredit', 'tanggal', 'tag', 'description', 'documents'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];
@@ -76,14 +76,9 @@ class MutasiJaminan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
 	// ------------------------------------------------------------------------------------------------------------
-	public function setStoredAtAttribute($variable)
+	public function setTanggalAttribute($variable)
 	{
-		$this->attributes['stored_at']	= $this->formatDateTimeFrom($variable);
-	}
-
-	public function setTakenAtAttribute($variable)
-	{
-		$this->attributes['taken_at']	= $this->formatDateTimeFrom($variable);
+		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
 	}
 
 	public function setDocumentsAttribute($variable)
@@ -104,10 +99,9 @@ class MutasiJaminan extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['kode_kantor'] 		= ['required', 'string'];
 		$rules['nomor_kredit'] 		= ['required', 'string'];
-		$rules['stored_at'] 		= ['required', 'date_format:"Y-m-d H:i:s"'];
-		$rules['taken_at'] 			= ['nullable', 'date_format:"Y-m-d H:i:s"'];
+		$rules['tanggal'] 			= ['required', 'date_format:"Y-m-d H:i:s"'];
+		$rules['tag'] 				= ['required', 'string'];
 
 		//////////////
 		// Validate //
@@ -127,14 +121,9 @@ class MutasiJaminan extends Model
 		return $this->errors;
 	}
 
-	public function getStoredAtAttribute($variable)
+	public function getTanggalAttribute($variable)
 	{
-		return $this->formatDateTimeTo($this->attributes['stored_at']);
-	}
-
-	public function getTakenAtAttribute($variable)
-	{
-		return $this->formatDateTimeTo($this->attributes['taken_at']);
+		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 
 	public function getDocumentsAttribute($variable)

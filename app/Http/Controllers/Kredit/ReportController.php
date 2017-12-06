@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 use Thunderlabid\Kredit\Models\Penagihan;
-use Thunderlabid\Kredit\Models\Angsuran;
+use Thunderlabid\Kredit\Models\NotaBayar;
+use Thunderlabid\Kredit\Models\AngsuranDetail;
 use Thunderlabid\Kredit\Models\Aktif;
 use Carbon\Carbon, Exception, DB, Config;
 
@@ -19,18 +20,29 @@ class ReportController extends Controller
 
 	public function angsuran () 
 	{
-		$today 		= Carbon::now();
+		$start 		= Carbon::parse('first day of this month')->startOfDay();
+		$end 		= Carbon::parse('last day of this month')->endOfDay();
 
-		$angsuran 	= Angsuran::wherenotnull('paid_at')->countAmount()->where('kode_kantor', request()->get('kantor_aktif_id'));
+		$angsuran 	= NotaBayar::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
 
 		if(request()->has('q')){
 			list($start, $end)	= explode(' - ', request()->get('q'));
 
-			$angsuran 	= $angsuran->where('paid_at', '>=', Carbon::createFromFormat('d/m/Y', $start)->format('Y-m-d H:i:s'))->where('paid_at', '<=', Carbon::createFromFormat('d/m/Y', $end)->format('Y-m-d H:i:s'));
+			$start 	= Carbon::createFromFormat('d/m/Y', $start);
+			$end 	= Carbon::createFromFormat('d/m/Y', $end);
 		}
 
-		$angsuran 	= $angsuran->orderby('paid_at', 'desc')->paginate();
+		$angsuran 	= $angsuran->where('tanggal', '>=', $start->format('Y-m-d H:i:s'))->where('tanggal', '<=', $end->format('Y-m-d H:i:s'));
 
+		$angsuran 	= $angsuran->displaying()->orderby('tanggal', 'desc')->get();
+
+		$total['pokok'] 	= array_sum(array_column($angsuran->toArray(), 'pokok'));
+		$total['bunga'] 	= array_sum(array_column($angsuran->toArray(), 'bunga'));
+		$total['denda'] 	= array_sum(array_column($angsuran->toArray(), 'denda'));
+		$total['collector'] = array_sum(array_column($angsuran->toArray(), 'collector'));
+		$total['subtotal'] 	= array_sum(array_column($angsuran->toArray(), 'subtotal'));
+
+		view()->share('total', $total);
 		view()->share('angsuran', $angsuran);
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
@@ -46,9 +58,7 @@ class ReportController extends Controller
 			$today	= Carbon::createFromFormat('d/m/Y', request()->get('q'));
 		}
 
-		$tunggakan 	= Aktif::cektunggakan($today)->where('kode_kantor', request()->get('kantor_aktif_id'));
-
-		$tunggakan 	= $tunggakan->orderby('issued_at', 'desc')->paginate();
+		$tunggakan 	= AngsuranDetail::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->with(['kredit', 'kredit.penagihan'])->orderby('tanggal', 'asc')->get();
 
 		view()->share('tunggakan', $tunggakan);
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));

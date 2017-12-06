@@ -17,7 +17,7 @@ class CreateKreditPenagihanTable extends Migration
 			$table->increments('id');
 			$table->string('nomor_kredit');
 			$table->string('nip_karyawan');
-			$table->datetime('collected_at');
+			$table->datetime('tanggal');
 			$table->timestamps();
 			$table->softDeletes();
 			
