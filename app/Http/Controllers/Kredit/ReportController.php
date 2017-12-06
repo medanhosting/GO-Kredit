@@ -69,17 +69,19 @@ class ReportController extends Controller
 
 	public function penagihan() 
 	{
-		$today 		= Carbon::now();
+		$start 		= Carbon::parse('first day of this month')->startOfDay();
+		$end 		= Carbon::parse('last day of this month')->endOfDay();
 
 		$penagihan 	= Penagihan::whereHas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
 
 		if(request()->has('q')){
 			list($start, $end)	= explode(' - ', request()->get('q'));
 
-			$penagihan 	= $penagihan->where('collected_at', '>=', Carbon::createFromFormat('d/m/Y', $start)->format('Y-m-d H:i:s'))->where('collected_at', '<=', Carbon::createFromFormat('d/m/Y', $end)->format('Y-m-d H:i:s'));
+			$start 	= Carbon::createFromFormat('d/m/Y', $start);
+			$end 	= Carbon::createFromFormat('d/m/Y', $end);
 		}
 
-		$penagihan 	= $penagihan->hitungTunggakan()->orderby('collected_at', 'desc')->paginate();
+		$penagihan 	= $penagihan->hitungTunggakan($start, $end)->where('tanggal', '>=', $start->format('Y-m-d H:i:s'))->where('tanggal', '<=', $end->format('Y-m-d H:i:s'))->orderby('tanggal', 'desc')->paginate();
 
 		view()->share('penagihan', $penagihan);
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
@@ -93,7 +95,7 @@ class ReportController extends Controller
 		$start 		= Carbon::now()->startOfDay();
 		$end 		= Carbon::now()->endOfDay();
 
-		$jaminan 	= MutasiJaminan::where('kode_kantor', request()->get('kantor_aktif_id'));
+		$jaminan 	= MutasiJaminan::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
 
 		if(request()->has('q')){
 			list($start, $end)	= explode(' - ', request()->get('q'));
@@ -101,7 +103,7 @@ class ReportController extends Controller
 			$end 	= Carbon::createFromFormat('d/m/Y', $end);
 		}
 
-		$jaminan 	= $jaminan->where('taken_at', '>=', $start->format('Y-m-d H:i:s'))->where('taken_at', '<=', $end->format('Y-m-d H:i:s'))->orderby('taken_at', 'desc')->paginate();
+		$jaminan 	= $jaminan->where('tanggal', '>=', $start->format('Y-m-d H:i:s'))->where('tanggal', '<=', $end->format('Y-m-d H:i:s'))->orderby('tanggal', 'desc')->paginate();
 
 		view()->share('jaminan', $jaminan);
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));

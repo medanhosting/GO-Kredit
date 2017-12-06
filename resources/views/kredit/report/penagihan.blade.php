@@ -37,7 +37,7 @@
 					<tbody>
 						@php $lua = null @endphp
 						@forelse($penagihan as $k => $v)
-							@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['collected_at'])->format('d/m/Y') @endphp
+							@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
 							@if($lua != $pa)
 								<tr>
 									<td colspan="5" class="bg-light">
@@ -57,7 +57,7 @@
 									{{$idr->formatMoneyTo($v['tunggakan'])}}
 								</td>
 								<td>
-									{{Carbon\Carbon::parse($v['issued_at'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
+									{{Carbon\Carbon::parse($v['tanggal_jatuh_tempo'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
 								</td>
 								<td></td>
 							</tr>

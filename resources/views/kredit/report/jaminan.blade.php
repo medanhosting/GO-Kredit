@@ -5,7 +5,7 @@
 		<div class="row">
 			<div class="col">
 				<h4 class='mb-4 text-style text-secondary'>
-					<span class="text-uppercase">Laporan Pengembalian Jaminan</span> 
+					<span class="text-uppercase">Laporan Mutasi Jaminan</span> 
 					<small><small>@if($jaminan->currentPage() > 1) Halaman {{$jaminan->currentPage()}} @endif</small></small>
 				</h4>
 
@@ -28,16 +28,16 @@
 						<tr class="text-center">
 							<th class="text-left">#</th>
 							<th>Nasabah</th>
-							<th>Dokumen</th>
+							<th colspan="2">Dokumen</th>
 						</tr>
 					</thead>
 					<tbody>
 						@php $lua = null @endphp
 						@forelse($jaminan as $k => $v)
-							@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['taken_at'])->format('d/m/Y') @endphp
+							@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
 							@if($lua != $pa)
 								<tr>
-									<td colspan="3" class="bg-light">
+									<td colspan="4" class="bg-light">
 										{{$pa}}
 									</td>
 								</tr>
@@ -49,6 +49,13 @@
 								</td>
 								<td class="text-left">
 									{{$v['kredit']['nasabah']['nama']}}
+								</td>
+								<td>
+									@if(str_is($v['tag'], 'in'))
+										<i class="fa fa-arrow-down text-success"></i>
+									@else
+										<i class="fa fa-arrow-up text-danger"></i>
+									@endif
 								</td>
 								<td class="text-right">
 									@if(str_is($v['documents']['jenis'], 'shm'))
@@ -68,7 +75,7 @@
 							</tr>
 						@empty
 							<tr>
-								<td colspan="3">
+								<td colspan="4">
 									<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
 								</td>
 							</tr>

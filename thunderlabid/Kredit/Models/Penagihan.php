@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\MessageBag;
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, Carbon\Carbon;
 
 use App\Service\Traits\WaktuTrait;
 
@@ -73,10 +73,12 @@ class Penagihan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
-	public function scopeHitungTunggakan($query){
+	public function scopeHitungTunggakan($query, Carbon $start, Carbon $end){
 		return $query->select('k_penagihan.*')
-			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td join k_angsuran where k_angsuran.id = td.angsuran_id and k_angsuran.nomor_kredit = k_penagihan.nomor_kredit and td.deleted_at is null and k_angsuran.deleted_at is null and k_angsuran.paid_at >= k_penagihan.tanggal and k_angsuran.issued_at <= k_penagihan.tanggal) as tunggakan"))
-			->selectraw(\DB::raw("(select issued_at from k_angsuran where k_angsuran.nomor_kredit = k_penagihan.nomor_kredit and k_angsuran.deleted_at is null and k_angsuran.paid_at >= k_penagihan.tanggal and k_angsuran.issued_at <= k_penagihan.tanggal order by issued_at asc limit 1) as issued_at"));
+			// ->selectraw('(select sum(ad.amount) from k_angsuran_detail as ad where (ad.tanggal <= k_penagihan.tanggal or (ad.tag in ("denda", "collector") and ad.tanggal <= "'.$value->format('Y-m-d H:i:s').'")) and ad.nomor_kredit = k_penagihan.nomor_kredit) as tunggakan')
+			->selectraw('(select sum(ad.amount) from k_angsuran_detail as ad where ad.tanggal <= k_penagihan.tanggal and ad.nomor_kredit = k_penagihan.nomor_kredit) as tunggakan')
+			->selectraw('(select min(ad.tanggal) from k_angsuran_detail as ad where ad.tanggal <= k_penagihan.tanggal and ad.nomor_kredit = k_penagihan.nomor_kredit) as tanggal_jatuh_tempo')
+			;
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
