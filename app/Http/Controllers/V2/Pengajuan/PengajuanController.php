@@ -26,7 +26,7 @@ class PengajuanController extends Controller
 				->orwhere('id', 'like', '%'.$cari.'%');
 			});
 		}
-		$permohonan		= $permohonan->orderby('p_pengajuan.created_at', 'desc')->paginate();
+		$permohonan		= $permohonan->orderby('p_pengajuan.created_at', 'desc')->paginate(15, ['*'], 'permohonan');
 
 		$survei			= Pengajuan::status('survei')->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan_kendaraan', 'jaminan_tanah_bangunan']);
 		if (request()->has('q'))
@@ -39,7 +39,7 @@ class PengajuanController extends Controller
 				->orwhere('id', 'like', '%'.$cari.'%');
 			});
 		}
-		$survei			= $survei->orderby('p_pengajuan.created_at', 'desc')->paginate();
+		$survei			= $survei->orderby('p_pengajuan.created_at', 'desc')->paginate(15, ['*'], 'survei');
 
 		$analisa		= Pengajuan::status('analisa')->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan_kendaraan', 'jaminan_tanah_bangunan']);
 		if (request()->has('q'))
@@ -52,7 +52,7 @@ class PengajuanController extends Controller
 				->orwhere('id', 'like', '%'.$cari.'%');
 			});
 		}
-		$analisa		= $analisa->orderby('p_pengajuan.created_at', 'desc')->paginate();
+		$analisa		= $analisa->orderby('p_pengajuan.created_at', 'desc')->paginate(15, ['*'], 'analisa');
 
 		$putusan		= Pengajuan::status('putusan')->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan_kendaraan', 'jaminan_tanah_bangunan']);
 		if (request()->has('q'))
@@ -65,7 +65,7 @@ class PengajuanController extends Controller
 				->orwhere('id', 'like', '%'.$cari.'%');
 			});
 		}
-		$putusan		= $putusan->orderby('p_pengajuan.created_at', 'desc')->paginate();
+		$putusan		= $putusan->orderby('p_pengajuan.created_at', 'desc')->paginate(15, ['*'], 'putusan');
 
 		view()->share('permohonan', $permohonan);
 		view()->share('survei', $survei);

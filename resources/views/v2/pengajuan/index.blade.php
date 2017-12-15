@@ -41,7 +41,7 @@
 										<tr>
 											<td>{{ $permohonan->firstItem() + $k }}</td>
 											<td>{{$v['nasabah']['nama']}}</td>
-											<td>{{$v['pokok_pinjaman']}}</td>
+											<td class="text-right">{{$v['pokok_pinjaman']}}</td>
 											<td>
 												@php $flag_j = true @endphp
 												@foreach($v['jaminan_kendaraan'] as $jk)
@@ -77,7 +77,57 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="tab-pane fade" id="nav-survei" role="tabpanel" aria-labelledby="nav-survei-tab">...</div>
+						<div class="tab-pane fade" id="nav-survei" role="tabpanel" aria-labelledby="nav-survei-tab">
+							<div class="clearfix">&nbsp;</div>
+							{{ $survei->appends(request()->all())->links() }}
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Nasabah</th>
+										<th>Pokok Pinjaman</th>
+										<th>Jaminan</th>
+										<th>Tanggal</th>
+										<th>Catatan</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($survei as $k => $v)
+										<tr>
+											<td colspan="6" class="bg-light">{{$v['id']}}</td>
+										</tr>
+										<tr>
+											<td>{{ $survei->firstItem() + $k }}</td>
+											<td>{{$v['nasabah']['nama']}}</td>
+											<td class="text-right">{{$v['pokok_pinjaman']}}</td>
+											<td>
+												@php $flag_j = true @endphp
+												@foreach($v['jaminan_kendaraan'] as $jk)
+													<p style="margin:5px;">{{strtoupper($jk['jenis'])}} Nomor : {{strtoupper($jk['dokumen_jaminan'][$jk['jenis']]['nomor_bpkb'])}}</p>
+													@if($jk['dokumen_jaminan'][$jk['jenis']]['is_lama']==false)
+														@php $flag_j 	= false @endphp
+													@endif
+												@endforeach
+												@foreach($v['jaminan_tanah_bangunan'] as $jtk)
+													<p style="margin:5px;">{{strtoupper($jtk['jenis'])}} Nomor : {{strtoupper($jtk['dokumen_jaminan'][$jtk['jenis']]['nomor_sertifikat'])}}</p>
+													@if($jk['dokumen_jaminan'][$jk['jenis']]['is_lama']==false)
+														@php $flag_j 	= false @endphp
+													@endif
+												@endforeach
+											</td>
+											<td>
+												{{$v['status_terakhir']['tanggal']}}
+											</td>
+											<td>
+												@if(!$v['is_complete'])
+													
+												@endif
+											</td>
+										</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
 						<div class="tab-pane fade" id="nav-analisa" role="tabpanel" aria-labelledby="nav-analisa-tab">...</div>
 						<div class="tab-pane fade" id="nav-putusan" role="tabpanel" aria-labelledby="nav-putusan-tab">...</div>
 					</div>
