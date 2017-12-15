@@ -14,7 +14,7 @@
 		.progress_menu {
 			display: inline-block;
 			position: relative;
-			background: #00c69b;
+			background: #009688;
 			padding: 15px 0;
 			height: 100px;
 			width: 75%;
@@ -29,7 +29,7 @@
 			left: 100%;
 			width: 0;
 			height: 0;
-			border-left: 20px solid #00c69b;
+			border-left: 20px solid #009688;
 			border-top: 50px solid transparent;
 			border-right: 0 solid transparent;
 			border-bottom: 50px solid transparent;
@@ -87,7 +87,7 @@
 		.block_menu {
 			display: inline-block;
 			position: relative;
-			background: #00c69b;
+			background: #009688;
 			padding: 15px 0;
 			height: 100px;
 			width: 75%;

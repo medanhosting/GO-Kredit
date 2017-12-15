@@ -25,12 +25,20 @@
 
 	Route::get('/pilih/koperasi',			['as'	=> 'pilih.koperasi','uses' => 'DashboardController@pilih_koperasi']);
 
+	//FRESH START
+	Route::middleware(['auth', 'pilih_koperasi'])->group( function() {
+		Route::namespace('V2\Pengajuan')->group(function(){
+			Route::resource('simulasi', 		'SimulasiController'); 
+			Route::resource('pengajuan', 		'PengajuanController'); 
+		});
+	});
+
 	Route::middleware(['auth', 'pilih_koperasi'])->group( function() {
 		Route::get('/home',					['as'	=> 'home',			'uses' => 'DashboardController@home']);
 		Route::get('/simulasi/{mode}',		['as'	=> 'simulasi',		'uses' => 'DashboardController@simulasi']);
 		Route::get('/download/{filename}',	['as' 	=> 'download', 		'uses' => 'DownloadController@download']);
 	
-		Route::prefix('pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
+		Route::prefix('v1/pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
 
 			Route::get('index/ajax', 		['uses' => 'PengajuanController@ajax', 'as' => 'pengajuan.ajax']);
 			// Route::get('/{status}',				['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);

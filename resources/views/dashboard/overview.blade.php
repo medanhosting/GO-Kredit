@@ -270,3 +270,7 @@
 	</div>
 	@endif
 @endpush
+
+@push('submenu')
+	@include('templates.submenu.submenu')
+@endpush
