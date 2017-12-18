@@ -10,7 +10,10 @@ use Thunderlabid\Survei\Models\Survei;
 use Thunderlabid\Survei\Models\SurveiDetail;
 use Thunderlabid\Survei\Models\SurveiFoto;
 
-use Exception, Response;
+use Thunderlabid\Manajemen\Models\Orang;
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+
+use Exception, Response, Carbon\Carbon;
 
 class SurveiController extends BaseController
 {
@@ -47,8 +50,18 @@ class SurveiController extends BaseController
 	{
 		try {
 			//1. find pengajuan
+			//check kalau karyawan itu komisaris
 			if(request()->has('nip_karyawan')){
-				$pengajuan	= Survei::wherehas('pengajuan', function($q){$q->status('survei');})->whereHas('surveyor', function($q){$q->where('nip', request()->get('nip_karyawan'));})->wherehas('collateral', function($q){$q->wheredoesnthave('foto', function($q){$q;});})->with(['collateral', 'collateral.foto'])->get();
+				$user 			= Orang::where('nip', request()->get('nip_karyawan'))->first();
+
+				$penempatan 	= PenempatanKaryawan::where('orang_id', $user['id'])->active(Carbon::now())->first();
+
+				if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan'))
+				{
+					$pengajuan	= Survei::where('kode_kantor', $penempatan['kantor_id'])->wherehas('pengajuan', function($q){$q->status('survei');})->wherehas('collateral', function($q){$q->wheredoesnthave('foto', function($q){$q;});})->with(['collateral', 'collateral.foto'])->get();
+				}else{
+					$pengajuan	= Survei::wherehas('pengajuan', function($q){$q->status('survei');})->whereHas('surveyor', function($q){$q->where('nip', request()->get('nip_karyawan'));})->wherehas('collateral', function($q){$q->wheredoesnthave('foto', function($q){$q;});})->with(['collateral', 'collateral.foto'])->get();
+				}
 			}
 			else{
 				throw new Exception("Harus login sebagai karyawan", 1);
