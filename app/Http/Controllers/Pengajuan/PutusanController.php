@@ -64,7 +64,7 @@ class PutusanController extends Controller
 
 		if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan'))
 		{
-			$pengajuan 			= $pengajuan->where('p_status.karyawan->nip', Auth::user()['nip'])->whereIn('p_status.progress', ['perlu', 'sedang', 'sudah']);
+			$pengajuan 			= $pengajuan->whereIn('p_status.progress', ['perlu', 'sedang', 'sudah']);
 		}
 		else
 		{
