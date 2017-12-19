@@ -31,6 +31,9 @@
 			Route::resource('simulasi', 		'SimulasiController'); 
 			Route::resource('pengajuan', 		'PengajuanController'); 
 		});
+		Route::namespace('V2\Kredit')->group(function(){
+			Route::resource('kredit', 			'KreditController'); 
+		});
 	});
 
 	Route::middleware(['auth', 'pilih_koperasi'])->group( function() {

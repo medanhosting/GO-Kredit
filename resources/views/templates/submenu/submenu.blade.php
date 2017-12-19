@@ -6,7 +6,7 @@
 				<i class="fa fa-tachometer"></i>&nbsp;&nbsp;Dashboard</a>
 				<a href="{{ route('pengajuan.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
 				<i class="fa fa-paper-plane"></i>&nbsp;&nbsp;Pengajuan</a>
-				<a href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
+				<a href="{{ route('kredit.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
 				<i class="fa fa-credit-card-alt"></i>&nbsp;&nbsp;Kredit</a>
 				<a href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
 				<i class="fa fa-line-chart"></i>&nbsp;&nbsp;Keuangan</a>

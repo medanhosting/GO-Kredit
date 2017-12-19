@@ -136,7 +136,7 @@ class Pengajuan extends Model
 
 	public function scopeStatus($query, $variable)
 	{
-		$query 	= $query->select('p_pengajuan.*');
+		$query 	= $query->selectraw('p_pengajuan.*');
 
 		// return $query->whereHas('status_terakhir', function($q)use($variable){$q->status($variable);});
 		if(!is_array($variable))
