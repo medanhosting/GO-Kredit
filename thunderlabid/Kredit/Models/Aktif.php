@@ -44,15 +44,15 @@ class Aktif extends Model
 	protected $errors;
 
 	protected $events = [
-        'created' 	=> AktifCreated::class,
-        'creating' 	=> AktifCreating::class,
-        'updated' 	=> AktifUpdated::class,
-        'updating' 	=> AktifUpdating::class,
-        'deleted' 	=> AktifDeleted::class,
-        'deleting' 	=> AktifDeleting::class,
-        'restoring' => AktifRestoring::class,
-        'restored' 	=> AktifRestored::class,
-    ];
+		'created' 	=> AktifCreated::class,
+		'creating' 	=> AktifCreating::class,
+		'updated' 	=> AktifUpdated::class,
+		'updating' 	=> AktifUpdating::class,
+		'deleted' 	=> AktifDeleted::class,
+		'deleting' 	=> AktifDeleting::class,
+		'restoring' => AktifRestoring::class,
+		'restored' 	=> AktifRestored::class,
+	];
 
 	// ------------------------------------------------------------------------------------------------------------
 	// CONSTRUCT
@@ -65,14 +65,17 @@ class Aktif extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
-    public function angsuran(){
-    	return $this->hasMany(Angsuran::class, 'nomor_kredit', 'nomor_kredit');
-    }
+	public function angsuran(){
+		return $this->hasMany(Angsuran::class, 'nomor_kredit', 'nomor_kredit');
+	}
 
-    public function penagihan(){
-    	return $this->hasMany(Penagihan::class, 'nomor_kredit', 'nomor_kredit');
-    }
+	public function penagihan(){
+		return $this->hasMany(Penagihan::class, 'nomor_kredit', 'nomor_kredit');
+	}
 
+	public function jaminan(){
+		return $this->hasMany(MutasiJaminan::class, 'nomor_kredit', 'nomor_kredit')->where('tag', 'in');
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------
@@ -80,6 +83,9 @@ class Aktif extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
+	public function scopePembayaranBerikut($query){
+		return $query->selectraw('k_aktif.*')->selectraw(\DB::raw("(select sum(amount) from k_angsuran_detail where k_angsuran_detail.nomor_kredit = k_aktif.nomor_kredit and k_angsuran_detail.deleted_at is null and k_angsuran_detail.nota_bayar_id is null) as jumlah_pembayaran_berikut"))->selectraw(\DB::raw("(select min(tanggal) from k_angsuran_detail where k_angsuran_detail.nomor_kredit = k_aktif.nomor_kredit and k_angsuran_detail.deleted_at is null and k_angsuran_detail.nota_bayar_id is null) as tanggal_pembayaran_berikut"));
+	}
 
 	public function scopeLihatJatuhTempo($query, Carbon $value){
 		return $query->selectraw(\DB::raw("(select issued_at from k_angsuran where k_angsuran.nomor_kredit = k_aktif.nomor_kredit and k_angsuran.deleted_at is null and k_angsuran.paid_at is null and k_angsuran.issued_at <= '".$value->format('Y-m-d H:i:s')."' order by k_angsuran.issued_at asc limit 1 ) as issued_at"))
@@ -92,6 +98,16 @@ class Aktif extends Model
 			->selectraw(\DB::raw("(select issued_at from k_angsuran where k_angsuran.nomor_kredit = k_aktif.nomor_kredit and k_angsuran.deleted_at is null and (k_angsuran.paid_at is null or datediff(k_angsuran.paid_at, k_angsuran.issued_at) > ".Config::get('kredit.batas_pembayaran_angsuran_hari').") and k_angsuran.issued_at <= '".$value->format('Y-m-d H:i:s')."' order by k_angsuran.issued_at asc limit 1 ) as issued_at"))
 			->wherehas('angsuran', function($q)use($value){$q->where(function($q){$q->wherenull('paid_at')->orwhereraw(\DB::raw('datediff(paid_at, issued_at) > '.Config::get('kredit.batas_pembayaran_angsuran_hari')));})->where('issued_at', '<=', $value->format('Y-m-d H:i:s'));})
 		;
+	}
+
+	public function scopeKantor($query, $variable)
+	{
+		if(is_array($variable))
+		{
+			return $query->whereIn('kode_kantor', $variable);
+		}
+
+		return $query->where('kode_kantor', $variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

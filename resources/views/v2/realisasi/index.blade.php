@@ -12,14 +12,7 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('body')
-					<nav class="nav nav-tabs" id="myTab" role="tablist">
-						<a class="nav-item nav-link {{$is_aktif_tab}}" id="nav-aktif-tab" data-toggle="tab" href="#nav-aktif" role="tab" aria-controls="nav-aktif" aria-selected="true">Kredit Aktif</a>
-					</nav>
-					<div class="tab-content" id="nav-tabContent">
-						<div class="tab-pane fade {{$is_aktif_tab}}" id="nav-aktif" role="tabpanel" aria-labelledby="nav-aktif-tab">
-							@include('v2.kredit.table', ['data' => $aktif, 's_pre' => 'aktif'])
-						</div>
-					</div>
+					@include('v2.realisasi.table', ['data' => $realisasi])
 				@endslot
 			@endcomponent
 		</div>

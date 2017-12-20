@@ -32,16 +32,32 @@
 						</div>
 						<div class="col-sm-10">
 							<div id="permohonan-panel">
-								@include('v2.pengajuan.permohonan')
+								@if(str_is($permohonan['status'], 'permohonan'))
+									@include('v2.pengajuan.permohonan.form')
+								@else
+									@include('v2.pengajuan.permohonan.list')
+								@endif
 							</div>
 							<div id="survei-panel">
-								@include('v2.pengajuan.survei')
+								@if(str_is($permohonan['status'], 'survei'))
+									@include('v2.pengajuan.survei.form')
+								@else
+									@include('v2.pengajuan.survei.list')
+								@endif
 							</div>
 							<div id="analisa-panel">
-								@include('v2.pengajuan.analisa')
+								@if(str_is($permohonan['status'], 'analisa'))
+									@include('v2.pengajuan.analisa.form')
+								@else
+									@include('v2.pengajuan.analisa.list')
+								@endif
 							</div>
 							<div id="putusan-panel">
-								@include('v2.pengajuan.putusan')
+								@if(str_is($permohonan['status'], 'putusan') && !str_is($permohonan['progress'], 'sudah'))
+									@include('v2.pengajuan.putusan.form')
+								@else
+									@include('v2.pengajuan.putusan.list')
+								@endif
 							</div>
 						</div>
 					</div>

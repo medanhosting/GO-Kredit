@@ -29,6 +29,7 @@ use Thunderlabid\Pengajuan\Traits\IDRTrait;
 use Thunderlabid\Pengajuan\Traits\TanggalTrait;
 use Thunderlabid\Pengajuan\Traits\WaktuTrait;
 use Thunderlabid\Pengajuan\Traits\NIKTrait;
+use Thunderlabid\Pengajuan\Traits\KantorTrait;
 
 class Pengajuan extends Model
 {
@@ -38,6 +39,7 @@ class Pengajuan extends Model
 	use IDRTrait;
 	use TanggalTrait;
 	use WaktuTrait;
+	use KantorTrait;
 
 	protected $table	= 'p_pengajuan';
 	protected $fillable	= ['pokok_pinjaman', 'kemampuan_angsur', 'is_mobile', 'nasabah', 'dokumen_pelengkap', 'kode_kantor', 'ao'];
@@ -122,16 +124,6 @@ class Pengajuan extends Model
 	public function setAoAttribute($variable)
 	{
 		$this->attributes['ao']		= json_encode($variable);
-	}
-
-	public function scopeKantor($query, $variable)
-	{
-		if(is_array($variable))
-		{
-			return $query->whereIn('kode_kantor', $variable);
-		}
-
-		return $query->where('kode_kantor', $variable);
 	}
 
 	public function scopeStatus($query, $variable)

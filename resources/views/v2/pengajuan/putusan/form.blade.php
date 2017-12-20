@@ -5,11 +5,11 @@
 			Putusan Komite Kredit 
 		</a>
 	</li>
-	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#legal-realisasi" role="tab">
+	<!-- <li class="nav-item">
+		<a class="nav-link disabled" data-toggle="tab" href="#legal-realisasi" role="tab">
 			Legalitas Realisasi 
 		</a>
-	</li>
+	</li> -->
 </ul>
 
 <!-- Tab panes -->
@@ -67,8 +67,8 @@
 		{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
 		{!! Form::close() !!}
 	</div>
-	<div class="tab-pane" id="legal-realisasi" role="tabpanel">
+	<!-- <div class="tab-pane" id="legal-realisasi" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		
-	</div>
+	</div> -->
 </div>

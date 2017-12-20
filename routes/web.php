@@ -32,6 +32,7 @@
 			Route::resource('pengajuan', 		'PengajuanController'); 
 		});
 		Route::namespace('V2\Kredit')->group(function(){
+			Route::resource('realisasi', 		'RealisasiController'); 
 			Route::resource('kredit', 			'KreditController'); 
 		});
 	});
