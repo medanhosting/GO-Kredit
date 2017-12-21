@@ -152,9 +152,9 @@ class SurveiController extends Controller
 				$sp 						= strtolower($ds_capacity['capacity']['status_pernikahan']);
 
 				if(str_is($sp, 'tk')){
-					$tk 					= $this->formatMoneyTo(1500000);
+					$ds_capacity['capacity']['tanggungan_keluarga']	= $this->formatMoneyTo(1500000);
 				}elseif(str_is($sp, 'k')){
-					$tk 					= $this->formatMoneyTo(3000000);
+					$ds_capacity['capacity']['tanggungan_keluarga']	= $this->formatMoneyTo(3000000);
 				}else{
 					$anak 					= str_replace('k-', '', $sp) * 1;
 					$ds_capacity['capacity']['tanggungan_keluarga']	= $this->formatMoneyTo(3000000 + ($anak * 1250000));
