@@ -146,7 +146,7 @@
 											<br/>
 											<label class="mb-1">FOTO KTP</label><br/>
 											<label class="custom-file">
-												<input type="file" class="custom-file-input">
+												<input type="file" class="custom-file-input" name="dokumen_pelengkap[ktp]">
 
 												<span class="custom-file-control"></span>
 											</label>
