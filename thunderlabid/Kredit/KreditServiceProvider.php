@@ -20,6 +20,10 @@ class KreditServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
+		Event::listen('Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiCreating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
+
 		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');

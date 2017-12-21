@@ -30,10 +30,10 @@ class AktivasiKreditDisetujui
 	 */
 	public function handle($event)
 	{
-		$model 		= $event->data;
+		$model 		= $event->data->pengajuan->putusan;
 
 		//BUTUH PENGECEKAN PUTUSAN
-		if($model->putusan == 'setuju'){
+		if($event->data->status =='realisasi' && $event->data->progress=='sudah' && $model->putusan == 'setuju'){
 			$aktif 		= Aktif::where('nomor_pengajuan', $model->pengajuan_id)->first();
 
 			if(!$aktif){

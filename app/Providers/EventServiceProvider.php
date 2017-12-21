@@ -100,6 +100,8 @@ class EventServiceProvider extends ServiceProvider
 		///////////////////////////////
 		// Aktivasi Kredit Disetujui //
 		///////////////////////////////
-		Event::listen('App\Events\AktivasiKredit', 'App\Listeners\AktivasiKreditDisetujui');
+		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusCreated', 'App\Listeners\AktivasiKreditDisetujui');
+		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusUpdated', 'App\Listeners\AktivasiKreditDisetujui');
+		// Event::listen('App\Events\AktivasiKredit', 'App\Listeners\AktivasiKreditDisetujui');
 	}
 }

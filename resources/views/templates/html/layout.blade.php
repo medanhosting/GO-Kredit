@@ -371,6 +371,14 @@
 				else {$('.no-result').hide();}
 					  });
 			});
+			/**
+			 * Clickable row in table
+			 */
+			$('.table > tbody > tr').on('click', function () {
+				if ($(this).attr('href')) {
+					window.location = $(this).attr('href');
+				}
+			});
 		</script>
 	</body>
 </html>

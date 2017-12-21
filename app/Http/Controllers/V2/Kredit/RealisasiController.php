@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 
 use Thunderlabid\Pengajuan\Models\Putusan;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
+use Thunderlabid\Pengajuan\Models\Status;
 
-use Exception;
+use Exception, Auth;
 
 class RealisasiController extends Controller
 {
@@ -46,16 +47,40 @@ class RealisasiController extends Controller
 	public function store($id = null)
 	{
 		try {
-			$putusan 					= Putusan::where('pengajuan_id', $id)->wherehas('pengajuan', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->orderby('tanggal', 'desc')->first();
-			
-			$data_input['checklists'] 	= request()->get('checklists');
+			\DB::beginTransaction();
+			$putusan					= Putusan::where('pengajuan_id', $id)->wherehas('pengajuan', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->orderby('tanggal', 'desc')->first();
 
-			$putusan->fill($data_input);
-			$putusan->save();
+			if(request()->has('checklists')){
+				$data_input['checklists'] 	= request()->get('checklists');
+				$putusan->fill($data_input);
+				$putusan->save();
+			}
 
+			if(request()->has('tanggal_realisasi')){
+				$status 				= new Status;
+				$status->tanggal 		= request()->get('tanggal_realisasi');
+				$status->progress 		= 'sedang';
+				$status->status 		= 'realisasi';
+				$status->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
+				$status->pengajuan_id 	= $id;
+				$status->save();
+			}
+
+			if(request()->has('tanggal_pencairan')){
+				$status 				= new Status;
+				$status->tanggal 		= request()->get('tanggal_pencairan');
+				$status->progress 		= 'sudah';
+				$status->status 		= 'realisasi';
+				$status->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
+				$status->pengajuan_id 	= $id;
+				$status->save();
+			}
+
+			\DB::commit();
 			return redirect(route('realisasi.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]));
 
 		} catch (Exception $e) {
+			\DB::rollback();
 			return redirect()->back()->withErrors($e->getMessage());
 		}
 
