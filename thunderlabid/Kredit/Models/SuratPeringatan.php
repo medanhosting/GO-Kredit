@@ -13,40 +13,40 @@ use App\Service\Traits\IDRTrait;
 ////////////
 // EVENTS //
 ////////////
-use Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiCreated;
-use Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiCreating;
-use Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiUpdated;
-use Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiUpdating;
-use Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiDeleted;
-use Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiDeleting;
-use Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiRestored;
-use Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiRestoring;
+use Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanCreated;
+use Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanCreating;
+use Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanUpdated;
+use Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanUpdating;
+use Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanDeleted;
+use Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanDeleting;
+use Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanRestored;
+use Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanRestoring;
 
 use Thunderlabid\Kredit\Models\Traits\FakturTrait;
 
-class BuktiRealisasi extends Model
+class SuratPeringatan extends Model
 {
 	use IDRTrait;
 	use WaktuTrait;
 	use FakturTrait;
 	
-	protected $table 	= 'k_bukti_realisasi';
-	protected $fillable = ['nomor_pengajuan', 'nomor_transaksi', 'tanggal', 'jumlah', 'nip_karyawan'];
+	protected $table 	= 'k_surat_peringatan';
+	protected $fillable = ['nomor_kredit', 'nth', 'tanggal', 'tag', 'nip_karyawan'];
 	protected $hidden 	= [];
-	protected $appends	= ['jatuh_tempo'];
+	protected $appends	= [];
 
 	protected $rules	= [];
 	protected $errors;
 
 	protected $events = [
-		'created' 	=> BuktiRealisasiCreated::class,
-		'creating' 	=> BuktiRealisasiCreating::class,
-		'updated' 	=> BuktiRealisasiUpdated::class,
-		'updating' 	=> BuktiRealisasiUpdating::class,
-		'deleted' 	=> BuktiRealisasiDeleted::class,
-		'deleting' 	=> BuktiRealisasiDeleting::class,
-		'restoring' => BuktiRealisasiRestoring::class,
-		'restored' 	=> BuktiRealisasiRestored::class,
+		'created' 	=> SuratPeringatanCreated::class,
+		'creating' 	=> SuratPeringatanCreating::class,
+		'updated' 	=> SuratPeringatanUpdated::class,
+		'updating' 	=> SuratPeringatanUpdating::class,
+		'deleted' 	=> SuratPeringatanDeleted::class,
+		'deleting' 	=> SuratPeringatanDeleting::class,
+		'restoring' => SuratPeringatanRestoring::class,
+		'restored' 	=> SuratPeringatanRestored::class,
 	];
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -80,11 +80,6 @@ class BuktiRealisasi extends Model
 		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
 	}
 
-	public function setJumlahAttribute($variable)
-	{
-		$this->attributes['jumlah']		= $this->formatMoneyFrom($variable);
-	}
-
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
 	// ------------------------------------------------------------------------------------------------------------
@@ -98,8 +93,8 @@ class BuktiRealisasi extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['nomor_pengajuan']	= ['required', 'string'];
-		$rules['nomor_transaksi'] 	= ['required', 'string'];
+		$rules['nomor_kredit']		= ['required', 'string'];
+		$rules['nth'] 				= ['required', 'integer'];
 		$rules['tanggal'] 			= ['required', 'date_format:"Y-m-d H:i:s"'];
 
 		//////////////
@@ -123,10 +118,5 @@ class BuktiRealisasi extends Model
 	public function getTanggalAttribute($variable)
 	{
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
-	}
-
-	public function getJumlahAttribute($variable)
-	{
-		return $this->formatmoneyTo($this->attributes['jumlah']);
 	}
 }

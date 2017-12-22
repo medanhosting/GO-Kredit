@@ -11,8 +11,10 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
+				@slot('pre')
+					<h6 class="pt-4 pl-4">MUTASI JAMINAN</h6>
+				@endslot
 				@slot('body')
-				<div class="clearfix">&nbsp;</div>
 				<div class="row">
 					<div class="col-12">
 						<form action="{{route('jaminan.index', request()->all())}}" method="GET">
@@ -31,12 +33,12 @@
 					</div>
 				</div>
 				<div class="clearfix">&nbsp;</div>
-				<table class="table table-hover">
+				<table class="table table-bordered table-hover">
 					<thead>
 						<tr class="text-center">
 							<th class="text-left">#</th>
+							<th colspan="2">Catatan</th>
 							<th>Dokumen</th>
-							<th>&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -44,7 +46,7 @@
 						@forelse($jaminan as $k => $v)
 							@if($lua != $v['updated_at']->format('d/m/Y'))
 								<tr>
-									<td colspan="3" class="bg-light">
+									<td colspan="4" class="bg-light">
 										{{$v['updated_at']->format('d/m/Y')}}
 									</td>
 								</tr>
@@ -53,6 +55,16 @@
 							<tr class="text-center">
 								<td class="text-left">
 									{{$v['nomor_kredit']}}
+								</td>
+								<td>
+									@if(is_null($v['taken_at']))
+										<i class="fa fa-arrow-down text-success"></i>
+									@else
+										<i class="fa fa-arrow-up text-danger"></i>
+									@endif
+								</td>
+								<td>
+									{{$v['description']}}
 								</td>
 								<td class="text-left">
 									@if(str_is($v['documents']['jenis'], 'shm'))
@@ -69,17 +81,10 @@
 										Kendaraan {{str_replace('_', ' ', $v['documents']['bpkb']['jenis'])}} - {{$v['documents']['bpkb']['merk']}} , {{$v['documents']['bpkb']['tipe']}} ({{$v['documents']['bpkb']['tahun']}})
 									@endif
 								</td>
-								<td>
-									@if(is_null($v['taken_at']))
-										<i class="fa fa-arrow-down text-success"></i>
-									@else
-										<i class="fa fa-arrow-up text-danger"></i>
-									@endif
-								</td>
 							</tr>
 						@empty
 							<tr>
-								<td colspan="3">
+								<td colspan="4">
 									<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
 								</td>
 							</tr>

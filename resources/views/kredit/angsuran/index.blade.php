@@ -38,7 +38,7 @@
 					</thead>
 					<tbody>
 						@forelse($angsuran as $k => $v)
-							<tr>
+							<tr @if($v['is_tunggakan']) class="bg-danger" @endif>
 								<td>
 									{{$v['nomor_kredit']}}
 								</td>

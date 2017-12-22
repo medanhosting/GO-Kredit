@@ -20,9 +20,9 @@ class KreditServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
-		Event::listen('Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiCreating', 'Thunderlabid\Kredit\Listeners\Saving');
-		Event::listen('Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
-		Event::listen('Thunderlabid\Kredit\Events\BuktiRealisasi\BuktiRealisasiDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
+		Event::listen('Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanCreating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
 		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
@@ -57,7 +57,7 @@ class KreditServiceProvider extends ServiceProvider
 	{
 		Config::set('kredit.biaya_kolektor', 50000);
 		Config::set('kredit.selisih_penagihan_hari', 5);
-		Config::set('kredit.batas_pembayaran_angsuran_hari', 7);
+		Config::set('kredit.batas_pembayaran_angsuran_hari', 3);
 		Config::set('kredit.denda_perbulan', 30000);
 	}
 }
