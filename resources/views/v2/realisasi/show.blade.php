@@ -12,7 +12,7 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('pre')
-					<h6 class="pt-4 pl-4"><a href="{{route('kredit.index', ['kantor_aktif_id' => $kantor_aktif_id])}}"><i class="fa fa-angle-left"></i></a>&nbsp;&nbsp;DETAIL KREDIT</h6>
+					<h6 class="pt-4 pl-4"><a href="{{route('realisasi.index', ['kantor_aktif_id' => $kantor_aktif_id])}}"><i class="fa fa-angle-left"></i></a>&nbsp;&nbsp;DETAIL REALISASI KREDIT</h6>
 				@endslot
 				@slot('body')
 					@include('v2.realisasi.legalitas.list', ['putusan' => $realisasi])

@@ -34,7 +34,7 @@ class Penagihan extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_penagihan';
-	protected $fillable = ['nomor_kredit', 'nip_karyawan', 'tanggal'];
+	protected $fillable = ['nomor_kredit', 'nip_karyawan', 'tanggal', 'tag', 'penerima'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];

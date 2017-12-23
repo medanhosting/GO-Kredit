@@ -1,11 +1,10 @@
 <div class="clearfix">&nbsp;</div>
 <div class="row">
 	<div class="col-sm-12">
-		<table class="table table-hover">
+		<table class="table table-hover table-bordered">
 			<thead>
 				<tr class="text-center">
-					<th>&nbsp;</th>
-					<th>Catatan</th>
+					<th colspan="2">Catatan</th>
 					<th>Dokumen</th>
 				</tr>
 			</thead>

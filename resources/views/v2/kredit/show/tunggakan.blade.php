@@ -16,7 +16,9 @@
 </div>
 <div class="row">
 	<div class="col-sm-12">
-		<a href="">Tandai Penagihan</a>
+		{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'penerima[nama]' => $aktif['nasabah']['nama'], 'nip_karyawan' => Auth::user()['nip'], 'tanggal' => Carbon\Carbon::now()->format('d/m/Y H:i'), 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'tagihan', 'nominal' => 'Rp 4.000.000']), 'method' => 'PATCH']) !!}
+			<button class="btn btn-success">Tandai Penagihan</button>
+		{!! Form::close() !!}
 	</div>
 </div>
 

@@ -10,6 +10,8 @@ use Thunderlabid\Kredit\Models\NotaBayar;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
+use App\Http\Service\Policy\FeedBackPenagihan;
+
 use Exception, DB, Auth, Carbon\Carbon;
 
 class KreditController extends Controller
@@ -73,30 +75,41 @@ class KreditController extends Controller
 	public function update($id) 
 	{
 		try {
-			$nth 		= request()->get('nth');
-			$angsuran 	= AngsuranDetail::whereIn('nth', $nth)->get();
-
+			$aktif 		= Aktif::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->first();
+			
 			DB::BeginTransaction();
-			if($angsuran){
-				$nb 	= new NotaBayar;
-				$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($angsuran[0]['nomor_kredit']);
-				$nb->nomor_kredit 	= $angsuran[0]['nomor_kredit'];
-				$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-				$nb->nip_karyawan 	= Auth::user()['nip'];
-				$nb->save();
+			switch (request()->get('current')) {
+				case 'tagihan':
+					$feedback 	= new FeedBackPenagihan($aktif, request()->get('nip_karyawan'), request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'));
+					$feedback->bayar();
+					break;
+				default:
+					$nth 		= request()->get('nth');
+					$angsuran 	= AngsuranDetail::whereIn('nth', $nth)->get();
 
-				foreach ($angsuran as $k => $v) {
-					if(is_null($v->nota_bayar_id)){
-						$v->nota_bayar_id 	= $nb->id;
-						$v->save();
+					if($angsuran){
+						$nb 	= new NotaBayar;
+						$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($angsuran[0]['nomor_kredit']);
+						$nb->nomor_kredit 	= $angsuran[0]['nomor_kredit'];
+						$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+						$nb->nip_karyawan 	= Auth::user()['nip'];
+						$nb->save();
+
+						foreach ($angsuran as $k => $v) {
+							if(is_null($v->nota_bayar_id)){
+								$v->nota_bayar_id 	= $nb->id;
+								$v->save();
+							}
+						}
 					}
-				}
+					break;
 			}
 			
 			DB::commit();
 			return redirect()->back();
 		} catch (Exception $e) {
 			DB::rollback();
+			dD($e);
 			return redirect()->back()->withErrors($e->getMessage());
 		}
 	}

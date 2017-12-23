@@ -35,8 +35,9 @@
 						<thead>
 							<tr class="text-center">
 								<th>Nasabah</th>
+								<th>Sejak</th>
 								<th>Total Tunggakan</th>
-								<th>Jatuh Tempo</th>
+								<th>Sisa Hutang</th>
 								<th>Surat Peringatan</th>
 								<th>&nbsp;</th>
 							</tr>
@@ -47,7 +48,7 @@
 								@php $pa = \Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
 								@if($lua != $pa)
 									<tr>
-										<td colspan="5" class="bg-light">
+										<td colspan="6" class="bg-light">
 											{{$pa}}
 										</td>
 									</tr>
@@ -58,30 +59,21 @@
 										{{$v['kredit']['nasabah']['nama']}}<br/>
 										{{$v['kredit']['nasabah']['telepon']}}
 									</td>
+									<td>
+										{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->diffForHumans()}}
+									</td>
 									<td class="text-right">
 										{{$idr->formatMoneyTo($v['tunggakan'])}}
 									</td>
-									<td>
-										{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->adddays(\Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}
+									<td class="text-right">
+										{{$idr->formatMoneyTo($v['sisa_hutang'])}}
 									</td>
-									<td>
+									<td class="text-right">
 										@foreach($v['suratperingatan'] as $v0)
-											<div class="row">
-												<div class="col-sm-4 text-right">
-													{{$v0['tanggal']}}
-												</div>
-												<div class="col-sm-8 text-left">
-													<a href="">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a>
-												</div>
-											</div>
+											<a href="">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a><br>
+											<small>{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v0['tanggal'])->diffForHumans()}}</small><br/>
 										@endforeach
-										<div class="row">
-											<div class="col-sm-4 text-right">
-											</div>
-											<div class="col-sm-8 text-left">
-												<a href="{{route('tunggakan.show', ['id' => $v['nomor_kredit'], 'nomor_kredit' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id])}}">Keluarkan {{ucwords(str_replace('_', ' ', $v['should_issue_surat_peringatan']['keluarkan']))}}</a>
-											</div>
-										</div>
+										<a href="{{route('tunggakan.show', ['id' => $v['nomor_kredit'], 'nomor_kredit' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id])}}" class="alert-link">Keluarkan {{ucwords(str_replace('_', ' ', $v['should_issue_surat_peringatan']['keluarkan']))}}</a>
 									</td>
 									<td>
 										<a href="{{route('kredit.show', ['id' => $v['kredit']['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'tunggakan'])}}">Lihat Kredit</a>
@@ -89,7 +81,7 @@
 								</tr>
 							@empty
 								<tr>
-									<td colspan="5">
+									<td colspan="6">
 										<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
 									</td>
 								</tr>

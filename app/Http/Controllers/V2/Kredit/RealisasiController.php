@@ -8,7 +8,7 @@ use Thunderlabid\Pengajuan\Models\Putusan;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Status;
 
-use Exception, Auth;
+use Exception, Auth, DB;
 
 class RealisasiController extends Controller
 {
@@ -19,7 +19,66 @@ class RealisasiController extends Controller
 
 	public function index () 
 	{
-		$realisasi 	= Pengajuan::whereHas('putusan', function($q){$q->where('putusan', 'setuju');})->status('putusan')->where('p_status.progress', 'sedang')->kantor(request()->get('kantor_aktif_id'))->paginate(15, ['*'], 'realisasi');
+		$realisasi 	= Pengajuan::whereHas('putusan', function($q){$q->where('putusan', 'setuju');})->status('putusan')->where('p_status.progress', 'sedang')->kantor(request()->get('kantor_aktif_id'));
+
+		if (request()->has('q_realisasi'))
+		{
+			$cari	= request()->get('q_realisasi');
+			$regexp = preg_replace("/-+/",'[^A-Za-z0-9_]+',$cari);
+			$realisasi	= $realisasi->where(function($q)use($regexp)
+			{				
+				$q
+				->whereRaw(DB::raw('nasabah REGEXP "'.$regexp.'"'));
+			});
+		}
+
+		if (request()->has('jaminan_realisasi'))
+		{
+			$cari	= request()->get('jaminan_realisasi');
+			switch (strtolower($cari)) {
+				case 'jaminan-bpkb':
+					$realisasi 	= $realisasi->wherehas('jaminan_kendaraan', function($q){$q;});
+					break;
+				case 'jaminan-sertifikat':
+					$realisasi 	= $realisasi->wherehas('jaminan_tanah_bangunan', function($q){$q;});
+					break;
+			}
+		}
+
+		if (request()->has('pinjaman_realisasi'))
+		{
+			$cari	= request()->get('pinjaman_realisasi');
+			switch (strtolower($cari)) {
+				case 'pinjaman-a':
+					$realisasi 	= $realisasi->wherehas('analisa', function($q){$q->where('jenis_pinjaman', 'pa');});
+					break;
+				case 'pinjaman-t':
+					$realisasi 	= $realisasi->wherehas('analisa', function($q){$q->where('jenis_pinjaman', 'pt');});
+					break;
+			}
+		}
+
+		if (request()->has('sort_realisasi')){
+			$sort	= request()->get('sort_realisasi');
+			switch (strtolower($sort)) {
+				case 'nama-desc':
+					$realisasi 	= $realisasi->orderby('p_pengajuan.nasabah->nama', 'desc');
+					break;
+				case 'pinjaman-asc':
+					$realisasi 	= $realisasi->orderby('pokok_pinjaman', 'asc');
+					break;
+				case 'pinjaman-desc':
+					$realisasi 	= $realisasi->orderby('pokok_pinjaman', 'desc');
+					break;
+				default :
+					$realisasi 	= $realisasi->orderby('p_pengajuan.nasabah->nama', 'asc');
+					break;
+			}
+		}else{
+			$realisasi 	= $realisasi->orderby('p_pengajuan.nasabah->nama', 'asc');
+		}
+
+		$realisasi 	= $realisasi->paginate(15, ['*'], 'realisasi');
 
 		view()->share('is_realisasi_tab', 'show active');
 

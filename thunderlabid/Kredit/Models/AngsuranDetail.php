@@ -124,6 +124,7 @@ class AngsuranDetail extends Model
 				->orwhereraw(\DB::raw('(select nb.tanggal from k_nota_bayar as nb where nb.id = k_angsuran_detail.nota_bayar_id and nb.tanggal >= "'.$value->format('Y-m-d H:i:s').'" limit 1) >= k_angsuran_detail.tanggal'))
 				;
 			})
+			->selectraw("(select sum(kd2.amount) from k_angsuran_detail as kd2 where kd2.nomor_kredit = k_angsuran_detail.nomor_kredit and kd2.nota_bayar_id is null and kd2.deleted_at is null) as sisa_hutang")
 			->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
 			->groupby('nomor_kredit');
 	}

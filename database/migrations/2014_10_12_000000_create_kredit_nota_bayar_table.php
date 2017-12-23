@@ -18,6 +18,7 @@ class CreateKreditNotaBayarTable extends Migration
 			$table->string('nomor_kredit');
 			$table->string('nomor_faktur');
 			$table->datetime('tanggal');
+			$table->double('jumlah')->nullable();
 			$table->string('nip_karyawan');
 			$table->timestamps();
 			$table->softDeletes();
