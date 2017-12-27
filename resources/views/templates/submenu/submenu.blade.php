@@ -10,7 +10,7 @@
 				<i class="fa fa-credit-card-alt"></i>&nbsp;&nbsp;Kredit</a>
 				<a href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
 				<i class="fa fa-line-chart"></i>&nbsp;&nbsp;Keuangan</a>
-				<a href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
+				<a href="{{ route('kantor.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
 				<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Kantor</a>
 			</nav>
 		</div>

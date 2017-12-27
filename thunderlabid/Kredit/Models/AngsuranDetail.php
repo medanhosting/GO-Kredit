@@ -84,7 +84,7 @@ class AngsuranDetail extends Model
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
 	public function scopeDisplaying($query){
-		return $query->selectraw(\DB::raw('SUM(IF(tag="denda",amount,0)) as denda'))->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))->selectraw('sum(amount) as subtotal')->selectraw('min(tanggal) as tanggal_bayar')->selectraw('min(nota_bayar_id) as nota_bayar_id')->selectraw('nth')->groupby('nth');
+		return $query->selectraw(\DB::raw('SUM(IF(tag="denda",amount,0)) as denda'))->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))->selectraw('SUM(IF(tag="bunga",amount,IF(tag="pokok",amount,0))) as subtotal')->selectraw('min(tanggal) as tanggal_bayar')->selectraw('min(nota_bayar_id) as nota_bayar_id')->selectraw('nth')->groupby('nth');
 	}
 
 	public function scopeLihatJatuhTempo($query, Carbon $value){
@@ -217,31 +217,27 @@ class AngsuranDetail extends Model
 	{
 		$data 	= null;
 		$total 	= $this->suratperingatan()->count();
-		if($total >= 7){
-			$data['cetak']		= ['surat_pemberitahuan', 'surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1', 'surat_somasi_2', 'surat_somasi_3'];
+		if($total >= 6){
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1', 'surat_somasi_2', 'surat_somasi_3'];
 			$data['keluarkan'] 	= null;
-		}
-		elseif($total < 7 && $total > 5){
-			$data['cetak']		= ['surat_pemberitahuan', 'surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1', 'surat_somasi_2'];
-			$data['keluarkan'] 	= 'surat_somasi_3';
 		}elseif($total < 6 && $total > 4){
-			$data['cetak']		= ['surat_pemberitahuan', 'surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1'];
-			$data['keluarkan'] 	= 'surat_somasi_2';
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1'];
+			$data['keluarkan'] 	= 'surat_somasi_3';
 		}elseif($total < 5 && $total > 3){
-			$data['cetak']		= ['surat_pemberitahuan', 'surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3'];
-			$data['keluarkan'] 	= 'surat_somasi_1';
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1'];
+			$data['keluarkan'] 	= 'surat_somasi_2';
 		}elseif($total < 4 && $total > 2){
-			$data['cetak']		= ['surat_pemberitahuan', 'surat_peringatan_1', 'surat_peringatan_2'];
-			$data['keluarkan'] 	= 'surat_peringatan_3';
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3'];
+			$data['keluarkan'] 	= 'surat_somasi_1';
 		}elseif($total < 3 && $total > 1){
-			$data['cetak']		= ['surat_pemberitahuan', 'surat_peringatan_1'];
-			$data['keluarkan'] 	= 'surat_peringatan_2';
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2'];
+			$data['keluarkan'] 	= 'surat_peringatan_3';
 		}elseif($total < 2 && $total > 0){
-			$data['cetak']		= ['surat_pemberitahuan'];
-			$data['keluarkan'] 	= 'surat_peringatan_1';
+			$data['cetak']		= ['surat_peringatan_1'];
+			$data['keluarkan'] 	= 'surat_peringatan_2';
 		}elseif($total==0){
 			$data['cetak']		= [];
-			$data['keluarkan'] 	= 'surat_pemberitahuan';
+			$data['keluarkan'] 	= 'surat_peringatan_1';
 		}
 
 		return $data;

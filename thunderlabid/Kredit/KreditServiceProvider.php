@@ -39,7 +39,7 @@ class KreditServiceProvider extends ServiceProvider
 		///////////////////////////////
 		// Pembebanan Biaya Kolektor //
 		///////////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanCreated', 'Thunderlabid\Kredit\Listeners\BebankanBiayaKolektor');
+		// Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanCreated', 'Thunderlabid\Kredit\Listeners\BebankanBiayaKolektor');
 
 		//////////////////////////
 		// Buat Jadwal Angsuran //

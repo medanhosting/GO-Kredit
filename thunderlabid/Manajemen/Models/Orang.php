@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 use Validator;
 use Exception;
-use Hash;
+use Carbon\Carbon;
 
 ///////////////
 // Exception //
@@ -61,7 +61,12 @@ class Orang extends Authenticatable
 	{
 		return $this->hasMany(PenempatanKaryawan::class, 'orang_id')->orderby('tanggal_masuk', 'asc');
 	}
-	
+
+	public function penempatanaktif()
+	{
+		return $this->hasMany(PenempatanKaryawan::class, 'orang_id')->where(function($q){$q->wherenull('tanggal_keluar')->orwhere('tanggal_keluar', '>', Carbon::now()->format('Y-m-d H:i:s'));})->orderby('tanggal_masuk', 'asc');
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------
