@@ -2,27 +2,27 @@
 <ul class="nav nav-tabs" role="tablist">
 	<li class="nav-item">
 		<a class="nav-link @if($lokasi['agenda']=='nasabah') active @endif" data-toggle="tab" href="#character" role="tab">
-			Character @if(!$checker['character']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
+			Karakter @if(!$checker['character']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
 		</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#condition" role="tab">
-			Condition @if(!$checker['condition']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
+			Kondisi @if(!$checker['condition']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
 		</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#capacity" role="tab">
-			Capacity @if(!$checker['capacity']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
+			Kapasitas @if(!$checker['capacity']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
 		</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#capital" role="tab">
-			Capital @if(!$checker['capital']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
+			Kapital @if(!$checker['capital']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
 		</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link @if($lokasi['agenda']=='jaminan') active @endif " data-toggle="tab" href="#collateral" role="tab">
-			Collateral @if(!$checker['collateral']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
+			Kolateral @if(!$checker['collateral']) <span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span> @endif
 		</a>
 	</li>
 </ul>

@@ -119,6 +119,48 @@ Class HelperController extends Controller
 
 	public function variable_list_select ()
 	{
-		
+		$jenis_pekerjaan	= [
+			'belum_bekerja'		=> 'Belum / Tidak Bekerja',
+			'karyawan_swasta'	=> 'Karyawan Swasta',
+			'nelayan'			=> 'Nelayan',
+			'pegawai_negeri'	=> 'Pegawai Negeri',
+			'petani'			=> 'Petani',
+			'polri'				=> 'Polri',
+			'wiraswasta'		=> 'Wiraswasta',
+			'lain_lain'			=> 'Lainnya'
+		];
+
+		$jenis_kendaraan 	= [
+			'roda_2'		=> 'roda 2',
+			'roda_3'		=> 'roda 3',
+			'roda_4'		=> 'roda 4',
+			'roda_6'		=> 'roda 6'
+		];
+
+		$jenis_sertifikat	= [
+			'shm'			=> 'SHM',
+			'shgb'			=> 'SHGB'
+		];
+
+		$tipe_sertifikat	= [
+			'tanah'				=> 'Tanah',
+			'tanah_dan_bangunan'=> 'Tanah & Bangunan',
+			'pekarangan'		=> 'Pekarangan',
+			'sawah'				=> 'Sawah',
+			'tambak'			=> 'Tambak'
+		];
+
+		$status_perkawinan = [
+			'belum_kawin'	=> 'Belum Kawin',
+			'kawin'			=> 'Kawin',
+			'cerai'			=> 'Cerai',
+			'cerai_mati'	=> 'Cerai Mati'
+		];
+
+		view()->share('jenis_pekerjaan', $jenis_pekerjaan);
+		view()->share('jenis_kendaraan', $jenis_kendaraan);
+		view()->share('jenis_sertifikat', $jenis_sertifikat);
+		view()->share('tipe_sertifikat', $tipe_sertifikat);
+		view()->share('status_perkawinan', $status_perkawinan);	
 	}
 }

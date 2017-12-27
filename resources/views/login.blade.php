@@ -7,7 +7,7 @@
 @endpush
 
 @push('body')
-	{!! Form::open(['url' => route('login.post'), 'method' => 'post']) !!}
+	{!! Form::open(['url' => route('login.post'), 'method' => 'post', 'class' => 'form']) !!}
 	{!! Form::bsText(null, 'nip', null, ['placeholder' => 'nip', 'class' => 'setfocus form-control']) !!}
 	{!! Form::bsPassword(null, 'password', ['placeholder' => 'password']) !!}
 	<!-- <a href='{{ route('forget_password') }}'>Forget my password</a> -->
@@ -25,6 +25,11 @@
 	<script>
 		$(document).ready(function(){
 			$('.setfocus').focus();
+			$('input[name="nip"]').on('keypress', function(e) {
+				if (e.which == 13) {
+					e.preventDefault();
+				}
+			});
 		});
 	</script>
 @endpush

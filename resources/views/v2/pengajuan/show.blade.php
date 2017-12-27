@@ -12,56 +12,123 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('pre')
-					<h6 class="pt-4 pl-4"><a href="{{route('pengajuan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}"><i class="fa fa-angle-left"></i></a>&nbsp;&nbsp;DETAIL PENGAJUAN</h6>
+					<h5 class="pt-4 pl-4 mb-0">
+						<a href="{{route('pengajuan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
+							<i class="fa fa-chevron-left"></i> 
+						</a>
+						&nbsp;&nbsp;DETAIL PENGAJUAN
+						<p class="float-right mr-3 text-secondary">
+							STATUS &nbsp;&nbsp; 
+							<span class="bg-info text-white text-uppercase pl-2 pr-2 pt-1 pb-1">
+								{{ ucwords($permohonan['status_terakhir']['status']) }}
+							</span>
+						</p>
+					</h5>
 				@endslot
-				@slot('body')
+				<div class="card-body">
 					<div class="row">
-						<div class="col-sm-2">
-							<p class="pb-2 mb-0">
-								<a id="permohonan-menu" class="text-success">Permohonan</a>
-							</p>
-							<p class="pb-2 mb-0">
-								<a id="survei-menu" class="text-success">Survei</a>
-							</p>
-							<p class="pb-2 mb-0">
-								<a id="analisa-menu" class="text-success">Analisa</a>
-							</p>
-							<p class="pb-2 mb-0">
-								<a id="putusan-menu" class="text-success">Putusan</a>
-							</p>
+						<div class="col-12 col-sm-12 col-md-12">
+							<!-- Nav tabs -->
+							<ul class="nav nav-tabs underline" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link active" data-toggle="tab" id="permohonan-menu" role="tab" href="#">
+										Permohonan
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" id="survei-menu" role="tab" href="#">
+										Survei
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" id="analisa-menu" role="tab" href="#">
+										Analisa
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-toggle="tab" id="putusan-menu" role="tab" href="#">
+										Putusan
+									</a>
+								</li>
+							</ul>
 						</div>
-						<div class="col-sm-10">
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							{{-- PERMOHONAN --}}
 							<div id="permohonan-panel">
-								@if(str_is($permohonan['status'], 'permohonan'))
-									@include('v2.pengajuan.permohonan.form')
-								@else
-									@include('v2.pengajuan.permohonan.list')
-								@endif
+								<div class="clearfix">&nbsp;</div>
+								<div class="row">
+									<div class="col-3">
+										@include('v2.pengajuan.permohonan.sidebar')
+									</div>
+									<div class="col-9">
+										@if(str_is($permohonan['status_terakhir']['status'], 'permohonan'))
+											@include('v2.pengajuan.permohonan.form')
+										@else
+											@include('v2.pengajuan.permohonan.list')
+										@endif
+									</div>
+								</div>
+								<div class="clearfix">&nbsp;</div>
 							</div>
+							{{-- SURVEI --}}
 							<div id="survei-panel">
-								@if(str_is($permohonan['status'], 'survei'))
-									@include('v2.pengajuan.survei.form')
-								@else
-									@include('v2.pengajuan.survei.list')
-								@endif
+								<div class="clearfix">&nbsp;</div>
+								<div class="row">
+									@if(str_is($permohonan['status_terakhir']['status'], 'survei'))
+										<div class="col-3">
+											@include('v2.pengajuan.survei.sidebar')
+										</div>
+										<div class="col-9">
+											@if (isset($survei))
+												@include('v2.pengajuan.survei.list')
+											@else
+												@include('v2.pengajuan.survei.form')
+											@endif
+										</div>
+									@else
+										<div class="col-12">
+											<p class="lead mt-3 text-center">
+												<i class="fa fa-info-circle"></i> 
+												Maaf data belum tersedia, pengajuan masih dalam status "<strong>{{ ucwords($permohonan['status_terakhir']['status']) }}</strong>"
+											</p>
+										</div>
+									@endif	
+								</div>
 							</div>
 							<div id="analisa-panel">
-								@if(str_is($permohonan['status'], 'analisa'))
-									@include('v2.pengajuan.analisa.form')
-								@else
+								@if (isset($analisa))
 									@include('v2.pengajuan.analisa.list')
+								@else
+									@if(str_is($permohonan['status_terakhir']['status'], 'analisa'))
+										@include('v2.pengajuan.analisa.form')
+									@else
+										<p class="lead mt-3 text-center">
+											<i class="fa fa-info-circle"></i> 
+											Maaf data belum tersedia, karena status masih dalam {{ ucwords($permohonan['status_terakhir']['status']) }}
+										</p>
+									@endif
 								@endif
 							</div>
 							<div id="putusan-panel">
-								@if(str_is($permohonan['status'], 'putusan') && !str_is($permohonan['progress'], 'sudah'))
-									@include('v2.pengajuan.putusan.form')
-								@else
+								@if (isset($putusan))
 									@include('v2.pengajuan.putusan.list')
+								@else
+									@if(str_is($permohonan['status_terakhir']['status'], 'putusan') && !str_is($permohonan['progress'], 'sudah'))
+										@include('v2.pengajuan.putusan.form')
+									@else
+										<p class="lead mt-3 text-center">
+											<i class="fa fa-info-circle"></i> 
+											Maaf data belum tersedia, karena status masih dalam {{ ucwords($permohonan['status_terakhir']['status']) }}
+										</p>
+									@endif
 								@endif
 							</div>
+							<div class="clearfix">&nbsp;</div>
 						</div>
 					</div>
-				@endslot
+				</div>
 			@endcomponent
 		</div>
 	</div>
@@ -76,34 +143,34 @@
 
 @push('js')
 	<script type="text/javascript">
-		$("#permohonan-panel").show();
-		$("#survei-panel").hide();
-		$("#analisa-panel").hide();
-		$("#putusan-panel").hide();
+		$("#permohonan-panel").fadeIn('fast');
+		$("#survei-panel").fadeOut('fast');
+		$("#analisa-panel").fadeOut('fast');
+		$("#putusan-panel").fadeOut('fast');
 
 		$("#permohonan-menu").click(function(){
-			$("#permohonan-panel").show();
-			$("#survei-panel").hide();
-			$("#analisa-panel").hide();
-			$("#putusan-panel").hide();
+			$("#permohonan-panel").fadeIn('fast');
+			$("#survei-panel").fadeOut('fast');
+			$("#analisa-panel").fadeOut('fast');
+			$("#putusan-panel").fadeOut('fast');
 		});
 		$("#survei-menu").click(function(){
-			$("#permohonan-panel").hide();
-			$("#survei-panel").show();
-			$("#analisa-panel").hide();
-			$("#putusan-panel").hide();
+			$("#permohonan-panel").fadeOut('fast');
+			$("#survei-panel").fadeIn('fast');
+			$("#analisa-panel").fadeOut('fast');
+			$("#putusan-panel").fadeOut('fast');
 		});
 		$("#analisa-menu").click(function(){
-			$("#permohonan-panel").hide();
-			$("#survei-panel").hide();
-			$("#analisa-panel").show();
-			$("#putusan-panel").hide();
+			$("#permohonan-panel").fadeOut('fast');
+			$("#survei-panel").fadeOut('fast');
+			$("#analisa-panel").fadeIn('fast');
+			$("#putusan-panel").fadeOut('fast');
 		});
 		$("#putusan-menu").click(function(){
-			$("#permohonan-panel").hide();
-			$("#survei-panel").hide();
-			$("#analisa-panel").hide();
-			$("#putusan-panel").show();
+			$("#permohonan-panel").fadeOut('fast');
+			$("#survei-panel").fadeOut('fast');
+			$("#analisa-panel").fadeOut('fast');
+			$("#putusan-panel").fadeIn('fast');
 		});
 	</script>
 @endpush

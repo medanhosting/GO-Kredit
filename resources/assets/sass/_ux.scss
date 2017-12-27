@@ -1,0 +1,10 @@
+table {
+	tr[href] {
+		cursor: pointer !important;
+	}
+}
+input, select, textarea {
+	&::placeholder {
+		color: $input-color-placeholder !important;
+	}
+}
