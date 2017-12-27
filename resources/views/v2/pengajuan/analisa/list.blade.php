@@ -2,7 +2,7 @@
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
 	<li class="nav-item">
-		<a class="nav-link" data-toggle="tab" href="#rknasabah" role="tab">
+		<a class="nav-link active" data-toggle="tab" href="#rknasabah" role="tab">
 			Riwayat Kredit Nasabah 
 		</a>
 	</li>
@@ -15,7 +15,7 @@
 
 <!-- Tab panes -->
 <div class="tab-content">
-	<div class="tab-pane" id="rknasabah" role="tabpanel">
+	<div class="tab-pane fade show active" id="rknasabah" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		<div class="row">
 			<div class="col-sm-12">
@@ -47,7 +47,7 @@
 		</div>
 	</div>
 
-	<div class="tab-pane" id="fanalisa" role="tabpanel">
+	<div class="tab-pane fade" id="fanalisa" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		<div class="row text-justify">
 			<div class="col-sm-12 text-left">
@@ -56,45 +56,65 @@
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Character
+				<p class="text-secondary mb-1">
+					Karakter
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{ucwords(str_replace('_',' ', $permohonan['analisa']['character']))}}
+				<p class="mb-1">
+					{{ ucfirst(strtolower(str_replace('_',' ', $permohonan['analisa']['character']))) }}
+				</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Capacity
+				<p class="text-secondary mb-1">
+					Kapasitas
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{ucwords(str_replace('_',' ', $permohonan['analisa']['capacity']))}}
+				<p class="mb-1">
+					{{ ucfirst(strtolower(str_replace('_',' ', $permohonan['analisa']['capacity']))) }}
+				</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Collateral
+				<p class="text-secondary mb-1">
+					Kolateral
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{ucwords(str_replace('_',' ', $permohonan['analisa']['collateral']))}}
+				<p class="mb-1">
+					{{ ucfirst(strtolower(str_replace('_',' ', $permohonan['analisa']['collateral']))) }}
+				</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Capital
+				<p class="text-secondary mb-1">
+					Kapital
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{ucwords(str_replace('_',' ', $permohonan['analisa']['capital']))}}
+				<p class="mb-1">
+					{{ ucfirst(strtolower(str_replace('_',' ', $permohonan['analisa']['capital']))) }}
+				</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Condition
+				<p class="text-secondary mb-1">
+					Kondisi
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{ucwords(str_replace('_',' ', $permohonan['analisa']['condition']))}}
+				<p class="mb-1">
+					{{ ucfirst(strtolower(str_replace('_',' ', $permohonan['analisa']['condition']))) }}
+				</p>
 			</div>
 		</div>
-		<div class="row text-justify">
+		<div class="row text-justify mt-2">
 			<div class="col-sm-12 text-left">
 				<p class="pt-2 pb-1 mb-0">Plafon Kredit yang direkomendasikan :</p>
 			</div>
@@ -102,95 +122,120 @@
 
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Jenis Pinjaman
+				<p class="text-secondary mb-1">
+					Jenis Pinjaman
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{strtoupper($permohonan['analisa']['jenis_pinjaman'])}}
+				<p class="mb-1">
+					{{ strtoupper($permohonan['analisa']['jenis_pinjaman']) }}
+				</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Suku Bunga
+				<p class="text-secondary mb-1">
+					Suku Bunga
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{$permohonan['analisa']['suku_bunga']}} %
+				<p class="mb-1">
+					{{$permohonan['analisa']['suku_bunga']}} %
+				</p>
 			</div>
 		</div>
 
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Jangka Waktu
+				<p class="text-secondary mb-1">
+					Jangka Waktu
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{$permohonan['analisa']['jangka_waktu']}} bulan
+				<p class="mb-1">
+					{{$permohonan['analisa']['jangka_waktu']}} bulan
+				</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Max. Plafon Kredit
+				<p class="text-secondary mb-1">
+					Max. Plafon Kredit
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{$permohonan['analisa']['limit_angsuran']}} x {{$permohonan['analisa']['limit_jangka_waktu']}} bulan
+				<p class="mb-1">
+					{{$permohonan['analisa']['limit_angsuran']}} x {{$permohonan['analisa']['limit_jangka_waktu']}} bulan = {{$terbilang->formatMoneyTo($terbilang->formatmoneyfrom($permohonan['analisa']['limit_angsuran']) * $permohonan['analisa']['limit_jangka_waktu'])}} 
+				</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
+				<p class="text-secondary mb-1">
+					Kredit yang diusulkan
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{$terbilang->formatMoneyTo($terbilang->formatmoneyfrom($permohonan['analisa']['limit_angsuran']) * $permohonan['analisa']['limit_jangka_waktu'])}} 
+				<p class="mb-1">
+					{{$permohonan['analisa']['kredit_diusulkan']}}
+				</p>
 			</div>
 		</div>
-		<div class="row text-justify">
-			<div class="col-sm-4 text-right">
-				Kredit yang diusulkan
-			</div>
-			<div class="col-sm-8 text-left">
-				{{$permohonan['analisa']['kredit_diusulkan']}}
-			</div>
-		</div>
-		<div class="row text-justify">
+		<div class="row text-justify mt-2">
 			<div class="col-sm-12 text-left">
 				<p class="pt-2 pb-1 mb-0">Pengembalian Angsuran Kredit Perbulan :</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Angsuran Pokok
+				<p class="text-secondary mb-1">
+					Angsuran Pokok
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{$permohonan['analisa']['angsuran_pokok']}}
+				<p class="mb-1">
+					{{$permohonan['analisa']['angsuran_pokok']}}
+				</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Angsuran Bunga
+				<p class="text-secondary mb-1">
+					Angsuran Bunga
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{$permohonan['analisa']['angsuran_bunga']}}
+				<p class="mb-1">
+					{{$permohonan['analisa']['angsuran_bunga']}}
+				</p>
 			</div>
 		</div>
 		<div class="row text-justify">
 			<div class="col-sm-4 text-right">
-				Total Angsuran
+				<p class="text-secondary mb-1">
+					Total Angsuran
+				</p>
 			</div>
 			<div class="col-sm-8 text-left">
-				{{$terbilang->formatMoneyTo($terbilang->formatmoneyfrom($permohonan['analisa']['angsuran_pokok']) + $terbilang->formatmoneyfrom($permohonan['analisa']['angsuran_bunga']))}} 
+				<p class="mb-1">
+					{{$terbilang->formatMoneyTo($terbilang->formatmoneyfrom($permohonan['analisa']['angsuran_pokok']) + $terbilang->formatmoneyfrom($permohonan['analisa']['angsuran_bunga']))}} 
+				</p>
 			</div>
 		</div>
 		<div class="clearfix">&nbsp;</div>
 		<div class="clearfix">&nbsp;</div>
 		<div class="row">
-			<div class="col text-right">
-				{{Carbon\Carbon::now()->format('d/m/Y')}}
-			</div>
-		</div>
-		<div class="row">
-			<div class="col text-right">
-				Analis Kredit
-				<br/>
-				<br/>
-				<br/>
-				{{$permohonan['analisa']['analis']['nama']}}
+			<div class="col text-right pr-5">
+				<p class="mb-0">
+					{{Carbon\Carbon::now()->format('d/m/Y')}}
+				</p>
+				<p class="mb-0">Analis Kredit</p>
+				<div class="clearfix">&nbsp;</div>
+				<div class="clearfix">&nbsp;</div>
+				<div class="clearfix">&nbsp;</div>
+				<p>
+					{{ $permohonan['analisa']['analis']['nama'] }}
+				</p>
 			</div>
 		</div>
 

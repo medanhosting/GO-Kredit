@@ -188,7 +188,7 @@
 @endpush
 
 @push('js')
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhGU-wSjC89hoHPStx7bYGOjHpULJQHGI&libraries=places&callback=initAutocomplete" async defer></script>        
+	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDhGU-wSjC89hoHPStx7bYGOjHpULJQHGI&libraries=places&callback=initAutocomplete" async defer></script>        
 
 	// This example displays an address form, using the autocomplete feature
 	// of the Google Places API to help users fill in the information.
