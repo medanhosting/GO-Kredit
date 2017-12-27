@@ -11,81 +11,121 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
+				@slot('pre')
+					<h6 class="pt-4 pl-4">MUTASI JAMINAN</h6>
+				@endslot
 				@slot('body')
-				<div class="clearfix">&nbsp;</div>
-				<div class="row">
-					<div class="col-12">
-						<form action="{{route('jaminan.index', request()->all())}}" method="GET">
-							 <div class="input-group">
+					<form action="{{route('realisasi.index')}}" method="GET">
+						<div class="row">
+							<div class="col-sm-3">
+								<label>Cari Nasabah</label>
 							 	@foreach(request()->all() as $k => $v)
-							 		@if(!str_is($k, 'q'))
+							 		@if(!in_array($k, ['q_'.$pre,'sort_'.$pre,'jaminan_'.$pre]))
 								 		<input type="hidden" name="{{$k}}" value="{{$v}}">
 							 		@endif
 							 	@endforeach
-								<input type="text" name="q" class="form-control" placeholder="cari nomor sertifikat / bpkb atau nomor kredit" value="{{request()->get('q')}}">
-								<span class="input-group-btn">
-									<button class="btn btn-secondary" type="submit" style="background-color:#fff;color:#aaa;border-color:#ccc;border-radius: 0px">Go!</button>
-								</span>
+						 		<input type="hidden" name="current" value="{{$s_pre}}">
+								<input type="text" name="q_{{$s_pre}}" class="form-control w-100" placeholder="cari nama nasabah" value="{{request()->get('q_jaminan')}}">
 							</div>
-						</form>
-					</div>
-				</div>
-				<div class="clearfix">&nbsp;</div>
-				<table class="table table-hover">
-					<thead>
-						<tr class="text-center">
-							<th class="text-left">#</th>
-							<th>Dokumen</th>
-							<th>&nbsp;</th>
-						</tr>
-					</thead>
-					<tbody>
-						@php $lua = null @endphp
-						@forelse($jaminan as $k => $v)
-							@if($lua != $v['updated_at']->format('d/m/Y'))
-								<tr>
-									<td colspan="3" class="bg-light">
-										{{$v['updated_at']->format('d/m/Y')}}
+							<!-- CARI BERDASARKAN DOKUMEN -->
+							<div class="col-sm-3">
+								<label>Cari Dokumen</label>
+								<input type="text" name="doc_{{$s_pre}}" class="form-control w-100" placeholder="cari dokumen" value="{{request()->get('doc_jaminan')}}">
+							</div>
+							<!-- FILTER BERDASARKAN JAMINAN -->
+							<div class="col-sm-2">
+								<label>Filter Mutasi</label>
+								<select class="form-control" name="mutasi_{{$s_pre}}">
+									<option value="semua">Semua Mutasi</option>
+									<option value="jaminan-m" @if(str_is(request()->get('mutasi_jaminan'), 'jaminan-m')) selected @endif>Jaminan Masuk</option>
+									<option value="jaminan-k" @if(str_is(request()->get('mutasi_jaminan'), 'jaminan-k')) selected @endif>Jaminan Keluar</option>
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<label>Urutkan</label>
+								<!-- URUTKAN BERDASARKAN NAMA/TANGGAL -->
+								<select class="form-control" name="sort_{{$s_pre}}">
+									<option value="nama-asc" @if(str_is(request()->get('sort_jaminan'), 'nama-asc')) selected @endif>Nama [A - Z]</option>
+									<option value="nama-desc" @if(str_is(request()->get('sort_jaminan'), 'nama-desc')) selected @endif>Nama [Z - A]</option>
+									<option value="pinjaman-asc" @if(str_is(request()->get('sort_jaminan'), 'pinjaman-asc')) selected @endif>Pinjaman [1 - 10]</option>
+									<option value="pinjaman-desc" @if(str_is(request()->get('sort_jaminan'), 'pinjaman-desc')) selected @endif>Pinjaman [10 - 1]</option>
+								</select>
+							</div>
+						</div>
+						<div class="clearfix">&nbsp;</div>
+						<div class="row">
+							<!-- CARI BERDASARKAN DOKUMEN -->
+							<div class="col-sm-4">
+								<label>Cari Tanggal</label>
+								<input type="text" name="tanggal_{{$s_pre}}" class="form-control w-100" placeholder="cari tanggal" value="{{request()->get('tanggal_jaminan')}}">
+							</div>
+							<div class="col-sm-2 pl-1">
+								<label>&nbsp;</label><br/>
+								<button class="btn btn-primary" type="submit">Go!</button>
+							</div>
+						</div>
+					</form>
+
+					<div class="clearfix">&nbsp;</div>
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr class="text-center">
+								<th class="text-left">Nasabah</th>
+								<th colspan="2">Catatan</th>
+								<th>Dokumen</th>
+							</tr>
+						</thead>
+						<tbody>
+							@php $lua = null @endphp
+							@forelse($jaminan as $k => $v)
+								@if($lua != $v['updated_at']->format('d/m/Y'))
+									<tr>
+										<td colspan="4" class="bg-light">
+											{{$v['updated_at']->format('d/m/Y')}}
+										</td>
+									</tr>
+									@php $lua = $v['updated_at']->format('d/m/Y') @endphp
+								@endif
+								<tr class="text-center">
+									<td class="text-left">
+										{{$v['kredit']['nasabah']['nama']}}<br/>
+										{{$v['kredit']['nasabah']['telepon']}}
+									</td>
+									<td>
+										@if(is_null($v['taken_at']))
+											<i class="fa fa-arrow-down text-success"></i>
+										@else
+											<i class="fa fa-arrow-up text-danger"></i>
+										@endif
+									</td>
+									<td>
+										{{$v['description']}}
+									</td>
+									<td class="text-left">
+										@if(str_is($v['documents']['jenis'], 'shm'))
+											<h6>SHM</h6>
+											Nomor Sertifikat {{$v['documents']['shm']['nomor_sertifikat']}}<br/>
+											{{implode(', ', $v['documents']['shm']['alamat'])}}
+										@elseif(str_is($v['documents']['jenis'], 'shgb'))
+											<h6>SHGB</h6>
+											Nomor Sertifikat {{$v['documents']['shgb']['nomor_sertifikat']}}<br/>
+											{{implode(', ', $v['documents']['shgb']['alamat'])}}
+										@else
+											<h6>BPKB</h6>
+											Nomor BPKB {{$v['documents']['bpkb']['nomor_bpkb']}}<br/>
+											Kendaraan {{str_replace('_', ' ', $v['documents']['bpkb']['jenis'])}} - {{$v['documents']['bpkb']['merk']}} , {{$v['documents']['bpkb']['tipe']}} ({{$v['documents']['bpkb']['tahun']}})
+										@endif
 									</td>
 								</tr>
-								@php $lua = $v['updated_at']->format('d/m/Y') @endphp
-							@endif
-							<tr class="text-center">
-								<td class="text-left">
-									{{$v['nomor_kredit']}}
-								</td>
-								<td class="text-left">
-									@if(str_is($v['documents']['jenis'], 'shm'))
-										<h6>SHM</h6>
-										Nomor Sertifikat {{$v['documents']['shm']['nomor_sertifikat']}}<br/>
-										{{implode(', ', $v['documents']['shm']['alamat'])}}
-									@elseif(str_is($v['documents']['jenis'], 'shgb'))
-										<h6>SHGB</h6>
-										Nomor Sertifikat {{$v['documents']['shgb']['nomor_sertifikat']}}<br/>
-										{{implode(', ', $v['documents']['shgb']['alamat'])}}
-									@else
-										<h6>BPKB</h6>
-										Nomor BPKB {{$v['documents']['bpkb']['nomor_bpkb']}}<br/>
-										Kendaraan {{str_replace('_', ' ', $v['documents']['bpkb']['jenis'])}} - {{$v['documents']['bpkb']['merk']}} , {{$v['documents']['bpkb']['tipe']}} ({{$v['documents']['bpkb']['tahun']}})
-									@endif
-								</td>
-								<td>
-									@if(is_null($v['taken_at']))
-										<i class="fa fa-arrow-down text-success"></i>
-									@else
-										<i class="fa fa-arrow-up text-danger"></i>
-									@endif
-								</td>
-							</tr>
-						@empty
-							<tr>
-								<td colspan="3">
-									<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
-								</td>
-							</tr>
-						@endforelse
-					</tbody>
-				</table>
+							@empty
+								<tr>
+									<td colspan="4">
+										<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
+									</td>
+								</tr>
+							@endforelse
+						</tbody>
+					</table>
 				@endslot
 			@endcomponent
 		</div>

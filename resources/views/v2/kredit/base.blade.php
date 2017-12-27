@@ -4,10 +4,10 @@
 <a href="{{route('realisasi.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link {{ in_array(strtolower($active_submenu), ['realisasi']) ? 'active' : '' }}">
 	<i class="fa fa-hourglass-end"></i>&nbsp;&nbsp;Realisasi
 </a>
-<a href="{{route('jaminan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link {{ in_array(strtolower($active_submenu), ['simulasi']) ? 'active' : '' }}">
+<a href="{{route('jaminan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link {{ in_array(strtolower($active_submenu), ['jaminan']) ? 'active' : '' }}">
 	<i class="fa fa-exchange"></i>&nbsp;&nbsp;Mutasi Jaminan
 </a>
-<a href="#" class="nav-link {{ in_array(strtolower($active_submenu), ['permohonan']) ? 'active' : '' }}">
+<a href="{{route('tunggakan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link {{ in_array(strtolower($active_submenu), ['tunggakan']) ? 'active' : '' }}">
 	<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;Laporan Tunggakan
 </a>
 <a href="#" class="nav-link {{ in_array(strtolower($active_submenu), ['permohonan']) ? 'active' : '' }}">

@@ -17,7 +17,7 @@
 					</nav>
 					<div class="tab-content" id="nav-tabContent">
 						<div class="tab-pane fade {{$is_aktif_tab}}" id="nav-aktif" role="tabpanel" aria-labelledby="nav-aktif-tab">
-							@include('v2.kredit.table', ['data' => $aktif, 's_pre' => 'aktif'])
+							@include('v2.kredit.table', ['data' => $aktif, 'pre' => 'aktif'])
 						</div>
 					</div>
 				@endslot

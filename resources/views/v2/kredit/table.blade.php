@@ -41,8 +41,8 @@
 			<select class="form-control" name="sort_{{$s_pre}}">
 				<option value="nama-asc" @if(str_is(request()->get('sort_'.$s_pre), 'nama-asc')) selected @endif>Nama [A - Z]</option>
 				<option value="nama-desc" @if(str_is(request()->get('sort_'.$s_pre), 'nama-desc')) selected @endif>Nama [Z - A]</option>
-				<option value="pinjaman-asc" @if(str_is(request()->get('sort_'.$s_pre), 'pinjaman-asc')) selected @endif>Pokok Pinjaman [1 - 10]</option>
-				<option value="pinjaman-desc" @if(str_is(request()->get('sort_'.$s_pre), 'pinjaman-desc')) selected @endif>Pokok Pinjaman [10 - 1]</option>
+				<option value="pinjaman-asc" @if(str_is(request()->get('sort_'.$s_pre), 'pinjaman-asc')) selected @endif>Pinjaman [1 - 10]</option>
+				<option value="pinjaman-desc" @if(str_is(request()->get('sort_'.$s_pre), 'pinjaman-desc')) selected @endif>Pinjaman [10 - 1]</option>
 			</select>
 		</div>
 		<div class="col-sm-2 pl-1">

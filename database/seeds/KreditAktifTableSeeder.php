@@ -16,6 +16,7 @@ class KreditAktifTableSeeder extends Seeder
 		DB::table('k_angsuran_detail')->truncate();
 		DB::table('k_penagihan')->truncate();
 		DB::table('k_mutasi_jaminan')->truncate();
+		DB::table('k_surat_peringatan')->truncate();
 
 		$kredits 	= \Thunderlabid\Pengajuan\Models\Putusan::where('putusan', 'setuju')->get();
 

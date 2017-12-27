@@ -26,7 +26,7 @@
 	Route::get('/pilih/koperasi',			['as'	=> 'pilih.koperasi','uses' => 'DashboardController@pilih_koperasi']);
 
 	//FRESH START
-	Route::middleware(['auth', 'pilih_koperasi'])->group( function() {
+	Route::middleware(['auth', 'pilih_koperasi'])->prefix('v2')->group( function() {
 		Route::namespace('V2\Pengajuan')->group(function(){
 			Route::resource('simulasi', 		'SimulasiController'); 
 			Route::resource('pengajuan', 		'PengajuanController'); 
@@ -34,7 +34,8 @@
 		Route::namespace('V2\Kredit')->group(function(){
 			Route::resource('realisasi', 		'RealisasiController'); 
 			Route::resource('kredit', 			'KreditController'); 
-			Route::resource('jaminan', 			'MutasiJaminanController'); 
+			Route::resource('jaminan',			'MutasiJaminanController'); 
+			Route::resource('tunggakan', 		'TunggakanController'); 
 		});
 	});
 
@@ -80,7 +81,7 @@
 			Route::get('/realisasi/{id}/print/{mode}',		['as'	=> 'pengajuan.print', 	'uses' => 'PengajuanController@print', 'middleware' => 'scope:realisasi']);
 		});
 		
-		Route::prefix('kredit')->namespace('Kredit')->as('kredit.')->group( function() {
+		Route::prefix('v1/kredit')->namespace('Kredit')->as('kredit.')->group( function() {
 			Route::resource('angsuran', 		'AngsuranController');
 			Route::get('/angsuran/print/{id}',	['as'	=> 'angsuran.print', 	'uses' => 'AngsuranController@print']);
 			Route::resource('penagihan', 		'PenagihanController');

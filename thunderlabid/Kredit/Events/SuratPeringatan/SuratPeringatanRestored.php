@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunderlabid\Kredit\Events\BuktiRealisasi;
+namespace Thunderlabid\Kredit\Events\SuratPeringatan;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
@@ -10,9 +10,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-use Thunderlabid\Kredit\Models\BuktiRealisasi;
+use Thunderlabid\Kredit\Models\SuratPeringatan;
 
-class BuktiRealisasiCreated
+class SuratPeringatanRestored
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -22,7 +22,7 @@ class BuktiRealisasiCreated
      *
      * @return void
      */
-    public function __construct(BuktiRealisasi $data)
+    public function __construct(SuratPeringatan $data)
     {
         $this->data = $data;
     }
