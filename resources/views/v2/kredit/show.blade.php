@@ -33,6 +33,11 @@
 							</a>
 						</li>
 						<li class="nav-item">
+							<a class="nav-link {{$is_penagihan_tab}}" data-toggle="tab" href="#penagihan" role="tab">
+								Penagihan 
+							</a>
+						</li>
+						<li class="nav-item">
 							<a class="nav-link" data-toggle="tab" href="#jaminan" role="tab">
 								Mutasi Jaminan 
 							</a>
@@ -53,6 +58,10 @@
 						<!-- tab tunggakan -->
 						<div class="tab-pane {{$is_tunggakan_tab}}" id="tunggakan" role="tabpanel">
 							@include('v2.kredit.show.tunggakan')
+						</div>
+						<!-- tab penagihan -->
+						<div class="tab-pane {{$is_penagihan_tab}}" id="penagihan" role="tabpanel">
+							@include('v2.kredit.show.penagihan')
 						</div>
 						<!-- tab jaminan -->
 						<div class="tab-pane" id="jaminan" role="tabpanel">

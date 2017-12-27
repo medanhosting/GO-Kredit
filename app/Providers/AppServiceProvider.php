@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use Form;
+use Form, Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
 		Form::component('bsPassword'	, 'bootstrap.form.password'			, ['label' => null, 'name', 'attributes' => [], 'show_error' => true]);
 		Form::component('bsSubmit'		, 'bootstrap.form.submit'			, ['label' => null, 'attributes' => []]);
 		Form::component('bsIcon'		, 'bootstrap.icon'					, ['icon' => null, 'class' => null]);
-
+		Carbon::setLocale('id');
 	}
 
 	/**

@@ -66,6 +66,10 @@ class Penagihan extends Model
 		return $this->belongsto(Aktif::class, 'nomor_kredit', 'nomor_kredit');
 	}
 
+	public function suratperingatan(){
+		return $this->hasone(SuratPeringatan::class, 'nomor_kredit', 'nomor_kredit')->where('tanggal', '<=', 'tanggal')->orderby('created_at', 'desc');
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------
@@ -81,12 +85,39 @@ class Penagihan extends Model
 			;
 	}
 
+	public function scopeHitungTotalTunggakan($query){
+		return $query
+			->selectraw('k_penagihan.*')
+			->selectraw("(select sum(kad.amount) from k_angsuran_detail as kad left join k_nota_bayar as knb on knb.id = kad.nota_bayar_id where kad.nomor_kredit = k_penagihan.nomor_kredit and kad.tag in('bunga', 'pokok') and kad.tanggal <= k_penagihan.tanggal and (kad.nota_bayar_id is null or kad.tanggal <= knb.tanggal) ) as tunggakan")
+			;
+	}
+
+	public function scopeHitungHasilPenagihan($query){
+		return $query
+			->selectraw('k_penagihan.*')
+			->selectraw("(select sum(knb.jumlah) from k_nota_bayar as knb where knb.nomor_kredit = k_penagihan.nomor_kredit and knb.tanggal <= k_penagihan.tanggal) as penagihan")
+			;
+	}
+
+	public function scopeHitungNotaBayar($query){
+		return $query
+			->selectraw('k_penagihan.*')
+			->selectraw("(select sum(knb.jumlah) from k_nota_bayar as knb WHERE EXISTS (SELECT * FROM k_angsuran_detail as kad WHERE kad.nota_bayar_id = knb.id) and knb.penagihan_id = k_penagihan.id) as pelunasan")
+			->selectraw("(select sum(knb.jumlah) from k_nota_bayar as knb WHERE NOT EXISTS (SELECT * FROM k_angsuran_detail as kad WHERE kad.nota_bayar_id = knb.id) and knb.penagihan_id = k_penagihan.id) as titipan")
+			;
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
 	// ------------------------------------------------------------------------------------------------------------
 	public function setTanggalAttribute($variable)
 	{
 		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
+	}
+
+	public function setPenerimaAttribute($variable)
+	{
+		$this->attributes['penerima']	= json_encode($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -129,4 +160,8 @@ class Penagihan extends Model
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 
+	public function getPenerimaAttribute($variable)
+	{
+		return json_decode($this->attributes['penerima'], true);
+	}
 }

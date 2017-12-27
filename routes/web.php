@@ -36,6 +36,11 @@
 			Route::resource('kredit', 			'KreditController'); 
 			Route::resource('jaminan',			'MutasiJaminanController'); 
 			Route::resource('tunggakan', 		'TunggakanController'); 
+			Route::resource('penagihan', 		'PenagihanController'); 
+		});
+		Route::namespace('V2\Kantor')->group(function(){
+			Route::resource('kantor', 			'KantorController'); 
+			Route::resource('karyawan', 		'KaryawanController'); 
 		});
 	});
 

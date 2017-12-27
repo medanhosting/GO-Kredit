@@ -8,6 +8,7 @@ use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Kredit\Models\AngsuranDetail;
 use Thunderlabid\Kredit\Models\NotaBayar;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
+use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
 use App\Http\Service\Policy\FeedBackPenagihan;
@@ -48,6 +49,7 @@ class KreditController extends Controller
 
 		$latest_pay = NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
 		$riwayat_t 	= SuratPeringatan::where('nth', '<>', $tunggakan['nth'])->orderby('nth', 'desc')->get();
+		$penagihan 	= Penagihan::wherehas('kredit', function($q)use($id){$q->where('kode_kantor', request()->get('kantor_aktif_id'))->where('id', $id);})->HitungNotaBayar()->orderby('tanggal', 'asc')->get();
 
 		$jaminan 	= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->get();
 
@@ -55,6 +57,9 @@ class KreditController extends Controller
 			switch (strtolower(request()->get('current'))) {
 				case 'tunggakan':
 					view()->share('is_tunggakan_tab', 'show active');
+					break;
+				case 'penagihan':
+					view()->share('is_penagihan_tab', 'show active');
 					break;
 				default:
 					view()->share('is_kredit_tab', 'show active');
@@ -68,7 +73,7 @@ class KreditController extends Controller
 		view()->share('active_submenu', 'kredit');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-		$this->layout->pages 	= view('v2.kredit.show', compact('aktif', 'angsuran', 'total', 'tunggakan', 'latest_pay', 'riwayat_t', 'jaminan'));
+		$this->layout->pages 	= view('v2.kredit.show', compact('aktif', 'angsuran', 'total', 'tunggakan', 'latest_pay', 'riwayat_t', 'penagihan', 'jaminan'));
 		return $this->layout;
 	}
 
