@@ -122,18 +122,28 @@
 								</div>
 							</div>
 							<div id="putusan-panel" {!! ($is_active_putusan) ? 'style=""' : 'style="display: none;"' !!}>
-								@if (isset($putusan))
-									@include('v2.pengajuan.putusan.list')
-								@else
+								<div class="clearfix">&nbsp;</div>
+								<div class="row">
 									@if(str_is($permohonan['status_terakhir']['status'], 'putusan') && !str_is($permohonan['progress'], 'sudah'))
-										@include('v2.pengajuan.putusan.form')
+										<div class="col-3">
+											@include('v2.pengajuan.putusan.sidebar')
+										</div>
+										<div class="col-9">
+											@if (isset($putusan))
+												@include('v2.pengajuan.putusan.list')
+											@else
+												@include('v2.pengajuan.putusan.form')
+											@endif
+										</div>
 									@else
-										<p class="lead mt-3 text-center">
-											<i class="fa fa-info-circle"></i> 
-											Maaf data belum tersedia, karena status masih dalam {{ ucwords($permohonan['status_terakhir']['status']) }}
-										</p>
+										<div class="col-12">
+											<p class="lead mt-3 text-center">
+												<i class="fa fa-info-circle"></i> 
+												Maaf data belum tersedia, karena status masih dalam {{ ucwords($permohonan['status_terakhir']['status']) }}
+											</p>
+										</div>
 									@endif
-								@endif
+								</div>
 							</div>
 							<div class="clearfix">&nbsp;</div>
 						</div>
