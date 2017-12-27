@@ -31,22 +31,22 @@
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs underline" role="tablist">
 								<li class="nav-item">
-									<a class="nav-link active" data-toggle="tab" id="permohonan-menu" role="tab" href="#">
+									<a class="nav-link {{ $is_active_permohonan }}" data-toggle="tab" id="permohonan-menu" role="tab" href="#">
 										Permohonan
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" data-toggle="tab" id="survei-menu" role="tab" href="#">
+									<a class="nav-link {{ $is_active_survei }}" data-toggle="tab" id="survei-menu" role="tab" href="#">
 										Survei
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" data-toggle="tab" id="analisa-menu" role="tab" href="#">
+									<a class="nav-link {{ $is_active_analisa }}" data-toggle="tab" id="analisa-menu" role="tab" href="#">
 										Analisa
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" data-toggle="tab" id="putusan-menu" role="tab" href="#">
+									<a class="nav-link {{ $is_active_putusan }}" data-toggle="tab" id="putusan-menu" role="tab" href="#">
 										Putusan
 									</a>
 								</li>
@@ -56,7 +56,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							{{-- PERMOHONAN --}}
-							<div id="permohonan-panel">
+							<div id="permohonan-panel" {!! ($is_active_permohonan) ? 'style=""' : 'style="display: none;"' !!}>
 								<div class="clearfix">&nbsp;</div>
 								<div class="row">
 									<div class="col-3">
@@ -73,7 +73,7 @@
 								<div class="clearfix">&nbsp;</div>
 							</div>
 							{{-- SURVEI --}}
-							<div id="survei-panel">
+							<div id="survei-panel" {!! ($is_active_survei) ? 'style=""' : 'style="display: none;"' !!}>
 								<div class="clearfix">&nbsp;</div>
 								<div class="row">
 									@if(str_is($permohonan['status_terakhir']['status'], 'survei'))
@@ -97,21 +97,31 @@
 									@endif	
 								</div>
 							</div>
-							<div id="analisa-panel">
-								@if (isset($analisa))
-									@include('v2.pengajuan.analisa.list')
-								@else
+							<div id="analisa-panel" {!! ($is_active_analisa) ? 'style=""' : 'style="display: none;"' !!}>
+								<div class="clearfix">&nbsp;</div>
+								<div class="row">
 									@if(str_is($permohonan['status_terakhir']['status'], 'analisa'))
-										@include('v2.pengajuan.analisa.form')
+										<div class="col-3">
+											@include('v2.pengajuan.analisa.sidebar')
+										</div>
+										<div class="col-9">
+											@if (isset($analisa))
+												@include('v2.pengajuan.analisa.list')
+											@else
+												@include('v2.pengajuan.analisa.form')
+											@endif
+										</div>
 									@else
-										<p class="lead mt-3 text-center">
-											<i class="fa fa-info-circle"></i> 
-											Maaf data belum tersedia, karena status masih dalam {{ ucwords($permohonan['status_terakhir']['status']) }}
-										</p>
+										<div class="col-12">
+											<p class="lead mt-3 text-center">
+												<i class="fa fa-info-circle"></i> 
+												Maaf data belum tersedia, pengajuan masih dalam status "<strong>{{ ucwords($permohonan['status_terakhir']['status']) }}</strong>"
+											</p>
+										</div>
 									@endif
-								@endif
+								</div>
 							</div>
-							<div id="putusan-panel">
+							<div id="putusan-panel" {!! ($is_active_putusan) ? 'style=""' : 'style="display: none;"' !!}>
 								@if (isset($putusan))
 									@include('v2.pengajuan.putusan.list')
 								@else
@@ -143,11 +153,6 @@
 
 @push('js')
 	<script type="text/javascript">
-		$("#permohonan-panel").fadeIn('fast');
-		$("#survei-panel").fadeOut('fast');
-		$("#analisa-panel").fadeOut('fast');
-		$("#putusan-panel").fadeOut('fast');
-
 		$("#permohonan-menu").click(function(){
 			$("#permohonan-panel").fadeIn('fast');
 			$("#survei-panel").fadeOut('fast');

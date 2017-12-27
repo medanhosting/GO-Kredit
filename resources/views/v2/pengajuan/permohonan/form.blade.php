@@ -401,10 +401,10 @@
 									{!! Form::vText('Berlaku Hingga', 'jaminan_tanah_bangunan[1][masa_berlaku_sertifikat]', null, ['class' => 'jtbmaber mask-year form-control text-info inline-edit', 'placeholder' => '2000'], true) !!}
 								</div>
 								
-								{!! Form::vText('L. Tanah', 'jaminan_tanah_bangunan[1][luas_tanah]', null, ['class' => 'jtbltanah form-control text-info inline-edit', 'placeholder' => '36'], true) !!}
+								{!! Form::vText('L. Tanah', 'jaminan_tanah_bangunan[1][luas_tanah]', null, ['class' => 'jtbltanah form-control text-info inline-edit', 'placeholder' => '36'], true, null, null, 'M<sup>2</sup>',  ['class_input_group' => 'w-50', 'class_input_group_append' => 'border-0 bg-white']) !!}
 							
 								<div class="laban" style="display: none;">
-									{!! Form::vText('L. Bangunan', 'jaminan_tanah_bangunan[1][luas_bangunan]', null, ['class' => 'jtblbangunan form-control text-info inline-edit', 'placeholder' => '24'], true) !!}
+									{!! Form::vText('L. Bangunan', 'jaminan_tanah_bangunan[1][luas_bangunan]', null, ['class' => 'jtblbangunan form-control text-info inline-edit', 'placeholder' => '24'], true, null, null, 'M<sup>2</sup>',  ['class_input_group' => 'w-50', 'class_input_group_append' => 'border-0 bg-white']) !!}
 								</div>
 
 								@include('templates.alamat.v-ajax-alamat', ['kecamatan' => $kantor_aktif['alamat']['kecamatan'], 'kota' => $kantor_aktif['alamat']['kota'], 'prefix' => 'jaminan_tanah_bangunan[1][alamat]', 'alamat' => $kantor_aktif['alamat'], 'class' => 'jtbalamat'])

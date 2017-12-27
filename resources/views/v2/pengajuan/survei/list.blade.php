@@ -65,7 +65,7 @@
 		@endforeach
 	</div>
 
-	<div class="tab-pane {{$is_survei_condition_tab}}" id="condition" role="tabpanel">
+	<div class="tab-pane fade {{$is_survei_condition_tab}}" id="condition" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		@foreach($survei['condition']['dokumen_survei']['condition'] as $k => $v )
 			@if(is_array($v))
@@ -100,7 +100,7 @@
 		@endforeach
 	</div>
 
-	<div class="tab-pane {{$is_survei_capacity_tab}}" id="capacity" role="tabpanel">
+	<div class="tab-pane fade {{$is_survei_capacity_tab}}" id="capacity" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		@foreach($survei['capacity']['dokumen_survei']['capacity'] as $k => $v )
 			<div class="row">
@@ -161,7 +161,7 @@
 		@endforeach
 	</div>
 
-	<div class="tab-pane {{$is_survei_capital_tab}}" id="capital" role="tabpanel">
+	<div class="tab-pane fade {{$is_survei_capital_tab}}" id="capital" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		@foreach($survei['capital']['dokumen_survei']['capital'] as $k => $v )
 			<div class="row">
@@ -178,7 +178,11 @@
 									</div> 
 									<div class="col-sm-8 text-left">
 										<p class="mb-1">
-											{{ ucfirst(strtolower(str_replace('_', ' ', $v3))) }}
+											@if (in_array($k3, ['lama_menempati', 'masa_sewa', 'lama_angsuran', 'lama_usaha', 'jangka_waktu']))
+												{{ ucfirst(strtolower(str_replace('_', ' ', $v3))) }} Tahun
+											@else
+												{{ ucfirst(strtolower(str_replace('_', ' ', $v3))) }}
+											@endif
 										</p>
 									</div> 
 								</div>
@@ -192,7 +196,15 @@
 								</div> 
 								<div class="col-sm-8 text-left">
 									<p class="mb-1">
-										{{ ucfirst(strtolower(str_replace('_', ' ', $v2))) }}
+										@if (in_array($k2, ['lama_menempati', 'masa_sewa', 'lama_angsuran', 'lama_usaha', 'jangka_waktu']))
+											{{ ucfirst(strtolower(str_replace('_', ' ', $v2))) }} Tahun
+										@elseif (in_array($k2, ['luas_rumah']))
+											{{ ucfirst(strtolower(str_replace('_', ' ', $v2))) }} M<sup>2</sup>
+										@elseif (in_array($k2, ['panjang_rumah', 'lebar_rumah']))
+											{{ ucfirst(strtolower(str_replace('_', ' ', $v2))) }} M
+										@else
+											{{ ucfirst(strtolower(str_replace('_', ' ', $v2))) }}
+										@endif
 									</p>
 								</div> 
 							</div>
@@ -203,7 +215,7 @@
 		@endforeach
 	</div>
 
-	<div class="tab-pane {{$is_survei_collateral_tab}}" id="collateral" role="tabpanel">
+	<div class="tab-pane fade {{$is_survei_collateral_tab}}" id="collateral" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		@foreach($survei['collateral'] as $k0 => $v0 )
 			<p class="text-secondary mt-2"><strong><u>{{strtoupper(str_replace('_', ' ', $v0['jenis']))}} {{($k0+1)}} </u></strong></p>
@@ -224,12 +236,12 @@
 											@if(is_array($v2))
 												@foreach($v2 as $k3 => $v3)
 													<div class="row">
-														<div class="col-sm-4 text-right">
+														<div class="col text-right">
 															<p class="text-secondary mb-1">
 																{{strtoupper(str_replace('_', ' ', $k3))}}
 															</p>
 														</div> 
-														<div class="col-sm-8 text-left">
+														<div class="col-sm-7 text-left">
 															<p class="mb-1">
 																{{ ucfirst(strtolower(str_replace('_', ' ', $v3))) }}
 															</p>
@@ -238,20 +250,26 @@
 												@endforeach
 											@else
 												<div class="row">
-													<div class="col-sm-4 text-right">
+													<div class="col text-right">
 														<p class="text-secondary mb-1">
 															{{strtoupper(str_replace('_', ' ', $k2))}}
 														</p>
 													</div> 
-													<div class="col-sm-8 text-left">
+													<div class="col-sm-7 text-left">
 														<p class="mb-1">
-															{{ ucfirst(strtolower(str_replace('_', ' ', $v2))) }}
+															@if (in_array($k2, ['luas_tanah', 'luas_bangunan']))
+																{{ ucfirst(strtolower(str_replace('_', ' ', $v2))) }} M<sup>2</sup>
+															@elseif (in_array($k2, ['panjang_tanah', 'lebar_tanah', 'lebar_bangunan', 'panjang_bangunan']))
+																{{ ucfirst(strtolower(str_replace('_', ' ', $v2))) }} M
+															@else
+																{{ ucfirst(strtolower(str_replace('_', ' ', $v2))) }}
+															@endif
 														</p>
 													</div> 
 												</div>
 											@endif
 
-											@if ($loop->last)
+											@if ($loop->iteration % 6 == 0)
 												<div class="clearfix">&nbsp;</div>
 											@endif
 										@endforeach

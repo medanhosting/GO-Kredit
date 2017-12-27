@@ -117,7 +117,7 @@
 			<div class="clearfix">&nbsp;</div>
 		@endforeach
 	</div>
-
+	
 	<!-- TAB JAMINAN -->
 	<div class="tab-pane" id="jaminan" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
@@ -137,7 +137,11 @@
 						</div> 
 						<div class="col-sm-8 text-left" >
 							<p class="mb-1">
-								{{ ucwords(str_replace('_', ' ', $v2)) }}
+								@if (in_array($k2, ['luas_tanah', 'luas_bangunan']))
+									{{ ucwords(str_replace('_', ' ', $v2)) }} M<sup>2</sup>
+								@else
+									{{ ucwords(str_replace('_', ' ', $v2)) }}
+								@endif
 							</p>
 						</div> 
 					</div>

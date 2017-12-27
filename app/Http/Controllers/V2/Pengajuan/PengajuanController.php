@@ -80,6 +80,16 @@ class PengajuanController extends Controller
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 			HelperController::variable_list_select();
 
+			if ($permohonan['status_terakhir']['status'] == 'permohonan') {
+				view()->share('is_active_permohonan', 'active');
+			} elseif ($permohonan['status_terakhir']['status'] == 'survei') {
+				view()->share('is_active_survei', 'active');
+			} elseif ($permohonan['status_terakhir']['status'] == 'analisa') {
+				view()->share('is_active_analisa', 'active');
+			} elseif ($permohonan['status_terakhir']['status'] == 'putusan') {
+				view()->share('is_active_putusan', 'active');
+			}
+
 			$this->layout->pages 	= view('v2.pengajuan.show', compact('permohonan', 'survei', 'analisa', 'putusan', 'r_nasabah'));
 			return $this->layout;
 
