@@ -25,9 +25,11 @@ use Thunderlabid\Manajemen\Events\Orang\OrangUpdating;
 use Thunderlabid\Manajemen\Events\Orang\OrangDeleted;
 use Thunderlabid\Manajemen\Events\Orang\OrangDeleting;
 
+use Laravel\Passport\HasApiTokens;
+
 class Orang extends Authenticatable
 {
-	use Notifiable, SoftDeletes;
+	use Notifiable, SoftDeletes, HasApiTokens;
 
 	protected $table 	= 'm_orang';
 	protected $fillable = [ 'nip', 'nama', 'email', 'password', 'alamat', 'telepon'];
@@ -141,4 +143,8 @@ class Orang extends Authenticatable
 	{
 		return $this->errors;
 	}
+
+	public function findForPassport($identifier) {
+        return $this->where('nip', $identifier)->first();
+}
 }

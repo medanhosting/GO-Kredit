@@ -19,20 +19,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 //LOGIN API
 
-Route::group(['namespace' => 'API'], function(){
-	Route::any('/check/device',					['uses' => 'LoginController@post_login_device']);
-	Route::any('/check/user',					['uses' => 'LoginController@post_login_with_username']);
-	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi', 'middleware' => 'device']);
-	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store', 'middleware' => 'device']);
-	Route::any('/permohonan/index',				['uses' => 'PermohonanController@index', 'middleware' => 'device']);
+Route::namespace('API')->group(function(){
+	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi']);
+	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store']);
+	Route::any('/permohonan/index',				['uses' => 'PermohonanController@index']);
 	
 	//UPLOAD FILE
-	Route::any('/simpan/gambar',	['uses' => 'UploadGambarController@store', 'middleware' => 'device']);
-	Route::any('/hapus/gambar',		['uses' => 'UploadGambarController@destroy', 'middleware' => 'device']);
+	Route::any('/simpan/gambar',	['uses' => 'UploadGambarController@store']);
+	Route::any('/hapus/gambar',		['uses' => 'UploadGambarController@destroy']);
 
 	//SURVEI
-	Route::any('/survei/index',										['uses' => 'SurveiController@index', 'middleware' => 'device']);
-	Route::any('/survei/{pengajuan_id}/foto/{survei_detail_id}',	['uses' => 'SurveiController@simpan_foto', 'middleware' => 'device']);
+	Route::any('/survei/index',										['uses' => 'SurveiController@index']);
+	Route::any('/survei/{pengajuan_id}/foto/{survei_detail_id}',	['uses' => 'SurveiController@simpan_foto']);
 });
 
 Route::middleware('device')->group( function() {

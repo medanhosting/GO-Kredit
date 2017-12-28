@@ -8,6 +8,7 @@ use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Jaminan;
 use Thunderlabid\Manajemen\Models\Kantor;
 
+use App\Service\Api\ResponseTrait;
 use App\Http\Service\UI\UploadBase64Gambar;
 use App\Http\Service\Policy\PerhitunganBunga;
 
@@ -15,13 +16,29 @@ use Exception, Response, DB, Carbon\Carbon;
 
 class PermohonanController extends BaseController
 {
-	public function __construct()
+	use ResponseTrait;
+
+	public function simulasi($mode)
 	{
-		// parent::__construct();
+		$rincian 	= [];
 
-		// $this->middleware('scope:permohonan');
+		if(request()->has('kemampuan_angsur') && request()->has('pokok_pinjaman'))
+		{
+			if($mode=='pa')
+			{
+				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/12);
+				$rincian 	= $rincian->pa();
+			}
+			elseif($mode=='pt')
+			{
+				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/12);
+				$rincian 	= $rincian->pt();
+			}
+		}
+
+		return response()->json(['status' => 1, 'data' => $rincian, 'error' => ['message' => []]]);
 	}
-
+	
 	public function store()
 	{
 		try {
@@ -103,10 +120,10 @@ class PermohonanController extends BaseController
 
 			DB::commit();
 
-			return Response::json(['status' => 1, 'data' => $pengajuan->toArray()]);
+			return response()->json(['status' => 1, 'data' => $pengajuan->toArray(), 'error' => ['message' => []]]);
 		} catch (Exception $e) {
 			DB::rollback();
-			return Response::json(['status' => 0, 'data' => [], 'pesan' => $e->getMessage()]);
+			return $this->error_response(request()->all(), $e);
 		}
 	}
 
@@ -129,26 +146,6 @@ class PermohonanController extends BaseController
 		}
 	}
 
-	public function simulasi($mode)
-	{
-		$rincian 	= [];
-
-		if(request()->has('kemampuan_angsur') && request()->has('pokok_pinjaman'))
-		{
-			if($mode=='pa')
-			{
-				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/12);
-				$rincian 	= $rincian->pa();
-			}
-			elseif($mode=='pt')
-			{
-				$rincian 	= new PerhitunganBunga(request()->get('pokok_pinjaman'), request()->get('kemampuan_angsur'), request()->get('bunga_per_tahun')/12);
-				$rincian 	= $rincian->pt();
-			}
-		}
-
-		return Response::json(['status' => 1, 'data' => $rincian]);
-	}
 
 	private function count_distance($delta_lat, $delta_lon)
     {

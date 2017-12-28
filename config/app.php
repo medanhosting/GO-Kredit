@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         // Barryvdh\Debugbar\ServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
 
         Thunderlabid\Manajemen\ManajemenServiceProvider::class,
         Thunderlabid\Pengajuan\PengajuanServiceProvider::class,
