@@ -11,8 +11,8 @@
 			@foreach($survei['surveyor'] as $k => $v)
 				<p class="mb-0">- {{$v['nama']}}</p>
 			@endforeach
+			<hr/>
 		@endif
-		<hr/>
 
 		{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 			<div class="row">
