@@ -97,6 +97,7 @@ class PerhitunganBunga
 			//kredit diusulkan
 			$kredit_update 	= $bulan * $k_angs;
 
+			$rincian['jenis_pinjaman']	= 'pa';
 			$rincian['lama_angsuran']	= $bulan;
 			$rincian['provisi']			= $this->formatMoneyTo($p_pinjaman * $this->perc_provisi);
 			$rincian['administrasi']	= $this->formatMoneyTo($p_pinjaman * $this->perc_administrasi);
@@ -169,6 +170,7 @@ class PerhitunganBunga
 			$bulan 			= 6;
 
 			//kredit diusulkan
+			$rincian['jenis_pinjaman']	= 'pt';
 			$rincian['lama_angsuran']	= $bulan;
 			$rincian['provisi']			= $this->formatMoneyTo($p_pinjaman * $this->perc_provisi);
 			$rincian['administrasi']	= $this->formatMoneyTo($p_pinjaman * $this->perc_administrasi);
