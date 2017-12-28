@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 
 use App\Http\Service\UI\UploadBase64Gambar;
-use Exception, Response;
+use Exception, Response, Auth;
 
 /**
  * Class UploadGambarController
@@ -19,24 +19,24 @@ Class UploadGambarController extends Controller
 	{		
 		try {
 			//1. find latest survei
-			if(request()->has('nip_karyawan'))
+			if(Auth::user())
 			{
 				$foto		= base64_decode(request()->get('foto'));
 				$fotos		= new UploadBase64Gambar('survei', $foto);
 				$fotos		= $fotos->handle();
 
-				return Response::json(['status' => 1, 'data' => $fotos]);
+				return response()->json(['status' => 1, 'data' => $fotos, 'error' => ['message' => []]]);
 			}
 
-			return Response::json(['status' => 1, 'data' => []]);
+			return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => []]]);
 		} catch (Exception $e) {
-			return Response::json(['status' => 0, 'data' => [], 'pesan' => $e->getMessage()]);
+			return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => $e->getMessage()]]);
 		}
 	}
 
 	public function destroy()
 	{
-		if(request()->has('nip_karyawan'))
+		if(Auth::user())
 		{
 			$filename	= request()->get('foto')['url'];
 			$filename 	= str_replace(url('/'), public_path(), $filename);
@@ -45,10 +45,10 @@ Class UploadGambarController extends Controller
 			{
 				unlink($filename);
 
-				return Response::json(['status' => 1, 'data' => []]);
+				return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => []]]);
 			}
 		} 
 
-		return Response::json(['status' => 0, 'data' => [], 'pesan' => ['Data tidak ada!']]);
+		return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => ['foto[url]' => 'Data tidak ada!']]]);
 	}
 }

@@ -7,12 +7,13 @@ use Illuminate\Routing\Controller as BaseController;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Jaminan;
 use Thunderlabid\Manajemen\Models\Kantor;
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
 use App\Service\Api\ResponseTrait;
 use App\Http\Service\UI\UploadBase64Gambar;
 use App\Http\Service\Policy\PerhitunganBunga;
 
-use Exception, Response, DB, Carbon\Carbon;
+use Exception, Response, DB, Carbon\Carbon, Auth;
 
 class PermohonanController extends BaseController
 {
@@ -43,9 +44,10 @@ class PermohonanController extends BaseController
 	{
 		try {
 			//1. find perfect location
-			if(request()->has('nip_karyawan')){
-				$data_input['nip_ao']		= request()->get('nip_karyawan');
-				$data_input['kode_kantor']	= request()->get('kode_kantor');
+			if(Auth::user()){
+				$penempatankaryawan			= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active(Carbon::now())->first();
+				$data_input['nip_ao']		= Auth::user()['nip'];
+				$data_input['kode_kantor']	= $penempatankaryawan['kantor_id'];
 			}
 			else{
 				$location 			= request()->get('geolocation');
@@ -131,18 +133,18 @@ class PermohonanController extends BaseController
 	{
 		try {
 			//1. find pengajuan
-			if(request()->has('nip_karyawan')){
-				$pengajuan	= Pengajuan::status('permohonan')->where('ao->nip', request()->get('nip_karyawan'))->get();
+			if(Auth::user()){
+				$pengajuan	= Pengajuan::status('permohonan')->where('ao->nip', Auth::user()['nip'])->get();
 			}
 			else{
 				$phone		= request()->get('mobile');
 				$pengajuan	= Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->get();
 			}
 
-			return Response::json(['status' => 1, 'data' => $pengajuan->toArray()]);
+			return response()->json(['status' => 1, 'data' => $pengajuan->toArray(), 'error' => ['message' => []]]);
 
 		} catch (Exception $e) {
-			return Response::json(['status' => 0, 'data' => [], 'pesan' => $e->getMessage()]);
+			return response()->json(['status' => 0, 'data' => [], 'error' => ['message' => []]]);
 		}
 	}
 
