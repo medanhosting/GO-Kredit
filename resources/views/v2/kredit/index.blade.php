@@ -15,7 +15,6 @@
 					<h5 class="pt-4 pl-3 mb-0">&nbsp;&nbsp;KREDIT</h5>
 				@endslot
 				@slot ('body')
-				<div class="card-body">
 					<div class="row">
 						<div class="col-12 col-sm-12 col-md-12">
 							<nav class="nav nav-tabs underline" id="myTab" role="tablist">
