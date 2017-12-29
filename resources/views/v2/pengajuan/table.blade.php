@@ -44,6 +44,7 @@
 <div class="float-right">
 	{{ $data->appends(array_merge(request()->all(), ['current' => $s_pre]))->links('vendor.pagination.default') }}
 </div>
+<div class="clearfix">&nbsp;</div>
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>

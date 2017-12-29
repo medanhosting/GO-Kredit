@@ -12,11 +12,16 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('pre')
-					<h6 class="pt-4 pl-3">&nbsp;&nbsp;REALISASI KREDIT</h6>
+					<h5 class="pt-4 pl-3 mb-0">&nbsp;&nbsp;REALISASI KREDIT</h5>
 				@endslot
-				@slot('body')
-					@include('v2.kredit.realisasi.table', ['data' => $realisasi, 's_pre' => 'realisasi'])
-				@endslot
+				
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 col-sm-12 col-md-12">
+							@include('v2.kredit.realisasi.table', ['data' => $realisasi, 's_pre' => 'realisasi'])
+						</div>
+					</div>
+				</div>
 			@endcomponent
 		</div>
 	</div>

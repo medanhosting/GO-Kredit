@@ -10953,3 +10953,7 @@ button {
   border-bottom: 2px solid #ced4da !important;
 }
 
+.modal-xl {
+  max-width: 1024px;
+}
+

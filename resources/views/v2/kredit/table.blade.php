@@ -20,7 +20,7 @@
 		<!-- FILTER BERDASARKAN JAMINAN -->
 		<div class="col-sm-2">
 			<label>Filter Jaminan</label>
-			<select class="form-control" name="jaminan_{{$s_pre}}">
+			<select class="form-control custom-select" name="jaminan_{{$s_pre}}">
 				<option value="semua">Semua Jaminan</option>
 				<option value="jaminan-bpkb" @if(str_is(request()->get('jaminan_'.$s_pre), 'jaminan-bpkb')) selected @endif>Jaminan BPKB</option>
 				<option value="jaminan-sertifikat" @if(str_is(request()->get('jaminan_'.$s_pre), 'jaminan-sertifikat')) selected @endif>Jaminan Sertifikat</option>
@@ -29,7 +29,7 @@
 		<!-- FILTER BERDASARKAN JAMINAN -->
 		<div class="col-sm-3">
 			<label>Filter Jenis Pinjaman</label>
-			<select class="form-control" name="pinjaman_{{$s_pre}}">
+			<select class="form-control custom-select" name="pinjaman_{{$s_pre}}">
 				<option value="semua">Semua Jenis Pinjaman</option>
 				<option value="pinjaman-a" @if(str_is(request()->get('pinjaman_'.$s_pre), 'pinjaman-a')) selected @endif>Pinjaman Angsuran</option>
 				<option value="pinjaman-t" @if(str_is(request()->get('pinjaman_'.$s_pre), 'pinjaman-t')) selected @endif>Pinjaman Musiman</option>
@@ -38,7 +38,7 @@
 		<div class="col-sm-2">
 			<label>Urutkan</label>
 			<!-- URUTKAN BERDASARKAN NAMA/TANGGAL -->
-			<select class="form-control" name="sort_{{$s_pre}}">
+			<select class="form-control custom-select" name="sort_{{$s_pre}}">
 				<option value="nama-asc" @if(str_is(request()->get('sort_'.$s_pre), 'nama-asc')) selected @endif>Nama [A - Z]</option>
 				<option value="nama-desc" @if(str_is(request()->get('sort_'.$s_pre), 'nama-desc')) selected @endif>Nama [Z - A]</option>
 				<option value="pinjaman-asc" @if(str_is(request()->get('sort_'.$s_pre), 'pinjaman-asc')) selected @endif>Pinjaman [1 - 10]</option>
@@ -57,6 +57,7 @@
 <div class="float-right">
 	{{ $data->appends(array_merge(request()->all(), ['current' => $s_pre]))->links() }}
 </div>
+<div class="clearfix">&nbsp;</div>
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>
@@ -64,11 +65,11 @@
 			<th rowspan="2" class="align-middle text-center">Nama</th>
 			<th rowspan="2" class="align-middle text-center">Jaminan</th>
 			<th rowspan="2" class="align-middle text-center">Jenis Pinjaman</th>
-			<th rowspan="2" class="align-middle text-center">Pokok Pinjaman</th>
+			<th rowspan="2" class="align-middle text-right">Pokok Pinjaman</th>
 			<th colspan="2" class="text-center">Pembayaran Berikut</th>
 		</tr>
 		<tr>
-			<th class="text-right">Tanggal</th>
+			<th class="text-center">Tanggal</th>
 			<th class="text-right">Jumlah</th>
 		</tr>
 	</thead>
@@ -78,18 +79,18 @@
 				<td>{{ $data->firstItem() + $k }} </td>
 				<td>{{$v['nasabah']['nama']}}</td>
 				<td>
-					<p>
 					@foreach($v['jaminan'] as $k)
-						{{strtoupper($k['documents']['jenis'])}} Nomor : {{strtoupper($k['documents'][$k['documents']['jenis']]['nomor_bpkb'])}}
-						{{strtoupper($k['documents'][$k['documents']['jenis']]['nomor_sertifikat'])}}<br/>
+						<p class="mb-1">
+							{{strtoupper($k['documents']['jenis'])}} Nomor : {{strtoupper($k['documents'][$k['documents']['jenis']]['nomor_bpkb'])}}
+							{{strtoupper($k['documents'][$k['documents']['jenis']]['nomor_sertifikat'])}}
+						</p>
 					@endforeach
-					</p>
 				</td>
-				<td>
+				<td class="text-center">
 					{{$glossary::pinjaman($v['jenis_pinjaman'])}}
 				</td>
 				<td class="text-right">{{$v['plafon_pinjaman']}}</td>
-				<td class="text-right">
+				<td class="text-center">
 					{{$tanggal->formatDatetimeTo($v['tanggal_pembayaran_berikut'])}}
 				</td>
 				<td class="text-right">
