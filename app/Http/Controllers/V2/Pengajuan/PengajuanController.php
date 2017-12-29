@@ -82,6 +82,7 @@ class PengajuanController extends Controller
 			$putusan 		= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
 			$r_nasabah 		= $this->riwayat_kredit_nasabah($permohonan['nasabah']['nik'], $id);
 
+			view()->share('active_submenu', 'pengajuan');
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 			HelperController::variable_list_select();
 

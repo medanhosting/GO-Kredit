@@ -10957,3 +10957,7 @@ button {
   max-width: 1024px;
 }
 
+.sidebar-plain .active {
+  border-right: 4px solid #009688;
+}
+

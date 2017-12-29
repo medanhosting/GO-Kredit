@@ -52,7 +52,7 @@ class PutusanController extends Controller
 			view()->share('active_submenu', 'putusan');
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-			$this->layout->pages 	= view('v2.realisasi.show', compact('realisasi'));
+			$this->layout->pages 	= view('v2.putusan.show', compact('realisasi'));
 			return $this->layout;
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());
