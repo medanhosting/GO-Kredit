@@ -50,11 +50,11 @@
 		<div class="clearfix">&nbsp;</div>
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
 		@if(is_null($permohonan['id']))
-			{!! Form::open(['url' => route('pengajuan.permohonan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id])]) !!}
+			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id])]) !!}
 		@else
-			{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 		@endif
-		
+			{!!Form::hidden('kantor_aktif_id', $kantor_aktif_id)!!}
 			<div class="row">
 				<div class="col">
 					{!! Form::vText('Pokok Pinjaman', 'pokok_pinjaman', $permohonan['pokok_pinjaman'], ['class' => 'form-control mask-money inline-edit border-input w-25 text-info pb-1', 'placeholder' => 'pokok pinjaman'], true, 'Min. Rp. 2.500.000') !!}
@@ -74,10 +74,11 @@
 		<div class="clearfix">&nbsp;</div>
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
 		@if(is_null($permohonan['id']))
-			{!! Form::open(['url' => route('pengajuan.permohonan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true]) !!}
+			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true]) !!}
 		@else
-			{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH']) !!}
+			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH']) !!}
 		@endif
+			{!!Form::hidden('kantor_aktif_id', $kantor_aktif_id)!!}
 			<div class="row">
 				<div class="col-sm-12">
 					<h6 class="text-secondary"><strong><u>Profil</u></strong></h6>
@@ -130,7 +131,7 @@
 					{!! Form::vText('Nama', 'nasabah[nama]', $permohonan['nasabah']['nama'], ['class' => 'nnama form-control inline-edit border-input w-100 text-info pb-1', 'placeholder' => 'Tukimin'], true) !!}
 					{!! Form::vText('Tempat lahir', 'nasabah[tempat_lahir]', $permohonan['nasabah']['tempat_lahir'], ['class' => 'ntempat_lahir form-control inline-edit border-input w-75 text-info pb-1', 'placeholder' => 'Malang'], true) !!}
 					{!! Form::vText('Tanggal lahir', 'nasabah[tanggal_lahir]', $permohonan['nasabah']['tanggal_lahir'], ['class' => 'ntanggal_lahir form-control inline-edit mask-date border-input w-50 text-info pb-1', 'placeholder' => 'dd/mm/yyyy'], true) !!}
-					{!! Form::vSelect('Jenis Kelamin', 'nasabah[jenis_kelamin]', ['' => 'pilih', 'laki-laki' => 'Laki-Laki', 'perempuan' => 'perempuan'], $permohonan['nasabah']['jenis_kelamin'], ['class' => 'custom-select njenis_kelamin form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
+					{!! Form::vSelect('Jenis Kelamin', 'nasabah[jenis_kelamin]', ['' => 'pilih', 'laki-laki' => 'Laki-Laki', 'perempuan' => 'Perempuan'], $permohonan['nasabah']['jenis_kelamin'], ['class' => 'custom-select njenis_kelamin form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 					{!! Form::vSelect('Status pernikahan', 'nasabah[status_perkawinan]', array_merge(['' => 'pilih'], $status_perkawinan), $permohonan['nasabah']['status_perkawinan'], ['class' => 'custom-select nstatus_perkawinan form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 					{!! Form::vSelect('Pekerjaan', 'nasabah[pekerjaan]', array_merge(['' => 'pilih'], $jenis_pekerjaan), $permohonan['nasabah']['pekerjaan'], ['class' => 'custom-select npekerjaan form-control inline-edit border-input w-50 text-info pb-1'], true) !!}
 					{!! Form::vText('Penghasilan Bersih', 'nasabah[penghasilan_bersih]', $permohonan['nasabah']['penghasilan_bersih'], ['class' => 'npenghasilan_bersih form-control inline-edit mask-money border-input w-50 text-info pb-1', 'placeholder' => 'masukkan penghasilan bersih'], true) !!}
@@ -167,10 +168,11 @@
 		@endif
 		
 		@if(is_null($permohonan['id']))
-			{!! Form::open(['url' => route('pengajuan.permohonan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true]) !!}
+			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true]) !!}
 		@else
-			{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH']) !!}
+			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH']) !!}
 		@endif
+			{!!Form::hidden('kantor_aktif_id', $kantor_aktif_id)!!}
 			<table class="table table-bordered">
 				<thead class="thead-default">
 					<tr>
@@ -243,13 +245,14 @@
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
 
 		@if(is_null($permohonan['id']))
-			{!! Form::open(['url' => route('pengajuan.permohonan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id])]) !!}
+			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id])]) !!}
 		@else
-			{!! Form::open(['url' => route('pengajuan.permohonan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 		@endif
 
 			{!!Form::hidden('jaminan_kendaraan', 1)!!}
 			{!!Form::hidden('jaminan_tanah_bangunan', 1)!!}
+			{!!Form::hidden('kantor_aktif_id', $kantor_aktif_id)!!}
 			<p class="text-left text-secondary">JAMINAN KENDARAAN</p>
 			<table class="table table-bordered">
 				<thead class="thead-default">
@@ -441,6 +444,8 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+
+@include('v2.pengajuan.modal.assign_surveyor')
 
 @push('css')
 	<style type="text/css">

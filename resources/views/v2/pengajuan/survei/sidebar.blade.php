@@ -29,18 +29,11 @@
 		<hr/>
 
 		<p class="text-secondary mb-1">NASABAH</p>
-		@if($lokasi)
-			<ul class="fa-ul mt-1">
-				<li class="mb-1"><i class="fa-li fa fa-user mt-1"></i> {{ $lokasi['nama'] }}</li>
-				<li class="mb-1"><i class="fa-li fa fa-phone mt-1"></i> {{ $lokasi['telepon'] }}</li>
-				<li class="mb-1"><i class="fa-li fa fa-map-marker mt-1"></i> {{ $lokasi['alamat'] }}</li>
-			</ul>
-		@else
-			<ul class="fa-ul mt-1 ml-0">
-				{{-- DIGANTI AJA NANTI TULISANNYA KETIKA SUDAH ADA VARIABLENYA --}}
-				<li class="mb-1">Tidak ada data nasabah atau belum diset variablenya</li>
-			</ul>
-		@endif
+		<ul class="fa-ul mt-1">
+			<li class="mb-1"><i class="fa-li fa fa-user mt-1"></i> {{ $permohonan['nasabah']['nama'] }}</li>
+			<li class="mb-1"><i class="fa-li fa fa-phone mt-1"></i> {{ $permohonan['nasabah']['telepon'] }}</li>
+			<li class="mb-1"><i class="fa-li fa fa-map-marker mt-1"></i> {{ implode(' ', $permohonan['nasabah']['alamat']) }}</li>
+		</ul>
 
 		<hr/>
 		<p>Form Survei</p>
@@ -50,7 +43,7 @@
 		@if ($percentage==100)
 			<hr/>
 			<p>Survei Sudah Lengkap</p>
-			<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $survei['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm btn-block">Lanjutkan Analisa</a>
+			<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $survei['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm btn-block text-white">Lanjutkan Analisa</a>
 		@endif
 	</div>
 </div>

@@ -24,16 +24,16 @@
 			Print
 		</a>
 
-		@if ($percentage==100)
+		@if ($percentage==100 && $permohonan['status_terakhir']['status']=='permohonan')
 			<hr/>
 			<p>Data Sudah Lengkap</p>
-			<a data-toggle="modal" data-target="#assign-survei" data-action="{{route('pengajuan.permohonan.assign_survei', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_assign btn btn-primary btn-sm btn-block">Assign Untuk Survei</a>
+			<a data-toggle="modal" data-target="#assign-survei" data-action="{{route('pengajuan.assign', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_assign btn btn-primary btn-sm btn-block text-white">Assign Untuk Survei</a>
 		@endif
 
-		@if ($percentage==100 && $v['nasabah']['is_lama'] && $flag_jam)
+		@if ($percentage==100 && $v['nasabah']['is_lama'] && $flag_jam && $permohonan['status_terakhir']['status']=='permohonan')
 			<hr/>
 			<p>Nasabah & Jaminan Lama</p>
-			<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $survei['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm btn-block">Lanjutkan Analisa</a>
+			<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.assign', ['id' => $survei['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm btn-block">Lanjutkan Analisa</a>
 		@endif
 	</div>
 </div>

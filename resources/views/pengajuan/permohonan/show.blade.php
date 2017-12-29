@@ -536,7 +536,7 @@
 	</style>
 @endpush
 @push ('js')
-		<script>
+	<script>
 
 		///CLONE FORM KELUARGA///
 		var regex = /^(.+?)(\d+)$/i;

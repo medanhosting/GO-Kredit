@@ -65,7 +65,7 @@ class PengajuanController extends Controller
 		try {
 			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan_kendaraan', 'jaminan_tanah_bangunan', 'riwayat_status', 'status_terakhir')->first();
 			
-			$this->status_permohonan($permohonan);
+			$this->checker_permohonan($permohonan);
 
 			if (!$permohonan)
 			{
@@ -99,6 +99,46 @@ class PengajuanController extends Controller
 		}
 	}
 
+	public function store($id = null){
+		$permohonan 	= Pengajuan::findornew($id);
+
+		if(str_is($permohonan->status_terakhir->status, 'putusan')){
+			$returned 	= $this->store_putusan($permohonan);
+		}elseif(str_is($permohonan->status_terakhir->status, 'analisa')){
+			$returned 	= $this->store_analisa($permohonan);
+		}elseif(str_is($permohonan->status_terakhir->status, 'survei')){
+			$returned 	= $this->store_survei($permohonan);
+		}elseif(str_is($permohonan->status_terakhir->status, 'permohonan') || is_null($id)){
+			$returned 	= $this->store_permohonan($permohonan);
+		}
+
+		if($returned instanceof Pengajuan){
+			return redirect()->route('pengajuan.show', ['id' => $returned['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+		}
+		
+		return redirect()->back()->withErrors($returned);
+	}
+
+
+	public function assign($id = null){
+		$permohonan 	= Pengajuan::findorfail($id);
+
+		if(str_is($permohonan->status_terakhir->status, 'permohonan')){
+			$returned 	= $this->assign_surveyor($permohonan);
+		}
+
+		if($returned instanceof Survei){
+			return redirect()->route('pengajuan.show', ['id' => $returned['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+		}
+		
+		return redirect()->back()->withErrors($returned);
+	}
+
+
+	public function update($id){
+		return $this->store($id);
+	}
+
 	protected function riwayat_kredit_nasabah($nik, $id)
 	{
 		if(is_null($nik))
@@ -109,123 +149,5 @@ class PengajuanController extends Controller
 		$k_ids	= array_column(Kredit::where('nasabah_id', $nik)->where('pengajuan_id', '<>', $id)->get()->toArray(), 'pengajuan_id');
 
 		return Pengajuan::wherein('id', $k_ids)->get();
-	}
-
-	protected function status_permohonan($permohonan) 
-	{
-		$checker 	= [];
-		$complete 	= 0;
-		$total 		= 3;
-
-		//CHECKER KREDIT
-		if (is_null($permohonan['pokok_pinjaman'])) {
-			$checker['kredit']	= false;
-			$complete 			= 0;
-		} else {
-			$checker['kredit']	= true;
-			$complete 			= 3;
-		}
-
-		//CHECKER NASABAH
-		$rule_n 	= Nasabah::rule_of_valid();
-		$total 		= $total + count($rule_n);
-
-		if (count($permohonan['nasabah'])) {
-			$validator 	= Validator::make($permohonan['nasabah'], $rule_n);
-
-			if ($validator->fails()) {
-				$complete 				= $complete + (count($rule_n) - count($validator->messages()));
-				$checker['nasabah'] 	= false;
-			} else {
-				$complete 				= $complete + count($rule_n);
-				$checker['nasabah'] 	= true;
-			}
-		} else {
-			$checker['nasabah'] 		= false;
-		}
-
-		//CHECKER KELUARGA
-		$rule_k 		= Nasabah::rule_of_valid_family();
-
-		if (count($permohonan['nasabah']['keluarga'])) {
-			foreach ($permohonan['nasabah']['keluarga'] as $kk => $kv) {
-				$total 		= $total + count($kv);
-				$validator 	= Validator::make($kv, $rule_k);
-
-				if ($validator->fails()) {
-					$complete 				= $complete + (count($kv) - count($validator->messages()));
-					$checker['keluarga'] 	= false;
-				} else {
-					$complete 				= $complete + count($kv);
-					$checker['keluarga'] 	= true;
-				}
-			}
-		} else {
-			$total 						= $total + count($rule_k);
-			$checker['keluarga'] 		= false;
-		}
-
-		//CHECKER JAMINAN
-		$flag_jam 			= true;
-
-		if (count($permohonan['jaminan_kendaraan'])) {
-			foreach ($permohonan['jaminan_kendaraan'] as $k => $v) {
-				$c_col 		= Jaminan::rule_of_valid_jaminan_bpkb();
-				$total 		= $total + count($c_col);
-				$validator 	= Validator::make($v['dokumen_jaminan'][$v['jenis']], $c_col);
-
-				if ($validator->fails()) {
-					$complete 				= $complete + (count($c_col) - count($validator->messages()));
-					$checker['jaminan'] 	= false;
-					$permohonan['jaminan_kendaraan'][$k]['is_lengkap'] = false;
-				} else {
-					$complete 				= $complete + count($c_col);
-
-					if (is_null($checker['jaminan']) || $checker['jaminan']) {
-						$checker['jaminan'] 	= true;
-					}
-
-					$permohonan['jaminan_kendaraan'][$k]['is_lengkap'] = true;
-				}
-
-				if (!$v['dokumen_jaminan'][$v['jenis']]['is_lama']) {
-					$flag_jam 	= false;
-				}
-			}
-		}
-
-		if (count($permohonan['jaminan_tanah_bangunan'])) {
-			foreach ($permohonan['jaminan_tanah_bangunan'] as $k => $v) {
-				$c_col 		= Jaminan::rule_of_valid_jaminan_sertifikat($v['jenis'], $v['dokumen_jaminan'][$v['jenis']]['jenis']);
-				$total 		= $total + count($c_col);
-				$validator 	= Validator::make($v['dokumen_jaminan'][$v['jenis']], $c_col);
-
-				if ($validator->fails()) {
-					$complete 				= $complete + (count($c_col) - count($validator->messages()));
-					$checker['jaminan'] 	= false;
-					$permohonan['jaminan_tanah_bangunan'][$k]['is_lengkap'] = false;
-				} else {
-					$complete 				= $complete + count($c_col);
-
-					if(is_null($checker['jaminan']) || $checker['jaminan']) {
-						$checker['jaminan'] 	= true;
-					}
-					$permohonan['jaminan_tanah_bangunan'][$k]['is_lengkap'] = true;
-				}
-
-				if(!$v['dokumen_jaminan'][$v['jenis']]['is_lama']) {
-					$flag_jam 	= false;
-				}
-			}
-		}
-
-		if (!count($permohonan['jaminan_kendaraan']) && !count($permohonan['jaminan_tanah_bangunan'])) {
-			$total 		= $total + 1;
-		}
-
-		$percentage 	= floor(($complete / max($total, 1)) * 100);
-
-		view()->share('checker', $checker);
-		view()->share('percentage', $percentage);
 	}
 }
