@@ -12,11 +12,21 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('pre')
-					<h6 class="pt-4 pl-4"><a href="{{route('realisasi.index', ['kantor_aktif_id' => $kantor_aktif_id])}}"><i class="fa fa-angle-left"></i></a>&nbsp;&nbsp;DETAIL REALISASI KREDIT</h6>
+					<h5 class="pt-4 pl-4 mb-0">
+						<a href="{{route('realisasi.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
+							<i class="fa fa-chevron-left"></i>
+						</a>
+						&nbsp;&nbsp;DETAIL REALISASI KREDIT
+					</h5>
 				@endslot
-				@slot('body')
-					@include('v2.realisasi.legalitas.list', ['putusan' => $realisasi])
-				@endslot
+
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 col-sm-12 col-md-12">
+							@include('v2.realisasi.legalitas.list', ['putusan' => $realisasi])
+						</div>
+					</div>
+				</div>
 			@endcomponent
 		</div>
 	</div>

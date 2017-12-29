@@ -25,6 +25,7 @@
 						</p>
 					</h5>
 				@endslot
+				
 				<div class="card-body">
 					<div class="row">
 						<div class="col-12 col-sm-12 col-md-12">

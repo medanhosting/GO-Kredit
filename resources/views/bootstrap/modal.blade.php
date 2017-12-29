@@ -1,5 +1,5 @@
 <div class="modal fade" id="{{ $id }}">
-	<div class="modal-dialog " role="document">
+	<div class="modal-dialog {{ $size }}" role="document">
 		<div class="modal-content">
 			@isset ($form)
 				{!! Form::open(['method' => $method ? $method : 'post', 'id' => 'form-'.$id ]) !!}

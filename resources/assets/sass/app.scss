@@ -53,3 +53,6 @@ html, body {}
 a, button { cursor:pointer !important; outline: none !important;}
 
 .border-input { border-bottom: 2px solid $gray-400 !important; }
+
+// Modal
+.modal-xl { max-width: 1024px; }

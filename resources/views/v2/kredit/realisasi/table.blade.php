@@ -15,7 +15,7 @@
 		<!-- FILTER BERDASARKAN JAMINAN -->
 		<div class="col-sm-2">
 			<label>Filter Jaminan</label>
-			<select class="form-control" name="jaminan_{{$s_pre}}">
+			<select class="form-control custom-select" name="jaminan_{{$s_pre}}">
 				<option value="semua">Semua Jaminan</option>
 				<option value="jaminan-bpkb" @if(str_is(request()->get('jaminan_'.$s_pre), 'jaminan-bpkb')) selected @endif>Jaminan BPKB</option>
 				<option value="jaminan-sertifikat" @if(str_is(request()->get('jaminan_'.$s_pre), 'jaminan-sertifikat')) selected @endif>Jaminan Sertifikat</option>
@@ -24,7 +24,7 @@
 		<!-- FILTER BERDASARKAN JAMINAN -->
 		<div class="col-sm-3">
 			<label>Filter Jenis Pinjaman</label>
-			<select class="form-control" name="pinjaman_{{$s_pre}}">
+			<select class="form-control custom-select" name="pinjaman_{{$s_pre}}">
 				<option value="semua">Semua Jenis Pinjaman</option>
 				<option value="pinjaman-a" @if(str_is(request()->get('pinjaman_'.$s_pre), 'pinjaman-a')) selected @endif>Pinjaman Angsuran</option>
 				<option value="pinjaman-t" @if(str_is(request()->get('pinjaman_'.$s_pre), 'pinjaman-t')) selected @endif>Pinjaman Musiman</option>
@@ -33,7 +33,7 @@
 		<div class="col-sm-2">
 			<label>Urutkan</label>
 			<!-- URUTKAN BERDASARKAN NAMA/TANGGAL -->
-			<select class="form-control" name="sort_{{$s_pre}}">
+			<select class="form-control custom-select" name="sort_{{$s_pre}}">
 				<option value="nama-asc" @if(str_is(request()->get('sort_'.$s_pre), 'nama-asc')) selected @endif>Nama [A - Z]</option>
 				<option value="nama-desc" @if(str_is(request()->get('sort_'.$s_pre), 'nama-desc')) selected @endif>Nama [Z - A]</option>
 				<option value="pinjaman-asc" @if(str_is(request()->get('sort_'.$s_pre), 'pinjaman-asc')) selected @endif>Pinjaman [1 - 10]</option>
@@ -51,6 +51,7 @@
 <div class="float-right">
 	{{ $data->appends(array_merge(request()->all(), ['current' => $s_pre]))->links() }}
 </div>
+<div class="clearfix">&nbsp;</div>
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>

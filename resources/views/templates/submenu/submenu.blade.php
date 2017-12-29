@@ -1,6 +1,6 @@
 <div class="container-fluid bg-white" style="border-bottom: 2px solid #f5f5f5;">
 	<div class="row">
-		<div class="col">
+		<div class="col pl-0 pr-0">
 			<nav class="nav m-2">
 				<a href="{{ route('home', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
 				<i class="fa fa-tachometer"></i>&nbsp;&nbsp;Dashboard</a>

@@ -150,10 +150,10 @@
 			  -ie-transition: background-color 0.5s;
 				  transition: background-color 0.5s;
 		}
-		.nav-tabs.underline .nav-item .nav-link {
+		.nav-tabs.underline .nav-item .nav-link, .nav-tabs.underline .nav-item.nav-link {
 			border: none !important;
 		}
-		.nav-tabs.underline .nav-item .nav-link.active{
+		.nav-tabs.underline .nav-item .nav-link.active, .nav-tabs.underline .nav-item.nav-link.active {
 			border-bottom: 3px solid #009688 !important;
 			color: #009688 !important;
 			background-color: transparent !important; 

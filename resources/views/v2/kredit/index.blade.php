@@ -11,16 +11,24 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('body')
-					<nav class="nav nav-tabs" id="myTab" role="tablist">
-						<a class="nav-item nav-link {{$is_aktif_tab}}" id="nav-aktif-tab" data-toggle="tab" href="#nav-aktif" role="tab" aria-controls="nav-aktif" aria-selected="true">Kredit Aktif</a>
-					</nav>
-					<div class="tab-content" id="nav-tabContent">
-						<div class="tab-pane fade {{$is_aktif_tab}}" id="nav-aktif" role="tabpanel" aria-labelledby="nav-aktif-tab">
-							@include('v2.kredit.table', ['data' => $aktif, 'pre' => 'aktif'])
+				@slot ('pre')
+					<h5 class="pt-4 pl-3 mb-0">&nbsp;&nbsp;REALISASI KREDIT</h5>
+				@endslot
+
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 col-sm-12 col-md-12">
+							<nav class="nav nav-tabs underline" id="myTab" role="tablist">
+								<a class="nav-item nav-link {{$is_aktif_tab}}" id="nav-aktif-tab" data-toggle="tab" href="#nav-aktif" role="tab" aria-controls="nav-aktif" aria-selected="true">Kredit Aktif</a>
+							</nav>
+							<div class="tab-content" id="nav-tabContent">
+								<div class="tab-pane fade {{$is_aktif_tab}}" id="nav-aktif" role="tabpanel" aria-labelledby="nav-aktif-tab">
+									@include('v2.kredit.table', ['data' => $aktif, 'pre' => 'aktif'])
+								</div>
+							</div>
 						</div>
 					</div>
-				@endslot
+				</div>
 			@endcomponent
 		</div>
 	</div>
