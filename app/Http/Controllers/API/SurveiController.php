@@ -10,15 +10,36 @@ use Thunderlabid\Survei\Models\Survei;
 use Thunderlabid\Survei\Models\SurveiDetail;
 use Thunderlabid\Survei\Models\SurveiFoto;
 
-use Exception, Response;
+use App\Service\Api\ResponseTrait;
+
+use Exception, Response, Auth;
 
 class SurveiController extends BaseController
 {
+	use ResponseTrait;
+
+	public function index()
+	{
+		try {
+			//1. find pengajuan
+			if(Auth::user()){
+				$survei		= Survei::wherehas('pengajuan', function($q){$q->status('survei');})->with(['collateral', 'collateral.foto'])->paginate();
+			
+				return response()->json(['status' => 1, 'data' => $survei->toArray(), 'error' => ['message' => []]]);
+			}
+
+			return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => []]]);
+
+		} catch (Exception $e) {
+			return $this->error_response(request()->all(), $e);
+		}
+	}
+
 	public function simpan_foto($pengajuan_id, $survei_detail_id)
 	{
 		try {
 			//1. find latest survei
-			if(request()->has('nip_karyawan'))
+			if(Auth::user())
 			{
 				$survei			= Survei::where('pengajuan_id', $pengajuan_id)->orderby('tanggal', 'desc')->first();
 				$survei_detail 	= SurveiDetail::where('survei_id', $survei['id'])->where('id', $survei_detail_id)->firstorfail();
@@ -35,29 +56,13 @@ class SurveiController extends BaseController
 				$s_foto->survei_detail_id 	= $survei_detail_id;
 				$s_foto->arsip_foto 		= $fotos;
 				$s_foto->save();
+
+				return response()->json(['status' => 1, 'data' => $survei->toArray(), 'error' => ['message' => []]]);
 			}
 
-			return Response::json(['status' => 1, 'data' => []]);
+			return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => []]]);
 		} catch (Exception $e) {
-			return Response::json(['status' => 0, 'data' => [], 'pesan' => $e->getMessage()]);
-		}
-	}
-
-	public function index()
-	{
-		try {
-			//1. find pengajuan
-			if(request()->has('nip_karyawan')){
-				$pengajuan	= Survei::wherehas('pengajuan', function($q){$q->status('survei');})->whereHas('surveyor', function($q){$q->where('nip', request()->get('nip_karyawan'));})->wherehas('collateral', function($q){$q->wheredoesnthave('foto', function($q){$q;});})->with(['collateral', 'collateral.foto'])->get();
-			}
-			else{
-				throw new Exception("Harus login sebagai karyawan", 1);
-			}
-
-			return Response::json(['status' => 1, 'data' => $pengajuan->toArray()]);
-
-		} catch (Exception $e) {
-			return Response::json(['status' => 0, 'data' => [], 'pesan' => $e->getMessage()]);
+			return $this->error_response(request()->all(), $e);
 		}
 	}
 }

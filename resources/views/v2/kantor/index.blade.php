@@ -11,9 +11,6 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('pre')
-					<h6 class="pt-4 pl-4">KANTOR</h6>
-				@endslot
 				@slot('body')
 					<nav class="nav nav-tabs" id="myTab" role="tablist">
 						<a class="nav-item nav-link {{$is_kantor_tab}}" id="nav-kantor-tab" data-toggle="tab" href="#nav-kantor" role="tab" aria-controls="nav-kantor" aria-selected="true">Kantor Aktif</a>
@@ -25,8 +22,10 @@
 							@include('v2.kantor.table')
 						</div>
 						<div class="tab-pane fade {{$is_kantor_baru_tab}}" id="nav-kantor-baru" role="tabpanel" aria-labelledby="nav-kantor-baru-tab">
+							@include('v2.kantor.form')
 						</div>
 						<div class="tab-pane fade {{$is_upload_kantor_tab}}" id="nav-upload-kantor" role="tabpanel" aria-labelledby="nav-upload-kantor-tab">
+							@include('v2.kantor.batch')
 						</div>
 					</div>
 				@endslot

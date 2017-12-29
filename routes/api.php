@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 //LOGIN API
 
-Route::namespace('API')->group(function(){
+Route::middleware('api')->namespace('API')->group(function(){
 	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi']);
 	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store']);
 	Route::any('/permohonan/index',				['uses' => 'PermohonanController@index']);
@@ -33,19 +33,21 @@ Route::namespace('API')->group(function(){
 	Route::any('/survei/{pengajuan_id}/foto/{survei_detail_id}',	['uses' => 'SurveiController@simpan_foto']);
 });
 
-Route::middleware('device')->group( function() {
-	Route::any('/pengaturan', function (Request $request) 
+Route::any('/pengaturan', function (Request $request) 
+{
+	if(Auth::user() && !is_null(Auth::user()['nip']))
 	{
-		if($request->has('nip_karyawan'))
-		{
-			return Response::json(['status' => 1, 'data' => ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1, 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3]]);
-		}
+		$data 	= ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1, 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3];
 
-		$phone 			= $request->get('mobile');
-		$jlh_pengajuan	= \Thunderlabid\Pengajuan\Models\Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->count();
+		return response()->json(['status' => 1, 'data' => $data, 'error' => ['message' => []]]);
+	}
 
-		return Response::json(['status' => 1, 'data' => ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'minimum_bpkb' => Carbon\Carbon::now()->subYears(25)->format('Y'), 'remain_pengajuan' => (3 - $jlh_pengajuan), 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3]]);
-	});
+	$phone 			= $request->get('mobile');
+	$jlh_pengajuan	= \Thunderlabid\Pengajuan\Models\Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->count();
+
+	$data 	= ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'minimum_bpkb' => Carbon\Carbon::now()->subYears(25)->format('Y'), 'remain_pengajuan' => (3 - $jlh_pengajuan), 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3];
+
+	return response()->json(['status' => 1, 'data' => $data, 'error' => ['message' => []]]);
 });
 
 

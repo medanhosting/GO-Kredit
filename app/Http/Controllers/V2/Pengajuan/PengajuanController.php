@@ -64,6 +64,7 @@ class PengajuanController extends Controller
 	public function show($id){
 		try {
 			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan_kendaraan', 'jaminan_tanah_bangunan', 'riwayat_status', 'status_terakhir')->first();
+			
 			$this->status_permohonan($permohonan);
 
 			if (!$permohonan)
