@@ -35,7 +35,7 @@ class Authorized
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $type)
+    public function handle($request, Closure $next, $type = null)
     {
         switch (strtolower($type)) {
             case 'admin':

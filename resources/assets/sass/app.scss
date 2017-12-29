@@ -56,3 +56,10 @@ a, button { cursor:pointer !important; outline: none !important;}
 
 // Modal
 .modal-xl { max-width: 1024px; }
+
+// Sidebar
+.sidebar-plain {
+	.active {
+		border-right: 4px solid $brand-primary;
+	}
+}
