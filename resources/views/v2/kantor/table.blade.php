@@ -54,7 +54,8 @@
 			<th>Kode kantor</th>
 			<th>Nama</th>
 			<th>Tipe</th>
-			<th class="w-50">Alamat</th>
+			<th class="w-25">Alamat</th>
+			<th>&nbsp;</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -68,10 +69,16 @@
 					<br/><i class="fa fa-phone"></i> {{$v['telepon']}}
 				</td>
 				<td>{{ucwords($v['tipe'])}}</td>
-				<td class="w-50">
+				<td class="w-25">
 					@foreach($v['alamat'] as $k2 => $v2)
 						{{ucwords($k2)}} {{ucwords($v2)}}
 					@endforeach
+				</td>
+				<td class="text-center">
+					@if($v['tipe']!='holding')
+					<a href="#" data-toggle="modal" data-target="#delete" data-url="{{route('kantor.destroy', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i class="fa fa-trash"></i></a>&emsp;
+					<a href="{{ route('kantor.edit', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']]) }}"><i class="fa fa-pencil"></i></a>
+					@endif
 				</td>
 		    </tr>
 		@empty

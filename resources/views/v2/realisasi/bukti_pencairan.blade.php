@@ -199,7 +199,7 @@
 									<p class="mb-1 ml-2">Tgl Bayar</p>
 								</div>
 								<div class="col">
-									<p class="mb-1">: {{ $carbon->parse($putusan['tanggal'])->format('d') }}</p>
+									<p class="mb-1">: </p>
 								</div>
 							</div>
 						</div>

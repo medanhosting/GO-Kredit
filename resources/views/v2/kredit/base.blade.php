@@ -14,3 +14,6 @@ px-3 py-1 my-3 {{ in_array(strtolower($active_submenu), ['tunggakan']) ? 'active
 px-3 py-1 my-3 {{ in_array(strtolower($active_submenu), ['penagihan']) ? 'active' : '' }}">
 	<i class="fa fa-hand-paper-o"></i>&nbsp;&nbsp;Laporan Penagihan
 </a>
+<a href="{{route('jaminan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link {{ in_array(strtolower($active_submenu), ['jaminan']) ? 'active' : '' }}">
+	<i class="fa fa-exchange"></i>&nbsp;&nbsp;Mutasi Jaminan
+</a>

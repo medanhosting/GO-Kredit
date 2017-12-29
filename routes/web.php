@@ -43,7 +43,9 @@
 		});
 		Route::namespace('V2\Kantor')->group(function(){
 			Route::resource('kantor', 			'KantorController'); 
+			Route::post('kantor/batch', 	['uses' => 'KantorController@batch', 	'as' => 'kantor.batch']);
 			Route::resource('karyawan', 		'KaryawanController'); 
+			Route::post('karyawan/batch', 	['uses' => 'KaryawanController@batch', 	'as' => 'karyawan.batch']);
 		});
 	});
 

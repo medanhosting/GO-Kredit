@@ -11,9 +11,9 @@
 		@endif
 
 		@if(is_null($kantor['id']))
-			{!! Form::open(['url' => route('manajemen.kantor.store', ['kantor_aktif_id' => $kantor_aktif['id']])]) !!}
+			{!! Form::open(['url' => route('kantor.store', ['kantor_aktif_id' => $kantor_aktif['id']])]) !!}
 		@else
-			{!! Form::open(['url' => route('manajemen.kantor.update', ['id' => $kantor['id'], 'kantor_aktif_id' => $kantor_aktif['id']]), 'method' => 'PATCH']) !!}
+			{!! Form::open(['url' => route('kantor.update', ['id' => $kantor['id'], 'kantor_aktif_id' => $kantor_aktif['id']]), 'method' => 'PATCH']) !!}
 		@endif
 			<fieldset class="form-group">
 				<label class="text-sm">Nama kantor</label>

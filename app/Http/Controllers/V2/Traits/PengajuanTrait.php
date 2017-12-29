@@ -96,7 +96,7 @@ trait PengajuanTrait {
 
 			$data_input['kode_kantor']	= request()->get('kantor_aktif_id');
 
-			if (!$permohonan)
+			if (is_null($permohonan['id']))
 			{
 				$data_input['is_mobile'] 						= false;
 				$data_input['nasabah']['is_lama'] 				= false;
