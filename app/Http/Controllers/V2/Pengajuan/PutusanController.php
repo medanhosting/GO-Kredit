@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V2\Kredit;
+namespace App\Http\Controllers\V2\Pengajuan;
 
 use App\Http\Controllers\Controller;
 
@@ -8,10 +8,13 @@ use Thunderlabid\Pengajuan\Models\Putusan;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Status;
 
+use App\Http\Controllers\V2\Traits\PengajuanTrait;
 use Exception, Auth, DB;
 
-class RealisasiController extends Controller
+class PutusanController extends Controller
 {
+	use PengajuanTrait;
+	
 	public function __construct()
 	{
 		parent::__construct();
@@ -19,73 +22,26 @@ class RealisasiController extends Controller
 
 	public function index () 
 	{
-		$realisasi 	= Pengajuan::status('setuju')->kantor(request()->get('kantor_aktif_id'));
+		$setuju 	= $this->get_pengajuan('setuju');
+		$tolak 		= $this->get_pengajuan('tolak');
 
-		if (request()->has('q_realisasi'))
-		{
-			$cari	= request()->get('q_realisasi');
-			$regexp = preg_replace("/-+/",'[^A-Za-z0-9_]+',$cari);
-			$realisasi	= $realisasi->where(function($q)use($regexp)
-			{				
-				$q
-				->whereRaw(DB::raw('nasabah REGEXP "'.$regexp.'"'));
-			});
-		}
-
-		if (request()->has('jaminan_realisasi'))
-		{
-			$cari	= request()->get('jaminan_realisasi');
-			switch (strtolower($cari)) {
-				case 'jaminan-bpkb':
-					$realisasi 	= $realisasi->wherehas('jaminan_kendaraan', function($q){$q;});
+		if(request()->has('current')){
+			switch (request()->get('current')) {
+				case 'tolak':
+					view()->share('is_tolak_tab', 'active show');
 					break;
-				case 'jaminan-sertifikat':
-					$realisasi 	= $realisasi->wherehas('jaminan_tanah_bangunan', function($q){$q;});
+				case 'setuju':
+					view()->share('is_setuju_tab', 'active show');
 					break;
-			}
-		}
-
-		if (request()->has('pinjaman_realisasi'))
-		{
-			$cari	= request()->get('pinjaman_realisasi');
-			switch (strtolower($cari)) {
-				case 'pinjaman-a':
-					$realisasi 	= $realisasi->wherehas('analisa', function($q){$q->where('jenis_pinjaman', 'pa');});
-					break;
-				case 'pinjaman-t':
-					$realisasi 	= $realisasi->wherehas('analisa', function($q){$q->where('jenis_pinjaman', 'pt');});
-					break;
-			}
-		}
-
-		if (request()->has('sort_realisasi')){
-			$sort	= request()->get('sort_realisasi');
-			switch (strtolower($sort)) {
-				case 'nama-desc':
-					$realisasi 	= $realisasi->orderby('p_pengajuan.nasabah->nama', 'desc');
-					break;
-				case 'pinjaman-asc':
-					$realisasi 	= $realisasi->orderby('pokok_pinjaman', 'asc');
-					break;
-				case 'pinjaman-desc':
-					$realisasi 	= $realisasi->orderby('pokok_pinjaman', 'desc');
-					break;
-				default :
-					$realisasi 	= $realisasi->orderby('p_pengajuan.nasabah->nama', 'asc');
-					break;
-			}
+			}			
 		}else{
-			$realisasi 	= $realisasi->orderby('p_pengajuan.nasabah->nama', 'asc');
+			view()->share('is_setuju_tab', 'active show');
 		}
 
-		$realisasi 	= $realisasi->paginate(15, ['*'], 'realisasi');
-
-		view()->share('is_realisasi_tab', 'show active');
-
-		view()->share('active_submenu', 'kredit');
+		view()->share('active_submenu', 'putusan');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-		$this->layout->pages 	= view('v2.realisasi.index', compact('realisasi'));
+		$this->layout->pages 	= view('v2.putusan.index', compact('setuju', 'tolak'));
 		return $this->layout;
 	}
 
@@ -93,7 +49,7 @@ class RealisasiController extends Controller
 		try {
 			$realisasi 				= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
 
-			view()->share('active_submenu', 'kredit');
+			view()->share('active_submenu', 'putusan');
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 			$this->layout->pages 	= view('v2.realisasi.show', compact('realisasi'));

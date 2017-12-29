@@ -6,7 +6,7 @@
 	</div>
 @endisset
 
-<table class="table table-sm table-responsive">
+<table class="table table-sm f8f9fa">
 	<thead class="thead-default">
 		<tr>
 			<th>Ke</th>

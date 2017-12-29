@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\V2\Pengajuan;
 
+use Illuminate\Database\Eloquent\Model;
+
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\HelperController;
 
@@ -17,10 +19,13 @@ use Thunderlabid\Log\Models\Nasabah;
 
 use App\Http\Controllers\V2\Traits\PengajuanTrait;
 
+use App\Service\Traits\IDRTrait;
+
 use Exception, Validator;
 
 class PengajuanController extends Controller
 {
+	use IDRTrait;
 	use PengajuanTrait;
 
 	public function __construct()
@@ -65,7 +70,6 @@ class PengajuanController extends Controller
 		try {
 			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan_kendaraan', 'jaminan_tanah_bangunan', 'riwayat_status', 'status_terakhir')->first();
 			
-			$this->checker_permohonan($permohonan);
 
 			if (!$permohonan)
 			{
@@ -83,12 +87,16 @@ class PengajuanController extends Controller
 
 			if ($permohonan['status_terakhir']['status'] == 'permohonan') {
 				view()->share('is_active_permohonan', 'active');
+				$this->checker_permohonan($permohonan);
 			} elseif ($permohonan['status_terakhir']['status'] == 'survei') {
 				view()->share('is_active_survei', 'active');
+				$this->checker_survei($survei);
 			} elseif ($permohonan['status_terakhir']['status'] == 'analisa') {
 				view()->share('is_active_analisa', 'active');
+				$this->checker_analisa($analisa);
 			} elseif ($permohonan['status_terakhir']['status'] == 'putusan') {
 				view()->share('is_active_putusan', 'active');
+				$this->checker_putusan($putusan);
 			}
 
 			$this->layout->pages 	= view('v2.pengajuan.show', compact('permohonan', 'survei', 'analisa', 'putusan', 'r_nasabah'));
@@ -123,11 +131,18 @@ class PengajuanController extends Controller
 	public function assign($id = null){
 		$permohonan 	= Pengajuan::findorfail($id);
 
+		$returned 		= [];
 		if(str_is($permohonan->status_terakhir->status, 'permohonan')){
 			$returned 	= $this->assign_surveyor($permohonan);
+		}elseif(str_is($permohonan->status_terakhir->status, 'survei')){
+			$returned 	= $this->assign_analis($permohonan);
+		}elseif(str_is($permohonan->status_terakhir->status, 'analisa')){
+			$returned 	= $this->assign_komite_putusan($permohonan);
+		}elseif(str_is($permohonan->status_terakhir->status, 'putusan')){
+			$returned 	= $this->assign_realisasi($permohonan);
 		}
 
-		if($returned instanceof Survei){
+		if($returned instanceof Model){
 			return redirect()->route('pengajuan.show', ['id' => $returned['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
 		}
 		

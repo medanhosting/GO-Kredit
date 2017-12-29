@@ -1,9 +1,16 @@
 <div class="card text-left">
 	<div class="card-body">
-		<p class="card-title mb-2">PUTUSAN KREDIT</p>
-		<div class="progress">
-			<div class="progress-bar bg-info" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
-		</div>
+		@if ($permohonan['status_terakhir']['status']=='putusan')
+			<p class="card-title mb-2">PUTUSAN KREDIT</p>
+			<div class="progress">
+				<div class="progress-bar bg-info" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
+			</div>
+		@else
+			<p class="card-title mb-2">PUTUSAN KREDIT</p>
+			<div class="progress">
+				<div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+			</div>
+		@endif
 		<hr/>
 
 		@if(!is_null($putusan['pembuat_keputusan']))
@@ -29,7 +36,7 @@
 		@if(!is_null($putusan['id']) && $permohonan['status_terakhir']['progress']!='sudah' && $percentage==100)
 		<hr/>
 		<p>Kredit sudah diputuskan</p>
-			<a data-toggle="modal" data-target="#ajukan-putusan" data-action="{{route('pengajuan.pengajuan.validasi_putusan', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'putusan'])}}" data-desc="Untuk validasi putusan, harap mengisi data berikut" data-title="Validasi Putusan" class="modal_putusan  btn btn-primary btn-sm text-white" style="width: 100%">
+			<a data-toggle="modal" data-target="#ajukan-putusan" data-action="{{route('pengajuan.assign', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'putusan'])}}" data-desc="Untuk validasi putusan, harap mengisi data berikut" data-title="Validasi Putusan" class="modal_putusan  btn btn-primary btn-sm text-white" style="width: 100%">
 				Validasi Putusan
 			</a> 
 		@endif

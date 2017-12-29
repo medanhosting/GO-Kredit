@@ -48,7 +48,7 @@
 
 	<div class="tab-pane fade" id="fanalisa" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
-		{!! Form::open(['url' => route('pengajuan.analisa.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+		{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 			<div class="row">
 				<div class="col">
 					{!! Form::vText('Tanggal Analisa', 'tanggal', $analisa['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info pb-1 border-input w-25', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
@@ -116,3 +116,5 @@
 
 	</div>
 </div>
+
+@include('v2.pengajuan.modal.assign_komite_putusan')

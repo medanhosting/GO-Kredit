@@ -1,9 +1,16 @@
 <div class="card text-left">
 	<div class="card-body">
-		<p class="card-title mb-2">ANALISA KREDIT</p>
-		<div class="progress">
-			<div class="progress-bar bg-info" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
-		</div>
+		@if ($permohonan['status_terakhir']['status']=='analisa')
+			<p class="card-title mb-2">ANALISA KREDIT</p>
+			<div class="progress">
+				<div class="progress-bar bg-info" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
+			</div>
+		@else
+			<p class="card-title mb-2">ANALISA KREDIT</p>
+			<div class="progress">
+				<div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+			</div>
+		@endif
 		<hr/>
 
 		@if(!is_null($analisa['analis']))
@@ -27,10 +34,10 @@
 		@endif
 
 
-		@if($percentage==100)
+		@if ($percentage==100 && $permohonan->status_terakhir->status=='analisa')
 		<hr/>
 		<p>Analisa Sudah Lengkap</p>
-			<a data-toggle="modal" data-target="#ajukan-putusan" data-action="{{route('pengajuan.pengajuan.assign_putusan', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'analisa'])}}" class="modal_putusan btn btn-primary btn-sm btn-block">
+			<a data-toggle="modal" data-target="#ajukan-putusan" data-action="{{route('pengajuan.assign', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'analisa'])}}" class="modal_putusan btn btn-primary btn-sm btn-block text-white">
 				Ajukan Ke Komite Kredit
 			</a> 
 		@endif

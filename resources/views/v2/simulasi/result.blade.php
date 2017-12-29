@@ -81,7 +81,7 @@
 <div class="clearfix">&nbsp;</div>
 <div class="row text-justify">
 <div class="col-12">
-	<table class="table table-responsive table-bordered">
+	<table class="table f8f9fa table-bordered">
   		<thead class="thead-default">
   			<tr>
   				<th>#</th>

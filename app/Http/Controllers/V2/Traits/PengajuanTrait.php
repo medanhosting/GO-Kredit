@@ -4,16 +4,21 @@ namespace App\Http\Controllers\V2\Traits;
 
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Jaminan;
+use Thunderlabid\Pengajuan\Models\Analisa;
+use Thunderlabid\Pengajuan\Models\Putusan;
+use Thunderlabid\Pengajuan\Models\Status;
 
 use Thunderlabid\Survei\Models\Survei;
+use Thunderlabid\Survei\Models\SurveiDetail;
 use Thunderlabid\Survei\Models\AssignedSurveyor;
 
 use Thunderlabid\Manajemen\Models\Orang;
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
 use Thunderlabid\Log\Models\Nasabah;
 
 use App\Service\UI\UploadedGambar;
-use DB, Exception, Carbon\Carbon, Validator;
+use DB, Exception, Carbon\Carbon, Validator, Auth;
 
 /**
  * Trait tanggal
@@ -279,6 +284,236 @@ trait PengajuanTrait {
 		}
 	}
 
+	private function store_survei($permohonan){
+		try {
+			$survei 			= Survei::where('pengajuan_id', $permohonan['id'])->wherehas('pengajuan', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->with(['character', 'condition', 'capacity', 'capital', 'collateral'])->orderby('tanggal', 'desc')->first();
+
+			if(!$survei)
+			{
+				throw new Exception("Dokumen ini tidak diijinkan untuk survei", 1);
+			}
+			if(request()->has('tanggal_survei'))
+			{
+				$survei->tanggal 	= request()->get('tanggal_survei');
+				$survei->save();
+			}
+
+			if(request()->has('character'))
+			{
+				$character 			= SurveiDetail::where('survei_id', $survei['id'])->where('jenis', 'character')->first();
+				if(!$character){
+					$character 		= new SurveiDetail;
+				}
+
+				$character->survei_id 		= $survei['id'];
+				$character->jenis 			= 'character';
+				$character->dokumen_survei 	= request()->only('character');
+				$character->save();
+			}
+	
+			if(request()->has('condition'))
+			{
+				$condition 					= SurveiDetail::where('survei_id', $survei['id'])->where('jenis', 'condition')->first();
+				if(!$condition){
+					$condition 				= new SurveiDetail;
+				}
+
+				$condition->survei_id 		= $survei['id'];
+				$condition->jenis 			= 'condition';
+				$ds_condition 				= request()->only('condition');
+				$ds_condition['condition']['pekerjaan'] 	= $survei->pengajuan->nasabah['pekerjaan'];
+				$ds_condition 				= array_map('array_filter', $ds_condition);;
+				$condition->dokumen_survei 	= $ds_condition;
+				$condition->save();
+			}
+
+			if(request()->has('capacity'))
+			{
+				$capacity 					= SurveiDetail::where('survei_id', $survei['id'])->where('jenis', 'capacity')->first();
+				if(!$capacity){
+					$capacity 				= new SurveiDetail;
+				}
+
+				$capacity->survei_id 		= $survei['id'];
+				$capacity->jenis 			= 'capacity';
+				$ds_capacity 			 	= request()->only('capacity');
+				$sp 						= strtolower($ds_capacity['capacity']['status_pernikahan']);
+
+				if(str_is($sp, 'tk')){
+					$ds_capacity['capacity']['tanggungan_keluarga'] = $this->formatMoneyTo(1500000);
+				}elseif(str_is($sp, 'k')){
+					$ds_capacity['capacity']['tanggungan_keluarga'] = $this->formatMoneyTo(3000000);
+				}else{
+					$anak 					= str_replace('k-', '', $sp) * 1;
+					$ds_capacity['capacity']['tanggungan_keluarga']	= $this->formatMoneyTo(3000000 + ($anak * 1250000));
+				}
+				$ds_capacity['capacity']['pekerjaan'] 	= $survei->pengajuan->nasabah['pekerjaan'];
+
+				$capacity->dokumen_survei 	= $ds_capacity;
+				$capacity->save();
+			}
+
+			if(request()->has('capital'))
+			{
+				$capital 					= SurveiDetail::where('survei_id', $survei['id'])->where('jenis', 'capital')->first();
+				if(!$capital){
+					$capital 				= new SurveiDetail;
+				}
+
+				$capital->survei_id 		= $survei['id'];
+				$capital->jenis 			= 'capital';
+				$ds_capital 				= request()->only('capital');
+				$ds_capital['capital']['pekerjaan'] 	= $survei->pengajuan->nasabah['pekerjaan'];
+				$ds_capital 				= array_map('array_filter', $ds_capital);;
+				$capital->dokumen_survei 	= $ds_capital;
+				$capital->save();
+			}
+
+			if(request()->has('collateral'))
+			{
+				$collateral 				= SurveiDetail::where('survei_id', $survei['id'])->where('id', request()->get('survei_detail_id'))->where('jenis', 'collateral')->first();
+				if(!$collateral){
+					throw new Exception("Jaminan tidak terdaftar!", 1);
+				}
+
+				$collateral->survei_id 		= $survei['id'];
+				$collateral->jenis 			= 'collateral';
+				$key 	= key(request()->get('collateral')[request()->get('survei_detail_id')]);
+
+				$ds_all = $collateral->dokumen_survei;
+				$ds		= array_merge($collateral->dokumen_survei['collateral'][$key], request()->get('collateral')[request()->get('survei_detail_id')][$key]);
+
+				$ds_all['collateral'][$key] = $ds;
+
+				if($key=='bpkb')
+				{
+					$ds_all['collateral'][$key]['harga_taksasi']	= $this->formatMoneyTo($this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_kendaraan']) * ($ds_all['collateral'][$key]['persentasi_taksasi']/100));
+					$ds_all['collateral'][$key]['harga_bank']		= $this->formatMoneyTo($this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_kendaraan']) * ($ds_all['collateral'][$key]['persentasi_bank']/100));
+				}else{
+					$nilai_t 	= $this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_tanah']); 
+					if(isset($ds_all['collateral'][$key]['nilai_bangunan'])){
+						$nilai_b 	= $this->formatMoneyFrom($ds_all['collateral'][$key]['nilai_bangunan']); 
+					}else{
+						$nilai_b 	= 0;
+					}
+					$ds_all['collateral'][$key]['harga_taksasi']	= $this->formatMoneyTo(($nilai_b + $nilai_t) * ($ds_all['collateral'][$key]['persentasi_taksasi']/100));
+				}
+				$collateral->dokumen_survei = $ds_all;
+				$collateral->save();
+			}
+
+			return $permohonan;
+		} catch (Exception $e) {
+			foreach ($e->getMessage()->toarray() as $k => $v) {
+				$exp 	= explode('.', $k);
+
+				if(request()->has('collateral'))
+				{
+					if(count($exp) ==4)
+					{
+						$msg[$exp[1].'['.request()->get('survei_detail_id').']['.$exp[2].']['.$exp[3].']'] 	= $v;
+					}
+					elseif(count($exp) ==3)
+					{
+						$msg[$exp[1].'['.request()->get('survei_detail_id').']['.$exp[2].']'] 	= $v;
+					}
+					elseif(count($exp) ==2)
+					{
+						$msg[$exp[1].'['.request()->get('survei_detail_id').']'] 	= $v;
+					}
+					else
+					{
+						$msg[$exp[0].'['.request()->get('survei_detail_id').']'] 	= $v;
+					}
+				}
+				else
+				{
+					if(count($exp) ==4)
+					{
+						$msg[$exp[1].'['.$exp[2].']['.$exp[3].']'] 	= $v;
+					}
+					elseif(count($exp) ==3)
+					{
+						$msg[$exp[1].'['.$exp[2].']'] 	= $v;
+					}
+					elseif(count($exp) ==2)
+					{
+						$msg[$exp[1]] 	= $v;
+					}
+					else
+					{
+						$msg[$exp[0]] = $v;
+					}
+				}
+			}
+			return $msg;
+		}
+	}
+
+	private function store_analisa($permohonan){
+		try {
+			$analisa 		= Analisa::where('pengajuan_id', $permohonan['id'])->wherehas('pengajuan', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->orderby('tanggal', 'desc')->first();
+
+			if(!$analisa)
+			{
+				$analisa 	= new Analisa;
+			}
+
+			$data_input 				= request()->all();
+			$data_input['analis']		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
+			$data_input['pengajuan_id']	= $permohonan['id'];
+			$data_input['limit_jangka_waktu']	= $data_input['jangka_waktu'];
+			$data_input['limit_angsuran']		= $data_input['kredit_diusulkan'];
+
+			$analisa->fill($data_input);
+			$analisa->save();
+
+			return $permohonan;
+		} catch (Exception $e) {
+			return $e->getMessage();
+		}
+	}
+
+	private function store_putusan($permohonan){
+		try {
+			$putusan 			= Putusan::where('pengajuan_id', $permohonan['id'])->wherehas('pengajuan', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->orderby('tanggal', 'desc')->first();
+
+			if(!$putusan)
+			{
+				$putusan 		= new Putusan;
+			}
+
+			if(!request()->has('checklists'))
+			{
+				$data_input 					= request()->only('tanggal', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'perc_provisi', 'administrasi', 'legal', 'putusan', 'catatan');
+
+				$data_input['pembuat_keputusan']= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
+				$data_input['pengajuan_id']		= $permohonan['id'];
+				$data_input['provisi']			= $this->formatMoneyTo(($this->formatMoneyFrom($data_input['plafon_pinjaman']) * $data_input['perc_provisi'])/100);
+
+				$data_input['is_baru']			= true;
+				$r_nasabah 		= $this->riwayat_kredit_nasabah($putusan['pengajuan']['nasabah']['nik'], $permohonan['id']);
+				if(count($r_nasabah))
+				{
+					$data_input['is_baru']		= false;
+				}
+			}
+
+			if(request()->has('checklists'))
+			{
+				$data_input['checklists'] 		= request()->get('checklists');
+			}
+
+			$putusan->fill($data_input);
+			$putusan->save();
+
+			return $permohonan;
+
+		} catch (Exception $e) {
+			return $e->getMessage();
+		}
+	}
+
 	private function assign_surveyor($permohonan){
 		try {
 			DB::BeginTransaction();
@@ -301,6 +536,102 @@ trait PengajuanTrait {
 		} catch (Exception $e) {
 			DB::rollback();
 			return $e;
+		}
+	}
+
+	private function assign_analis($permohonan)
+	{
+		try {
+			if(is_null(request()->get('analis')['nip'])){
+				throw new Exception("Analis Belum dipilih", 1);
+			}
+
+			DB::BeginTransaction();
+
+			$analis['nip']			= request()->get('analis')['nip'];
+			$analis['nama']			= Orang::where('nip', request()->get('analis')['nip'])->first()['nama'];
+			if(is_null($analis['nama'])){
+				throw new Exception("Analis Tidak Valid", 1);
+			}
+
+			$status 				= new Status;
+			$status->pengajuan_id 	= $permohonan['id'];
+			$status->status 		= 'analisa';
+			$status->progress 		= 'perlu';
+			$status->karyawan 		= $analis;
+			$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$status->save();
+
+			DB::commit();
+			return $status;
+		} catch (Exception $e) {
+			DB::rollback();
+			return $e->getMessage();
+		}
+ 	}
+
+	private function assign_komite_putusan($permohonan){
+		try {
+
+			DB::BeginTransaction();
+
+			//pimpinan
+			$kredit_diusulkan 	= $this->formatMoneyFrom($permohonan['analisa']['kredit_diusulkan']);
+			
+			if($kredit_diusulkan > 10000000)
+			{
+				$pimpinan 		= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->active(Carbon::now())->where('role', 'komisaris')->first();
+			}
+			else
+			{
+				$pimpinan 		= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->active(Carbon::now())->where('role', 'pimpinan')->first();
+			}
+
+			if(!$pimpinan)
+			{
+				throw new Exception("Tidak ada data pimpinan", 1);
+			}
+
+			$pk['nip']			= $pimpinan['orang']['nip'];
+			$pk['nama']			= $pimpinan['orang']['nama'];
+
+			$status 				= new Status;
+			$status->pengajuan_id 	= $permohonan['id'];
+			$status->status 		= 'putusan';
+			$status->progress 		= 'perlu';
+			$status->karyawan 		= $pk;
+			$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$status->save();
+
+			DB::commit();
+
+			return $status;
+		} catch (Exception $e) {
+			DB::rollback();
+			return $e->getMessage();
+		}
+	}
+
+	private function assign_realisasi($permohonan){
+		try {
+			DB::BeginTransaction();
+
+			$pk['nip']			= Auth::user()['nip'];
+			$pk['nama']			= Auth::user()['nama'];
+
+			$status 				= new Status;
+			$status->pengajuan_id 	= $permohonan['id'];
+			$status->status 		= $permohonan->putusan['putusan'];
+			$status->progress 		= 'sudah';
+			$status->karyawan 		= $pk;
+			$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$status->save();
+
+			DB::commit();
+			return $status;
+		} catch (Exception $e) {
+			DB::rollback();
+			return $e->getMessage();
 		}
 	}
 
@@ -420,5 +751,224 @@ trait PengajuanTrait {
 
 		view()->share('checker', $checker);
 		view()->share('percentage', $percentage);
+	}
+
+	private function checker_survei($survei){
+		//checker character
+		$c_char 	= SurveiDetail::rule_of_valid_character();
+		$total 		= $total + count($c_char);
+
+		if(count($survei['character']))
+		{
+			$validator 	= Validator::make($survei['character']['dokumen_survei']['character'], $c_char);
+			if ($validator->fails())
+			{
+				$complete 				= $complete + (count($c_char) - count($validator->messages()));
+				$checker['character'] 	= false;
+			}
+			else
+			{
+				$complete 				= $complete + count($c_char);
+				$checker['character'] 	= true;
+			}
+		}
+		else
+		{
+			$checker['character'] 		= false;
+		}
+
+		//checker condition
+		$c_cond 	= SurveiDetail::rule_of_valid_condition();
+		$total 		= $total + count($c_cond);
+
+		if(count($survei['condition']))
+		{
+			$validator 	= Validator::make($survei['condition']['dokumen_survei']['condition'], $c_cond);
+			if ($validator->fails())
+			{
+				$complete 				= $complete + (count($c_cond) - count($validator->messages()));
+				$checker['condition'] 	= false;
+			}
+			else
+			{
+				$complete 				= $complete + count($c_cond);
+				$checker['condition'] 	= true;
+			}
+		}
+		else
+		{
+			$checker['condition'] 		= false;
+		}
+
+		//checker capital
+		$c_capi 	= SurveiDetail::rule_of_valid_capital();
+		$total 		= $total + count($c_capi);
+
+		if(count($survei['capital']))
+		{
+			$validator 	= Validator::make($survei['capital']['dokumen_survei']['capital'], $c_capi);
+			if ($validator->fails())
+			{
+				$complete 				= $complete + (count($c_capi) - count($validator->messages()));
+				$checker['capital'] 	= false;
+			}
+			else
+			{
+				$complete 				= $complete + count($c_capi);
+				$checker['capital'] 	= true;
+			}
+		}
+		else
+		{
+			$checker['capital'] 		= false;
+		}
+
+		//checker capacity
+		$c_capa 	= SurveiDetail::rule_of_valid_capacity();
+		$total 		= $total + count($c_capa);
+
+		if(count($survei['capacity']))
+		{
+			$validator 	= Validator::make($survei['capacity']['dokumen_survei']['capacity'], $c_capa);
+			if ($validator->fails())
+			{
+				$complete 				= $complete + (count($c_capa) - count($validator->messages()));
+				$checker['capacity'] 	= false;
+			}
+			else
+			{
+				$complete 				= $complete + count($c_capa);
+				$checker['capacity'] 	= true;
+			}
+		}
+		else
+		{
+			$checker['capacity'] 		= false;
+		}
+
+		//checker collateral
+		if(count($survei['jaminan_kendaraan'])){
+			foreach ($survei['jaminan_kendaraan'] as $k => $v) {
+				$c_col 		= SurveiDetail::rule_of_valid_collateral_bpkb();
+				$total 		= $total + count($c_col);
+				$v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['has_foto']	= $v['has_foto'];
+
+				$validator 	= Validator::make($v['dokumen_survei']['collateral']['bpkb'], $c_col);
+				if ($validator->fails())
+				{
+					$complete 				= $complete + (count($c_col) - count($validator->messages()));
+					$checker['collateral'] 	= false;
+					$survei['jaminan_kendaraan'][$k]['is_lengkap'] = false;
+				}
+				else
+				{
+					$complete 				= $complete + count($c_col);
+					if(is_null($checker['collateral']) || $checker['collateral'])
+					{
+						$checker['collateral'] 	= true;
+					}
+					$survei['jaminan_kendaraan'][$k]['is_lengkap'] = true;
+				}
+			}
+		}
+
+		if(count($survei['jaminan_tanah_bangunan'])){
+			foreach ($survei['jaminan_tanah_bangunan'] as $k => $v) {
+				$c_col 		= SurveiDetail::rule_of_valid_collateral_sertifikat($v['dokumen_survei']['collateral']['jenis'], $v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['tipe']);
+				$total 		= $total + count($c_col);
+
+				$v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['has_foto']	= $v['has_foto'];
+				$validator 	= Validator::make($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']], $c_col);
+				if ($validator->fails())
+				{
+					$complete 				= $complete + (count($c_col) - count($validator->messages()));
+					$checker['collateral'] 	= false;
+					$survei['jaminan_tanah_bangunan'][$k]['is_lengkap'] = false;
+				}
+				else
+				{
+					$complete 				= $complete + count($c_col);
+					if(is_null($checker['collateral']) || $checker['collateral'])
+					{
+						$checker['collateral'] 	= true;
+					}
+					$survei['jaminan_tanah_bangunan'][$k]['is_lengkap'] = true;
+				}
+			}
+		}
+		
+		$percentage 	= floor(($complete / max($total, 1)) * 100);
+
+		view()->share('checker', $checker);
+		view()->share('percentage', $percentage);			
+	}
+
+	private function checker_analisa($analisa){
+		$checker 	= [];
+		$complete 	= 0;
+		$total 		= 0;
+
+		//checker character
+		$r_analisa 	= Analisa::rule_of_valid();
+		$total 		= $total + count($r_analisa);
+
+		if($analisa)
+		{
+			$validator 	= Validator::make($analisa->toArray(), $r_analisa);
+			if ($validator->fails())
+			{
+				$complete 				= $complete + (count($r_analisa) - count($validator->messages()));
+				$checker['analisa'] 	= false;
+			}
+			else
+			{
+				$complete 				= $complete + count($r_analisa);
+				$checker['analisa'] 	= true;
+			}
+		}
+		else
+		{
+			$checker['analisa'] 		= false;
+		}
+
+		$percentage 	= floor(($complete / max($total, 1)) * 100);
+
+		view()->share('checker', $checker);
+		view()->share('percentage', $percentage);	
+	}
+
+
+	private function checker_putusan($putusan){
+		$checker 	= [];
+		$complete 	= 0;
+		$total 		= 0;
+
+		//checker character
+		$r_putusan 	= Putusan::rule_of_valid();
+		$total 		= $total + count($r_putusan);
+
+		if($putusan)
+		{
+			$validator 	= Validator::make($putusan->toArray(), $r_putusan);
+			if ($validator->fails())
+			{
+				$complete 				= $complete + (count($r_putusan) - count($validator->messages()));
+				$checker['putusan'] 	= false;
+			}
+			else
+			{
+				$complete 				= $complete + count($r_putusan);
+				$checker['putusan'] 	= true;
+			}
+		}
+		else
+		{
+			$checker['putusan'] 		= false;
+		}
+
+		$percentage 	= floor(($complete / max($total, 1)) * 100);
+
+		view()->share('checker', $checker);
+		view()->share('percentage', $percentage);	
 	}
 }

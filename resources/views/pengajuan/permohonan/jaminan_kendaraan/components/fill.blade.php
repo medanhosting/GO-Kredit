@@ -4,7 +4,7 @@
 
 <a href="#" class="btn btn-primary btn-sm btn-link mb-1" data-toggle="modal" data-target="#jaminan-kendaraan"><i class="fa fa-plus"></i> Jaminan Kendaraan</a>
 
-<table class="table table-sm table-responsive">
+<table class="table table-sm f8f9fa">
 	<thead class="thead-default">
 		<tr>
 			<th>#</th>

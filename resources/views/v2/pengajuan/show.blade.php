@@ -77,12 +77,12 @@
 							<div id="survei-panel" {!! ($is_active_survei) ? 'style=""' : 'style="display: none;"' !!}>
 								<div class="clearfix">&nbsp;</div>
 								<div class="row">
-									@if(str_is($permohonan['status_terakhir']['status'], 'survei'))
+									@if(!str_is($permohonan['status_terakhir']['status'], 'permohonan'))
 										<div class="col-3">
 											@include('v2.pengajuan.survei.sidebar')
 										</div>
 										<div class="col-9">
-											@if (isset($survei))
+											@if(!str_is($permohonan['status_terakhir']['status'], 'survei'))
 												@include('v2.pengajuan.survei.list')
 											@else
 												@include('v2.pengajuan.survei.form')
@@ -101,12 +101,12 @@
 							<div id="analisa-panel" {!! ($is_active_analisa) ? 'style=""' : 'style="display: none;"' !!}>
 								<div class="clearfix">&nbsp;</div>
 								<div class="row">
-									@if(str_is($permohonan['status_terakhir']['status'], 'analisa'))
+									@if(!in_array($permohonan['status_terakhir']['status'], ['permohonan', 'survei']))
 										<div class="col-3">
 											@include('v2.pengajuan.analisa.sidebar')
 										</div>
 										<div class="col-9">
-											@if (isset($analisa))
+											@if(!str_is($permohonan['status_terakhir']['status'], 'analisa'))
 												@include('v2.pengajuan.analisa.list')
 											@else
 												@include('v2.pengajuan.analisa.form')
@@ -125,12 +125,12 @@
 							<div id="putusan-panel" {!! ($is_active_putusan) ? 'style=""' : 'style="display: none;"' !!}>
 								<div class="clearfix">&nbsp;</div>
 								<div class="row">
-									@if(str_is($permohonan['status_terakhir']['status'], 'putusan') && !str_is($permohonan['progress'], 'sudah'))
+									@if(!in_array($permohonan['status_terakhir']['status'], ['permohonan', 'survei', 'analisa']))
 										<div class="col-3">
 											@include('v2.pengajuan.putusan.sidebar')
 										</div>
 										<div class="col-9">
-											@if (isset($putusan))
+											@if(!str_is($permohonan['status_terakhir']['status'], 'putusan'))
 												@include('v2.pengajuan.putusan.list')
 											@else
 												@include('v2.pengajuan.putusan.form')

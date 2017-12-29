@@ -1,9 +1,16 @@
 <div class="card text-left">
 	<div class="card-body">
-		<p class="card-title mb-2">SURVEI KREDIT</p>
-		<div class="progress">
-			<div class="progress-bar bg-info" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
-		</div>
+		@if ($permohonan['status_terakhir']['status']=='survei')
+			<p class="card-title mb-2">SURVEI KREDIT</p>
+			<div class="progress">
+				<div class="progress-bar bg-info" role="progressbar" style="width: {{$percentage}}%" aria-valuenow="{{$percentage}}" aria-valuemin="0" aria-valuemax="100">{{$percentage}}%</div>
+			</div>
+		@else
+			<p class="card-title mb-2">SURVEI KREDIT</p>
+			<div class="progress">
+				<div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
+			</div>
+		@endif
 		<hr/>
 
 		@if (!is_null($survei['surveyor']))
@@ -14,7 +21,7 @@
 			<hr/>
 		@endif
 
-		{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
+		{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 			<div class="row">
 				<div class="col">
 					{!! Form::bsText('Tanggal Survei', 'tanggal_survei', $survei['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
@@ -40,10 +47,10 @@
 		<a href="{{route('pengajuan.pengajuan.print', ['id' => $survei['pengajuan_id'], 'mode' => 'survei_report', 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="btn btn-primary btn-sm btn-block">
 			Print
 		</a>
-		@if ($percentage==100)
+		@if ($percentage==100 && $permohonan->status_terakhir->status=='survei')
 			<hr/>
 			<p>Survei Sudah Lengkap</p>
-			<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $survei['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm btn-block text-white">Lanjutkan Analisa</a>
+			<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.assign', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa btn btn-primary btn-sm btn-block text-white">Lanjutkan Analisa</a>
 		@endif
 	</div>
 </div>

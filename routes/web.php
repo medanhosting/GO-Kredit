@@ -30,6 +30,7 @@
 		Route::namespace('V2\Pengajuan')->group(function(){
 			Route::resource('simulasi', 		'SimulasiController'); 
 			Route::resource('pengajuan', 		'PengajuanController'); 
+			Route::resource('putusan', 			'PutusanController'); 
 			
 			Route::post('assign/{id}', 	['uses' => 	'PengajuanController@assign', 'as' => 'pengajuan.assign']);
 		});

@@ -16,7 +16,7 @@
 <div class="tab-content">
 	<div class="tab-pane fade show active" id="form-putusan" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
-		{!! Form::open(['url' => route('pengajuan.putusan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+		{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 			<div class="row">
 				<div class="col">
 					{!! Form::vText('Tanggal Putusan', 'tanggal', $putusan['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info pb-1 border-input w-25', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
@@ -72,3 +72,16 @@
 		
 	</div> -->
 </div>
+
+@include('v2.pengajuan.modal.assign_komite_putusan')
+
+@push ('js')
+	<script type="text/javascript">
+		$("a.modal_putusan").on("click", gantiCaption);
+
+		function gantiCaption(){
+			$('.modal-title').text($(this).attr("data-title"));
+			$('.modal-body').find('p:first').text($(this).attr("data-desc"));
+		}
+	</script>
+@endpush

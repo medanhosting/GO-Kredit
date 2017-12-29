@@ -32,7 +32,7 @@
 	<div class="tab-pane fade show active" id="character" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
-		{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
+		{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 		<div class="row">
 			<div class="col">
 				{!! Form::vSelect('Lingkungan Tinggal', 'character[lingkungan_tinggal]', ['dikenal' => 'Dikenal', 'kurang_dikenal' => 'Kurang Dikenal', 'tidak_dikenal' => 'Tidak Dikenal'], $survei['character']['dokumen_survei']['character']['lingkungan_tinggal'], ['class' => 'clingkungantinggal form-control custom-select inline-edit border-input w-50 text-info pb-1'], true) !!}
@@ -81,7 +81,7 @@
 	<div class="tab-pane" id="condition" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
-		{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
+		{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 		<div class="row">
 			<div class="col">
 				{!! Form::vSelect('Persaingan Usaha', 'condition[persaingan_usaha]', [null => 'Pilih', 'padat' => 'Padat', 'sedang' => 'Sedang', 'biasa' => 'Biasa'], $survei['condition']['dokumen_survei']['condition']['persaingan_usaha'], ['class' => 'copersainganusaha form-control custom-select inline-edit border-input w-50 text-info pb-1'], true) !!}
@@ -119,7 +119,7 @@
 	<div class="tab-pane" id="capacity" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
-		{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
+		{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 		<div class="row">
 			<div class="col">
 				{!! Form::vSelect('Manajemen Usaha', 'capacity[manajemen_usaha]', ['baik' => 'Baik', 'cukup_baik' => 'Cukup Baik', 'tidak_baik' => 'Tidak Baik'], $survei['capacity']['dokumen_survei']['capacity']['manajemen_usaha'], ['class' => 'camanajemenusaha form-control custom-select inline-edit border-input w-50 text-info pb-1'], true) !!}
@@ -169,7 +169,7 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				{!! Form::vText('Tanggungan Keluarga', 'capacity[tanggungan_keluarga]', $survei['capacity']['dokumen_survei']['capacity']['tanggungan_keluarga'], ['class' => 'cattanggungankeluarga form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => ''], true) !!}
+				{!! Form::vLabel('Tanggungan Keluarga', 'capacity[tanggungan_keluarga]', $survei['capacity']['dokumen_survei']['capacity']['tanggungan_keluarga'], ['class' => 'cattanggungankeluarga form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => ''], true) !!}
 			</div>
 		</div>
 		{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
@@ -179,7 +179,7 @@
 	<div class="tab-pane" id="capital" role="tabpanel">
 		<div class="clearfix">&nbsp;</div>
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
-		{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
+		{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 		<h6 class="text-secondary"><strong><u>Rumah</u></strong></h6>
 		<div class="row">
 			<div class="col">
@@ -408,7 +408,7 @@
 								<div class="clearfix">&nbsp;</div>
 								<div class="clearfix">&nbsp;</div>
 
-							{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
+							{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
 								<h6 class="text-secondary"><strong><u>Data Survei</u></strong></h6>
 								<div class="row">
 									<div class="col">
@@ -577,7 +577,7 @@
 							<div class="clearfix">&nbsp;</div>
 
 							<h6 class="text-secondary"><strong><u>Data Survei</u></strong></h6>
-							{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
+							{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id'], 'survei_detail_id' => $v['id']]), 'method' => 'PATCH']) !!}
 							<h6 class="text-secondary"><strong><u>Alamat</u></strong></h6>
 							<div class="row">
 								<div class="col">
@@ -792,3 +792,221 @@
 		</div>
 	</div>
 </div>
+
+@include('v2.pengajuan.modal.assign_analis')
+
+@push('js')
+	<script type="text/javascript">
+		///CLONE FORM HUTANG///
+		var regex = /^(.+?)(\d+)$/i;
+		var cloneIndexHutang = $(".clonedHutang").length;
+
+		function cloneHutang(){
+			cloneIndexHutang++;
+
+			$(this).parents(".clonedHutang").clone()
+				.appendTo("#formHutang")
+				.attr("id", "clonedHutang" +  cloneIndexHutang)
+				.find("*")
+				.each(function() {
+					var id = this.id || "";
+					var match = id.match(regex) || [];
+					if (match.length == 3) {
+						this.id = match[1] + (cloneIndexHutang);
+					}
+				})
+				.on('click', 'a.cloneHutang', cloneHutang)
+				.on('click', 'a.removeHutang', removeHutang);
+
+			$("#clonedHutang"+cloneIndexHutang).find('.klembagakeuangan').attr('name', 'Hutang['+cloneIndexHutang+'][lembaga_keuangan]');
+			$("#clonedHutang"+cloneIndexHutang).find('.kjumlahpinjaman').attr('name', 'Hutang['+cloneIndexHutang+'][jumlah_pinjaman]');
+			$("#clonedHutang"+cloneIndexHutang).find('.kjumlahangsuran').attr('name', 'Hutang['+cloneIndexHutang+'][jumlah_angsuran]');
+			$("#clonedHutang"+cloneIndexHutang).find('.kjangkawaktu').attr('name', 'Hutang['+cloneIndexHutang+'][jangka_waktu]');
+		}
+
+		function removeHutang(){
+			$(this).parents(".clonedHutang").remove();
+		}
+		$("a.cloneHutang").on("click", cloneHutang);
+
+		$("a.removeHutang").on("click", removeHutang);
+		///END OF CLONE FORM HUTANG///
+
+		///CAPITAL, FORM DIMUNCULKAN / HIDE BERDASARKAN KEPEMILIKAN///
+		$("select.caprumahstatus").on("change", checkKepemilikan);
+
+		function checkKepemilikan(){
+			var form = $(this).closest('form');
+			if($(this).val()=='sewa'){
+				form.find('#capisewa').show();
+			}
+			else{
+				form.find('#capisewa').hide();
+			}
+
+			if($(this).val()=='angsuran'){
+				form.find('#capiangs').show();
+			}
+			else{
+				form.find('#capiangs').hide();
+			}
+		}
+		///END OF CAPITAL, FORM DIMUNCULKAN / HIDE BERDASARKAN KEPEMILIKAN///
+
+		var global_perc = $("input.colbpkbpercbank").val();
+		var s_id 		= $("input.colbpkbpercbank").attr('id');
+		
+		///COLLATERAL, BPKB CHECK PERSENTASI BANK UNTUK PASSCODE///
+		$("input.colbpkbpercbank").on("change", checBPKBButuhPasscode);
+		function checBPKBButuhPasscode(){
+			var perc 	= $(this).val();
+			var s_id 	= $(this).attr('id').replace('colbpkbpercbank', '');
+			if(perc > 50){
+				$('#modal_passcode_entry').modal('toggle');
+			}
+			else{
+				global_perc = $(this).val();
+			}
+		}
+
+			//SET PERSENTASI BANK SEBELUM PERUBAHAN
+			//dibutuhkan jika passcode tidak diisi
+			$("input.colbpkbpercbank").on("focus", setBPKBPersentasiBank);
+
+			function setBPKBPersentasiBank(){
+				global_perc = $(this).val();
+				s_id = $(this).attr('id').replace('colbpkbpercbank', '');
+			}
+
+			//PENGENDALI EVENT PASSCODE
+			$(".modal-close").on("click", revertDataPasscode);
+			$("#passcode_batal").on("click", revertDataPasscode);
+			$("#passcode_batal").on("click", hitungBPKBHargaBank);
+
+			$("#passcode_simpan").on("click", setPercBank);
+			$("#passcode_simpan").on("click", hitungBPKBHargaBank);
+			$("#passcode_simpan").on("click", parsingDataPasscode);
+
+			function parsingDataPasscode(){
+				$('#passcode'+s_id).val($('#passcode_oke').val());
+			}
+
+			function revertDataPasscode(){
+				$('input#colbpkbpercbank'+s_id).val(global_perc);
+				$('#passcode'+s_id).val('');
+			}
+			
+			function setPercBank(){
+				global_perc = $('#colbpkbpercbank'+s_id).val();
+			}
+		///END OF COLLATERAL, BPKB CHECK PERSENTASI BANK UNTUK PASSCODE///
+
+		///COLLATERAL, HITUNG HARGA BANK BPKB///
+		$("input.colbpkbpercbank").on("change", hitungBPKBHargaBank);
+		function hitungBPKBHargaBank(){
+			//CHANGE
+			var nilaik 	= $('#colbpkbnilaik'+s_id).val().replace('Rp', '');
+			nilaitax 	= nilaik.replace(/[\.]+/g, '') * 1;
+			nilaitax 	= nilaitax * (global_perc / 100); 
+
+			$('#colbpkbnilaibank'+s_id).text(nilaitax);
+			$('#colbpkbnilaibank'+s_id).digits();
+			$('#colbpkbnilaibank'+s_id).prepend('Rp ');			
+		}
+
+
+		///END COLLATERAL, HITUNG HARGA BANK BPKB///
+
+		///COLLATERAL, HITUNG HARGA TAKSASI BPKB///
+		$("input.colbpkbperctax").on("change", hitungBPKBHargaTaksasi);
+		function hitungBPKBHargaTaksasi(){
+			var id 		= $(this).attr('id').replace('colbpkbperctax', '');
+			var nilaik 	= $('#colbpkbnilaik'+id).val().replace('Rp', '');
+			nilaitax 	= nilaik.replace(/[\.]+/g, '') * 1;
+			nilaitax 	= nilaitax * ($(this).val() / 100); 
+
+			$(this).closest('form').find('#colnilaitaxbpkb'+id).text(nilaitax);
+			$(this).closest('form').find('#colnilaitaxbpkb'+id).digits();
+			$(this).closest('form').find('#colnilaitaxbpkb'+id).prepend('Rp ');
+		}
+		///END OF COLLATERAL, HITUNG HARGA TAKSASI BPKB///
+
+
+		///COLLATERAL, HITUNG HARGA TAKSASI SERTIFIKAT///
+		$("input.colsertifikatperctax").on("change", hitungSertifikatHargaTaksasi);
+		function hitungSertifikatHargaTaksasi(){
+			var nilait 	= $(this).closest('form').find('.colsertifikatnilait').val();
+			var nilaib 	= $(this).closest('form').find('.colsertifikatnilaib').val();
+
+			if(nilait){
+				nilait 	= nilait.replace('Rp', '');
+				nilait 	= (nilait.replace(/[\.]+/g, '') * 1);
+			}else{
+				nilait 	= 0;
+			}
+
+			if(nilaib){
+				nilaib 	= nilaib.replace('Rp', '');
+				nilaib 	= (nilaib.replace(/[\.]+/g, '') * 1);
+			}else{
+				nilaib 	= 0;
+			}
+
+			nilaitax 	= nilait + nilaib;
+			nilaitax 	= nilaitax * ($(this).val() / 100); 
+
+			$(this).closest('form').find('.colsertifikatnilaitax').text(nilaitax);
+			$(this).closest('form').find('.colsertifikatnilaitax').digits();
+			$(this).closest('form').find('.colsertifikatnilaitax').prepend('Rp ');
+		}
+		///END OF COLLATERAL, HITUNG HARGA TAKSASI SERTIFIKAT///
+
+		//FUNGSI GLOBAL
+		$.fn.digits = function(){ 
+		    return this.each(function(){ 
+		        $(this).text( $(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.") ); 
+		    })
+		}
+		//END OF FUNGSI GLOBAL
+
+		//PERUBAHAN NILAI KENDARAAN, HITUNG ULANG PERSENTASI BANK
+		$("input.colbpkbnilaik").on("change", triggerBPKBPerubahanHargaKendaraan);
+
+		function triggerBPKBPerubahanHargaKendaraan(){
+			s_id = $(this).attr('id').replace('colbpkbnilaik', '');
+			$("#colbpkbpercbank"+s_id).trigger('change');
+			$("#colbpkbperctax"+s_id).trigger('change');
+		}
+		//END OF PERUBAHAN NILAI KENDARAAN, HITUNG ULANG PERSENTASI BANK
+
+
+		//PERUBAHAN STATUS PERNIKAHAN
+		$(".catstatuspernikahan").on("change", hitungTanggunganKeluarga);
+		
+		function hitungTanggunganKeluarga(){
+			status_p = $(this).val().replace('K-', '');
+			if(status_p.toLowerCase()=='tk'){
+				tanggungan 	= 1500000;
+			}else if(status_p.toLowerCase()=='k'){
+				tanggungan 	= 3000000;
+			}else{
+				tanggungan 	= 3000000 + (status_p * 1250000);
+			}
+
+			$(this).closest('form').find('.cattanggungankeluarga').text(tanggungan);
+			$(this).closest('form').find('.cattanggungankeluarga').digits();
+			$(this).closest('form').find('.cattanggungankeluarga').prepend('Rp ');
+		}
+
+		//CEK STATUS KEPEMILIKAN USAHA
+		$(".capusahastatus").on("change", cekStatusKepemilikanUsaha);
+
+		function cekStatusKepemilikanUsaha(){
+			if($(this).val()=='kerjasama_bagi_hasil'){
+				$(this).closest('form').find('.rowcapusahabagihasil').show();
+			}else{
+				$(this).closest('form').find('.rowcapusahabagihasil').hide();
+			}
+		}
+	</script>
+@endpush
