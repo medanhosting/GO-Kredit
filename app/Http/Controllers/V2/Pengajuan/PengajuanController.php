@@ -129,6 +129,9 @@ class PengajuanController extends Controller
 	}
 
 	public function create(){
+		view()->share('active_submenu', 'permohonan');
+		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+		
 		$this->layout->pages 	= view('v2.pengajuan.create');
 		return $this->layout;
 	}

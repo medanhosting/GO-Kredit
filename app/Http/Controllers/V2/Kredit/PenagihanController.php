@@ -27,7 +27,7 @@ class PenagihanController extends Controller
 
 		view()->share('is_aktif_tab', 'show active');
 
-		view()->share('active_submenu', 'kredit');
+		view()->share('active_submenu', 'penagihan');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 		$this->layout->pages 	= view('v2.kredit.penagihan.index', compact('penagihan'));

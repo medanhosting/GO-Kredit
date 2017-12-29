@@ -19,7 +19,6 @@ class MutasiJaminanController extends Controller
 	{
 		$start 		= Carbon::now()->startOfDay();
 		$end 		= Carbon::now()->endOfDay();
-
 		$jaminan 	= MutasiJaminan::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
 
 		if(request()->has('q')){
@@ -29,8 +28,7 @@ class MutasiJaminanController extends Controller
 		}
 
 		$jaminan 	= $jaminan->where('tanggal', '>=', $start->format('Y-m-d H:i:s'))->where('tanggal', '<=', $end->format('Y-m-d H:i:s'))->orderby('tanggal', 'desc')->paginate();
-
-		view()->share('active_submenu', 'kredit');
+		view()->share('active_submenu', 'jaminan');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 		$this->layout->pages 	= view('v2.kredit.jaminan.index', compact('jaminan'));

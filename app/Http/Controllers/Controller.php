@@ -26,7 +26,7 @@ class Controller extends BaseController
 		$hari_ini 		= Carbon::now();
 
 		//GET PILIHAN KANTOR
-		$this->kantor 		= Kantor::wherehas('penempatan', function($q)use($hari_ini){$q->where('orang_id', $this->me['id'])->active($hari_ini);})->get(['id', 'nama', 'jenis', 'tipe']);
+		$this->kantor 		= Kantor::wherehas('penempatan', function($q)use($hari_ini){$q->where('orang_id', $this->me['id'])->active($hari_ini);})->orderby('nama', 'asc')->get(['id', 'nama', 'jenis', 'tipe']);
 
 		$this->kantor_aktif	= Kantor::find(request()->get('kantor_aktif_id'));
 		$this->scopes 		= PenempatanKaryawan::where('orang_id', $this->me['id'])->active($hari_ini)->where('kantor_id', request()->get('kantor_aktif_id'))->first();
