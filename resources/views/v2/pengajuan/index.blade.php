@@ -1,7 +1,7 @@
 @push('main')
 	<div class="row justify-content-center">
 		<div class="col-auto px-5 pt-2">
-			<h5 class="h5 mx-5 px-5 d-flex text-center"><i class="fa fa-paper-plane mr-2"></i> PENGAJUAN</h5>
+			<h5 class="h5 mx-5 px-5 text-center"><i class="fa fa-paper-plane mr-2"></i> PENGAJUAN</h5>
 			<hr>
 		</div>
 	</div>
