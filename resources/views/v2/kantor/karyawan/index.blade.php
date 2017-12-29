@@ -11,100 +11,23 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('pre')
-					<h6 class="pt-4 pl-4">KARYAWAN</h6>
-				@endslot
 				@slot('body')
-					<form action="{{route('karyawan.index')}}" method="GET">
-						<div class="row">
-							<div class="col-sm-3">
-								<label>Cari Nama</label>
-							 	@foreach(request()->all() as $k => $v)
-							 		@if(!in_array($k, ['q','sort']))
-								 		<input type="hidden" name="{{$k}}" value="{{$v}}">
-							 		@endif
-							 	@endforeach
-								<input type="text" name="q" class="form-control w-100" placeholder="cari nama" value="{{request()->get('q')}}">
-							</div>
-							<!-- FILTER BERDASARKAN KANTOR -->
-							<div class="col-sm-3">
-								<label>Kantor Penempatan</label>
-								<select class="form-control" name="kantor">
-									<option value="semua">Semua Kantor</option>
-									@foreach($kantor as $k2 => $v2)
-									<option value="{{$v2['id']}}" @if(str_is(request()->get('kantor'), $v2['id'])) selected @endif>{{$v2['nama']}}</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="col-sm-2">
-								<label>Urutkan</label>
-								<!-- URUTKAN BERDASARKAN NAMA/TANGGAL -->
-								<select class="form-control" name="sort">
-									<option value="nama-asc" @if(str_is(request()->get('sort'), 'nama-asc')) selected @endif>Nama [A - Z]</option>
-									<option value="nama-desc" @if(str_is(request()->get('sort'), 'nama-desc')) selected @endif>Nama [Z - A]</option>
-								</select>
-							</div>
-							<div class="col-sm-2 pl-1">
-								<label>&nbsp;</label><br/>
-								<button class="btn btn-primary" type="submit">Go!</button>
-							</div>
+					<nav class="nav nav-tabs" id="myTab" role="tablist">
+						<a class="nav-item nav-link {{$is_karyawan_tab}}" id="nav-karyawan-tab" data-toggle="tab" href="#nav-karyawan" role="tab" aria-controls="nav-karyawan" aria-selected="true">Karyawan Aktif</a>
+						<a class="nav-item nav-link {{$is_karyawan_baru_tab}}" id="nav-karyawan-baru-tab" data-toggle="tab" href="#nav-karyawan-baru" role="tab" aria-controls="nav-karyawan-baru" aria-selected="true">Karyawan Baru</a>
+						<a class="nav-item nav-link {{$is_upload_karyawan_tab}}" id="nav-upload-karyawan-tab" data-toggle="tab" href="#nav-upload-karyawan" role="tab" aria-controls="nav-upload-karyawan" aria-selected="true">Upload Karyawan</a>
+					</nav>
+					<div class="tab-content" id="nav-tabContent">
+						<div class="tab-pane fade {{$is_karyawan_tab}}" id="nav-karyawan" role="tabpanel" aria-labelledby="nav-karyawan-tab">
+							@include('v2.kantor.karyawan.table')
 						</div>
-					</form>
-					<div class="clearfix">&nbsp;</div>
-					<div class="float-right">
-						{{ $karyawan->appends(array_merge(request()->all()))->links() }}
+						<div class="tab-pane fade {{$is_karyawan_baru_tab}}" id="nav-karyawan-baru" role="tabpanel" aria-labelledby="nav-karyawan-baru-tab">
+							@include('v2.kantor.karyawan.form')
+						</div>
+						<div class="tab-pane fade {{$is_upload_karyawan_tab}}" id="nav-upload-karyawan" role="tabpanel" aria-labelledby="nav-upload-karyawan-tab">
+							@include('v2.kantor.karyawan.batch')
+						</div>
 					</div>
-
-					<table class="table table-bordered">
-	  					<thead>
-							<tr>
-								<th>#</th>
-								<th>NIP</th>
-								<th>Nama</th>
-								<th>Email</th>
-								<th class="w-25">Alamat</th>
-								<th>Penempatan</th>
-							</tr>
-		 				</thead>
-	  					<tbody>
-							@forelse($karyawan as $k => $v)
-			  					<tr>
-			    					<td>
-										{{(($karyawan->currentPage() - 1) * $karyawan->perPage()) + $k + 1}}
-									</td>
-			    					<td>
-										{{$v['nip']}} 
-									</td>
-			    					<td>
-										{{$v['nama']}}
-										<br/><i class="fa fa-phone"></i> {{$v['telepon']}}
-									</td>
-			    					<td>
-										{{$v['email']}}
-									</td>
-			    					<td class="w-25">
-										@foreach($v['alamat'] as $k2 => $v2)
-											{{ucwords($k2)}} {{ucwords($v2)}}
-										@endforeach
-									</td>
-			    					<td>
-			    						@foreach($v->penempatan as $k2 => $v2)
-											<span class="badge badge-success">
-												{{ ucwords(str_replace('_', ' ', $v2['role'])) }} 
-												{{ ucwords(str_replace('_', ' ', $v2['kantor']['nama'])) }}
-											</span> <br/>
-										@endforeach
-									</td>
-								</tr>
-							@empty
-			  					<tr>
-			    					<td colspan="6">
-										Data tidak tersedia
-									</td>
-								</tr>
-		  					@endforelse
-		 				</tbody>
-					</table>
 				@endslot
 			@endcomponent
 		</div>
