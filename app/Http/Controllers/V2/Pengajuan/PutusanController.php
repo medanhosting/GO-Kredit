@@ -92,7 +92,7 @@ class PutusanController extends Controller
 			}
 
 			\DB::commit();
-			return redirect(route('realisasi.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]));
+			return redirect(route('putusan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]));
 
 		} catch (Exception $e) {
 			\DB::rollback();
