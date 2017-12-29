@@ -127,6 +127,10 @@ class PengajuanController extends Controller
 		return redirect()->back()->withErrors($returned);
 	}
 
+	public function create(){
+		$this->layout->pages 	= view('v2.pengajuan.create');
+		return $this->layout;
+	}
 
 	public function assign($id = null){
 		$permohonan 	= Pengajuan::findorfail($id);

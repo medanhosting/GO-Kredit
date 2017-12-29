@@ -47,8 +47,8 @@ class PengajuanTableSeeder extends Seeder
 
 		$foto 		= 	[
 			'http://rumahpengaduan.com/wp-content/uploads/2015/02/KTP.jpg',
-			'https://pbs.twimg.com/media/BwlhnFOCQAAvDGp.jpg',
-			'https://pbs.twimg.com/media/A_Cc4keCAAAAP-2.jpg',
+			'https://4.bp.blogspot.com/-eLcB4mOdM1A/WXk5WPmNFBI/AAAAAAAAHoQ/kD6s2xtF3VAxzXgIulGfv3T72oe76ZB8gCLcBGAs/s1600/ktp.jpg',
+			'https://userscontent2.emaze.com/images/df65bd82-a60f-40f2-9685-64fe92c8ae66/11653154bbb1b7c6f46dbbd3a09b978a.jpeg',
 			'https://balyanurmd.files.wordpress.com/2013/12/ktp-masa-depan.jpg',
 			'https://pbs.twimg.com/media/BXjQAxjIEAAVhox.jpg',
 		];
