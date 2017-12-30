@@ -4,7 +4,7 @@
 <div class="clearfix">&nbsp;</div>
 <div class="row">
 	<div class="col-sm-12">
-		{!! Form::open(['url' => route('kredit.store', ['id' => $id]), 'method' => 'POST']) !!}
+		{!! Form::open(['url' => route('kredit.store', ['id' => $kredit_id]), 'method' => 'POST']) !!}
 
 			@foreach(request()->all() as $k => $v)
 				<input type="hidden" name="{{$k}}" value="{{$v}}">
@@ -72,7 +72,7 @@
 			</table>
 		{!!Form::close()!!}
 
-		{!! Form::open(['url' => route('kredit.store', ['id' => $id]), 'method' => 'POST', 'class' => 'kredit-single']) !!}
+		{!! Form::open(['url' => route('kredit.store', ['id' => $kredit_id]), 'method' => 'POST', 'class' => 'kredit-single']) !!}
 			@foreach(request()->all() as $k => $v)
 				<input type="hidden" name="{{$k}}" value="{{$v}}">
 			@endforeach

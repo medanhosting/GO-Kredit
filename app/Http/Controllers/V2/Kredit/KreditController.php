@@ -74,7 +74,18 @@ class KreditController extends Controller
 		view()->share('active_submenu', 'kredit');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-		$this->layout->pages 	= view('v2.kredit.show', compact('aktif', 'angsuran', 'total', 'tunggakan', 'latest_pay', 'riwayat_t', 'penagihan', 'jaminan'));
+		view()->share('aktif', $aktif);
+		view()->share('angsuran', $angsuran);
+		view()->share('total', $total);
+		view()->share('tunggakan', $tunggakan);
+		view()->share('latest_pay', $latest_pay);
+		view()->share('riwayat_t', $riwayat_t);
+		view()->share('penagihan', $penagihan);
+		view()->share('jaminan', $jaminan);
+
+		view()->share('kredit_id', $id);
+
+		$this->layout->pages 	= view('v2.kredit.show');
 		return $this->layout;
 	}
 
@@ -92,9 +103,10 @@ class KreditController extends Controller
 				default:
 
 					$nth 		= request()->get('nth');
+					
 					$angsuran 	= AngsuranDetail::whereIn('nth', $nth)->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->get();
 
-					$latest_pay = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherenotnull('nota_bayar_id')->wherein(['bunga', 'pokok'])->orderby('nth', 'desc')->first();
+					$latest_pay = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherenotnull('nota_bayar_id')->wherein('tag', ['bunga', 'pokok'])->orderby('nth', 'desc')->first();
 					$should_pay = AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->whereIn('nth', $nth)->get();
 
 					if($latest_pay){
@@ -138,7 +150,6 @@ class KreditController extends Controller
 					}
 					break;
 			}
-			
 			DB::commit();
 			return redirect()->back();
 		} catch (Exception $e) {
