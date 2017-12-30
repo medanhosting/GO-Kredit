@@ -105,4 +105,18 @@ class PutusanController extends Controller
 	{
 		return $this->store($id);
 	}
+
+	public function print($id) 
+	{
+		try {
+			$realisasi 				= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
+
+			view()->share('putusan', $realisasi);
+			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+
+			return view('v2.print.putusan.bukti_realisasi');
+		} catch (Exception $e) {
+			return redirect()->back()->withErrors($e->getMessage());
+		}
+	}
 }
