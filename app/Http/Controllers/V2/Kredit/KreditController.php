@@ -73,7 +73,18 @@ class KreditController extends Controller
 		view()->share('active_submenu', 'kredit');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-		$this->layout->pages 	= view('v2.kredit.show', compact('aktif', 'angsuran', 'total', 'tunggakan', 'latest_pay', 'riwayat_t', 'penagihan', 'jaminan'));
+		view()->share('aktif', $aktif);
+		view()->share('angsuran', $angsuran);
+		view()->share('total', $total);
+		view()->share('tunggakan', $tunggakan);
+		view()->share('latest_pay', $latest_pay);
+		view()->share('riwayat_t', $riwayat_t);
+		view()->share('penagihan', $penagihan);
+		view()->share('jaminan', $jaminan);
+
+		view()->share('kredit_id', $id);
+
+		$this->layout->pages 	= view('v2.kredit.show');
 		return $this->layout;
 	}
 
