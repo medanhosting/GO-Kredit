@@ -2,32 +2,54 @@
 @inject('tanggal', 'App\Service\UI\TanggalTranslater')
 @inject('carbon', 'Carbon\Carbon')
 
-<div class="clearfix">&nbsp;</div>
-<div class="row justify-content-center">
-	<div class="col">
-		{!! Form::open(['url' => route('realisasi.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>SURAT PERNYATAAN SEBAGAI PENJAMIN</title>
+
+		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
+
+		<!-- Fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	</head>
+	<body>
+		<div class="container-fluid" style="width: 21cm;height: 29.7cm; ">
+			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-6 text-left">
 					<h3 class="mb-2">{{strtoupper($kantor_aktif['nama'])}}</h3>
-					<p class="mb-0"><i class="fa fa-building-o fa-fw"></i>&nbsp; {{implode(' ', $kantor_aktif['alamat'])}}</p>
-					<p class="mb-0"><i class="fa fa-phone fa-fw"></i>&nbsp; {{$kantor_aktif['telepon']}}</p>
+					<ul class="list-unstyled fa-ul">
+						<li>
+							<i class="fa fa-building-o fa-li" style="margin-top: .2rem;"></i>
+							{{ implode(' ', $kantor_aktif['alamat']) }}
+						</li>
+						<li>
+							<i class="fa fa-phone fa-li" style="margin-top: .2rem;"></i>
+							{{ $kantor_aktif['telepon'] }}
+						</li>
+					</ul>
 				</div>
 				<div class="col-6 text-right">
 					<div class="row justify-content-end">
 						<div class="col-2">Nomor</div>
-						<div class="col-6">{{$kantor_aktif['id']}} / {{$putusan['pengajuan_id']}}</div>
+						<div class="col-7">{{$kantor_aktif['id']}} / {{$putusan['pengajuan_id']}}</div>
 					</div>
 					<div class="row justify-content-end">
 						<div class="col-2">Tanggal</div>
-						<div class="col-6">
-							{!! Form::vText(null, 'tanggal_pencairan', $putusan['tanggal'], ['class' => 'form-control inline-edit border-input text-info  mask-date-time w-50 ml-auto', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+						<div class="col-7">
+							{{ $putusan['tanggal'] }}
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col text-center">
-					<h4 class="mb-1">BUKTI REALISASI KREDIT</h4>
+					<h4 class="mb-1"><strong>BUKTI REALISASI KREDIT</strong></h4>
 				</div>
 			</div>
 			<hr class="mt-1 mb-2" style="border-size: 2px;">
@@ -174,17 +196,6 @@
 					</table>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-6">
-					<a href="{{ route('putusan.bukti_realisasi', ['id' => $putusan['pengajuan_id'], 'mode' => $kc, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="text-success">
-						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK NOTA BUKTI REALISASI
-					</a>
-				</div>
-				<div class="col-6">
-					<hr>
-					{!! Form::bsSubmit('Realisasikan', ['class' => 'btn btn-primary float-right']) !!}
-				</div>
-			</div>
-		{!! Form::close() !!}
-	</div>
-</div>
+		</div>
+	</body>
+</html>

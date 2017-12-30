@@ -31,6 +31,7 @@
 			Route::resource('simulasi', 		'SimulasiController'); 
 			Route::resource('pengajuan', 		'PengajuanController'); 
 			Route::resource('putusan', 			'PutusanController'); 
+			Route::get('putusan/{id}/print/bukti/realisasi', ['uses' => 'PutusanController@print', 'as' => 'putusan.bukti_realisasi']);
 			
 			Route::post('assign/{id}', 	['uses' => 	'PengajuanController@assign', 'as' => 'pengajuan.assign']);
 		});
