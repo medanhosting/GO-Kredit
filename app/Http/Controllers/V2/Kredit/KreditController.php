@@ -103,9 +103,10 @@ class KreditController extends Controller
 				default:
 
 					$nth 		= request()->get('nth');
+					
 					$angsuran 	= AngsuranDetail::whereIn('nth', $nth)->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->get();
 
-					$latest_pay = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherenotnull('nota_bayar_id')->wherein(['bunga', 'pokok'])->orderby('nth', 'desc')->first();
+					$latest_pay = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherenotnull('nota_bayar_id')->wherein('tag', ['bunga', 'pokok'])->orderby('nth', 'desc')->first();
 					$should_pay = AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->whereIn('nth', $nth)->get();
 
 					if($latest_pay){
@@ -149,7 +150,6 @@ class KreditController extends Controller
 					}
 					break;
 			}
-			
 			DB::commit();
 			return redirect()->back();
 		} catch (Exception $e) {
