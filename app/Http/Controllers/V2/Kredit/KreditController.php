@@ -12,6 +12,7 @@ use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
 use App\Http\Service\Policy\FeedBackPenagihan;
+use App\Http\Service\Policy\PelunasanAngsuran;
 
 use Exception, DB, Auth, Carbon\Carbon;
 
@@ -92,7 +93,7 @@ class KreditController extends Controller
 	{
 		try {
 			$aktif 		= Aktif::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->first();
-			
+
 			DB::BeginTransaction();
 			switch (request()->get('current')) {
 				case 'tagihan':
@@ -100,13 +101,29 @@ class KreditController extends Controller
 					$feedback->bayar();
 					break;
 				default:
+
 					$nth 		= request()->get('nth');
-					$angsuran 	= AngsuranDetail::whereIn('nth', $nth)->get();
+					$angsuran 	= AngsuranDetail::whereIn('nth', $nth)->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->get();
+
+					$latest_pay = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherenotnull('nota_bayar_id')->wherein(['bunga', 'pokok'])->orderby('nth', 'desc')->first();
+					$should_pay = AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->whereIn('nth', $nth)->get();
+
+					if($latest_pay){
+						$total 	= $aktif['jangka_waktu'] - $latest_pay['nth'];
+					}else{
+						$total 	= $aktif['jangka_waktu'];
+					}
+
+					$potongan 		= false;
+
+					if(count($should_pay) == $total){
+						$potongan 	= PelunasanAngsuran::potongan($aktif['nomor_kredit']);
+					}
 
 					if($angsuran){
 						$nb 	= new NotaBayar;
-						$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($angsuran[0]['nomor_kredit']);
-						$nb->nomor_kredit 	= $angsuran[0]['nomor_kredit'];
+						$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($aktif['nomor_kredit']);
+						$nb->nomor_kredit 	= $aktif['nomor_kredit'];
 						$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
 						$nb->nip_karyawan 	= Auth::user()['nip'];
 						$nb->save();
@@ -116,6 +133,18 @@ class KreditController extends Controller
 								$v->nota_bayar_id 	= $nb->id;
 								$v->save();
 							}
+						}
+
+						if($potongan){
+							$pad 	= new AngsuranDetail;
+							$pad->nota_bayar_id	= $nb->id;
+							$pad->nomor_kredit 	= $aktif['nomor_kredit'];
+							$pad->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+							$pad->nth 			= ($latest_pay['nth'] * 1) + 1;
+							$pad->tag 			= 'potongan';
+							$pad->amount 		= $potongan;
+							$pad->description 	= 'Potongan Pelunasan';
+							$pad->save();
 						}
 					}
 					break;

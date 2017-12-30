@@ -13,10 +13,7 @@
 			@component('bootstrap.card')
 				@slot('pre')
 					<h5 class="pt-4 pl-4 mb-0">
-						<a href="{{route('pengajuan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
-							<i class="fa fa-chevron-left"></i> 
-						</a>
-						&nbsp;&nbsp;PENGAJUAN BARU
+						PENGAJUAN BARU
 					</h5>
 				@endslot
 
