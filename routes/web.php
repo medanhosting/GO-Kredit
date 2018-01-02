@@ -51,6 +51,9 @@
 			Route::resource('karyawan', 		'KaryawanController'); 
 			Route::post('karyawan/batch', 	['uses' => 'KaryawanController@batch', 	'as' => 'karyawan.batch']);
 		});
+		Route::namespace('V2\Finance')->group(function(){
+			Route::get('kasir', 		['uses' => 'KasirController@index', 	'as' => 'kasir.index']);
+		});
 	});
 
 	Route::middleware(['auth', 'pilih_koperasi'])->group( function() {

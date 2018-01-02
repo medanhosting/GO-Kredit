@@ -18,6 +18,7 @@
 						<th class="text-right">Pokok</th>
 						<th class="text-right">Bunga</th>
 						<th class="text-right">Denda</th>
+						<th class="text-right">Potongan</th>
 						<th class="text-right">Jumlah</th>
 						<th class="text-center">
 							<input type="checkbox" class="check-all">
@@ -36,7 +37,8 @@
 						<td class="text-right">{{$idr->formatMoneyTo($v['pokok'])}}</td>
 						<td class="text-right">{{$idr->formatMoneyTo($v['bunga'])}}</td>
 						<td class="text-right">{{$idr->formatMoneyTo($v['denda'])}}</td>
-						<td class="text-right">{{$idr->formatMoneyTo($v['subtotal'])}}</td>
+						<td class="text-right">{{$idr->formatMoneyTo($v['potongan'])}}</td>
+						<td class="text-right">{{$idr->formatMoneyTo($v['subtotal'] - $v['potongan'])}}</td>
 						<td class="text-center">
 							@if (is_null($v['nota_bayar_id']))
 								<input type="checkbox" name="nth[]" value="{{$v['nth']}}">
@@ -59,7 +61,7 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<th class="text-right align-middle" colspan="5">
+						<th class="text-right align-middle" colspan="6">
 							<h5 class="mb-0"><strong>Total</strong></h5>
 						</th>
 						<th class="text-right align-middle">

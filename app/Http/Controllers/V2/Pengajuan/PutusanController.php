@@ -8,6 +8,8 @@ use Thunderlabid\Pengajuan\Models\Putusan;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 use Thunderlabid\Pengajuan\Models\Status;
 
+use Thunderlabid\Survei\Models\Survei;
+
 use App\Http\Controllers\V2\Traits\PengajuanTrait;
 use Exception, Auth, DB;
 
@@ -22,7 +24,7 @@ class PutusanController extends Controller
 
 	public function index () 
 	{
-		$setuju 	= $this->get_pengajuan('setuju');
+		$setuju 	= $this->get_pengajuan(['setuju', 'realisasi']);
 		$tolak 		= $this->get_pengajuan('tolak');
 
 		if(request()->has('current')){
@@ -47,12 +49,26 @@ class PutusanController extends Controller
 
 	public function show($id){
 		try {
-			$realisasi 				= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
+			$putusan 			= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
+			$survei 			= Survei::where('pengajuan_id', $id)->first();
+
+			if(request()->has('current')){
+				switch (request()->get('current')) {
+					case 'bukti_pencairan':
+						view()->share('is_bukti_pencairan_tab', 'active show');
+						break;
+					default:
+						view()->share('is_legalitas_tab', 'active show');
+						break;
+				}			
+			}else{
+				view()->share('is_legalitas_tab', 'active show');
+			}
 
 			view()->share('active_submenu', 'putusan');
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-			$this->layout->pages 	= view('v2.putusan.show', compact('realisasi'));
+			$this->layout->pages 	= view('v2.putusan.show', compact('putusan', 'survei'));
 			return $this->layout;
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());
@@ -109,9 +125,11 @@ class PutusanController extends Controller
 	public function print($id) 
 	{
 		try {
-			$realisasi 				= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
+			$putusan	= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
+			$survei		= Survei::where('pengajuan_id', $id)->first();
 
-			view()->share('putusan', $realisasi);
+			view()->share('survei', $survei);
+			view()->share('putusan', $putusan);
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 			return view('v2.print.putusan.bukti_realisasi');
