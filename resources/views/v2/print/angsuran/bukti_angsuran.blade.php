@@ -1,0 +1,197 @@
+@inject('idr', 'App\Service\UI\IDRTranslater')
+@inject('tanggal', 'App\Service\UI\TanggalTranslater')
+@inject('carbon', 'Carbon\Carbon')
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>SURAT PERNYATAAN SEBAGAI PENJAMIN</title>
+
+		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
+
+		<!-- Fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	</head>
+	<body>
+		<div class="container-fluid" style="width: 21cm;height: 29.7cm; ">
+			<div class="clearfix">&nbsp;</div>
+			<div class="row">
+				<div class="col-6 text-left">
+					<h3 class="mb-2">{{strtoupper($kantor_aktif['nama'])}}</h3>
+					<ul class="list-unstyled fa-ul">
+						<li>
+							<i class="fa fa-building-o fa-li" style="margin-top: .2rem;"></i>
+							{{ implode(' ', $kantor_aktif['alamat']) }}
+						</li>
+						<li>
+							<i class="fa fa-phone fa-li" style="margin-top: .2rem;"></i>
+							{{ $kantor_aktif['telepon'] }}
+						</li>
+					</ul>
+				</div>
+				<div class="col-6 text-right">
+					<div class="row justify-content-end">
+						<div class="col-2">Nomor</div>
+						<div class="col-7">{{$kantor_aktif['id']}} / {{$angsuran['nomor_kredit']}}</div>
+					</div>
+					<div class="row justify-content-end">
+						<div class="col-2">Tanggal</div>
+						<div class="col-7">
+							{{ $angsuran['tanggal'] }}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col text-center">
+					<h4 class="mb-1"><strong>BUKTI REALISASI KREDIT</strong></h4>
+				</div>
+			</div>
+			<hr class="mt-3 mb-2" style="border-size: 2px;">
+			<table>
+				<tr class="align-top">
+					<td style="width: 12.5%">AC / SPK</td>
+					<td style="width: 1%">:</td>
+					<td class="w-25 pl-2 pr-2">
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">gak tau variabelnya</p>
+					</td>
+					<td style="width: 12.5%">AO</td>
+					<td style="width: 1%">:</td>
+					<td class="w-25 pl-2 pr-2">
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">gak tau variabelnya</p>
+					</td>
+				</tr>
+				<tr class="align-top">
+					<td style="width: 12.5%">Nama</td>
+					<td style="width: 1%">:</td>
+					<td class="w-25 pl-2 pr-2">
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
+							{{ $angsuran['kredit']['nasabah']['nama'] }}
+						</p>
+					</td>
+					<td style="width: 12.5%">Angsuran Ke-</td>
+					<td style="width: 1%">:</td>
+					<td class="w-25 pl-2 pr-2">
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
+							@foreach($angsuran['details'] as $k => $v)
+								@if ($loop->last)
+									{{ $v['nth'] }}
+								@else
+									{{ $v['nth'] }}, 
+								@endif
+							@endforeach
+						</p>
+					</td>
+				</tr>
+				<tr class="align-top">
+					<td style="width: 12.5%">Alamat</td>
+					<td style="width: 1%">:</td>
+					<td class="w-25 pl-2 pr-2 text-capitalize">
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
+							{{ strtolower(implode(' ', $angsuran['kredit']['nasabah']['alamat'])) }}
+						</p>
+					</td>
+					<td style="width: 12.5%">Sisa Angsuran</td>
+					<td style="width: 1%">:</td>
+					<td class="w-25 pl-2 pr-2">
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{ $s_hutang }}</p>
+					</td>
+				</tr>
+				<tr class="align-top">
+					<td style="width: 12.5%">Telp.</td>
+					<td style="width: 1%">:</td>
+					<td class="w-25 pl-2 pr-2">
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{ $angsuran['kredit']['nasabah']['telepon'] }}</p>
+					</td>
+					<td style="width: 12.5%">Periode Bulan</td>
+					<td style="width: 1%">:</td>
+					<td class="w-25 pl-2 pr-2 text-capitalize">
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
+							{{--  {{ $angsuran['kredit']['ao']['nama'] }}  --}} &nbsp;
+						</p>
+					</td>
+				</tr>
+				<tr class="align-top">
+					<td colspan="6">
+						<div class="clearfix">&nbsp;</div>
+						<div class="clearfix">&nbsp;</div>
+						<table class="table w-100 table-bordered">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Angsuran</th>
+									<th class="text-right">Pokok</th>
+									<th class="text-right">Bunga</th>
+									<th class="text-right">Denda</th>
+									<th class="text-right">Potongan</th>
+									<th class="text-right">Sub Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach ($angsuran['details'] as $k => $v)
+									<tr>
+										<td>{{ $loop->iteration }}</td>
+										<td>Angsuran ke- {{ $v['nth'] }}</td>
+										<td class="text-right">{{ $idr->formatMoneyTo($v['pokok']) }}</td>
+										<td class="text-right">{{ $idr->formatMoneyTo($v['bunga']) }}</td>
+										<td class="text-right">{{ $idr->formatMoneyTo($v['denda']) }}</td>
+										<td class="text-right">{{ $idr->formatMoneyTo($v['potongan']) }}</td>
+										<td class="text-right">{{ $idr->formatMoneyTo($v['subtotal']) }}</td>
+									</tr>
+								@endforeach
+							</tbody>
+							<tfoot>
+								<tr>
+									<td class="text-right" colspan="6"><h5><strong>Total</strong></h5></td>
+									<td class="text-right"><h5><strong>{{ $idr->formatMoneyTo($total) }}</strong></h5></td>
+								</tr>
+							</tfoot>
+						</table>
+						<div class="clearfix">&nbsp;</div>
+					</td>
+				</tr>
+			</table>			
+			<div class="row">
+				<div class="col-6">
+					<table class="table table-bordered w-100 mt-4">
+						<thead class="thead-light">
+							<tr>
+								<th class="text-center p-2 w-25">Dibuat</th>
+								<th class="text-center p-2 w-25">Diperiksa</th>
+								<th class="text-center p-2 w-25">Disetujui</th>
+								<th class="text-center p-2 w-25">Dibayar</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td style="padding: 35px;">&nbsp;</td>
+								<td style="padding: 35px;">&nbsp;</td>
+								<td style="padding: 35px;">&nbsp;</td>
+								<td style="padding: 35px;">&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-6">
+					<table class="table w-50 text-center ml-auto mr-5" style="height: 220px;">
+						<tbody>
+							<tr>
+								<td class="border-0">{{ $kantor_aktif['alamat']['kota'] }}, {{ $carbon->now()->format('d/m/Y') }}</td>
+							</tr>
+							<tr>
+								<td class="border-0">
+									<p class="border border-left-0 border-right-0 border-bottom-0">Nama terang dan tanda tangan</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -72,7 +72,6 @@ class AngsuranController extends Controller
 		// $t_lunas 	= (string)AngsuranDetail::hitungHutangDibayar($id) * 1;
 		$s_hutang 	= $t_hutang - $t_lunas;
 
-
 		view()->share('t_hutang', $this->formatMoneyTo($t_hutang));
 		view()->share('s_hutang', $this->formatMoneyTo($s_hutang));
 		view()->share('t_lunas', $this->formatMoneyTo($t_lunas));

@@ -4,12 +4,18 @@ namespace App\Http\Controllers\V2\Kredit;
 
 use App\Http\Controllers\Controller;
 
+use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Kredit\Models\NotaBayar;
+use Thunderlabid\Kredit\Models\AngsuranDetail;
 
-use Exception, Auth, Carbon\Carbon;
+use App\Service\Traits\IDRTrait;
+
+use Exception, DB, Auth, Carbon\Carbon;
 
 class AngsuranController extends Controller
 {
+	use IDRTrait;
+
 	public function __construct()
 	{
 		parent::__construct();

@@ -40,7 +40,10 @@
 			Route::resource('kredit', 			'KreditController'); 
 			Route::resource('jaminan',			'MutasiJaminanController'); 
 			Route::resource('tunggakan', 		'TunggakanController'); 
-			Route::resource('penagihan', 		'PenagihanController'); 
+			Route::resource('penagihan', 		'PenagihanController');
+
+			Route::get('angsuran/{id}', 						['uses' => 'AngsuranController@show', 'as' => 'angsuran.show']);
+			Route::get('angsuran/{id}/print/bukti/angsuran', 	['uses' => 'AngsuranController@print', 'as' => 'angsuran.bukti_angsuran']);
 		});
 		Route::namespace('V2\Kantor')->group(function(){
 			Route::resource('kantor', 			'KantorController'); 
@@ -96,7 +99,7 @@
 		});
 		
 		Route::prefix('v1/kredit')->namespace('Kredit')->as('kredit.')->group( function() {
-			Route::resource('angsuran', 		'AngsuranController');
+			// Route::resource('angsuran', 		'AngsuranController');
 			Route::get('/angsuran/print/{id}',	['as'	=> 'angsuran.print', 	'uses' => 'AngsuranController@print']);
 			Route::resource('penagihan', 		'PenagihanController');
 			Route::resource('jaminan', 			'JaminanController');
