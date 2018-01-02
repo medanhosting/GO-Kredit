@@ -44,13 +44,15 @@ class KreditController extends Controller
 		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
 		$total		= array_sum(array_column($angsuran->toArray(), 'subtotal'));
 		
-
 		//TUNGGAKAN
 		$today		= Carbon::now();
+		$dday		= Carbon::createFromFormat('d/m/Y H:i', $aktif['tanggal']);
 		$tunggakan  = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->orderby('tanggal', 'asc')->first();
+		
+		$riwayat_t  = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($dday)->orderby('tanggal', 'asc')->get();
 
 		$latest_pay = NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
-		$riwayat_t 	= SuratPeringatan::where('nth', '<>', $tunggakan['nth'])->orderby('nth', 'desc')->get();
+
 		$penagihan 	= Penagihan::wherehas('kredit', function($q)use($id){$q->where('kode_kantor', request()->get('kantor_aktif_id'))->where('id', $id);})->HitungNotaBayar()->orderby('tanggal', 'asc')->get();
 
 		$jaminan 	= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->get();

@@ -20,10 +20,10 @@
 						<div class="col-12 col-sm-12 col-md-12">
 							<nav class="nav nav-tabs underline" id="myTab" role="tablist">
 								<a class="nav-item nav-link {{$is_setuju_tab}}" id="nav-setuju-tab" data-toggle="tab" href="#nav-setuju" role="tab" aria-controls="nav-setuju" aria-selected="true">
-									setuju <span class="badge badge-success">{{$setuju->total()}}</span>
+									Setuju <span class="badge badge-success">{{$setuju->total()}}</span>
 								</a>
 								<a class="nav-item nav-link {{$is_tolak_tab}}" id="nav-tolak-tab" data-toggle="tab" href="#nav-tolak" role="tab" aria-controls="nav-tolak" aria-selected="false">
-									tolak <span class="badge badge-success">{{$tolak->total()}}</span>
+									Tolak <span class="badge badge-success">{{$tolak->total()}}</span>
 								</a>
 							</nav>
 							<div class="tab-content" id="nav-tabContent">

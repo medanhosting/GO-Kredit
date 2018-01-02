@@ -10,6 +10,8 @@ use Thunderlabid\Kredit\Models\AngsuranDetail;
 
 use App\Service\Traits\IDRTrait;
 
+use App\Http\Service\Policy\PelunasanAngsuran;
+
 use Exception, DB, Auth, Carbon\Carbon;
 
 class AngsuranController extends Controller
@@ -99,5 +101,12 @@ class AngsuranController extends Controller
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());
 		}
+	}
+
+	public function potongan($id){
+		$aktif		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
+		
+		$potongan 	= PelunasanAngsuran::potongan($aktif['nomor_kredit']);
+		return response()->json($potongan);
 	}
 }

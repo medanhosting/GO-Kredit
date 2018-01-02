@@ -21,24 +21,40 @@
 		{!! Form::close() !!}
 	</div>
 </div>
+@endif
 
 <div class="clearfix">&nbsp;</div>
 <div class="row">
 	<div class="col-sm-12">
-		<h6 class="text-secondary">SURAT PERINGATAN</h6>
+		<h6 class="text-secondary">RIWAYAT TUNGGAKAN</h6>
 		<table class="table table-bordered">
 			<thead>
 				<tr>
 					<th>Tanggal</th>
+					<th>Sejak</th>
+					<th>Total Tunggakan</th>
+					<th>Sisa Hutang</th>
 					<th>Surat Peringatan</th>
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($tunggakan['suratperingatan'] as $k => $v)
+				@foreach($riwayat_t as $k => $v)
 				<tr>
 					<td>{{$v['tanggal']}}</td>
 					<td>
-						<a href="">Cetak {{ucwords(str_replace('_', ' ', $v['tag']))}}</a>
+						{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->diffForHumans()}}
+					</td>
+					<td>
+						{{$idr->formatMoneyTo($v['tunggakan'])}}
+					</td>
+					<td>
+						{{$idr->formatMoneyTo($v['sisa_hutang'])}}
+					</td>
+					<td>
+						@foreach($v['suratperingatan'] as $v0)
+							<a href="">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a><br>
+							<small>{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v0['tanggal'])->diffForHumans()}}</small><br/>
+						@endforeach
 					</td>
 				</tr>
 				@endforeach
@@ -46,32 +62,3 @@
 		</table>
 	</div>
 </div>
-@endif
-
-@if(count($riwayat_t))
-	<h6 class="text-secondary">RIWAYAT TUNGGAKAN</h6>
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<th>Tanggal</th>
-				<th>Surat Peringatan</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach($riwayat_t as $k => $v)
-			<tr>
-				<td>{{$v['tanggal']}}</td>
-				<td>
-					<a href="">Cetak {{ucwords(str_replace('_', ' ', $v['tag']))}}</a>
-				</td>
-			</tr>
-			@endforeach
-		</tbody>
-	</table>
-@elseif(!count($riwayat_t) && !$tunggakan)
-<div class="row">
-	<div class="col-sm-12">
-		Tidak ada tunggakan
-	</div>
-</div>
-@endif

@@ -31,7 +31,7 @@
 			Route::resource('simulasi', 		'SimulasiController'); 
 			Route::resource('pengajuan', 		'PengajuanController'); 
 			Route::resource('putusan', 			'PutusanController'); 
-			Route::get('putusan/{id}/print/bukti/realisasi', ['uses' => 'PutusanController@print', 'as' => 'putusan.bukti_realisasi']);
+			Route::get('putusan/{id}/print ', ['uses' => 'PutusanController@print', 'as' => 'putusan.print']);
 			
 			Route::post('assign/{id}', 	['uses' => 	'PengajuanController@assign', 'as' => 'pengajuan.assign']);
 		});
@@ -41,9 +41,10 @@
 			Route::resource('jaminan',			'MutasiJaminanController'); 
 			Route::resource('tunggakan', 		'TunggakanController'); 
 			Route::resource('penagihan', 		'PenagihanController');
+			Route::resource('angsuran', 		'AngsuranController');
 
-			Route::get('angsuran/{id}', 						['uses' => 'AngsuranController@show', 'as' => 'angsuran.show']);
-			Route::get('angsuran/{id}/print/bukti/angsuran', 	['uses' => 'AngsuranController@print', 'as' => 'angsuran.bukti_angsuran']);
+			Route::get('angsuran/{id}/print', 		['uses' => 'AngsuranController@print', 		'as' => 'angsuran.print']);
+			Route::get('angsuran/{id}/potongan', 	['uses' => 'AngsuranController@potongan', 	'as' => 'angsuran.potongan']);
 		});
 		Route::namespace('V2\Kantor')->group(function(){
 			Route::resource('kantor', 			'KantorController'); 

@@ -76,7 +76,7 @@ class Pengajuan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	public function status_terakhir()
 	{
-		return $this->hasOne(Status::class, 'pengajuan_id')->orderby('tanggal', 'desc');
+		return $this->hasOne(Status::class, 'pengajuan_id')->orderby('tanggal', 'desc')->orderby('created_at', 'desc');
 	}
 
 	public function status_permohonan()
