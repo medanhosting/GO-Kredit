@@ -196,7 +196,7 @@
 			</div>
 			<div class="row">
 				<div class="col-6">
-					<a href="{{ route('putusan.bukti_realisasi', ['id' => $putusan['pengajuan_id'], 'mode' => $kc, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="text-success">
+					<a href="{{ route('putusan.print', ['id' => $putusan['pengajuan_id'], 'mode' => $kc, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="text-success">
 						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK NOTA BUKTI REALISASI
 					</a>
 				</div>
