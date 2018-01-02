@@ -37,7 +37,7 @@ Route::any('/pengaturan', function (Request $request)
 {
 	if(Auth::user() && !is_null(Auth::user()['nip']))
 	{
-		$data 	= ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'remain_pengajuan' => 1, 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3];
+		$data 	= ['minimum_pengajuan' => 2500000, 'minimum_shgb' => Carbon\Carbon::now()->format('Y'), 'minimum_bpkb' => Carbon\Carbon::now()->subYears(25)->format('Y'), 'remain_pengajuan' => 1, 'max_jaminan_kendaraan' => 2, 'max_jaminan_tanah_dan_bangunan' => 3];
 
 		return response()->json(['status' => 1, 'data' => $data, 'error' => ['message' => []]]);
 	}

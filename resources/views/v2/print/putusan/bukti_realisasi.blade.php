@@ -42,7 +42,7 @@
 					<div class="row justify-content-end">
 						<div class="col-2">Tanggal</div>
 						<div class="col-7">
-							{{ $putusan['tanggal'] }}
+							{{ $putusan['pengajuan']['status_terakhir']['tanggal'] }}
 						</div>
 					</div>
 				</div>
@@ -59,12 +59,12 @@
 					<td style="width: 12.5%">Nomor Rekening</td>
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">gak tau variabelnya</p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">&nbsp;</p>
 					</td>
 					<td style="width: 12.5%">No. SPK</td>
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">gak tau variabelnya</p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">&nbsp;</p>
 					</td>
 				</tr>
 				<tr class="align-top">
@@ -78,7 +78,7 @@
 					<td style="width: 12.5%">Usaha</td>
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">gak tau variabelnya</p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">&nbsp;</p>
 					</td>
 				</tr>
 				<tr class="align-top">
@@ -92,14 +92,30 @@
 					<td style="width: 12.5%">Jenis Pinjaman</td>
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">gak tau variabelnya</p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{strtoupper($putusan['pengajuan']['analisa']['jenis_pinjaman'])}}</p>
 					</td>
 				</tr>
 				<tr class="align-top">
 					<td style="width: 12.5%">Jaminan</td>
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">gak tau variabelnya</p>
+					@foreach($survei['jaminan_kendaraan'] as $k => $v)
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
+							BPKB
+							{{strtoupper($v['dokumen_survei']['collateral']['bpkb']['tipe'])}}
+							{{strtoupper($v['dokumen_survei']['collateral']['bpkb']['merk'])}}
+							NOMOR 
+							{{strtoupper($v['dokumen_survei']['collateral']['bpkb']['nomor_bpkb'])}}
+						</p>
+					@endforeach
+					@foreach($survei['jaminan_tanah_bangunan'] as $k => $v)
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
+							{{strtoupper($v['dokumen_survei']['collateral']['jenis'])}}
+							{{strtoupper($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['tipe'])}}
+							NOMOR 
+							{{strtoupper($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['nomor_sertifikat'])}}
+						</p>
+					@endforeach
 					</td>
 					<td style="width: 12.5%">Nama AO</td>
 					<td style="width: 1%">:</td>
@@ -155,7 +171,7 @@
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{ $putusan['tanggal'] }} <-- tolong diparsing ke tanggal aja
+							{{ $carbon::createFromFormat('d/m/Y H:i', $putusan['pengajuan']['status_terakhir']['tanggal'])->format('d') }}
 						</p>
 					</td>
 				</tr>

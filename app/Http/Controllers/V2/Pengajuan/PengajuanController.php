@@ -69,7 +69,6 @@ class PengajuanController extends Controller
 	public function show($id){
 		try {
 			$permohonan		= Pengajuan::where('p_pengajuan.id', $id)->kantor(request()->get('kantor_aktif_id'))->with('jaminan_kendaraan', 'jaminan_tanah_bangunan', 'riwayat_status', 'status_terakhir')->first();
-			
 
 			if (!$permohonan)
 			{
@@ -148,6 +147,10 @@ class PengajuanController extends Controller
 			$returned 	= $this->assign_komite_putusan($permohonan);
 		}elseif(str_is($permohonan->status_terakhir->status, 'putusan')){
 			$returned 	= $this->assign_realisasi($permohonan);
+
+			if($returned instanceof Model){
+			return redirect()->route('putusan.show', ['id' => $returned['pengajuan_id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+		}
 		}
 
 		if($returned instanceof Model){
