@@ -26,6 +26,9 @@
 					</tr>
 				</thead>
 				<tbody>
+					@php
+						{{--  dd($aktif['nomor_kredit']);  --}}
+					@endphp
 					@foreach($angsuran as $k => $v)
 					<tr @if($v['is_tunggakan']) class="text-danger" @endif>
 						<td class="text-center">{{ $loop->iteration }}</td>
@@ -46,8 +49,8 @@
 							@if (is_null($v['nota_bayar_id']))
 								<a href="#" class="text-primary btn-bayar" data-value="{{ $v['nth'] }}">Bayar</a>
 							@else
-								<a href="{{route('kredit.angsuran.show', array_merge(['id' => $id, 'nota_bayar_id' => $v['nota_bayar_id']], request()->all()))}}">
-									Daftar Angsuran	
+								<a href="{{route('angsuran.show', array_merge(['id' => $aktif['nomor_kredit'], 'nota_bayar_id' => $v['nota_bayar_id']], request()->all()))}}">
+									Nota Angsuran
 								</a>
 							@endif
 						</td>
@@ -78,23 +81,6 @@
 		{!! Form::close() !!}
 	</div>
 </div>
-
-@component ('bootstrap.modal', ['id' => 'bayar-angsuran', 'form' => true, 'method' => 'patch', 'url' => route('kredit.update', ['id' => $id, 'kantor_aktif_id' => $kantor_aktif['id'], 'nth' => request()->get('nth')]) ])
-		@slot ('title')
-			Tandai Angsuran Lunas
-		@endslot
-
-		@slot ('body')
-			<p>Tanggal pelunasan akan terhitung tepat ketika Anda mengisi password berikut</p>
-
-			{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
-		@endslot
-
-		@slot ('footer')
-			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-			{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
-		@endslot
-@endcomponent
 
 @push('js')
 	<script type="text/javascript">

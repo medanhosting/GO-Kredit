@@ -5,7 +5,7 @@
 <div class="clearfix">&nbsp;</div>
 <div class="row justify-content-center">
 	<div class="col">
-		{!! Form::open(['url' => route('realisasi.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+		{!! Form::open(['url' => route('putusan.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 			<div class="row">
 				<div class="col-6 text-left">
 					<h3 class="mb-2">{{strtoupper($kantor_aktif['nama'])}}</h3>

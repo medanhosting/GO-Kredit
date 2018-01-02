@@ -43,6 +43,7 @@ class KreditController extends Controller
 		//ANGSURAN
 		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
 		$total		= array_sum(array_column($angsuran->toArray(), 'subtotal'));
+		
 
 		//TUNGGAKAN
 		$today		= Carbon::now();
