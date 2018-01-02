@@ -16,8 +16,10 @@ class CreateKreditMutasiJaminanTable extends Migration
 		Schema::create('k_mutasi_jaminan', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('nomor_kredit');
+			$table->string('nomor_jaminan');
 			$table->datetime('tanggal');
 			$table->string('tag');
+			$table->string('status');
 			$table->text('description')->nullable();
 			$table->text('documents');
 			$table->timestamps();

@@ -42,6 +42,9 @@ class KreditController extends Controller
 
 		//ANGSURAN
 		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
+
+		$titipan 	= NotaBayar::wheredoesnthave('details',  function($q){$q;})->where('nomor_kredit', $aktif['nomor_kredit'])->sum('jumlah');
+
 		$total		= array_sum(array_column($angsuran->toArray(), 'subtotal'));
 		
 		//TUNGGAKAN
@@ -55,7 +58,7 @@ class KreditController extends Controller
 
 		$penagihan 	= Penagihan::wherehas('kredit', function($q)use($id){$q->where('kode_kantor', request()->get('kantor_aktif_id'))->where('id', $id);})->HitungNotaBayar()->orderby('tanggal', 'asc')->get();
 
-		$jaminan 	= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->get();
+		$jaminan 	= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->with(['next'])->get();
 
 		if(request()->get('current')){
 			switch (strtolower(request()->get('current'))) {
@@ -72,7 +75,6 @@ class KreditController extends Controller
 		}else{
 			view()->share('is_kredit_tab', 'show active');
 		}
-
 
 		view()->share('active_submenu', 'kredit');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));

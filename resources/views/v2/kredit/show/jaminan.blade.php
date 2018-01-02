@@ -6,6 +6,7 @@
 				<tr class="text-center">
 					<th colspan="2">Catatan</th>
 					<th>Dokumen</th>
+					<th>&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -14,7 +15,7 @@
 					@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
 					@if($lua != $pa)
 						<tr>
-							<td colspan="3" class="bg-light">
+							<td colspan="4" class="bg-light">
 								{{$pa}}
 							</td>
 						</tr>
@@ -46,10 +47,19 @@
 								Kendaraan {{str_replace('_', ' ', $v['documents']['bpkb']['jenis'])}} - {{$v['documents']['bpkb']['merk']}} , {{$v['documents']['bpkb']['tipe']}} ({{$v['documents']['bpkb']['tahun']}})
 							@endif
 						</td>
+						<td>
+							@if(str_is($v['possible_action'], 'ajukan_jaminan_keluar'))
+								<a href="">Ajukan Jaminan Keluar</a>
+							@elseif(str_is($v['possible_action'], 'otorisasi_jaminan_masuk'))
+								<a href="">Otorisasi Jaminan Masuk</a>
+							@elseif(str_is($v['possible_action'], 'otorisasi_jaminan_keluar'))
+								<a href="">Otorisasi Jaminan Keluar</a>
+							@endif
+						</td>
 					</tr>
 				@empty
 					<tr>
-						<td colspan="3">
+						<td colspan="4">
 							<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
 						</td>
 					</tr>

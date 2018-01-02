@@ -84,7 +84,7 @@ class Aktif extends Model
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
 	public function scopePembayaranBerikut($query){
-		return $query->selectraw('k_aktif.*')->selectraw(\DB::raw("(select sum(amount) from k_angsuran_detail where k_angsuran_detail.nomor_kredit = k_aktif.nomor_kredit and k_angsuran_detail.deleted_at is null and k_angsuran_detail.nota_bayar_id is null and k_angsuran_detail.tanggal <= '".Carbon::now()->format('Y-m-d H:i:s')."') as jumlah_pembayaran_berikut"))->selectraw(\DB::raw("(select min(tanggal) from k_angsuran_detail where k_angsuran_detail.nomor_kredit = k_aktif.nomor_kredit and k_angsuran_detail.deleted_at is null and k_angsuran_detail.nota_bayar_id is null) as tanggal_pembayaran_berikut"));
+		return $query->selectraw('k_aktif.*')->selectraw(\DB::raw("(select min(tanggal) from k_angsuran_detail where k_angsuran_detail.nomor_kredit = k_aktif.nomor_kredit and k_angsuran_detail.deleted_at is null and k_angsuran_detail.nota_bayar_id is null) as tanggal_pembayaran_berikut"))->selectraw(\DB::raw("(select sum(amount) from k_angsuran_detail where k_angsuran_detail.nomor_kredit = k_aktif.nomor_kredit and k_angsuran_detail.deleted_at is null and k_angsuran_detail.nota_bayar_id is null and k_angsuran_detail.tanggal <= tanggal_pembayaran_berikut) as jumlah_pembayaran_berikut"));
 	}
 
 	public function scopeLihatJatuhTempo($query, Carbon $value){
