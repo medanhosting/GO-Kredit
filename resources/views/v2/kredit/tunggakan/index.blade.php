@@ -24,8 +24,7 @@
 					 		@endif
 					 	@endforeach
 						<div class="form-row">
-							<div class='col-sm-6 order-1'>{!! Form::bsText(null, 'q', null, ['placeholder' => 'search']) !!}</div>
-							<!-- <div class='col-sm-1 order-2'>{!! Form::bsSelect(null, 'periode', ['daily' => 'Daily', 'monthly' => 'Monthly', 'yearly' => 'Yearly'], null) !!}</div> -->
+							<div class='col-sm-2 order-1'>{!! Form::bsText(null, 'q', null, ['placeholder' => 'sebelum tanggal', 'class' => 'mask-date form-control']) !!}</div>
 							<div class='col-auto order-3'>{!! Form::bsSubmit('<i class="fa fa-search"></i>', ['class' => 'btn btn-primary']) !!}</div>
 						</div>
 					{!! Form::close() !!}
@@ -73,7 +72,10 @@
 											<a href="">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a><br>
 											<small>{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v0['tanggal'])->diffForHumans()}}</small><br/>
 										@endforeach
+
+										@if(is_null($v['nota_bayar_id']))
 										<a href="{{route('tunggakan.show', ['id' => $v['nomor_kredit'], 'nomor_kredit' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id])}}" class="alert-link">Keluarkan {{ucwords(str_replace('_', ' ', $v['should_issue_surat_peringatan']['keluarkan']))}}</a>
+										@endif
 									</td>
 									<td>
 										<a href="{{route('kredit.show', ['id' => $v['kredit']['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'tunggakan'])}}">Lihat Kredit</a>

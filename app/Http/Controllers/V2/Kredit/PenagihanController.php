@@ -17,13 +17,17 @@ class PenagihanController extends Controller
 
 	public function index() 
 	{
-		$today 		= Carbon::now();
+		$start 		= Carbon::now()->startofday();
+		$end 		= Carbon::now()->endofday();
 
-		if(request()->has('q')){
-			$today	= Carbon::createFromFormat('d/m/Y', request()->get('q'));
+		if(request()->has('start')){
+			$start	= Carbon::createFromFormat('d/m/Y', request()->get('start'))->startofday();
+		}
+		if(request()->has('end')){
+			$end	= Carbon::createFromFormat('d/m/Y', request()->get('end'))->endofday();
 		}
 
-		$penagihan 	= Penagihan::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungNotaBayar()->orderby('tanggal', 'asc')->get();
+		$penagihan 	= Penagihan::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungNotaBayar()->where('tanggal', '>=', $start->format('Y-m-d H:i:s'))->where('tanggal', '<=', $end->format('Y-m-d H:i:s'))->orderby('tanggal', 'asc')->get();
 
 		view()->share('is_aktif_tab', 'show active');
 

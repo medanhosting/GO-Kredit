@@ -24,7 +24,9 @@
 					 		@endif
 					 	@endforeach
 						<div class="form-row">
-							<div class='col-sm-6 order-1'>{!! Form::bsText(null, 'q', null, ['placeholder' => 'search']) !!}</div>
+							<div class='col-sm-2 order-1'>{!! Form::bsText(null, 'start', null, ['placeholder' => 'mulai', 'class' => 'mask-date form-control']) !!}</div>
+							<div class="col-auto order-2"><i class="fa fa-minus pt-3"></i></div>
+							<div class='col-sm-2 order-3'>{!! Form::bsText(null, 'end', null, ['placeholder' => 'sampai', 'class' => 'mask-date form-control']) !!}</div>
 							<!-- <div class='col-sm-1 order-2'>{!! Form::bsSelect(null, 'periode', ['daily' => 'Daily', 'monthly' => 'Monthly', 'yearly' => 'Yearly'], null) !!}</div> -->
 							<div class='col-auto order-3'>{!! Form::bsSubmit('<i class="fa fa-search"></i>', ['class' => 'btn btn-primary']) !!}</div>
 						</div>

@@ -15,7 +15,7 @@
 					<h6 class="pt-4 pl-4">MUTASI JAMINAN</h6>
 				@endslot
 				@slot('body')
-					<form action="{{route('realisasi.index')}}" method="GET">
+					<form action="{{route('jaminan.index')}}" method="GET">
 						<div class="row">
 							<div class="col-sm-3">
 								<label>Cari Nasabah</label>
@@ -57,7 +57,11 @@
 							<!-- CARI BERDASARKAN DOKUMEN -->
 							<div class="col-sm-4">
 								<label>Cari Tanggal</label>
-								<input type="text" name="tanggal_{{$s_pre}}" class="form-control w-100" placeholder="cari tanggal" value="{{request()->get('tanggal_jaminan')}}">
+								<div class="form-row">
+									<div class='col-sm-5 order-1'>{!! Form::bsText(null, 'start', null, ['placeholder' => 'mulai', 'class' => 'mask-date form-control']) !!}</div>
+									<div class="col-auto order-2"><i class="fa fa-minus pt-3"></i></div>
+									<div class='col-sm-5 order-3'>{!! Form::bsText(null, 'end', null, ['placeholder' => 'sampai', 'class' => 'mask-date form-control']) !!}</div>
+								</div>
 							</div>
 							<div class="col-sm-2 pl-1">
 								<label>&nbsp;</label><br/>

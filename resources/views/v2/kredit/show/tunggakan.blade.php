@@ -32,9 +32,9 @@
 				<tr>
 					<th>Tanggal</th>
 					<th>Sejak</th>
-					<th>Total Tunggakan</th>
-					<th>Sisa Hutang</th>
-					<th>Surat Peringatan</th>
+					<th class="text-right">Total Tunggakan</th>
+					<th class="text-right">Sisa Hutang</th>
+					<th class="text-right">Surat Peringatan</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -44,13 +44,13 @@
 					<td>
 						{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->diffForHumans()}}
 					</td>
-					<td>
+					<td class="text-right">
 						{{$idr->formatMoneyTo($v['tunggakan'])}}
 					</td>
-					<td>
+					<td class="text-right">
 						{{$idr->formatMoneyTo($v['sisa_hutang'])}}
 					</td>
-					<td>
+					<td class="text-right">
 						@foreach($v['suratperingatan'] as $v0)
 							<a href="">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a><br>
 							<small>{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v0['tanggal'])->diffForHumans()}}</small><br/>

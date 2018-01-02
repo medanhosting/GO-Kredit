@@ -8,8 +8,8 @@
 			<th>Tanggal</th>
 			<th>Surat Peringatan</th>
 			<th>Penerima</th>
-			<th>Pelunasan</th>
-			<th>Titipan</th>
+			<th class="text-right">Pelunasan</th>
+			<th class="text-right">Titipan</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -20,8 +20,8 @@
 				{{ucwords(str_replace('_',' ',$v['suratperingatan']['tag']))}}
 			</td>
 			<td>{{$v['penerima']['nama']}}</td>
-			<td>{{$idr->formatMoneyTo($v['pelunasan'])}}</td>
-			<td>{{$idr->formatMoneyTo($v['titipan'])}}</td>
+			<td class="text-right">{{$idr->formatMoneyTo($v['pelunasan'])}}</td>
+			<td class="text-right">{{$idr->formatMoneyTo($v['titipan'])}}</td>
 		</tr>
 		@endforeach
 	</tbody>

@@ -17,14 +17,16 @@ class MutasiJaminanController extends Controller
 
 	public function index () 
 	{
-		$start 		= Carbon::now()->startOfDay();
-		$end 		= Carbon::now()->endOfDay();
 		$jaminan 	= MutasiJaminan::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
 
-		if(request()->has('q')){
-			list($start, $end)	= explode(' - ', request()->get('q'));
-			$start 	= Carbon::createFromFormat('d/m/Y', $start);
-			$end 	= Carbon::createFromFormat('d/m/Y', $end);
+		$start 		= Carbon::now()->startofday();
+		$end 		= Carbon::now()->endofday();
+
+		if(request()->has('start')){
+			$start	= Carbon::createFromFormat('d/m/Y', request()->get('start'))->startofday();
+		}
+		if(request()->has('end')){
+			$end	= Carbon::createFromFormat('d/m/Y', request()->get('end'))->endofday();
 		}
 
 		$jaminan 	= $jaminan->where('tanggal', '>=', $start->format('Y-m-d H:i:s'))->where('tanggal', '<=', $end->format('Y-m-d H:i:s'))->orderby('tanggal', 'desc')->paginate();
