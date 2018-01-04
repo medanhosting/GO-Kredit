@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //LOGIN API
 
 Route::middleware('api')->namespace('API')->group(function(){
+	Route::any('/me',							['uses' => 'UserController@show']);
 	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi']);
 	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store']);
 	Route::any('/permohonan/index',				['uses' => 'PermohonanController@index']);
