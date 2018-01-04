@@ -134,9 +134,16 @@ class PermohonanController extends BaseController
 		try {
 			//1. find pengajuan
 			if(Auth::user()){
-				$pkary		= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active(Carbon::now())->first();
-
 				$pengajuan 	= new Pengajuan;
+
+				$pkary		= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active(Carbon::now());
+
+				if(request()->has('kode_kantor')){
+					$pkary 		= $pkary->where('kantor_id', request()->get('kode_kantor'));
+					$pengajuan 	= $pengajuan->kantor(request()->get('kode_kantor'));
+				}
+
+				$pkary 		= $pkary->first();
 
 				if(!in_array(strtolower($pkary['role']), ['komisaris', 'pimpinan'])){
 					$pengajuan	= $pengajuan->where('ao->nip', Auth::user()['nip']);
@@ -144,10 +151,6 @@ class PermohonanController extends BaseController
 
 				if(request()->has('status')){
 					$pengajuan 	= $pengajuan->status(request()->get('status'));
-				}
-
-				if(request()->has('kode_kantor')){
-					$pengajuan 	= $pengajuan->kantor(request()->get('kode_kantor'));
 				}
 			}
 			else{
