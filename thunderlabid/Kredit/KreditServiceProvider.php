@@ -36,11 +36,6 @@ class KreditServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
-		///////////////////////////////
-		// Pembebanan Biaya Kolektor //
-		///////////////////////////////
-		// Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanCreated', 'Thunderlabid\Kredit\Listeners\BebankanBiayaKolektor');
-
 		//////////////////////////
 		// Buat Jadwal Angsuran //
 		//////////////////////////
@@ -51,6 +46,13 @@ class KreditServiceProvider extends ServiceProvider
 		///////////////////////////
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
+
+		////////////////////////////////////////////////////
+		// Tidak boleh melakukan pembayaran setelah jam 3 //
+		////////////////////////////////////////////////////
+		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
+		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
+
 	}
 
 	public function register()
