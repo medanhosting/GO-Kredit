@@ -113,4 +113,21 @@ class AngsuranController extends Controller
 		$potongan 	= PelunasanAngsuran::potongan($aktif['nomor_kredit']);
 		return response()->json($potongan);
 	}
+
+	public function tagihan($id){
+		$aktif		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
+
+		$nth 		= request()->get('nth');
+		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit']);
+
+		if(is_array($nth)){
+			$angsuran 	= $angsuran->wherein('nth', $nth);
+		}else{
+			$angsuran 	= $angsuran->where('nth', $nth);
+		}
+
+		$angsuran 	= $angsuran->get();
+
+		return response()->json($angsuran);
+	}
 }

@@ -159,7 +159,6 @@ class KreditController extends Controller
 			return redirect()->back();
 		} catch (Exception $e) {
 			DB::rollback();
-			dD($e);
 			return redirect()->back()->withErrors($e->getMessage());
 		}
 	}
