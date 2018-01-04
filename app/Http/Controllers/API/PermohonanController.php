@@ -159,7 +159,7 @@ class PermohonanController extends BaseController
 			}
 
 			$pengajuan 		= $pengajuan->paginate();
-			$pengajuan->appends(request()->only('status', 'mobile'));
+			$pengajuan->appends(request()->only('status', 'mobile', 'kode_kantor'));
 
 			return response()->json(['status' => 1, 'data' => $pengajuan, 'error' => ['message' => []]]);
 
