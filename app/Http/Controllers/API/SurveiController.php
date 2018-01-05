@@ -64,18 +64,28 @@ class SurveiController extends BaseController
 				$survei			= Survei::where('pengajuan_id', $pengajuan_id)->orderby('tanggal', 'desc')->first();
 				$survei_detail 	= SurveiDetail::where('survei_id', $survei['id'])->where('id', $survei_detail_id)->firstorfail();
 
-				$fotos 		= request()->get('foto');
+				//jika ada kiriman foto
+				if(request()->has('foto')){
+					$fotos 		= request()->get('foto');
 
-				$s_foto 	= SurveiFoto::where('survei_detail_id', $survei_detail_id)->first();
+					$s_foto 	= SurveiFoto::where('survei_detail_id', $survei_detail_id)->first();
 
-				if(!$s_foto)
-				{
-					$s_foto = new SurveiFoto;
+					if(!$s_foto)
+					{
+						$s_foto = new SurveiFoto;
+					}
+
+					$s_foto->survei_detail_id 	= $survei_detail_id;
+					$s_foto->arsip_foto 		= $fotos;
+					$s_foto->save();
 				}
 
-				$s_foto->survei_detail_id 	= $survei_detail_id;
-				$s_foto->arsip_foto 		= $fotos;
-				$s_foto->save();
+				if(request()->has('catatan')){
+					$v 	= $survei_detail->dokumen_survei;
+					$v['collateral'][$v['collateral']['jenis']]['catatan'] = request()->get('catatan');
+					$survei_detail->dokumen_survei	= $v;
+					$survei_detail->save(); 
+				}
 
 				return response()->json(['status' => 1, 'data' => $survei->toArray(), 'error' => ['message' => []]]);
 			}
