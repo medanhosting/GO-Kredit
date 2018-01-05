@@ -13,7 +13,7 @@
 		<!-- FILTER BERDASARKAN KANTOR -->
 		<div class="col-sm-3">
 			<label>Kantor Penempatan</label>
-			<select class="form-control" name="kantor">
+			<select class="form-control custom-select" name="kantor">
 				<option value="semua">Semua Kantor</option>
 				@foreach($kantor as $k2 => $v2)
 				<option value="{{$v2['id']}}" @if(str_is(request()->get('kantor'), $v2['id'])) selected @endif>{{$v2['nama']}}</option>
@@ -23,7 +23,7 @@
 		<div class="col-sm-2">
 			<label>Urutkan</label>
 			<!-- URUTKAN BERDASARKAN NAMA/TANGGAL -->
-			<select class="form-control" name="sort">
+			<select class="form-control custom-select" name="sort">
 				<option value="nama-asc" @if(str_is(request()->get('sort'), 'nama-asc')) selected @endif>Nama [A - Z]</option>
 				<option value="nama-desc" @if(str_is(request()->get('sort'), 'nama-desc')) selected @endif>Nama [Z - A]</option>
 			</select>

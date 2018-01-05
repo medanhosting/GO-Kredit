@@ -94,35 +94,35 @@
 					</thead>
 					<tbody>
 						@foreach($angsuran['details'] as $k => $v)
-						<tr>
-							<td>{{$k+1}}</td>
-							<td class="text-left">{{Carbon\Carbon::parse($v['tanggal_bayar'])->addDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}</td>
-							<td class="text-right">{{$idr->formatMoneyTo($v['pokok'])}}</td>
-							<td class="text-right">{{$idr->formatMoneyTo($v['bunga'])}}</td>
-							<td class="text-right">{{$idr->formatMoneyTo($v['denda'])}}</td>
-							<td class="text-right">{{$idr->formatMoneyTo($v['collector'])}}</td>
-							<td class="text-right">{{$idr->formatMoneyTo($v['subtotal'])}}</td>
-							@if(!isset($bayar) && !isset($lunas))
-							<td class="text-center">
-								@if(is_null($v['nota_bayar_id']))
-									<input type="checkbox" name="nth[]" value="{{$v['nth']}}">
-								@else
-									<a href="{{route('kredit.angsuran.show', array_merge(['id' => $id, 'nota_bayar_id' => $v['nota_bayar_id']], request()->all()))}}"><i class="fa fa-check"></i></a>
+							<tr>
+								<td>{{$k+1}}</td>
+								<td class="text-left">{{Carbon\Carbon::parse($v['tanggal_bayar'])->addDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i')}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['pokok'])}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['bunga'])}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['denda'])}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['collector'])}}</td>
+								<td class="text-right">{{$idr->formatMoneyTo($v['subtotal'])}}</td>
+								@if(!isset($bayar) && !isset($lunas))
+									<td class="text-center">
+										@if(is_null($v['nota_bayar_id']))
+											<input type="checkbox" name="nth[]" value="{{$v['nth']}}">
+										@else
+											<a href="{{route('kredit.angsuran.show', array_merge(['id' => $id, 'nota_bayar_id' => $v['nota_bayar_id']], request()->all()))}}"><i class="fa fa-check"></i></a>
+										@endif
+									</td>
 								@endif
-							</td>
-							@endif
-						</tr>
+							</tr>
 						@endforeach
 					</tbody>
 					<tfoot>
 						<tr>
-							<th colspan="@if(!isset($bayar) && !isset($lunas)) 7 @else 6 @endif">Total</th>
-							<th class="text-right">{{$idr->formatMoneyTo($total)}}</th>
+							<th colspan="{{ (!isset($bayar) && !isset($lunas)) ? '7' : '6' }}">Total</th>
+							<th class="text-right">{{ $idr->formatMoneyTo($total) }}</th>
 						</tr>
 						@if(!isset($bayar) && !isset($lunas))
-						<tr>
-							<th class="text-right" colspan=8"><button type="submit" class="btn btn-primary">&emsp;Bayar&emsp;</button></th>
-						</tr>
+							<tr>
+								<th class="text-right" colspan="8"><button type="submit" class="btn btn-primary">&emsp;Bayar&emsp;</button></th>
+							</tr>
 						@endif
 					</tfoot>
 				</table>

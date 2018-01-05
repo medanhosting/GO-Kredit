@@ -11,82 +11,87 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('pre')
-					<h5 class="pt-4 pl-4 mb-0">
+				@slot('header')
+					<h5 class="py-2 pl-2 mb-0">
 						<a href="{{route('karyawan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
 							<i class="fa fa-chevron-left"></i> 
 						</a>
 						&nbsp;&nbsp;EDIT KARYAWAN
 					</h5>
 				@endslot
-				@slot('body')
-					<nav class="nav nav-tabs" id="myTab" role="tablist">
-						<a class="nav-item nav-link {{$is_create_tab}}" id="nav-create-tab" data-toggle="tab" href="#nav-create" role="tab" aria-controls="nav-create" aria-selected="true">Data Karyawan</a>
-						<a class="nav-item nav-link {{$is_penempatan_tab}}" id="nav-penempatan-tab" data-toggle="tab" href="#nav-penempatan" role="tab" aria-controls="nav-penempatan" aria-selected="true">Penempatan Karyawan</a>
-					</nav>
-					<div class="tab-content" id="nav-tabContent">
-						<div class="tab-pane fade {{$is_create_tab}}" id="nav-create" role="tabpanel" aria-labelledby="nav-create-tab">
-							@include('v2.kantor.karyawan.form')
-						</div>
-						<div class="tab-pane fade {{$is_penempatan_tab}}" id="nav-penempatan" role="tabpanel" aria-labelledby="nav-penempatan-tab">
-							<div class="clearfix">&nbsp;</div>
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th class="text-center">#</th>
-										<th class="text-center">Kantor</th>
-										<th class="text-center">Jabatan</th>
-										<th class="text-center w-50">Scopes</th>
-										<th class="text-center">Masa Kerja</th>
-										<th class="text-center">&nbsp;</th>
-									</tr>
-								</thead>
-								<tbody>
-									@forelse($karyawan['penempatan'] as $k => $v)
-									<tr>
-										<td class="text-center">{{ ($k + 1) }}</td>
-										<td class="text-center">{{ ucwords(str_replace('_', ' ', $v['kantor']['nama'])) }}</td>
-										<td class="text-center">{{ ucwords(str_replace('_', ' ', $v['role'])) }}</td>
-										<td class="text-center" style="max-width:320px;">
-											@foreach($v['scopes'] as $k3 => $v3)
-												<span class="badge badge-primary"> manage {{$v3}} </span>
-											@endforeach
-										</td>
-										<td class="text-center">{{ $v['tanggal_masuk'] }} - 
-											@if(is_null($v['tanggal_keluar']))
-												<i>sekarang</i>
-											@else
-												{{ $v['tanggal_keluar'] }}
-											@endif
-										</td>
-										<td class="text-center">
-											<a href="#" data-toggle="modal" class="mutasi_karyawan" data-target="#mutasi" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'],'penempatan_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'mutasi'])}}">
-												<i class="fa fa-exchange"></i>
-											</a> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-											<a href="#" data-toggle="modal" class="resign_karyawan" data-target="#resign" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'],'penempatan_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'resign'])}}">
-												<i class="fa fa-close"></i>
-											</a>
-										</td>
-									</tr>
-									@empty
-										<tr>
-											<td colspan="6" class="text-center"><i class="text-secondary">tidak ada data</i></td>
-										</tr>
-									@endforelse
-								</tbody>
-								<tfoot>
-									<tr>
-										<td colspan="6" class="text-right">
-											<a href="#" class="assign_karyawan" data-toggle="modal" data-target="#assign" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'assign'])}}">
-												Penempatan Baru
-											</a>
-										</td>
-									</tr>
-								</tfoot>
-							</table>
+
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 col-sm-12 col-md-12">
+							<nav class="nav nav-tabs underline" id="myTab" role="tablist">
+								<a class="nav-item nav-link {{$is_create_tab}}" id="nav-create-tab" data-toggle="tab" href="#nav-create" role="tab" aria-controls="nav-create" aria-selected="true">Data Karyawan</a>
+								<a class="nav-item nav-link {{$is_penempatan_tab}}" id="nav-penempatan-tab" data-toggle="tab" href="#nav-penempatan" role="tab" aria-controls="nav-penempatan" aria-selected="true">Penempatan Karyawan</a>
+							</nav>
+							<div class="tab-content" id="nav-tabContent">
+								<div class="tab-pane fade {{$is_create_tab}}" id="nav-create" role="tabpanel" aria-labelledby="nav-create-tab">
+									@include('v2.kantor.karyawan.form')
+								</div>
+								<div class="tab-pane fade {{$is_penempatan_tab}}" id="nav-penempatan" role="tabpanel" aria-labelledby="nav-penempatan-tab">
+									<div class="clearfix">&nbsp;</div>
+									<table class="table table-bordered">
+										<thead>
+											<tr>
+												<th class="text-center">#</th>
+												<th class="text-center">Kantor</th>
+												<th class="text-center">Jabatan</th>
+												<th class="text-center w-50">Scopes</th>
+												<th class="text-center">Masa Kerja</th>
+												<th class="text-center">&nbsp;</th>
+											</tr>
+										</thead>
+										<tbody>
+											@forelse($karyawan['penempatan'] as $k => $v)
+											<tr>
+												<td class="text-center">{{ ($k + 1) }}</td>
+												<td class="text-center">{{ ucwords(str_replace('_', ' ', $v['kantor']['nama'])) }}</td>
+												<td class="text-center">{{ ucwords(str_replace('_', ' ', $v['role'])) }}</td>
+												<td class="text-center" style="max-width:320px;">
+													@foreach($v['scopes'] as $k3 => $v3)
+														<span class="badge badge-primary"> manage {{$v3}} </span>
+													@endforeach
+												</td>
+												<td class="text-center">{{ $v['tanggal_masuk'] }} - 
+													@if(is_null($v['tanggal_keluar']))
+														<i>sekarang</i>
+													@else
+														{{ $v['tanggal_keluar'] }}
+													@endif
+												</td>
+												<td class="text-center">
+													<a href="#" data-toggle="modal" class="mutasi_karyawan" data-target="#mutasi" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'],'penempatan_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'mutasi'])}}">
+														<i class="fa fa-exchange"></i>
+													</a> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+													<a href="#" data-toggle="modal" class="resign_karyawan" data-target="#resign" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'],'penempatan_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'resign'])}}">
+														<i class="fa fa-close"></i>
+													</a>
+												</td>
+											</tr>
+											@empty
+												<tr>
+													<td colspan="6" class="text-center"><i class="text-secondary">tidak ada data</i></td>
+												</tr>
+											@endforelse
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="6" class="text-right">
+													<a href="#" class="assign_karyawan" data-toggle="modal" data-target="#assign" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'assign'])}}">
+														Penempatan Baru
+													</a>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
 						</div>
 					</div>
-				@endslot
+				</div>
 			@endcomponent
 		</div>
 	</div>

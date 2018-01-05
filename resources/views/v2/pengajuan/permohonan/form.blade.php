@@ -1,5 +1,5 @@
 <!-- Nav tabs -->
-<ul class="nav nav-tabs" role="tablist">
+<ul class="nav nav-tabs underline" role="tablist">
 	<li class="nav-item">
 		<a class="nav-link active" data-toggle="tab" href="#kredit" role="tab">
 			Kredit 

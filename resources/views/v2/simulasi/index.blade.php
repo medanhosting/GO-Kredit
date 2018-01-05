@@ -11,8 +11,8 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot ('pre')
-					<h5 class="pt-4 pl-3 mb-0">&nbsp;&nbsp;SIMULASI KREDIT</h5>
+				@slot('header')
+					<h5 class="py-2 pl-3 mb-0">&nbsp;&nbsp;SIMULASI KREDIT</h5>
 				@endslot
 				
 				<div class="card-body">

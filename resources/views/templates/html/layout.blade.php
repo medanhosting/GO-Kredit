@@ -11,153 +11,153 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 		@stack('css')
 		<style type="text/css">
-		.progress_menu {
-			display: inline-block;
-			position: relative;
-			background: #009688;
-			padding: 15px 0;
-			height: 100px;
-			width: 75%;
-			text-align: center;
-			margin: 25px;
-		}
-		.progress_menu:after {
-			content: '';
-			display: block;  
-			position: absolute;
-			top: 0;
-			left: 100%;
-			width: 0;
-			height: 0;
-			border-left: 20px solid #009688;
-			border-top: 50px solid transparent;
-			border-right: 0 solid transparent;
-			border-bottom: 50px solid transparent;
-		}
-		.progress_menu:before {
-			content: '';
-			display: block;  
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 0;
-			height: 0;
-			border-left: 20px solid #fff;
-			border-top: 50px solid transparent;
-			border-right: 0 solid transparent;
-			border-bottom: 50px solid transparent;
-		}
-		.progress_menu_disabled {
-			display: inline-block;
-			position: relative;
-			background: #aaa;
-			padding: 15px 0;
-			height: 100px;
-			width: 75%;
-			text-align: center;
-			margin: 25px;
-		}
-		.progress_menu_disabled:after {
-			content: '';
-			display: block;  
-			position: absolute;
-			top: 0;
-			left: 100%;
-			width: 0;
-			height: 0;
-			border-left: 20px solid #aaa;
-			border-top: 50px solid transparent;
-			border-right: 0 solid transparent;
-			border-bottom: 50px solid transparent;
-		}
-		.progress_menu_disabled:before {
-			content: '';
-			display: block;  
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 0;
-			height: 0;
-			border-left: 20px solid #fff;
-			border-top: 50px solid transparent;
-			border-right: 0 solid transparent;
-			border-bottom: 50px solid transparent;
-		}
+			.progress_menu {
+				display: inline-block;
+				position: relative;
+				background: #009688;
+				padding: 15px 0;
+				height: 100px;
+				width: 75%;
+				text-align: center;
+				margin: 25px;
+			}
+			.progress_menu:after {
+				content: '';
+				display: block;  
+				position: absolute;
+				top: 0;
+				left: 100%;
+				width: 0;
+				height: 0;
+				border-left: 20px solid #009688;
+				border-top: 50px solid transparent;
+				border-right: 0 solid transparent;
+				border-bottom: 50px solid transparent;
+			}
+			.progress_menu:before {
+				content: '';
+				display: block;  
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 0;
+				height: 0;
+				border-left: 20px solid #fff;
+				border-top: 50px solid transparent;
+				border-right: 0 solid transparent;
+				border-bottom: 50px solid transparent;
+			}
+			.progress_menu_disabled {
+				display: inline-block;
+				position: relative;
+				background: #aaa;
+				padding: 15px 0;
+				height: 100px;
+				width: 75%;
+				text-align: center;
+				margin: 25px;
+			}
+			.progress_menu_disabled:after {
+				content: '';
+				display: block;  
+				position: absolute;
+				top: 0;
+				left: 100%;
+				width: 0;
+				height: 0;
+				border-left: 20px solid #aaa;
+				border-top: 50px solid transparent;
+				border-right: 0 solid transparent;
+				border-bottom: 50px solid transparent;
+			}
+			.progress_menu_disabled:before {
+				content: '';
+				display: block;  
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 0;
+				height: 0;
+				border-left: 20px solid #fff;
+				border-top: 50px solid transparent;
+				border-right: 0 solid transparent;
+				border-bottom: 50px solid transparent;
+			}
 
-		.block_menu {
-			display: inline-block;
-			position: relative;
-			background: #009688;
-			padding: 15px 0;
-			height: 100px;
-			width: 75%;
-			text-align: center;
-			margin: 25px;
-		}
+			.block_menu {
+				display: inline-block;
+				position: relative;
+				background: #009688;
+				padding: 15px 0;
+				height: 100px;
+				width: 75%;
+				text-align: center;
+				margin: 25px;
+			}
 
-		.block_menu_disabled {
-			display: inline-block;
-			position: relative;
-			background: #aaa;
-			padding: 15px 0;
-			height: 100px;
-			width: 75%;
-			text-align: center;
-			margin: 25px;
-		}
+			.block_menu_disabled {
+				display: inline-block;
+				position: relative;
+				background: #aaa;
+				padding: 15px 0;
+				height: 100px;
+				width: 75%;
+				text-align: center;
+				margin: 25px;
+			}
 
-		.results tr[visible='false'],
-		.no-result{
-		  display:none;
-		}
+			.results tr[visible='false'],
+			.no-result{
+			display:none;
+			}
 
-		.results tr[visible='true']{
-		  display:table-row;
-		}
+			.results tr[visible='true']{
+			display:table-row;
+			}
 
-		.counter{
-		  padding:8px; 
-		  color:#ccc;
-		}
+			.counter{
+			padding:8px; 
+			color:#ccc;
+			}
 
-		/* Make an input blend into its parent */
-		.inline-edit{
-		  /* Eliminate borders and padding */
-		  border: none;
-		  padding: 0;
-		  margin: 0;
+			/* Make an input blend into its parent */
+			.inline-edit{
+			/* Eliminate borders and padding */
+			border: none;
+			padding: 0;
+			margin: 0;
 
-		  /* Inherit the parent element's typography */
-		  font: inherit;
-		  color: inherit;
-		  line-height: inherit;
-		  font-size: inherit;
-		  text-align: inherit;
+			/* Inherit the parent element's typography */
+			font: inherit;
+			color: inherit;
+			line-height: inherit;
+			font-size: inherit;
+			text-align: inherit;
 
-		  /* Seems to help alignment in headers */
-		  vertical-align: top;
-		}
+			/* Seems to help alignment in headers */
+			vertical-align: top;
+			}
 
-		/* Add interaction cues on hover and focus */
-		.inline-edit:hover,
-		.inline-edit:focus{
-		  /* Change the background to a light yellow */
-		  background-color: #FFD;
+			/* Add interaction cues on hover and focus */
+			.inline-edit:hover,
+			.inline-edit:focus{
+			/* Change the background to a light yellow */
+			background-color: #FFD;
 
-		  /* A subtle transition never hurts */
-		  -webkit-transition: background-color 0.5s;
-			 -moz-transition: background-color 0.5s;
-			  -ie-transition: background-color 0.5s;
-				  transition: background-color 0.5s;
-		}
-		.nav-tabs.underline .nav-item .nav-link, .nav-tabs.underline .nav-item.nav-link {
-			border: none !important;
-		}
-		.nav-tabs.underline .nav-item .nav-link.active, .nav-tabs.underline .nav-item.nav-link.active {
-			border-bottom: 3px solid #009688 !important;
-			color: #009688 !important;
-			background-color: transparent !important; 
-		}
+			/* A subtle transition never hurts */
+			-webkit-transition: background-color 0.5s;
+				-moz-transition: background-color 0.5s;
+				-ie-transition: background-color 0.5s;
+					transition: background-color 0.5s;
+			}
+			.nav-tabs.underline .nav-item .nav-link, .nav-tabs.underline .nav-item.nav-link {
+				border: none !important;
+			}
+			.nav-tabs.underline .nav-item .nav-link.active, .nav-tabs.underline .nav-item.nav-link.active {
+				border-bottom: 3px solid #009688 !important;
+				color: #009688 !important;
+				background-color: transparent !important; 
+			}
 		</style>
 	</head>
 	<body class=''>
@@ -199,6 +199,7 @@
 		</nav>
 
 		@stack('submenu')
+		
 		@include('templates.alerts.alert')
 
 		<div class="container-fluid mt-4 pb-5">

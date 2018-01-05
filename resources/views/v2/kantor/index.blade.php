@@ -11,24 +11,28 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('body')
-					<nav class="nav nav-tabs" id="myTab" role="tablist">
-						<a class="nav-item nav-link {{$is_kantor_tab}}" id="nav-kantor-tab" data-toggle="tab" href="#nav-kantor" role="tab" aria-controls="nav-kantor" aria-selected="true">Kantor Aktif</a>
-						<a class="nav-item nav-link {{$is_kantor_baru_tab}}" id="nav-kantor-baru-tab" data-toggle="tab" href="#nav-kantor-baru" role="tab" aria-controls="nav-kantor-baru" aria-selected="true">Kantor Baru</a>
-						<a class="nav-item nav-link {{$is_upload_kantor_tab}}" id="nav-upload-kantor-tab" data-toggle="tab" href="#nav-upload-kantor" role="tab" aria-controls="nav-upload-kantor" aria-selected="true">Upload Kantor</a>
-					</nav>
-					<div class="tab-content" id="nav-tabContent">
-						<div class="tab-pane fade {{$is_kantor_tab}}" id="nav-kantor" role="tabpanel" aria-labelledby="nav-kantor-tab">
-							@include('v2.kantor.table')
-						</div>
-						<div class="tab-pane fade {{$is_kantor_baru_tab}}" id="nav-kantor-baru" role="tabpanel" aria-labelledby="nav-kantor-baru-tab">
-							@include('v2.kantor.form')
-						</div>
-						<div class="tab-pane fade {{$is_upload_kantor_tab}}" id="nav-upload-kantor" role="tabpanel" aria-labelledby="nav-upload-kantor-tab">
-							@include('v2.kantor.batch')
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 col-sm-12 col-md-12">
+							<nav class="nav nav-tabs underline" id="myTab" role="tablist">
+								<a class="nav-item nav-link {{$is_kantor_tab}}" id="nav-kantor-tab" data-toggle="tab" href="#nav-kantor" role="tab" aria-controls="nav-kantor" aria-selected="true">Kantor Aktif</a>
+								<a class="nav-item nav-link {{$is_kantor_baru_tab}}" id="nav-kantor-baru-tab" data-toggle="tab" href="#nav-kantor-baru" role="tab" aria-controls="nav-kantor-baru" aria-selected="true">Kantor Baru</a>
+								<a class="nav-item nav-link {{$is_upload_kantor_tab}}" id="nav-upload-kantor-tab" data-toggle="tab" href="#nav-upload-kantor" role="tab" aria-controls="nav-upload-kantor" aria-selected="true">Upload Kantor</a>
+							</nav>
+							<div class="tab-content" id="nav-tabContent">
+								<div class="tab-pane fade {{$is_kantor_tab}}" id="nav-kantor" role="tabpanel" aria-labelledby="nav-kantor-tab">
+									@include('v2.kantor.table')
+								</div>
+								<div class="tab-pane fade {{$is_kantor_baru_tab}}" id="nav-kantor-baru" role="tabpanel" aria-labelledby="nav-kantor-baru-tab">
+									@include('v2.kantor.form')
+								</div>
+								<div class="tab-pane fade {{$is_upload_kantor_tab}}" id="nav-upload-kantor" role="tabpanel" aria-labelledby="nav-upload-kantor-tab">
+									@include('v2.kantor.batch')
+								</div>
+							</div>
 						</div>
 					</div>
-				@endslot
+				</div>
 			@endcomponent
 		</div>
 	</div>

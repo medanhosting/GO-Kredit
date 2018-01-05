@@ -11,31 +11,36 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('pre')
-					<h5 class="pt-4 pl-4 mb-0">
+				@slot('header')
+					<h5 class="py-2 pl-2 mb-0">
 						<a href="{{route('putusan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
 							<i class="fa fa-chevron-left"></i>
 						</a>
 						&nbsp;&nbsp;DETAIL PUTUSAN KREDIT
 					</h5>
 				@endslot
-				@slot('body')
-					<nav class="nav nav-tabs" id="myTab" role="tablist">
-						<a class="nav-item nav-link {{$is_legalitas_tab}}" id="nav-legalitas-tab" data-toggle="tab" href="#nav-legalitas" role="tab" aria-controls="nav-legalitas" aria-selected="true">Legalitas Realisasi</a>
-						<a class="nav-item nav-link {{$is_bukti_pencairan_tab}}" id="nav-bukti-pencairan-tab" data-toggle="tab" href="#nav-bukti-pencairan" role="tab" aria-controls="nav-bukti-pencairan" aria-selected="true">Bukti Pencairan</a>
-					</nav>
-					<!-- Nav tabs -->
-					<div class="tab-content">
-						<div class="tab-pane fade {{$is_legalitas_tab}}" id="nav-legalitas" role="tabpanel">
-							<div class="clearfix">&nbsp;</div>
-							@include('v2.putusan.legalitas.list')
-						</div>
-						<div class="tab-pane fade {{$is_bukti_pencairan_tab}}" id="nav-bukti-pencairan" role="tabpanel">
-							<div class="clearfix">&nbsp;</div>
-							@include('v2.putusan.legalitas.bukti')
+			
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 col-sm-12 col-md-12">
+							<nav class="nav nav-tabs underline" id="myTab" role="tablist">
+								<a class="nav-item nav-link {{$is_legalitas_tab}}" id="nav-legalitas-tab" data-toggle="tab" href="#nav-legalitas" role="tab" aria-controls="nav-legalitas" aria-selected="true">Legalitas Realisasi</a>
+								<a class="nav-item nav-link {{$is_bukti_pencairan_tab}}" id="nav-bukti-pencairan-tab" data-toggle="tab" href="#nav-bukti-pencairan" role="tab" aria-controls="nav-bukti-pencairan" aria-selected="true">Bukti Pencairan</a>
+							</nav>
+							<!-- Nav tabs -->
+							<div class="tab-content">
+								<div class="tab-pane fade {{$is_legalitas_tab}}" id="nav-legalitas" role="tabpanel">
+									<div class="clearfix">&nbsp;</div>
+									@include('v2.putusan.legalitas.list')
+								</div>
+								<div class="tab-pane fade {{$is_bukti_pencairan_tab}}" id="nav-bukti-pencairan" role="tabpanel">
+									<div class="clearfix">&nbsp;</div>
+									@include('v2.putusan.legalitas.bukti')
+								</div>
+							</div>
 						</div>
 					</div>
-				@endslot
+				</div>
 			@endcomponent
 		</div>
 	</div>

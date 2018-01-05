@@ -13,7 +13,7 @@
 		<!-- FILTER BERDASARKAN JAMINAN -->
 		<div class="col-sm-2">
 			<label>Jenis Kantor</label>
-			<select class="form-control" name="jenis">
+			<select class="form-control custom-select" name="jenis">
 				<option value="semua">Semua Jenis</option>
 				<option value="bpr" @if(str_is(request()->get('jenis'), 'bpr')) selected @endif>BPR</option>
 				<option value="koperasi" @if(str_is(request()->get('jenis'), 'koperasi')) selected @endif>Koperasi</option>
@@ -22,7 +22,7 @@
 		<!-- FILTER BERDASARKAN JAMINAN -->
 		<div class="col-sm-3">
 			<label>Tipe Kantor</label>
-			<select class="form-control" name="tipe">
+			<select class="form-control custom-select" name="tipe">
 				<option value="semua">Semua Tipe</option>
 				<option value="holding" @if(str_is(request()->get('tipe'), 'holding')) selected @endif>Holding</option>
 				<option value="pusat" @if(str_is(request()->get('tipe'), 'pusat')) selected @endif>Pusat</option>
@@ -32,7 +32,7 @@
 		<div class="col-sm-2">
 			<label>Urutkan</label>
 			<!-- URUTKAN BERDASARKAN NAMA/TANGGAL -->
-			<select class="form-control" name="sort">
+			<select class="form-control custom-select" name="sort">
 				<option value="nama-asc" @if(str_is(request()->get('sort'), 'nama-asc')) selected @endif>Nama [A - Z]</option>
 				<option value="nama-desc" @if(str_is(request()->get('sort'), 'nama-desc')) selected @endif>Nama [Z - A]</option>
 			</select>

@@ -11,17 +11,22 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('pre')
-					<h5 class="pt-4 pl-4 mb-0">
+				@slot('header')
+					<h5 class="py-2 pl-2 mb-0">
 						<a href="{{route('kantor.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
 							<i class="fa fa-chevron-left"></i> 
 						</a>
 						&nbsp;&nbsp;EDIT KANTOR
 					</h5>
 				@endslot
-				@slot('body')
-					@include('v2.kantor.form')
-				@endslot
+
+				<div class="card-body">
+					<div class="row">
+						<div class="col-12 col-sm-12 col-md-12">
+							@include('v2.kantor.form')
+						</div>
+					</div>
+				</div>
 			@endcomponent
 		</div>
 	</div>
