@@ -11,19 +11,21 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('pre')
-					<h5 class="pt-4 pl-4 mb-0">
-						PENGAJUAN BARU
-					</h5>
+				@slot('header')
+					<h5 class="py-2 pl-2 mb-0">&nbsp;&nbsp;PENGAJUAN BARU</h5>
 				@endslot
 
-				@slot('body')
+				<div class="card-body">
 					<div class="row">
-						<div class="col">
-							@include('v2.pengajuan.permohonan.form')
+						<div class="col-12 col-sm-12 col-md-12">
+							<div class="row">
+								<div class="col">
+									@include('v2.pengajuan.permohonan.form')
+								</div>
+							</div>
 						</div>
 					</div>
-				@endslot
+				</div>
 			@endcomponent
 		</div>
 	</div>

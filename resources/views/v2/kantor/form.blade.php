@@ -28,7 +28,7 @@
 				<label class="text-sm">Tipe Kantor</label>
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-10">
-						{!! Form::select('tipe', ['cabang' => 'Cabang', 'pusat' => 'Pusat'], $kantor['tipe'], ['class' => 'form-control required', 'placeholder' => 'Masukkan tipe kantor']) !!}			
+						{!! Form::select('tipe', ['cabang' => 'Cabang', 'pusat' => 'Pusat'], $kantor['tipe'], ['class' => 'form-control custom-select required', 'placeholder' => 'Masukkan tipe kantor']) !!}			
 					</div>
 				</div>
 			</fieldset>
@@ -36,7 +36,7 @@
 				<label class="text-sm">Jenis Kantor</label>
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-10">
-						{!! Form::select('jenis', ['bpr' => 'BPR', 'koperasi' => 'Koperasi'], $kantor['jenis'], ['class' => 'form-control required', 'placeholder' => 'Masukkan jenis kantor']) !!}			
+						{!! Form::select('jenis', ['bpr' => 'BPR', 'koperasi' => 'Koperasi'], $kantor['jenis'], ['class' => 'form-control custom-select required', 'placeholder' => 'Masukkan jenis kantor']) !!}			
 					</div>
 				</div>
 			</fieldset>

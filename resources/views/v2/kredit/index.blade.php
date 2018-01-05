@@ -1,7 +1,7 @@
 @push('main')
 	<div class="row justify-content-center">
 		<div class="col-auto px-5 pt-2">
-			<h5 class="h5 mx-5 px-5 text-center"><i class="fa fa-credit-card-alt mr-2"></i> KREDIT</h5>
+			<h5 class="mx-5 px-5 text-center"><i class="fa fa-credit-card-alt"></i> KREDIT</h5>
 			<hr>
 		</div>
 	</div>
@@ -11,7 +11,11 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot ('body')
+				@slot('header')
+					<h5 class="py-2 pl-3 mb-0">&nbsp;&nbsp;KREDIT</h5>
+				@endslot
+				
+				<div class="card-body">
 					<div class="row">
 						<div class="col-12 col-sm-12 col-md-12">
 							<nav class="nav nav-tabs underline" id="myTab" role="tablist">
@@ -24,7 +28,7 @@
 							</div>
 						</div>
 					</div>
-				@endslot
+				</div>
 			@endcomponent
 		</div>
 	</div>

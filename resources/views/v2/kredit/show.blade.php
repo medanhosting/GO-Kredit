@@ -11,8 +11,8 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('pre')
-					<h5 class="pt-4 pl-4 mb-0">
+				@slot('header')
+					<h5 class="py-2 pl-2 mb-0">
 						<a href="{{route('kredit.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
 							<i class="fa fa-chevron-left"></i> 
 						</a>

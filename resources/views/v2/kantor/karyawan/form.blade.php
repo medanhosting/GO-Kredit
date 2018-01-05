@@ -97,7 +97,7 @@
 			<label class="text-sm">JABATAN</label>
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-10">
-					<select class="jabatan-select form-control" name="kantor[role]" style="width: 100%"></select>
+					<select class="jabatan-select form-control custom-select" name="kantor[role]" style="width: 100%"></select>
 				</div>
 			</div>
 		</fieldset>
@@ -106,7 +106,7 @@
 			<label class="text-sm">WEWENANG</label>
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-10">
-					<select class="scopes-select form-control" name="kantor[scopes][]" multiple="multiple" style="width: 100%"></select>	
+					<select class="scopes-select form-control custom-select" name="kantor[scopes][]" multiple="multiple" style="width: 100%"></select>	
 				</div>
 			</div>
 		</fieldset>
