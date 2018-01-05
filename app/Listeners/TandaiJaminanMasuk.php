@@ -40,6 +40,8 @@ class TandaiJaminanMasuk
 			$m_jaminan->tanggal 		= $model->tanggal;
 			$m_jaminan->tag 			= 'in';
 			$m_jaminan->description 	= 'Jaminan Masuk';
+			$m_jaminan->nomor_jaminan 	= $m_jaminan->nomor_kredit.'-'.($k+1);
+			$m_jaminan->status 			= 'completed';
 			$m_jaminan->documents 		= $v->dokumen_survei['collateral'];
 			$m_jaminan->save();
 		}

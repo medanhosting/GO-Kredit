@@ -34,9 +34,9 @@ class MutasiJaminan extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_mutasi_jaminan';
-	protected $fillable = ['nomor_kredit', 'tanggal', 'tag', 'description', 'documents'];
+	protected $fillable = ['nomor_kredit', 'tanggal', 'tag', 'description', 'documents', 'nomor_jaminan', 'status'];
 	protected $hidden 	= [];
-	protected $appends	= [];
+	protected $appends	= ['possible_action'];
 	protected $rules	= [];
 	protected $errors;
 	protected $events = [
@@ -63,6 +63,10 @@ class MutasiJaminan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	public function kredit(){
 		return $this->belongsto(Aktif::class, 'nomor_kredit', 'nomor_kredit');
+	}
+
+	public function next(){
+		return $this->hasone(MutasiJaminan::class, 'nomor_jaminan', 'nomor_jaminan')->whereraw(\DB::raw('k_mutasi_jaminan.id <> id'))->whereraw(\DB::raw('k_mutasi_jaminan.tanggal <> tanggal'))->orderby('tanggal', 'desc');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -129,5 +133,17 @@ class MutasiJaminan extends Model
 	public function getDocumentsAttribute($variable)
 	{
 		return json_decode($this->attributes['documents'], true);
+	}
+
+	public function getPossibleActionAttribute($value){
+		//boleh ajukan jaminan keluar
+		if(is_null($this->next) && str_is($this->status, 'completed') && str_is($this->tag, 'in')){
+			return 'ajukan_jaminan_keluar';
+		}elseif(str_is($this->status, 'pending')  && str_is($this->tag, 'in')){
+			return 'otorisasi_jaminan_masuk';
+		}elseif(str_is($this->status, 'pending')  && str_is($this->tag, 'out')){
+			return 'otorisasi_jaminan_keluar';
+		}
+		return null;
 	}
 }

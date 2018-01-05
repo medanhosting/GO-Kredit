@@ -33,7 +33,7 @@ class TandaiJaminanKeluar
 	{
 		$model	= $event->data;
 
-		$not_yet_paid 	= AngsuranDetail::where('tanggal', '>', Carbon::createFromFormat('d/m/Y H:i', $model->tanggal))->wherenull('nota_bayar_id')->where('tag', '<>', 'bunga')->count();
+		$not_yet_paid 	= AngsuranDetail::where('tanggal', '>', Carbon::createFromFormat('d/m/Y H:i', $model->tanggal))->wherenull('nota_bayar_id')->where('nomor_kredit', $model->nomor_kredit)->count();
 
 		if(!$not_yet_paid){
 			$jaminan 	= MutasiJaminan::where('nomor_kredit', $model->nomor_kredit)->get();
@@ -42,6 +42,8 @@ class TandaiJaminanKeluar
 				$m_jaminan->nomor_kredit 	= $v->nomor_kredit;
 				$m_jaminan->tanggal 		= Carbon::now()->format('d/m/Y H:i');
 				$m_jaminan->tag 			= 'out';
+				$m_jaminan->nomor_jaminan 	= $v->nomor_jaminan;
+				$m_jaminan->status 			= 'completed';
 				$m_jaminan->description 	= 'Jaminan Keluar';
 				$m_jaminan->documents 		= $v->documents;
 				$m_jaminan->save();

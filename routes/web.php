@@ -45,6 +45,7 @@
 
 			Route::get('angsuran/{id}/print', 		['uses' => 'AngsuranController@print', 		'as' => 'angsuran.print']);
 			Route::get('angsuran/{id}/potongan', 	['uses' => 'AngsuranController@potongan', 	'as' => 'angsuran.potongan']);
+			Route::get('angsuran/{id}/tagihan', 	['uses' => 'AngsuranController@tagihan', 	'as' => 'angsuran.tagihan']);
 		});
 		Route::namespace('V2\Kantor')->group(function(){
 			Route::resource('kantor', 			'KantorController'); 
@@ -65,8 +66,7 @@
 		Route::prefix('v1/pengajuan')->namespace('Pengajuan')->as('pengajuan.')->group( function() {
 
 			Route::get('index/ajax', 		['uses' => 'PengajuanController@ajax', 'as' => 'pengajuan.ajax']);
-			// Route::get('/{status}',				['as'	=> 'pengajuan.index', 	'uses' => 'PengajuanController@index']);
-			// Route::get('/{status}/{id}/show',	['as'	=> 'pengajuan.show', 	'uses' => 'PengajuanController@show']);
+
 			Route::delete('/{status}/{id}',					['as'	=> 'pengajuan.destroy', 'uses' => 'PengajuanController@destroy']);
 			Route::post('/pengajuan/assign/analisa/{id}',	['as'	=> 'pengajuan.assign_analisa', 	'uses' => 'PengajuanController@assign_analisa']);
 			Route::post('/pengajuan/assign/putusan/{id}',	['as'	=> 'pengajuan.assign_putusan', 	'uses' => 'PengajuanController@assign_putusan']);
@@ -145,7 +145,6 @@
 
 
 Route::get('/test', function() {
-
 	$mutasi 	= Thunderlabid\Kredit\Models\MutasiJaminan::where('nomor_kredit', 'K.1711.0001')->get();
 
 	$kredit 	= Thunderlabid\Pengajuan\Models\Putusan::where('pengajuan_id', '1711.1711.0002.0001')->first();

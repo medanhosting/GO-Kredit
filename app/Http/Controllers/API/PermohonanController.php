@@ -134,14 +134,34 @@ class PermohonanController extends BaseController
 		try {
 			//1. find pengajuan
 			if(Auth::user()){
-				$pengajuan	= Pengajuan::status('permohonan')->where('ao->nip', Auth::user()['nip'])->get();
+				$pengajuan 	= new Pengajuan;
+
+				$pkary		= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active(Carbon::now());
+
+				if(request()->has('kode_kantor')){
+					$pkary 		= $pkary->where('kantor_id', request()->get('kode_kantor'));
+					$pengajuan 	= $pengajuan->kantor(request()->get('kode_kantor'));
+				}
+
+				$pkary 		= $pkary->first();
+
+				if(!in_array(strtolower($pkary['role']), ['komisaris', 'pimpinan'])){
+					$pengajuan	= $pengajuan->where('ao->nip', Auth::user()['nip']);
+				}
+
+				if(request()->has('status')){
+					$pengajuan 	= $pengajuan->status(request()->get('status'));
+				}
 			}
 			else{
 				$phone		= request()->get('mobile');
-				$pengajuan	= Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon'])->get();
+				$pengajuan	= Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon']);
 			}
 
-			return response()->json(['status' => 1, 'data' => $pengajuan->toArray(), 'error' => ['message' => []]]);
+			$pengajuan 		= $pengajuan->paginate();
+			$pengajuan->appends(request()->only('status', 'mobile', 'kode_kantor'));
+
+			return response()->json(['status' => 1, 'data' => $pengajuan, 'error' => ['message' => []]]);
 
 		} catch (Exception $e) {
 			return response()->json(['status' => 0, 'data' => [], 'error' => ['message' => []]]);
@@ -149,8 +169,7 @@ class PermohonanController extends BaseController
 	}
 
 
-	private function count_distance($delta_lat, $delta_lon)
-    {
+	private function count_distance($delta_lat, $delta_lon){
 		$earth_radius = 6372.795477598;
 
 		$alpha    = $delta_lat/2;

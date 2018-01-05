@@ -10,9 +10,11 @@ use Thunderlabid\Survei\Models\Survei;
 use Thunderlabid\Survei\Models\SurveiDetail;
 use Thunderlabid\Survei\Models\SurveiFoto;
 
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+
 use App\Service\Api\ResponseTrait;
 
-use Exception, Response, Auth;
+use Exception, Response, Auth, Carbon\Carbon;
 
 class SurveiController extends BaseController
 {
@@ -23,9 +25,20 @@ class SurveiController extends BaseController
 		try {
 			//1. find pengajuan
 			if(Auth::user()){
-				$survei		= Survei::wherehas('pengajuan', function($q){$q->status('survei');})->with(['collateral', 'collateral.foto'])->paginate();
+				$pkary		= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active(Carbon::now());
+
+				$survei		= new Survei;
+
+				if(request()->has('kode_kantor')){
+					$pkary 		= $pkary->where('kantor_id', request()->get('kode_kantor'));
+					$survei 	= $survei->wherehas('pengajuan', function($q){$q->kantor(request()->get('kode_kantor'));});
+				}
+				
+				$survei 	= $survei->wherehas('pengajuan', function($q){$q->status('survei');})->with(['collateral', 'collateral.foto'])->paginate();
 			
-				return response()->json(['status' => 1, 'data' => $survei->toArray(), 'error' => ['message' => []]]);
+				$survei->appends(request()->only('kode_kantor'));
+			
+				return response()->json(['status' => 1, 'data' => $survei, 'error' => ['message' => []]]);
 			}
 
 			return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => []]]);
