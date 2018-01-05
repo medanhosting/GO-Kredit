@@ -152,14 +152,20 @@ class PermohonanController extends BaseController
 				if(request()->has('status')){
 					$pengajuan 	= $pengajuan->status(request()->get('status'));
 				}
+			
+				if(request()->has('query')){
+					$regexp 	= preg_replace("/-+/",'[^A-Za-z0-9_]+',request()->get('query'));
+					$pengajuan 	= $pengajuan->whereRaw(\DB::raw("nasabah REGEXP '". $regexp."'"));
+				}
 			}
 			else{
 				$phone		= request()->get('mobile');
 				$pengajuan	= Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon']);
 			}
 
+
 			$pengajuan 		= $pengajuan->paginate();
-			$pengajuan->appends(request()->only('status', 'mobile', 'kode_kantor'));
+			$pengajuan->appends(request()->only('status', 'mobile', 'kode_kantor', 'query'));
 
 			return response()->json(['status' => 1, 'data' => $pengajuan, 'error' => ['message' => []]]);
 

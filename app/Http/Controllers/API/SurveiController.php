@@ -34,9 +34,16 @@ class SurveiController extends BaseController
 					$survei 	= $survei->wherehas('pengajuan', function($q){$q->kantor(request()->get('kode_kantor'));});
 				}
 				
-				$survei 	= $survei->wherehas('pengajuan', function($q){$q->status('survei');})->with(['collateral', 'collateral.foto'])->paginate();
+				$survei 	= $survei->wherehas('pengajuan', function($q){$q->status('survei');})->with(['collateral', 'collateral.foto']);
 			
-				$survei->appends(request()->only('kode_kantor'));
+				if(request()->has('query')){
+					$regexp 	= preg_replace("/-+/",'[^A-Za-z0-9_]+',request()->get('query'));
+					$survei 	= $survei->where(function($q)use($regexp){$q->whereHas('collateral', function($q)use($regexp){$q->whereRaw(\DB::raw("dokumen_survei REGEXP '". $regexp."'"));})->orwherehas('pengajuan', function($q)use($regexp){$q->whereraw(\DB::raw("nasabah REGEXP '". $regexp."'"));});});
+				}
+
+				$survei 	= $survei->with(['pengajuan'])->paginate();
+
+				$survei->appends(request()->only('kode_kantor', 'query'));
 			
 				return response()->json(['status' => 1, 'data' => $survei, 'error' => ['message' => []]]);
 			}
