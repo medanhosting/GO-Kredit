@@ -20,6 +20,8 @@
 	</div>
 	<hr/>
 	<div class="clearfix">&nbsp;</div>
+
+	@if($sp)
 	<div class="row">
 		<div class="col-sm-12">
 			{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'nip_karyawan' => Auth::user()['nip'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'tagihan']), 'method' => 'PATCH']) !!}
@@ -62,6 +64,7 @@
 	</div>
 	{{--  <hr/>  --}}
 	<div class="clearfix">&nbsp;</div>
+	@endif
 @endif
 
 <div class="clearfix">&nbsp;</div>

@@ -123,12 +123,12 @@
 		});
 
 	});
-	Route::any('regensi',	['uses' => 'HelperController@getRegensi', 		'as' => 'regensi.index']);
-	Route::any('distrik',	['uses'	=> 'HelperController@getDistrik',		'as' => 'distrik.index']);
-	Route::any('desa',		['uses' => 'HelperController@getDesa',			'as' => 'desa.index']);
+	Route::any('regensi',	['uses' => 'HelperController@getRegensi', 	'as' => 'regensi.index']);
+	Route::any('distrik',	['uses'	=> 'HelperController@getDistrik',	'as' => 'distrik.index']);
+	Route::any('desa',		['uses' => 'HelperController@getDesa',		'as' => 'desa.index']);
 
-	Route::any('jabatan',	['uses' => 'HelperController@jabatan',			'as' => 'jabatan.index']);
-	Route::any('scopes',	['uses' => 'HelperController@scopes',			'as' => 'scopes.index']);
+	Route::any('jabatan',	['uses' => 'HelperController@jabatan',		'as' => 'jabatan.index']);
+	Route::any('scopes',	['uses' => 'HelperController@scopes',		'as' => 'scopes.index']);
 	
 	Route::any('upload/image', 		['as' => 'upload.image.store',		'uses' => 'HelperController@storeGambar']);
 	Route::any('remove/image',		['as' => 'upload.image.destroy',	'uses' => 'HelperController@destroyGambar']);

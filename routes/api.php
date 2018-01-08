@@ -34,6 +34,7 @@ Route::middleware('api')->namespace('API')->group(function(){
 	Route::any('/survei/{pengajuan_id}/foto/{survei_detail_id}',	['uses' => 'SurveiController@simpan_foto']);
 });
 
+
 Route::any('/pengaturan', function (Request $request) 
 {
 	if(Auth::user() && !is_null(Auth::user()['nip']))

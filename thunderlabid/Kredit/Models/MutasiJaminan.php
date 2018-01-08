@@ -66,7 +66,7 @@ class MutasiJaminan extends Model
 	}
 
 	public function next(){
-		return $this->hasone(MutasiJaminan::class, 'nomor_jaminan', 'nomor_jaminan')->whereraw(\DB::raw('k_mutasi_jaminan.id <> id'))->whereraw(\DB::raw('k_mutasi_jaminan.tanggal <> tanggal'))->orderby('tanggal', 'desc');
+		return $this->hasone(MutasiJaminan::class, 'nomor_jaminan', 'nomor_jaminan')->whereraw(\DB::raw('k_mutasi_jaminan.id <> "'.$this->id.'"'))->whereraw(\DB::raw('k_mutasi_jaminan.tanggal > "'.$this->formatDateTimeFrom($this->tanggal).'"'))->orderby('tanggal', 'desc');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -76,6 +76,9 @@ class MutasiJaminan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
+	public function scopeDoesntHaveNext($query, $variable){
+		return $query->where();
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
@@ -137,7 +140,9 @@ class MutasiJaminan extends Model
 
 	public function getPossibleActionAttribute($value){
 		//boleh ajukan jaminan keluar
-		if(is_null($this->next) && str_is($this->status, 'completed') && str_is($this->tag, 'in')){
+		$next 	= MutasiJaminan::where('nomor_jaminan', $this->nomor_jaminan)->where('id', '<>', $this->id)->where('tanggal', '>', $this->formatDateTimeFrom($this->tanggal))->orderby('tanggal', 'desc')->first();
+
+		if(is_null($next) && str_is($this->status, 'completed') && str_is($this->tag, 'in')){
 			return 'ajukan_jaminan_keluar';
 		}elseif(str_is($this->status, 'pending')  && str_is($this->tag, 'in')){
 			return 'otorisasi_jaminan_masuk';

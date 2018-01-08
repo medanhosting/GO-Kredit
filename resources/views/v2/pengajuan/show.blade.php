@@ -13,7 +13,7 @@
 			@component('bootstrap.card')
 				@slot('header')
 					<h5 class="py-2 pl-2 mb-0">
-						<a href="{{route('pengajuan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
+						<a href="{{route('pengajuan.index', ['kantor_aktif_id' => $kantor_aktif_id, 'current' => $permohonan['status_terakhir']['status']])}}">
 							<i class="fa fa-chevron-left"></i> 
 						</a>
 						&nbsp;&nbsp;DETAIL PENGAJUAN

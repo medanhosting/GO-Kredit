@@ -51,7 +51,9 @@ class KreditController extends Controller
 		$today		= Carbon::now();
 		$dday		= Carbon::createFromFormat('d/m/Y H:i', $aktif['tanggal']);
 		$tunggakan  = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->orderby('tanggal', 'asc')->first();
-		
+		//CHECK SP YANG BELUM DIKIRIM
+		$sp 		= SuratPeringatan::wheredoesnthave('penagihan', function($q){$q;})->first();
+
 		$riwayat_t  = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($dday)->orderby('tanggal', 'asc')->get();
 
 		$latest_pay = NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
@@ -90,7 +92,7 @@ class KreditController extends Controller
 
 		view()->share('kredit_id', $id);
 
-		$this->layout->pages 	= view('v2.kredit.show');
+		$this->layout->pages 	= view('v2.kredit.show', compact('sp'));
 		return $this->layout;
 	}
 

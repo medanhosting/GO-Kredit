@@ -64,6 +64,9 @@ class SuratPeringatan extends Model
 		return $this->belongsto(Aktif::class, 'nomor_kredit', 'nomor_kredit');
 	}
 
+	public function penagihan(){
+		return $this->hasone(Penagihan::class, 'nomor_kredit', 'nomor_kredit')->where('tanggal', '>=', 'tanggal')->orderby('created_at', 'desc');
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------

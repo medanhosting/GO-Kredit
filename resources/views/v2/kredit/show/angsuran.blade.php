@@ -19,7 +19,6 @@
 						<th>Jatuh Tempo</th>
 						<th class="text-right">Pokok</th>
 						<th class="text-right">Bunga</th>
-						<th class="text-right">Denda</th>
 						<th class="text-right">Potongan</th>
 						<th class="text-right">Jumlah</th>
 						<th class="text-center">
@@ -38,7 +37,6 @@
 						<td class="text-left">{{Carbon\Carbon::parse($v['tanggal_bayar'])->format('d/m/Y H:i')}}</td>
 						<td class="text-right">{{$idr->formatMoneyTo($v['pokok'])}}</td>
 						<td class="text-right">{{$idr->formatMoneyTo($v['bunga'])}}</td>
-						<td class="text-right">{{$idr->formatMoneyTo($v['denda'])}}</td>
 						<td class="text-right">{{$idr->formatMoneyTo($v['potongan'])}}</td>
 						<td class="text-right">{{$idr->formatMoneyTo($v['subtotal'] - $v['potongan'])}}</td>
 						<td class="text-center">
@@ -72,7 +70,7 @@
 				</tbody>
 				<tfoot>
 					<tr>
-						<th class="text-right align-middle" colspan="6">
+						<th class="text-right align-middle" colspan="5">
 							<h5 class="mb-0"><strong>Total</strong></h5>
 						</th>
 						<th class="text-right align-middle">

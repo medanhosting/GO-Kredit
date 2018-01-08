@@ -56,7 +56,6 @@
 										<th class="text-left">Nasabah</th>
 										<th class="text-right">Pokok</th>
 										<th class="text-right">Bunga</th>
-										<th class="text-right">Denda</th>
 										<th class="text-right">Potongan</th>
 										<th class="text-right">Subtotal</th>
 										<th>&nbsp;</th>
@@ -68,7 +67,7 @@
 										@php $pa = \Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
 										@if($lua != $pa)
 											<tr>
-												<td colspan="8" class="bg-light">
+												<td colspan="7" class="bg-light">
 													{{$pa}}
 												</td>
 											</tr>
@@ -88,9 +87,6 @@
 												{{$idr->formatMoneyTo($v['bunga'])}}
 											</td>
 											<td class="text-right">
-												{{$idr->formatMoneyTo($v['denda'])}}
-											</td>
-											<td class="text-right">
 												{{$idr->formatMoneyTo($v['potongan'])}}
 											</td>
 											<td class="text-right">
@@ -102,7 +98,7 @@
 										</tr>
 									@empty
 										<tr>
-											<td colspan="8">
+											<td colspan="7">
 												<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
 											</td>
 										</tr>

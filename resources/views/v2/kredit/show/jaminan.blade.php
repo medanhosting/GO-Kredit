@@ -49,11 +49,11 @@
 						</td>
 						<td>
 							@if(str_is($v['possible_action'], 'ajukan_jaminan_keluar'))
-								<a href="">Ajukan Jaminan Keluar</a>
+								<a class="jaminan_keluar text-success" data-toggle="modal" data-target="#ajukan-jaminan-keluar" data-action="{{route('jaminan.update', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id])}}">Ajukan Jaminan Keluar</a>
 							@elseif(str_is($v['possible_action'], 'otorisasi_jaminan_masuk'))
-								<a href="">Otorisasi Jaminan Masuk</a>
+								<a class="otorisasi_mutasi text-success" data-toggle="modal" data-target="#otorisasi-mutasi-jaminan" data-action="{{route('jaminan.update', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id])}}">Otorisasi Jaminan Masuk</a>
 							@elseif(str_is($v['possible_action'], 'otorisasi_jaminan_keluar'))
-								<a href="">Otorisasi Jaminan Keluar</a>
+								<a class="otorisasi_mutasi text-success" data-toggle="modal" data-target="#otorisasi-mutasi-jaminan" data-action="{{route('jaminan.update', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id])}}">Otorisasi Jaminan Keluar</a>
 							@endif
 						</td>
 					</tr>
@@ -68,3 +68,63 @@
 		</table>
 	</div>
 </div>
+
+
+@component ('bootstrap.modal', ['id' => 'ajukan-jaminan-keluar', 'form' => true, 'method' => 'patch', 'url' => '#'])
+	@slot ('title')
+		Ajukan Jaminan Keluar
+	@endslot
+
+	@slot ('body')
+		<p>Untuk pengajuan jaminan keluar harap lengkapi data berikut!</p>
+
+		<div class="form-group">
+			{!! Form::bsText('Tanggal Keluar', 'out', null, ['placeholder' => '13/11/2017', 'class' => 'mask-date form-control']) !!}
+
+			{!! Form::bsText('Perkiraan Tanggal Kembali', 'in', null, ['placeholder' => '13/11/2017', 'class' => 'mask-date form-control']) !!}
+
+			{!! Form::bsTextarea('Alasan Keluar', 'description', null, ['placeholder' => 'Perpanjangan STNK']) !!}
+		</div>
+	@endslot
+
+	@slot ('footer')
+		<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
+		{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
+	@endslot
+@endcomponent
+
+@component ('bootstrap.modal', ['id' => 'otorisasi-mutasi-jaminan', 'form' => true, 'method' => 'patch', 'url' => '#'])
+	@slot ('title')
+		Otorisasi jaminan masuk / keluar
+	@endslot
+
+	@slot ('body')
+		<p>Untuk otorisasi jaminan, harap mengisi password Anda!</p>
+
+		{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
+	@endslot
+
+	@slot ('footer')
+		<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
+		{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
+	@endslot
+@endcomponent
+
+@push ('js')	
+	<script type="text/javascript">
+	//MODAL PARSE DATA ATTRIBUTE//
+	$("a.jaminan_keluar").on("click", parsingDataAttributeJaminanKeluar);
+
+	function parsingDataAttributeJaminanKeluar(){
+		$('#ajukan-jaminan-keluar').find('form').attr('action', $(this).attr("data-action"));
+	}
+
+	//MODAL PARSE DATA ATTRIBUTE//
+	$("a.otorisasi_mutasi").on("click", parsingDataAttributeOtorisasiMutasi);
+
+	function parsingDataAttributeOtorisasiMutasi(){
+		$('#otorisasi-mutasi-jaminan').find('form').attr('action', $(this).attr("data-action"));
+	}
+	</script>
+
+@endpush

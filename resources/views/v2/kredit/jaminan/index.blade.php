@@ -19,36 +19,29 @@
 						<div class="row">
 							<div class="col-sm-3">
 								<label>Cari Nasabah</label>
-							 	@foreach(request()->all() as $k => $v)
-							 		@if(!in_array($k, ['q_'.$pre,'sort_'.$pre,'jaminan_'.$pre]))
-								 		<input type="hidden" name="{{$k}}" value="{{$v}}">
-							 		@endif
-							 	@endforeach
-						 		<input type="hidden" name="current" value="{{$s_pre}}">
-								<input type="text" name="q_{{$s_pre}}" class="form-control w-100" placeholder="cari nama nasabah" value="{{request()->get('q_jaminan')}}">
+						 		<input type="hidden" name="kantor_aktif_id" value="{{$kantor_aktif_id}}">
+								<input type="text" name="q_jaminan" class="form-control w-100" placeholder="cari nama nasabah" value="{{request()->get('q_jaminan')}}">
 							</div>
 							<!-- CARI BERDASARKAN DOKUMEN -->
 							<div class="col-sm-3">
 								<label>Cari Dokumen</label>
-								<input type="text" name="doc_{{$s_pre}}" class="form-control w-100" placeholder="cari dokumen" value="{{request()->get('doc_jaminan')}}">
+								<input type="text" name="doc_jaminan" class="form-control w-100" placeholder="cari dokumen" value="{{request()->get('doc_jaminan')}}">
 							</div>
 							<!-- FILTER BERDASARKAN JAMINAN -->
 							<div class="col-sm-2">
 								<label>Filter Mutasi</label>
-								<select class="form-control" name="mutasi_{{$s_pre}}">
-									<option value="semua">Semua Mutasi</option>
-									<option value="jaminan-m" @if(str_is(request()->get('mutasi_jaminan'), 'jaminan-m')) selected @endif>Jaminan Masuk</option>
-									<option value="jaminan-k" @if(str_is(request()->get('mutasi_jaminan'), 'jaminan-k')) selected @endif>Jaminan Keluar</option>
+								<select class="form-control" name="mutasi_jaminan">
+									<option value="">Semua Mutasi</option>
+									<option value="in" @if(str_is(request()->get('mutasi_jaminan'), 'in')) selected @endif>Jaminan Masuk</option>
+									<option value="out" @if(str_is(request()->get('mutasi_jaminan'), 'out')) selected @endif>Jaminan Keluar</option>
 								</select>
 							</div>
 							<div class="col-sm-2">
 								<label>Urutkan</label>
 								<!-- URUTKAN BERDASARKAN NAMA/TANGGAL -->
-								<select class="form-control" name="sort_{{$s_pre}}">
-									<option value="nama-asc" @if(str_is(request()->get('sort_jaminan'), 'nama-asc')) selected @endif>Nama [A - Z]</option>
-									<option value="nama-desc" @if(str_is(request()->get('sort_jaminan'), 'nama-desc')) selected @endif>Nama [Z - A]</option>
-									<option value="pinjaman-asc" @if(str_is(request()->get('sort_jaminan'), 'pinjaman-asc')) selected @endif>Pinjaman [1 - 10]</option>
-									<option value="pinjaman-desc" @if(str_is(request()->get('sort_jaminan'), 'pinjaman-desc')) selected @endif>Pinjaman [10 - 1]</option>
+								<select class="form-control" name="sort_jaminan">
+									<option value="tanggal-asc" @if(str_is(request()->get('sort_jaminan'), 'tanggal-asc')) selected @endif>Tanggal [1 - 31]</option>
+									<option value="tanggal-desc" @if(str_is(request()->get('sort_jaminan'), 'tanggal-desc')) selected @endif>Tanggal [31 - 1]</option>
 								</select>
 							</div>
 						</div>
