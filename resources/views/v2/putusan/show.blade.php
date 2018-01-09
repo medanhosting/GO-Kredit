@@ -12,12 +12,15 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('header')
-					<h5 class="py-2 pl-2 mb-0">
+					<h5 class="py-2 pl-2 mb-0 float-left">
 						<a href="{{route('putusan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
 							<i class="fa fa-chevron-left"></i>
 						</a>
 						&nbsp;&nbsp;DETAIL PUTUSAN KREDIT
 					</h5>
+					<a href="{{ route('putusan.print', ['id' => $putusan['pengajuan_id'], 'mode' => $kc, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="text-success float-right btn btn-link">
+						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK NOTA BUKTI REALISASI
+					</a>
 				@endslot
 			
 				<div class="card-body">

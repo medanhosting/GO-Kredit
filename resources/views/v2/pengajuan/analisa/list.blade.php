@@ -153,7 +153,7 @@
 			</div>
 			<div class="col-sm-8 text-left">
 				<p class="mb-1">
-					{{$permohonan['analisa']['jangka_waktu']}} bulan
+					{{$permohonan['analisa']['jangka_waktu']}} Bulan
 				</p>
 			</div>
 		</div>

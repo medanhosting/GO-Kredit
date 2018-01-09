@@ -15,13 +15,17 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('pre')
-					<h5 class="pt-4 pl-4 mb-0">
+				@slot('header')
+					<h5 class="py-2 pl-2 mb-0 float-left">
 						<a href="{{route('kredit.index', ['kantor_aktif_id' => $kantor_aktif_id])}}">
 							<i class="fa fa-chevron-left"></i> 
 						</a>
-						&nbsp;&nbsp;DETAIL KREDIT
+						&nbsp;&nbsp;DETAIL NOTA ANGSURAN
 					</h5>
+					
+					<a href="{{ route('angsuran.print', ['id' => $angsuran['nomor_kredit'], 'nota_bayar_id' => $angsuran['id'], 'kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success float-right btn btn-link">
+						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK NOTA BUKTI ANGSURAN
+					</a>
 				@endslot
 
 				<div class="card-body">
@@ -75,19 +79,6 @@
 												<td class="w-25 pl-2 pr-2">
 													<p class="mb-2" style="border-bottom: 1px dotted #ccc">
 														{{ $angsuran['kredit']['nasabah']['nama'] }}
-													</p>
-												</td>
-												<td style="width: 12.5%">Angsuran Ke-</td>
-												<td style="width: 1%">:</td>
-												<td class="w-25 pl-2 pr-2">
-													<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-														@foreach($angsuran['details'] as $k => $v)
-															@if ($loop->last)
-																{{ $v['nth'] }}
-															@else
-																{{ $v['nth'] }}, 
-															@endif
-														@endforeach
 													</p>
 												</td>
 											</tr>
@@ -158,7 +149,7 @@
 													<div class="clearfix">&nbsp;</div>
 												</td>
 											</tr>
-										</table>			
+										</table>
 										<div class="row">
 											<div class="col-6">
 												<table class="table table-bordered w-100 mt-4">
@@ -197,12 +188,8 @@
 										</div>
 										<div class="row">
 											<div class="col-6">
-												<a href="{{ route('angsuran.bukti_angsuran', ['id' => $angsuran['nomor_kredit'], 'nota_bayar_id' => $v['nota_bayar_id'], 'kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success">
-													<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK NOTA BUKTI ANGSURAN
-												</a>
 											</div>
 											<div class="col-6">
-												{{--  {!! Form::bsSubmit('Realisasikan', ['class' => 'btn btn-primary float-right']) !!}  --}}
 											</div>
 										</div>
 									{{--  {!! Form::close() !!}  --}}

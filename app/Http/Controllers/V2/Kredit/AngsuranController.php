@@ -64,10 +64,13 @@ class AngsuranController extends Controller
 		view()->share('t_hutang', $this->formatMoneyTo($t_hutang));
 		view()->share('s_hutang', $this->formatMoneyTo($s_hutang));
 		view()->share('t_lunas', $this->formatMoneyTo($t_lunas));
+		
 		view()->share('angsuran', $angsuran);
 		view()->share('today', $today);
 		view()->share('total', $total);
 		view()->share('id', $id);
+
+		view()->share('active_submenu', 'kredit');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 		$this->layout->pages 	= view('v2.kredit.show.angsuran.bukti_angsuran');
@@ -101,7 +104,7 @@ class AngsuranController extends Controller
 			view()->share('id', $id);
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-			return view('v2.print.angsuran.bukti_angsuran');;
+			return view('v2.print.angsuran.bukti_angsuran');
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());
 		}
@@ -109,15 +112,17 @@ class AngsuranController extends Controller
 
 	public function potongan($id){
 		$aktif		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
-		
 		$potongan 	= PelunasanAngsuran::potongan($aktif['nomor_kredit']);
-		return response()->json($potongan);
+
+		return response()->json(['message' => 'success', 'data' => $potongan], 200);
 	}
 
 	public function tagihan($id){
+		
 		$aktif		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
 
-		$nth 		= request()->get('nth');
+		$nth 		= array_flatten(request()->get('nth'));
+		
 		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit']);
 
 		if(is_array($nth)){
@@ -128,6 +133,6 @@ class AngsuranController extends Controller
 
 		$angsuran 	= $angsuran->get();
 
-		return response()->json($angsuran);
+		return response()->json(['message' => 'success', 'data' => $angsuran], 200);
 	}
 }

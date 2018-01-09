@@ -194,19 +194,14 @@
 					</table>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-6">
-					<a href="{{ route('putusan.print', ['id' => $putusan['pengajuan_id'], 'mode' => $kc, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="text-success">
-						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK NOTA BUKTI REALISASI
-					</a>
-				</div>
-				<div class="col-6">
-					<hr>
-					@if(str_is($putusan['pengajuan']['status_terakhir']['progress'], 'sudah') &&  str_is($putusan['pengajuan']['status_terakhir']['status'], 'setuju'))
+			@if(str_is($putusan['pengajuan']['status_terakhir']['progress'], 'sudah') &&  str_is($putusan['pengajuan']['status_terakhir']['status'], 'setuju'))
+				<hr>
+				<div class="row">
+					<div class="col-12">
 						{!! Form::bsSubmit('Realisasikan', ['class' => 'btn btn-primary float-right']) !!}
-					@endif
+					</div>
 				</div>
-			</div>
+			@endif
 		{!! Form::close() !!}
 	</div>
 </div>

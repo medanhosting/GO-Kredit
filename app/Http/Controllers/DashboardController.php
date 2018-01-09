@@ -31,6 +31,7 @@ class DashboardController extends Controller
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 		view()->share('end', $end);
 		view()->share('start', $start);
+		view()->share('html', ['title' => 'Dashboard · GO-Kredit.com']);
 		
 		$this->layout->pages 	= view('dashboard.overview', compact('is_holder', 'holder_scopes'));
 		return $this->layout;
@@ -63,6 +64,8 @@ class DashboardController extends Controller
 
 	public function pilih_koperasi(){
 		$url 	= request()->get('prev_url');
+
+		view()->share('html', ['title' => 'Pilih Koperasi · GO-Kredit.com']);
 
 		return view('dashboard.koperasi', compact('url'));
 	}

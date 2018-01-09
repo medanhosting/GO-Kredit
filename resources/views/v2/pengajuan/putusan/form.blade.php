@@ -34,7 +34,7 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					{!! Form::vText('Jangka Waktu', 'jangka_waktu', $putusan['jangka_waktu'], ['class' => 'form-control inline-edit border-input text-info pb-1', 'placeholder' => '12'], true, null, null, 'Tahun',  ['class_input_group' => 'w-25', 'class_input_group_append' => 'border-0 bg-white']) !!}
+					{!! Form::vText('Jangka Waktu', 'jangka_waktu', $putusan['jangka_waktu'], ['class' => 'form-control inline-edit border-input text-info pb-1', 'placeholder' => '12'], true, null, null, 'Bulan',  ['class_input_group' => 'w-25', 'class_input_group_append' => 'border-0 bg-white']) !!}
 				</div>
 			</div>
 			<div class="row">

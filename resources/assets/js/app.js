@@ -4,19 +4,15 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-// window.Vue = require('vue');
-// Vue.component('example', require('./components/Example.vue'));
-
-// const app = new Vue({
-//     el: '#app'
-// });
-
-
 // const flatpickr = require("flatpickr");
 // 
 
+
+require ('./thunderlab/ajax.js');
+require ('./thunderlab/numberFormat.js');
+// require ('./thunderlab/dataBox.js');
+
 // call plugin
 require ('./plugins');
-
 // module UI for use plugin jquery.inputmask
 require ('./plugins/jquery.inputmask/form-inputmask')

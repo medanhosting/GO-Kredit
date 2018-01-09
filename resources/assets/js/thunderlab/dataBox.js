@@ -55,4 +55,4 @@ var dataBox = function(){
 }
 
 // This the interface
-window.thunder.dataBox = new dataBox();
+// window.thunder.dataBox = new dataBox();

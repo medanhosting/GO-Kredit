@@ -48,7 +48,7 @@
 			</div>
 			<div class="col-sm-8 text-left">
 				<p class="mb-1">
-					{{$putusan['jangka_waktu']}} Tahun
+					{{$putusan['jangka_waktu']}} Bulan
 				</p>
 			</div>
 		</div>

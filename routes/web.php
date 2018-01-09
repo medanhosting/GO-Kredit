@@ -44,8 +44,6 @@
 			Route::resource('angsuran', 		'AngsuranController');
 
 			Route::get('angsuran/{id}/print', 		['uses' => 'AngsuranController@print', 		'as' => 'angsuran.print']);
-			Route::get('angsuran/{id}/potongan', 	['uses' => 'AngsuranController@potongan', 	'as' => 'angsuran.potongan']);
-			Route::get('angsuran/{id}/tagihan', 	['uses' => 'AngsuranController@tagihan', 	'as' => 'angsuran.tagihan']);
 		});
 		Route::namespace('V2\Kantor')->group(function(){
 			Route::resource('kantor', 			'KantorController'); 
@@ -132,6 +130,13 @@
 	
 	Route::any('upload/image', 		['as' => 'upload.image.store',		'uses' => 'HelperController@storeGambar']);
 	Route::any('remove/image',		['as' => 'upload.image.destroy',	'uses' => 'HelperController@destroyGambar']);
+
+	// ajax data potongan & tagihan
+	Route::namespace('V2\Kredit')->group(function(){
+		Route::any('angsuran/{id}/tagihan', 	['uses' => 'AngsuranController@tagihan', 	'as' => 'angsuran.tagihan']);
+		Route::get('angsuran/{id}/potongan', 	['uses' => 'AngsuranController@potongan', 	'as' => 'angsuran.potongan']);
+
+	});
 
 	//ajax data log
 	Route::any('log/nasabah', 		['as' => 'log.nasabah',		'uses' => 'LogController@nasabah']);

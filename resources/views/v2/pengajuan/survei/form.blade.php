@@ -303,7 +303,7 @@
 							{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jumlah_angsuran]', $v['jumlah_angsuran'], ['class' => 'kjumlahangsuran mask-money form-control text-info inline-edit', 'placeholder' => 'Rp 2.000.000'], true) !!}
 						</td>
 						<td class="align-top">
-							{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jangka_waktu]', $v['jangka_waktu'], ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1'], true, null, null, 'Tahun',  ['class_input_group' => 'w-50', 'class_input_group_append' => 'border-0 bg-white']) !!}
+							{!! Form::vText(null, 'capital[hutang]['.($k+1).'][jangka_waktu]', $v['jangka_waktu'], ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1'], true, null, null, 'Bulan',  ['class_input_group' => 'w-50', 'class_input_group_append' => 'border-0 bg-white']) !!}
 						</td>
 						<td class="align-top" style="width: 10%;">
 							<a class="cloneHutang text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat hutang"><i class="fa fa-copy fa-lg"></i></a> 
@@ -323,7 +323,7 @@
 							{!! Form::vText(null, 'capital[hutang][1][jumlah_angsuran]', null, ['class' => 'kjumlahangsuran form-control mask-money text-info inline-edit', 'placeholder' => 'Rp 2.000.000'], true) !!}
 						</td>
 						<td class="align-top">
-							{!! Form::vText(null, 'capital[hutang][1][jangka_waktu]', null, ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1'], true, null, null, 'Tahun',  ['class_input_group' => 'w-50', 'class_input_group_append' => 'border-0 bg-white']) !!}
+							{!! Form::vText(null, 'capital[hutang][1][jangka_waktu]', null, ['class' => 'kjangkawaktu form-control text-info inline-edit', 'placeholder' => '1'], true, null, null, 'Bulan',  ['class_input_group' => 'w-50', 'class_input_group_append' => 'border-0 bg-white']) !!}
 						</td>
 						<td class="align-top" style="width: 10%;">
 							<a class="cloneHutang text-primary" data-toggle="tooltip" data-placement="bottom" title="tambah/duplikat hutang"><i class="fa fa-copy fa-lg"></i></a> 

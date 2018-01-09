@@ -172,13 +172,13 @@ return [
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
+        // App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         // Barryvdh\Debugbar\ServiceProvider::class,
-        Laravel\Passport\PassportServiceProvider::class,
+        // Laravel\Passport\PassportServiceProvider::class,
 
         Thunderlabid\Manajemen\ManajemenServiceProvider::class,
         Thunderlabid\Pengajuan\PengajuanServiceProvider::class,

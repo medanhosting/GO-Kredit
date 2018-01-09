@@ -9,7 +9,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>SURAT PERNYATAAN SEBAGAI PENJAMIN</title>
+		<title>BUKTI NOTA ANGSURAN</title>
 
 		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
@@ -49,7 +49,7 @@
 			</div>
 			<div class="row">
 				<div class="col text-center">
-					<h4 class="mb-1"><strong>BUKTI REALISASI KREDIT</strong></h4>
+					<h4 class="mb-1"><strong>BUKTI ANGSURAN KREDIT</strong></h4>
 				</div>
 			</div>
 			<hr class="mt-3 mb-2" style="border-size: 2px;">
