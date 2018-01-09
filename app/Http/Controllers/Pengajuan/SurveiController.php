@@ -26,7 +26,8 @@ class SurveiController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:survei');
+		$this->middleware('scope:operasional.survei')->only(['index', 'show']);
+		$this->middleware('scope:survei')->only(['store', 'update', 'assign_survei']);
 
 		$this->middleware('required_passcode')->only(['store', 'update']);
 	}
@@ -35,7 +36,7 @@ class SurveiController extends Controller
 	{
 		$penempatan 	= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('orang_id', Auth::user()['id'])->active(Carbon::now())->first();
 
-		if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan'))
+		if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan') || in_array('operasional', $penempatan['scopes']))
 		{
 			$kecamatan 	= SurveiLokasi::whereHas('survei', function($q){
 								$q->where('kode_kantor', request()->get('kantor_aktif_id'));
@@ -273,7 +274,7 @@ class SurveiController extends Controller
 		try {
 			$penempatan 	= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('orang_id', Auth::user()['id'])->active(Carbon::now())->first();
 
-			if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan'))
+			if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan') || in_array('operasional', $penempatan['scopes']))
 			{
 				$lokasi 	= SurveiLokasi::whereHas('survei', function($q){
 						$q->where('kode_kantor', request()->get('kantor_aktif_id'));

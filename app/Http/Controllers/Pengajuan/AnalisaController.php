@@ -28,7 +28,8 @@ class AnalisaController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:analisa');
+		$this->middleware('scope:operasional.analisa')->only(['index', 'show']);
+		$this->middleware('scope:analisa')->only(['store', 'update']);
 	}
 
 	public function index ($status = 'analisa') 
@@ -66,7 +67,7 @@ class AnalisaController extends Controller
 
 		$penempatan 	= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('orang_id', Auth::user()['id'])->active(Carbon::now())->first();
 
-		if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan'))
+		if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan') || in_array('operasional', $penempatan['scopes']))
 		{
 			$pengajuan 				= $pengajuan->orderby('p_pengajuan.created_at', $urut)->paginate();
 		}else{

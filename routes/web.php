@@ -40,29 +40,29 @@
 			Route::post('/pengajuan/assign/putusan/{id}',	['as'	=> 'pengajuan.assign_putusan', 	'uses' => 'PengajuanController@assign_putusan']);
 			Route::post('/pengajuan/validasi/putusan/{id}',	['as'	=> 'pengajuan.validasi_putusan', 	'uses' => 'PengajuanController@validasi_putusan']);
 			
-			Route::middleware('scope:permohonan')->group( function() {
+			// Route::middleware('scope:permohonan')->group( function() {
 				Route::resource('permohonan', 					'PermohonanController');
 				Route::post('/permohonan/assign/survei/{id}',	['as'	=> 'permohonan.assign_survei', 	'uses' => 'PermohonanController@assign_survei']);
-			});
-			Route::middleware('scope:survei')->group( function() {
-				Route::resource('survei', 				'SurveiController');
-			});
+			// });
+			// Route::middleware('scope:survei')->group( function() {
+				Route::resource('survei', 			'SurveiController');
+			// });
 
-			Route::middleware('scope:analisa')->group( function() {
+			// Route::middleware('scope:analisa')->group( function() {
 				Route::resource('analisa', 			'AnalisaController');
-			});
+			// });
 
-			Route::middleware('scope:putusan')->group( function() {
+			// Route::middleware('scope:putusan')->group( function() {
 				Route::resource('putusan', 			'PutusanController');
-			});
+			// });
 			
-			Route::middleware('scope:realisasi')->group( function() {
+			// Route::middleware('scope:realisasi')->group( function() {
 				Route::get('/realisasi/{id}/done',	['as'	=> 'realisasi.done', 	'uses' => 'RealisasiController@done']);
-			});
+			// });
 
-			Route::middleware('scope:passcode')->group( function() {
+			// Route::middleware('scope:passcode')->group( function() {
 				Route::resource('passcode', 		'PasscodeController');
-			});
+			// });
 
 			Route::get('/realisasi/{id}/print/{mode}',		['as'	=> 'pengajuan.print', 	'uses' => 'PengajuanController@print', 'middleware' => 'scope:realisasi']);
 		});

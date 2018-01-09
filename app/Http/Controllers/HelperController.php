@@ -82,7 +82,8 @@ Class HelperController extends Controller
 
 		if(!$scopes)
 		{
-			$scopes = explode(',', env('SU_SCOPES', 'pengajuan,permohonan,survei,analisa,keputusan,realisasi,kantor,karyawan'));
+			$scopes = explode(',', 'pengajuan,permohonan,survei,analisa,keputusan,realisasi,kantor,karyawan,operasional');
+			// $scopes = explode(',', env('SU_SCOPES', 'pengajuan,permohonan,survei,analisa,keputusan,realisasi,kantor,karyawan,operasional'));
 		}
 		else
 		{

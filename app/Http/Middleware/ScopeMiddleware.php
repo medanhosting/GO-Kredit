@@ -11,7 +11,6 @@ class ScopeMiddleware
 {
 	public function handle($request, Closure $next, $scope)
 	{
-		return $next($request);
 		$hari_ini 	= Carbon::now();
 		
 		$active_u	= Auth::user();
@@ -19,7 +18,7 @@ class ScopeMiddleware
 
 		if(!$active_p)
 		{
-			return redirect()->back()->withErrors('Forbidden!');
+			return redirect()->back()->withErrors('Anda tidak memiliki wewenang untuk data ini!');
 		}
 
 		if(str_is($scope, 'setuju') || str_is($scope, 'tolak'))
@@ -31,7 +30,17 @@ class ScopeMiddleware
 			return $next($request);
 		}
 
-		return redirect()->back()->withErrors('Forbidden!');
-		throw new Exception("Forbidden", 403);
+		if(str_is('*.*', $scope)){
+			$scopes 	= explode('.', $scope);
+			foreach ($scopes as $k => $v) {
+				if(in_array($v, $active_p['scopes']))
+				{
+					return $next($request);
+				}
+			}
+		}
+
+		return redirect()->back()->withErrors('Anda tidak memiliki wewenang untuk data ini!');
+		throw new Exception("Anda tidak memiliki wewenang untuk data ini", 403);
 	}
 }
