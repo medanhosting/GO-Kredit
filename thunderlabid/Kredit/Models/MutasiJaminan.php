@@ -34,7 +34,7 @@ class MutasiJaminan extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_mutasi_jaminan';
-	protected $fillable = ['nomor_kredit', 'tanggal', 'tag', 'description', 'documents', 'nomor_jaminan', 'status'];
+	protected $fillable = ['nomor_kredit', 'tanggal', 'tag', 'description', 'documents', 'nomor_jaminan', 'status', 'mutasi_jaminan_id'];
 	protected $hidden 	= [];
 	protected $appends	= ['possible_action'];
 	protected $rules	= [];
@@ -63,10 +63,6 @@ class MutasiJaminan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	public function kredit(){
 		return $this->belongsto(Aktif::class, 'nomor_kredit', 'nomor_kredit');
-	}
-
-	public function next(){
-		return $this->hasone(MutasiJaminan::class, 'nomor_jaminan', 'nomor_jaminan')->whereraw(\DB::raw('k_mutasi_jaminan.id <> "'.$this->id.'"'))->whereraw(\DB::raw('k_mutasi_jaminan.tanggal > "'.$this->formatDateTimeFrom($this->tanggal).'"'))->orderby('tanggal', 'desc');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

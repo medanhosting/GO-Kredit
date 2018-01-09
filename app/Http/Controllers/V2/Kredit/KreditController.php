@@ -16,8 +16,12 @@ use App\Http\Service\Policy\PelunasanAngsuran;
 
 use Exception, DB, Auth, Carbon\Carbon;
 
+use App\Service\Traits\IDRTrait;
+
 class KreditController extends Controller
 {
+	use IDRTrait;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -43,6 +47,9 @@ class KreditController extends Controller
 		//ANGSURAN
 		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
 
+		$denda 		= AngsuranDetail::displayingdenda()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
+		$t_denda 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
+
 		$titipan 	= NotaBayar::wheredoesnthave('details',  function($q){$q;})->where('nomor_kredit', $aktif['nomor_kredit'])->sum('jumlah');
 
 		$total		= array_sum(array_column($angsuran->toArray(), 'subtotal'));
@@ -60,7 +67,7 @@ class KreditController extends Controller
 
 		$penagihan 	= Penagihan::wherehas('kredit', function($q)use($id){$q->where('kode_kantor', request()->get('kantor_aktif_id'))->where('id', $id);})->HitungNotaBayar()->orderby('tanggal', 'asc')->get();
 
-		$jaminan 	= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->with(['next'])->get();
+		$jaminan 	= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->get();
 
 		if(request()->get('current')){
 			switch (strtolower(request()->get('current'))) {
@@ -92,7 +99,7 @@ class KreditController extends Controller
 
 		view()->share('kredit_id', $id);
 
-		$this->layout->pages 	= view('v2.kredit.show', compact('sp'));
+		$this->layout->pages 	= view('v2.kredit.show', compact('sp', 'denda', 't_denda'));
 		return $this->layout;
 	}
 
@@ -106,6 +113,39 @@ class KreditController extends Controller
 				case 'tagihan':
 					$feedback 	= new FeedBackPenagihan($aktif, request()->get('nip_karyawan'), request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'));
 					$feedback->bayar();
+					break;
+				case 'denda':
+					$amount 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->sum('amount');
+					$first 		= AngsuranDetail::whereIn('tag', ['denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->orderby('nth', 'asc')->first();
+
+					//check potongan 
+					$potongan 	= $this->formatMoneyFrom(request()->get('potongan'));
+					if($potongan > 0){
+						if($potongan>$amount){
+							throw new Exception("Potongan lebih besar dari denda", 1);
+						}
+						$ptg 	= new AngsuranDetail;
+						$ptg->nomor_kredit 	= $aktif['nomor_kredit'];
+						$ptg->tanggal 		= request()->get('tanggal');
+						$ptg->nth 			= $first->nth;
+						$ptg->tag 			= 'potongan_denda';
+						$ptg->amount 		= $this->formatMoneyTo(0 - $potongan);
+						$ptg->save();
+					}
+
+					$denda 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->get();
+
+					$nb 	= new NotaBayar;
+					$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($aktif['nomor_kredit']);
+					$nb->nomor_kredit 	= $aktif['nomor_kredit'];
+					$nb->tanggal 		= request()->get('tanggal');
+					$nb->nip_karyawan 	= Auth::user()['nip'];
+					$nb->save();
+
+					foreach ($denda as $k => $v) {
+						$v->nota_bayar_id = $nb->id;
+						$v->save();
+					}
 					break;
 				default:
 

@@ -74,8 +74,9 @@ class Aktif extends Model
 	}
 
 	public function jaminan(){
-		return $this->hasMany(MutasiJaminan::class, 'nomor_kredit', 'nomor_kredit')->where('tag', 'in');
+		return $this->hasMany(MutasiJaminan::class, 'nomor_kredit', 'nomor_kredit')->where('tag', 'in')->wherenull('mutasi_jaminan_id');
 	}
+	
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------

@@ -85,24 +85,26 @@ class MutasiJaminanController extends Controller
 			//simpan jaminan keluar
 			if(str_is($jaminan->possible_action, 'ajukan_jaminan_keluar')){
 				$out 	= new MutasiJaminan;
-				$out->nomor_kredit 	= $jaminan->nomor_kredit;
-				$out->tanggal 		= request()->get('out'). ' 00:00';
-				$out->tag 			= 'out';
-				$out->description 	= request()->get('description');
-				$out->documents 	= $jaminan->documents;
-				$out->nomor_jaminan = $jaminan->nomor_jaminan;
-				$out->status 		= 'pending';
+				$out->mutasi_jaminan_id	= $jaminan->id;
+				$out->nomor_kredit 		= $jaminan->nomor_kredit;
+				$out->tanggal 			= request()->get('out'). ' 00:00';
+				$out->tag 				= 'out';
+				$out->description 		= request()->get('description');
+				$out->documents 		= $jaminan->documents;
+				$out->nomor_jaminan 	= $jaminan->nomor_jaminan;
+				$out->status 			= 'pending';
 				$out->save();
 
-				$out 	= new MutasiJaminan;
-				$out->nomor_kredit 	= $jaminan->nomor_kredit;
-				$out->tanggal 		= request()->get('in'). ' 00:00';
-				$out->tag 			= 'in';
-				$out->description 	= request()->get('description');
-				$out->documents 	= $jaminan->documents;
-				$out->nomor_jaminan = $jaminan->nomor_jaminan;
-				$out->status 		= 'pending';
-				$out->save();
+				$in 	= new MutasiJaminan;
+				$in->mutasi_jaminan_id	= $out->id;
+				$in->nomor_kredit 		= $jaminan->nomor_kredit;
+				$in->tanggal 			= request()->get('in'). ' 00:00';
+				$in->tag 				= 'in';
+				$in->description 		= request()->get('description');
+				$in->documents 			= $jaminan->documents;
+				$in->nomor_jaminan 		= $jaminan->nomor_jaminan;
+				$in->status 			= 'pending';
+				$in->save();
 			}elseif(str_is($jaminan->possible_action, 'otorisasi_jaminan_masuk')){
 				$jaminan->status 	= 'completed';
 				$jaminan->save();

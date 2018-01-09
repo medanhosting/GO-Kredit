@@ -31,8 +31,13 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" data-toggle="tab" href="#angsuran" role="tab">
+									<a class="nav-link {{$is_angsuran_tab}}" data-toggle="tab" href="#angsuran" role="tab">
 										Angsuran 
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {{$is_denda_tab}}" data-toggle="tab" href="#denda" role="tab">
+										Denda 
 									</a>
 								</li>
 								<li class="nav-item">
@@ -46,7 +51,7 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" data-toggle="tab" href="#jaminan" role="tab">
+									<a class="nav-link {{$is_jaminan_tab}}" data-toggle="tab" href="#jaminan" role="tab">
 										Mutasi Jaminan 
 									</a>
 								</li>
@@ -59,8 +64,12 @@
 									@include('v2.kredit.show.kredit')
 								</div>
 								<!-- tab angsuran -->
-								<div class="tab-pane" id="angsuran" role="tabpanel">
+								<div class="tab-pane {{$is_angsuran_tab}}" id="angsuran" role="tabpanel">
 									@include('v2.kredit.show.angsuran')
+								</div>
+								<!-- tab denda -->
+								<div class="tab-pane {{$is_denda_tab}}" id="denda" role="tabpanel">
+									@include('v2.kredit.show.denda')
 								</div>
 								<!-- tab tunggakan -->
 								<div class="tab-pane {{$is_tunggakan_tab}}" id="tunggakan" role="tabpanel">
@@ -71,7 +80,7 @@
 									@include('v2.kredit.show.penagihan')
 								</div>
 								<!-- tab jaminan -->
-								<div class="tab-pane" id="jaminan" role="tabpanel">
+								<div class="tab-pane {{$is_jaminan_tab}}" id="jaminan" role="tabpanel">
 									@include('v2.kredit.show.jaminan')
 								</div>
 							</div>
