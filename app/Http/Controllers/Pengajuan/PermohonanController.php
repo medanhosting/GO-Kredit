@@ -321,6 +321,7 @@ class PermohonanController extends Controller
 			if(request()->has('nasabah'))
 			{
 				$data_input['nasabah']				= request()->get('nasabah'); 
+				$data_input['nasabah']['keluarga']	= $permohonan['nasabah']['keluarga'];
 			}
 
 			if(request()->has('keluarga'))
