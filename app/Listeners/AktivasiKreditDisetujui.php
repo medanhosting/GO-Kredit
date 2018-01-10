@@ -51,19 +51,29 @@ class AktivasiKreditDisetujui
 			$aktif->legal 			= $model->legal;
 			$aktif->tanggal 		= $model->tanggal;
 			$aktif->kode_kantor 	= $model->pengajuan->kode_kantor;
+			$aktif->ao 				= $model->pengajuan->ao;
 			$aktif->save();
 		}
 	}
 
 	protected function generateNomorKredit($model)
 	{
-		$first_letter       = 'K.'.Carbon::now()->format('ym').'.';
+		$first_letter       = $model->pengajuan->kode_kantor;
+		
+		if(str_is($model->pengajuan->analisa->jenis_pinjaman,'pa')){
+			$first_letter 	= $first_letter.'.002.';
+		}else{
+			$first_letter 	= $first_letter.'.001.';
+		}
+
+		$first_letter       = $first_letter.Carbon::now()->format('Y').'.';
+
 		$prev_data          = Aktif::where('nomor_kredit', 'like', $first_letter.'%')->orderby('nomor_kredit', 'desc')->first();
 
 		if($prev_data)
 		{
 			$last_letter	= explode('.', $prev_data['nomor_kredit']);
-			$last_letter	= ((int)$last_letter[2] * 1) + 1;
+			$last_letter	= ((int)$last_letter[3] * 1) + 1;
 		}
 		else
 		{

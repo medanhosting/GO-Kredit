@@ -20,6 +20,7 @@ class CreateKreditSuratPeringatanTable extends Migration
 			$table->string('tag');
 			$table->datetime('tanggal');
 			$table->string('nip_karyawan');
+			$table->string('penagihan_id')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			

@@ -11,8 +11,8 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('pre')
-					<h6 class="pt-4 pl-4">MUTASI JAMINAN</h6>
+				@slot('header')
+					<h5 class="py-2 pl-3 mb-0">&nbsp;&nbsp;MUTASI JAMINAN</h5>
 				@endslot
 				@slot('body')
 					<form action="{{route('jaminan.index')}}" method="GET">

@@ -12,6 +12,9 @@
 				<i class="fa fa-line-chart"></i>&nbsp;&nbsp;Keuangan</a>
 				<a href="{{ route('kantor.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
 				<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Kantor</a>
+
+				<a href="{{ route('passcode.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
+				<i class="fa fa-unlock-alt"></i>&nbsp;&nbsp;Passcode</a>
 			</nav>
 		</div>
 	</div>

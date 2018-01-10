@@ -130,7 +130,7 @@ class AngsuranDetail extends Model
 				;
 			})
 			->selectraw("(select sum(kd2.amount) from k_angsuran_detail as kd2 where kd2.nomor_kredit = k_angsuran_detail.nomor_kredit and kd2.nota_bayar_id is null and kd2.deleted_at is null) as sisa_hutang")
-			->where('tanggal', '<=', Carbon::now()->format('Y-m-d H:i:s'))
+			->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
 			->groupby('nomor_kredit');
 	}
 	

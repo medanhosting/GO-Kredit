@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Thunderlabid\Kredit\Models\Rekening;
 
 class KreditAktifTableSeeder extends Seeder
 {
@@ -17,11 +18,19 @@ class KreditAktifTableSeeder extends Seeder
 		DB::table('k_penagihan')->truncate();
 		DB::table('k_mutasi_jaminan')->truncate();
 		DB::table('k_surat_peringatan')->truncate();
+		DB::table('k_rekening')->truncate();
 
-		$kredits 	= \Thunderlabid\Pengajuan\Models\Putusan::where('putusan', 'setuju')->get();
+		$all 	= ['Kas', 'BANK BCA 411000'];
 
-		foreach ($kredits as $k => $v) {
-			event(new \App\Events\AktivasiKredit($v));	
+		foreach($all as $k => $v){
+			$rek 	= new Rekening;
+			$rek->nama 	= $v;
+			$rek->save();
 		}
+		// $kredits 	= \Thunderlabid\Pengajuan\Models\Putusan::where('putusan', 'setuju')->get();
+
+		// foreach ($kredits as $k => $v) {
+		// 	event(new \App\Events\AktivasiKredit($v));	
+		// }
 	}
 }

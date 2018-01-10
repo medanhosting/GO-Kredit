@@ -26,6 +26,8 @@
 		<div class="col-sm-12">
 			{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'nip_karyawan' => Auth::user()['nip'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'tagihan']), 'method' => 'PATCH']) !!}
 
+				<h6 class="text-secondary">PENERIMAAN TAGIHAN</h6>
+
 				<div class="row mb-1">
 					<div class="col-2">
 						<label class="text-uppercase">Nama Penerima</label>

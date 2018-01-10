@@ -54,6 +54,9 @@
 		Route::namespace('V2\Finance')->group(function(){
 			Route::get('kasir', 		['uses' => 'KasirController@index', 	'as' => 'kasir.index']);
 		});
+		Route::namespace('V2\Otorisasi')->group(function(){
+			Route::resource('passcode', 		'PasscodeController');
+		});
 	});
 
 	Route::middleware(['auth', 'pilih_koperasi'])->group( function() {
