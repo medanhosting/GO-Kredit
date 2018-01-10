@@ -68,7 +68,8 @@
 							data-target="#summary-angsuran" 
 							data-url-angsuran="{{ route('angsuran.tagihan', ['id' => $aktif['nomor_kredit']]) }}"
 							data-url-potongan="{{ route('angsuran.potongan', ['id' => $aktif['nomor_kredit']]) }}" 
-							data-kantor-aktif-id="{{ $kantor_aktif_id }}">&emsp;Bayar yang tercentang&emsp;</a>
+							data-kantor-aktif-id="{{ $kantor_aktif_id }}"
+							data-url-terbilang="{[ route('terbilang') }}">&emsp;Bayar yang tercentang&emsp;</a>
 						</th>
 					</tr>
 				</tfoot>
@@ -140,6 +141,12 @@
 						temp.find('td.angs-' + i2).html('Rp ' + window.numberFormat.set(v2));
 					} else {
 						temp.find('td.angs-title').html('Angsuran ke- ' + v2);
+
+						if ((data.length - 1) == i) {
+							$('.periode_bln').append(v2);
+						} else {
+							$('.periode_bln').append(v2 + ', ');
+						}
 					}
 				});
 
@@ -215,6 +222,22 @@
 								<td class="text-right text-info" colspan="5"><h5><strong>Total Bayar Angsuran</strong></h5></td> \
 								<td class="text-right text-info"><h5><strong>Rp ' + window.numberFormat.set(total_angsuran)  + '</strong></h5></td> \
 							</tr>');
+
+						// terbilang
+						var ajxTerbilang = window.ajax;
+		
+						ajxTerbilang.defineOnSuccess(function(resp){
+							parent2.append('<tr> \
+												<td class="text-left"><strong>Terbilang</strong></td> \
+												<td class="text-left text-capitalize" colspan="7"><i>	' + resp.data + '</i></td> \
+											</tr>');
+						});
+			
+						ajxTerbilang.defineOnError(function(resp){
+			
+						});
+			
+						ajxTerbilang.get('{{ route("terbilang")  }}', {money: total_angsuran});
 					});
 
 					ajxPot.defineOnError(function(resp){
@@ -249,6 +272,7 @@
 			var parent = root.parent();
 
 			parent.children(':not(#angsuran-row)').remove();
+			$('.periode_bln').html('');
 		});
 
 		$('#konfirmasi-angsuran').on('show.bs.modal', function(e) {

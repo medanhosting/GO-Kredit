@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 
 use Input;
 
+use App\Service\UI\IDRTranslater;
+
 use Thunderlabid\Territorial\Models\Regensi;
 use Thunderlabid\Territorial\Models\Distrik;
 use Thunderlabid\Territorial\Models\Desa;
@@ -162,5 +164,18 @@ Class HelperController extends Controller
 		view()->share('jenis_sertifikat', $jenis_sertifikat);
 		view()->share('tipe_sertifikat', $tipe_sertifikat);
 		view()->share('status_perkawinan', $status_perkawinan);	
+	}
+
+	public function terbilang()
+	{
+		$money = request()->get('money');
+
+		if ($money != null) {
+			$terbilang = IDRTranslater::terbilang($money);
+
+			return response()->json(['status' => 'success', 'data' => $terbilang], 200);
+		} else {
+			return response()->json(['status' => 'error', 'message' => 'parameters money tidak ada']);
+		}
 	}
 }
