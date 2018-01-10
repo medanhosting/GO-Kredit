@@ -11,6 +11,8 @@ use Thunderlabid\Kredit\Models\SuratPeringatan;
 use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
+use App\Http\Service\Policy\BayarDenda;
+use App\Http\Service\Policy\BayarAngsuran;
 use App\Http\Service\Policy\FeedBackPenagihan;
 use App\Http\Service\Policy\PelunasanAngsuran;
 
@@ -53,6 +55,9 @@ class KreditController extends Controller
 		$titipan 	= NotaBayar::wheredoesnthave('details',  function($q){$q;})->where('nomor_kredit', $aktif['nomor_kredit'])->sum('jumlah');
 
 		$total		= array_sum(array_column($angsuran->toArray(), 'subtotal'));
+
+		//CHECK TITIPAN
+		$titipan 	= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->wheredoesnthave('details', function($q){$q;})->sum('jumlah');
 		
 		//TUNGGAKAN
 		$today		= Carbon::now();
@@ -99,7 +104,7 @@ class KreditController extends Controller
 
 		view()->share('kredit_id', $id);
 
-		$this->layout->pages 	= view('v2.kredit.show', compact('sp', 'denda', 't_denda'));
+		$this->layout->pages 	= view('v2.kredit.show', compact('sp', 'denda', 't_denda', 'titipan'));
 		return $this->layout;
 	}
 
@@ -111,90 +116,16 @@ class KreditController extends Controller
 			DB::BeginTransaction();
 			switch (request()->get('current')) {
 				case 'tagihan':
-					$feedback 	= new FeedBackPenagihan($aktif, request()->get('nip_karyawan'), request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'));
+					$feedback 	= new FeedBackPenagihan($aktif, Auth::user()['nip'], request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'));
 					$feedback->bayar();
 					break;
 				case 'denda':
-					$amount 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->sum('amount');
-					$first 		= AngsuranDetail::whereIn('tag', ['denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->orderby('nth', 'asc')->first();
-
-					//check potongan 
-					$potongan 	= $this->formatMoneyFrom(request()->get('potongan'));
-					if($potongan > 0){
-						if($potongan>$amount){
-							throw new Exception("Potongan lebih besar dari denda", 1);
-						}
-						$ptg 	= new AngsuranDetail;
-						$ptg->nomor_kredit 	= $aktif['nomor_kredit'];
-						$ptg->tanggal 		= request()->get('tanggal');
-						$ptg->nth 			= $first->nth;
-						$ptg->tag 			= 'potongan_denda';
-						$ptg->amount 		= $this->formatMoneyTo(0 - $potongan);
-						$ptg->save();
-					}
-
-					$denda 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->get();
-
-					$nb 	= new NotaBayar;
-					$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($aktif['nomor_kredit']);
-					$nb->nomor_kredit 	= $aktif['nomor_kredit'];
-					$nb->tanggal 		= request()->get('tanggal');
-					$nb->nip_karyawan 	= Auth::user()['nip'];
-					$nb->save();
-
-					foreach ($denda as $k => $v) {
-						$v->nota_bayar_id = $nb->id;
-						$v->save();
-					}
+					$denda 		= new BayarDenda($aktif, Auth::user()['nip'], request()->get('potongan'), request()->get('tanggal'));
+					$denda->bayar();
 					break;
 				default:
-
-					$nth 		= request()->get('nth');
-					
-					$angsuran 	= AngsuranDetail::whereIn('nth', $nth)->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->get();
-
-					$latest_pay = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherenotnull('nota_bayar_id')->wherein('tag', ['bunga', 'pokok'])->orderby('nth', 'desc')->first();
-					$should_pay = AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->whereIn('nth', $nth)->get();
-
-					if($latest_pay){
-						$total 	= $aktif['jangka_waktu'] - $latest_pay['nth'];
-					}else{
-						$total 	= $aktif['jangka_waktu'];
-					}
-
-					$potongan 		= false;
-
-					if(count($should_pay) == $total){
-						$potongan 	= PelunasanAngsuran::potongan($aktif['nomor_kredit']);
-					}
-
-					if($angsuran){
-						$nb 	= new NotaBayar;
-						$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($aktif['nomor_kredit']);
-						$nb->nomor_kredit 	= $aktif['nomor_kredit'];
-						$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-						$nb->nip_karyawan 	= Auth::user()['nip'];
-						$nb->save();
-
-						foreach ($angsuran as $k => $v) {
-							if(is_null($v->nota_bayar_id)){
-								$v->nota_bayar_id 	= $nb->id;
-								$v->save();
-							}
-						}
-
-						if($potongan){
-							$pad 	= new AngsuranDetail;
-							$pad->nota_bayar_id	= $nb->id;
-							$pad->nomor_kredit 	= $aktif['nomor_kredit'];
-							$pad->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-							$pad->nth 			= ($latest_pay['nth'] * 1) + 1;
-							$pad->tag 			= 'potongan';
-							$pad->amount 		= $potongan;
-							$pad->description 	= 'Potongan Pelunasan';
-							$pad->save();
-						}
-					}
+					$bayar 		= new BayarAngsuran($aktif, Auth::user()['nip'], request()->get('nth'), request()->get('tanggal'));
+					$bayar->bayar();
 					break;
 			}
 			DB::commit();

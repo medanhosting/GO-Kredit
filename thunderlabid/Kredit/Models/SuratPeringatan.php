@@ -31,7 +31,7 @@ class SuratPeringatan extends Model
 	use FakturTrait;
 	
 	protected $table 	= 'k_surat_peringatan';
-	protected $fillable = ['nomor_kredit', 'nth', 'tanggal', 'tag', 'nip_karyawan'];
+	protected $fillable = ['nomor_kredit', 'nth', 'tanggal', 'tag', 'nip_karyawan', 'penagihan_id'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
@@ -65,7 +65,7 @@ class SuratPeringatan extends Model
 	}
 
 	public function penagihan(){
-		return $this->hasone(Penagihan::class, 'nomor_kredit', 'nomor_kredit')->where('tanggal', '>=', 'tanggal')->orderby('created_at', 'desc');
+		return $this->hasone(Penagihan::class, 'id', 'penagihan_id')->orderby('created_at', 'desc');
 	}
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION

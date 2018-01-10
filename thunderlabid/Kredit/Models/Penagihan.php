@@ -103,7 +103,7 @@ class Penagihan extends Model
 		return $query
 			->selectraw('k_penagihan.*')
 			->selectraw("(select sum(knb.jumlah) from k_nota_bayar as knb WHERE EXISTS (SELECT * FROM k_angsuran_detail as kad WHERE kad.nota_bayar_id = knb.id) and knb.penagihan_id = k_penagihan.id) as pelunasan")
-			->selectraw("(select sum(knb.jumlah) from k_nota_bayar as knb WHERE NOT EXISTS (SELECT * FROM k_angsuran_detail as kad WHERE kad.nota_bayar_id = knb.id) and knb.penagihan_id = k_penagihan.id) as titipan")
+			->selectraw("(select sum(knb.jumlah) from k_nota_bayar as knb WHERE NOT EXISTS (SELECT * FROM k_angsuran_detail as kad WHERE kad.nota_bayar_id = knb.id) and knb.penagihan_id = k_penagihan.id and knb.jumlah > 0) as titipan")
 			;
 	}
 

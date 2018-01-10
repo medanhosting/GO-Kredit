@@ -36,7 +36,7 @@ class Aktif extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_aktif';
-	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'jenis_pinjaman', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal', 'kode_kantor', 'tanggal'];
+	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'jenis_pinjaman', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal', 'kode_kantor', 'tanggal', 'ao'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
@@ -139,6 +139,11 @@ class Aktif extends Model
 		$this->attributes['nasabah']			= json_encode($variable);
 	}
 
+	public function setAoAttribute($variable)
+	{
+		$this->attributes['ao']					= json_encode($variable);
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
 	// ------------------------------------------------------------------------------------------------------------
@@ -204,5 +209,10 @@ class Aktif extends Model
 	public function getNasabahAttribute($variable)
 	{
 		return json_decode($this->attributes['nasabah'], true);
+	}
+
+	public function getAoAttribute($variable)
+	{
+		return json_decode($this->attributes['ao'], true);
 	}
 }

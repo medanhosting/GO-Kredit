@@ -17,7 +17,7 @@
 			<div class="col-6 text-right">
 				<div class="row justify-content-end">
 					<div class="col-3">Nomor</div>
-					<div class="col-6">{{$kantor_aktif['id']}} / {{$angsuran['nomor_kredit']}}</div>
+					<div class="col-6">#</div>
 				</div>
 				<div class="row justify-content-end">
 					<div class="col-3">Tanggal</div>
@@ -39,12 +39,12 @@
 				<td style="width: 12.5%">AC / SPK</td>
 				<td style="width: 1%">:</td>
 				<td class="w-25 pl-2 pr-2">
-					<p class="mb-2" style="border-bottom: 1px dotted #ccc">gak tau variabelnya</p>
+					<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{$kredit_aktif['nomor_kredit']}}</p>
 				</td>
 				<td style="width: 12.5%">AO</td>
 				<td style="width: 1%">:</td>
 				<td class="w-25 pl-2 pr-2">
-					<p class="mb-2" style="border-bottom: 1px dotted #ccc">&nbsp;</p>
+					<p class="mb-2" style="border-bottom: 1px dotted #ccc">&nbsp;{{$kredit_aktif['ao']['nama']}}</p>
 				</td>
 			</tr>
 			<tr class="align-top">

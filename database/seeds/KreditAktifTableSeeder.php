@@ -18,10 +18,10 @@ class KreditAktifTableSeeder extends Seeder
 		DB::table('k_mutasi_jaminan')->truncate();
 		DB::table('k_surat_peringatan')->truncate();
 
-		$kredits 	= \Thunderlabid\Pengajuan\Models\Putusan::where('putusan', 'setuju')->get();
+		// $kredits 	= \Thunderlabid\Pengajuan\Models\Putusan::where('putusan', 'setuju')->get();
 
-		foreach ($kredits as $k => $v) {
-			event(new \App\Events\AktivasiKredit($v));	
-		}
+		// foreach ($kredits as $k => $v) {
+		// 	event(new \App\Events\AktivasiKredit($v));	
+		// }
 	}
 }
