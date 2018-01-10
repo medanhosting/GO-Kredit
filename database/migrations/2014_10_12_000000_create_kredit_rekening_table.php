@@ -16,10 +16,11 @@ class CreateKreditRekeningTable extends Migration
 		Schema::create('k_rekening', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('nama');
+			$table->string('kode_kantor')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'nama']);
+            $table->index(['deleted_at', 'kode_kantor']);
 		});
 	}
 

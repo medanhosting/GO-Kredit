@@ -33,7 +33,7 @@ class Rekening extends Model
 	use IDRTrait;
 	
 	protected $table 	= 'k_rekening';
-	protected $fillable = ['nama'];
+	protected $fillable = ['nama', 'kode_kantor'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
