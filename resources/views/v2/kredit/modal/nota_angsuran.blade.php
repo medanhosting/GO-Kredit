@@ -1,3 +1,5 @@
+@inject('rekening', 'Thunderlabid\Kredit\Models\Rekening')
+@php $rek 	= $rekening->get() @endphp
 @component('bootstrap.modal', ['id' => 'summary-angsuran', 'size' => 'modal-lg']) 
 	@slot ('title') 
 		Detail Angsuran

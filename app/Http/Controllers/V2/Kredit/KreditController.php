@@ -125,15 +125,15 @@ class KreditController extends Controller
 			DB::BeginTransaction();
 			switch (request()->get('current')) {
 				case 'tagihan':
-					$feedback 	= new FeedBackPenagihan($aktif, Auth::user()['nip'], request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'));
+					$feedback 	= new FeedBackPenagihan($aktif, Auth::user()['nip'], request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'), request()->get('rekening_id'));
 					$feedback->bayar();
 					break;
 				case 'denda':
-					$denda 		= new BayarDenda($aktif, Auth::user()['nip'], request()->get('potongan'), request()->get('tanggal'));
+					$denda 		= new BayarDenda($aktif, Auth::user()['nip'], request()->get('potongan'), request()->get('tanggal'), request()->get('rekening_id'));
 					$denda->bayar();
 					break;
 				default:
-					$bayar 		= new BayarAngsuran($aktif, Auth::user()['nip'], request()->get('nth'), request()->get('tanggal'));
+					$bayar 		= new BayarAngsuran($aktif, Auth::user()['nip'], request()->get('nth'), request()->get('tanggal'), request()->get('rekening_id'));
 					$bayar->bayar();
 					break;
 			}

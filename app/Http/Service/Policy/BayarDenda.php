@@ -14,11 +14,12 @@ class BayarDenda
 {
 	use IDRTrait;
 
-	public function __construct(Aktif $aktif, $nip_karyawan, $potongan, $tanggal){
+	public function __construct(Aktif $aktif, $nip_karyawan, $potongan, $tanggal, $rekening_id = null){
 		$this->kredit 			= $aktif;
 		$this->nip_karyawan 	= $nip_karyawan;
 		$this->potongan 		= $potongan;
 		$this->tanggal 			= $tanggal;
+		$this->rekening_id 		= $rekening_id;
 	}
 
 	public function bayar(){
@@ -27,7 +28,7 @@ class BayarDenda
 		$first 		= AngsuranDetail::whereIn('tag', ['denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->orderby('nth', 'asc')->first();
 
 		//check potongan 
-		$potongan 	= $this->formatMoneyFrom($this->potongan);
+		$potongan 	= $this->formatMoneyFrom($this->potongan*1);
 		if($potongan > 0){
 			if($potongan>$amount){
 				throw new Exception("Potongan lebih besar dari denda", 1);
@@ -48,6 +49,8 @@ class BayarDenda
 		$nb->nomor_kredit 	= $this->kredit['nomor_kredit'];
 		$nb->tanggal 		= $this->tanggal;
 		$nb->nip_karyawan 	= $this->nip_karyawan;
+		$nb->rekening_id 	= $this->rekening_id;
+		$nb->jumlah 		= $this->formatMoneyTo($amount - $potongan);
 		$nb->save();
 
 		foreach ($denda as $k => $v) {

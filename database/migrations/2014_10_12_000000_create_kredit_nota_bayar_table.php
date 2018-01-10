@@ -21,6 +21,7 @@ class CreateKreditNotaBayarTable extends Migration
 			$table->datetime('tanggal');
 			$table->double('jumlah')->nullable();
 			$table->string('nip_karyawan');
+			$table->string('rekening_id')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			
