@@ -1,8 +1,10 @@
 @inject('idr', 'App\Service\UI\IDRTranslater')
+@inject('carbon', 'Carbon\Carbon')
 
 @php
 	$is_paid 	= true;
 @endphp
+
 <div class="clearfix">&nbsp;</div>
 <div class="clearfix">&nbsp;</div>
 <div class="row">
@@ -46,7 +48,7 @@
 						</h5>
 					</th>
 					<th class="">
-						<a href="#" class="btn btn-block btn-primary">Bayar</a>
+						<a href="#" class="btn btn-block btn-primary" data-toggle="modal" data-target="#summary-denda">Bayar</a>
 					</th>
 				</tr>
 				@if(!$is_paid && count($denda))
@@ -71,5 +73,10 @@
 				@endif
 			</tfoot>
 		</table>
+
+		@include('v2.kredit.modal.nota_denda', [
+			'kredit_aktif' 	=> $aktif,
+			'tanggal_now'	=> $carbon->now()->format('d/m/Y H:i'),
+		])
 	</div>
 </div>

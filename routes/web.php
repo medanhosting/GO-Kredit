@@ -134,6 +134,8 @@
 
 	Route::any('jabatan',	['uses' => 'HelperController@jabatan',		'as' => 'jabatan.index']);
 	Route::any('scopes',	['uses' => 'HelperController@scopes',		'as' => 'scopes.index']);
+
+	Route::any('terbilang',	['uses' => 'HelperController@terbilang',	'as' => 'terbilang']);
 	
 	Route::any('upload/image', 		['as' => 'upload.image.store',		'uses' => 'HelperController@storeGambar']);
 	Route::any('remove/image',		['as' => 'upload.image.destroy',	'uses' => 'HelperController@destroyGambar']);
@@ -141,7 +143,8 @@
 	// ajax data potongan & tagihan
 	Route::namespace('V2\Kredit')->group(function(){
 		Route::any('angsuran/{id}/tagihan', 	['uses' => 'AngsuranController@tagihan', 	'as' => 'angsuran.tagihan']);
-		Route::get('angsuran/{id}/potongan', 	['uses' => 'AngsuranController@potongan', 	'as' => 'angsuran.potongan']);
+		Route::any('angsuran/{id}/potongan', 	['uses' => 'AngsuranController@potongan', 	'as' => 'angsuran.potongan']);
+		Route::any('angsuran/{id}/denda',		['uses' => 'AngsuranController@denda',		'as' => 'angsuran.denda']);
 
 	});
 
