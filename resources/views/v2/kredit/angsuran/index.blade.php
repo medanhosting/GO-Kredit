@@ -93,7 +93,7 @@
 												{{$idr->formatMoneyTo($v['subtotal'])}}
 											</td>
 											<td>
-												<a href="{{route('kredit.show', ['id' => $v['kredit']['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'penagihan'])}}">Lihat Kredit</a>
+												<a href="{{route('kredit.show', ['id' => $v['kredit']['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'angsuran'])}}">Lihat Kredit</a>
 											</td>
 										</tr>
 									@empty

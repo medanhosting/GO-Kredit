@@ -25,17 +25,18 @@ class AngsuranController extends Controller
 
 	public function index() 
 	{
-		$start 		= Carbon::now()->startofday();
-		$end 		= Carbon::now()->endofday();
+		$angsuran 	= NotaBayar::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
 
 		if(request()->has('start')){
-			$start	= Carbon::createFromFormat('d/m/Y', request()->get('start'))->startofday();
+			$start		= Carbon::createFromFormat('d/m/Y', request()->get('start'))->startofday();
+			$angsuran 	= $angsuran->where('tanggal', '>=', $start->format('Y-m-d H:i:s'));
 		}
 		if(request()->has('end')){
-			$end	= Carbon::createFromFormat('d/m/Y', request()->get('end'))->endofday();
+			$end		= Carbon::createFromFormat('d/m/Y', request()->get('end'))->endofday();
+			$angsuran 	= $angsuran->where('tanggal', '<=', $end->format('Y-m-d H:i:s'));
 		}
 
-		$angsuran 	= NotaBayar::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>=', $start->format('Y-m-d H:i:s'))->where('tanggal', '<=', $end->format('Y-m-d H:i:s'))->wherehas('details', function($q){$q;})->Displaying()->paginate();
+		$angsuran 	= $angsuran->wherehas('details', function($q){$q;})->Displaying()->paginate();
 
 		view()->share('active_submenu', 'angsuran');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));

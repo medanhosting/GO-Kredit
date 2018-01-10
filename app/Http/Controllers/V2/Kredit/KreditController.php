@@ -61,12 +61,12 @@ class KreditController extends Controller
 		
 		//TUNGGAKAN
 		$today		= Carbon::now();
-		$dday		= Carbon::createFromFormat('d/m/Y H:i', $aktif['tanggal']);
+		// $dday		= Carbon::createFromFormat('d/m/Y H:i', $aktif['tanggal']);
 		$tunggakan  = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->orderby('tanggal', 'asc')->first();
 		//CHECK SP YANG BELUM DIKIRIM
 		$sp 		= SuratPeringatan::wheredoesnthave('penagihan', function($q){$q;})->first();
 
-		$riwayat_t  = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($dday)->orderby('tanggal', 'asc')->get();
+		$riwayat_t  = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->orderby('tanggal', 'asc')->get();
 
 		$latest_pay = NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
 
@@ -76,11 +76,20 @@ class KreditController extends Controller
 
 		if(request()->get('current')){
 			switch (strtolower(request()->get('current'))) {
+				case 'angsuran':
+					view()->share('is_angsuran_tab', 'show active');
+					break;
+				case 'denda':
+					view()->share('is_denda_tab', 'show active');
+					break;
 				case 'tunggakan':
 					view()->share('is_tunggakan_tab', 'show active');
 					break;
 				case 'penagihan':
 					view()->share('is_penagihan_tab', 'show active');
+					break;
+				case 'jaminan':
+					view()->share('is_jaminan_tab', 'show active');
 					break;
 				default:
 					view()->share('is_kredit_tab', 'show active');
