@@ -1,5 +1,9 @@
 @inject('rekening', 'Thunderlabid\Kredit\Models\Rekening')
-@php $rek 	= $rekening->get() @endphp
+
+@php 
+	$rek 	= $rekening->get();
+@endphp
+
 @component('bootstrap.modal', ['id' => 'summary-angsuran', 'size' => 'modal-lg']) 
 	@slot ('title') 
 		Detail Angsuran
@@ -103,6 +107,19 @@
 				</tbody>
 			</table>
 		</div>
+		<div class="clearfix"></div>
+		{{--  <div class="form-group row">
+			<div class="col-2">
+				<label class="mb-0">Ke Rekening</label>
+			</div>
+			<div class="col-4">
+				<select name="rekening_id" id="" class="form-control custom-select">
+					@foreach($rek as $k => $v)
+						<option value="{{ $v['id'] }}">{{ $v['nama'] }}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>  --}}
 	@endslot 
 	
 	@slot ('footer')

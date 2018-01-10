@@ -28,7 +28,7 @@ class BayarDenda
 		$first 		= AngsuranDetail::whereIn('tag', ['denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->orderby('nth', 'asc')->first();
 
 		//check potongan 
-		$potongan 	= $this->formatMoneyFrom($this->potongan*1);
+		$potongan 	= $this->formatMoneyFrom($this->potongan)*1;
 		if($potongan > 0){
 			if($potongan>$amount){
 				throw new Exception("Potongan lebih besar dari denda", 1);
