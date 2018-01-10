@@ -20,6 +20,9 @@ class PutusanController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->middleware('scope:operasional.pengajuan')->only(['index', 'show']);
+		$this->middleware('scope:realisasi')->only(['store', 'print']);
 	}
 
 	public function index () 

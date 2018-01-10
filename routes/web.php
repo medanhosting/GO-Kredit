@@ -23,9 +23,14 @@
 	Route::get('/password', 	['as'	=> 'password.get', 		'uses' => 'LoginController@password_get']);
 	Route::post('/password', 	['as'	=> 'password.post', 	'uses' => 'LoginController@password_post']);
 
-	Route::get('/pilih/koperasi',			['as'	=> 'pilih.koperasi','uses' => 'DashboardController@pilih_koperasi']);
 
 	//FRESH START
+	Route::middleware(['auth'])->prefix('v2')->group( function() {
+		Route::namespace('V2\Dashboard')->group(function(){
+			Route::get('/home',		['as'	=> 'home',				'uses' => 'DashboardController@index'])->middleware('pilih_koperasi');
+			Route::get('/koperasi',	['as'	=> 'pilih.koperasi',	'uses' => 'DashboardController@koperasi']);
+		});
+	});
 	Route::middleware(['auth', 'pilih_koperasi'])->prefix('v2')->group( function() {
 		Route::namespace('V2\Pengajuan')->group(function(){
 			Route::resource('simulasi', 		'SimulasiController'); 
@@ -36,7 +41,6 @@
 			Route::post('assign/{id}', 	['uses' => 	'PengajuanController@assign', 'as' => 'pengajuan.assign']);
 		});
 		Route::namespace('V2\Kredit')->group(function(){
-			Route::resource('realisasi', 		'RealisasiController'); 
 			Route::resource('kredit', 			'KreditController'); 
 			Route::resource('jaminan',			'MutasiJaminanController'); 
 			Route::resource('tunggakan', 		'TunggakanController'); 
@@ -60,7 +64,7 @@
 	});
 
 	Route::middleware(['auth', 'pilih_koperasi'])->group( function() {
-		Route::get('/home',					['as'	=> 'home',			'uses' => 'DashboardController@home']);
+		// Route::get('/home',					['as'	=> 'home',			'uses' => 'DashboardController@home']);
 		Route::get('/simulasi/{mode}',		['as'	=> 'simulasi',		'uses' => 'DashboardController@simulasi']);
 		Route::get('/download/{filename}',	['as' 	=> 'download', 		'uses' => 'DownloadController@download']);
 	

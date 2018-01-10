@@ -31,6 +31,14 @@ class PengajuanController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->middleware('scope:operasional.pengajuan')->only(['index', 'show']);
+
+		$this->middleware('scope:permohonan')->only(['create', 'store_permohonan', 'assign_surveyor']);
+		$this->middleware('scope:survei')->only(['store_survei', 'assign_analis']);
+		$this->middleware('scope:analisa')->only(['store_analisa', 'assign_komite_putusan']);
+		$this->middleware('scope:putusan')->only(['store_putusan', 'assign_realisasi']);
+		
 	}
 
 	public function index () 

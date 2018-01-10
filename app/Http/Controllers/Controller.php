@@ -31,6 +31,10 @@ class Controller extends BaseController
 		$this->kantor_aktif	= Kantor::find(request()->get('kantor_aktif_id'));
 		$this->scopes 		= PenempatanKaryawan::where('orang_id', $this->me['id'])->active($hari_ini)->where('kantor_id', request()->get('kantor_aktif_id'))->first();
 
+		if(in_array('holding', array_column($this->kantor->toArray(), 'tipe'))){
+			view()->share('is_holder', true);
+		}
+
 		//////////////////
 		// General Info //
 		//////////////////

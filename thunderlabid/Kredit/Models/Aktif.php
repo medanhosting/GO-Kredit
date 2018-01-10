@@ -66,7 +66,7 @@ class Aktif extends Model
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
 	public function angsuran(){
-		return $this->hasMany(Angsuran::class, 'nomor_kredit', 'nomor_kredit');
+		return $this->hasMany(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit');
 	}
 
 	public function penagihan(){

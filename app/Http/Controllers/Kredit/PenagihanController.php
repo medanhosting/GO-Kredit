@@ -19,8 +19,10 @@ class PenagihanController extends Controller
 	{
 		parent::__construct();
 
+		$this->middleware('scope:tagihan');
 		$this->middleware('required_password')->only('store');
 	}
+
 	public function index () 
 	{
 		$today 		= Carbon::now();

@@ -14,6 +14,8 @@ class KantorController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->middleware('scope:kantor');
 	}
 
 	public function index () 
