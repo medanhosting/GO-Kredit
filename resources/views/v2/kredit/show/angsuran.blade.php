@@ -194,7 +194,7 @@
 	
 			ajxBuy.defineOnSuccess(function(resp){
 				// check potongan
-				//if (checked_all() === true) {
+				if (checked_all() === true) {
 					var ajxPot = window.ajax;
 					var dataAjax2 = {};
 					
@@ -224,11 +224,9 @@
 					dataAjax2.kantor_aktif_id = kantor_aktif_id;
 
 					ajxPot.get(urlLinkPotongan, dataAjax2);
-				//}
-				// else {
-				//	parsingData(resp.data);
-
-				//}
+				} else {
+					parsingData(resp.data);
+				}
 			});
 	
 			ajxBuy.defineOnError(function(resp){
