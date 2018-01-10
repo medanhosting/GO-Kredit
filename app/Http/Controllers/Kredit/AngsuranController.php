@@ -19,6 +19,7 @@ class AngsuranController extends Controller
 	{
 		parent::__construct();
 
+		$this->middleware('scope:angsuran');
 		$this->middleware('required_password')->only('update');
 	}
 

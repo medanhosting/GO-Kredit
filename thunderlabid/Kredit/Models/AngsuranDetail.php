@@ -84,7 +84,7 @@ class AngsuranDetail extends Model
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
 	public function scopeDisplaying($query){
-		return $query->selectraw(\DB::raw('SUM(IF(tag="potongan",amount,0)) as potongan'))->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))->selectraw('SUM(IF(tag="bunga",amount,IF(tag="pokok",amount,IF(tag="potongan",amount,0)))) as subtotal')->selectraw('min(tanggal) as tanggal_bayar')->selectraw('min(nota_bayar_id) as nota_bayar_id')->selectraw('nth')->groupby('nth');
+		return $query->selectraw(\DB::raw('SUM(IF(tag="potongan",amount,0)) as potongan'))->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))->selectraw('SUM(IF(tag="bunga",amount,IF(tag="pokok",amount,IF(tag="potongan",amount,0)))) as subtotal')->selectraw('min(tanggal) as tanggal_bayar')->selectraw('min(nota_bayar_id) as nota_bayar_id')->selectraw('nth')->selectraw('max(nomor_kredit) as nomor_kredit')->groupby('nth');
 	}
 
 	public function scopeDisplayingDenda($query){

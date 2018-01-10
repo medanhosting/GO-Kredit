@@ -15,6 +15,7 @@ class TunggakanController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->middleware('scope:angsuran');
 	}
 
 	public function index() 

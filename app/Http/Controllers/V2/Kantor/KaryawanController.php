@@ -16,6 +16,7 @@ class KaryawanController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->middleware('scope:karyawan');
 	}
 
 	public function index () 

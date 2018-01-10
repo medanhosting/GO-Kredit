@@ -11,22 +11,25 @@ use Thunderlabid\Kredit\Models\SuratPeringatan;
 use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
-use App\Http\Service\Policy\BayarDenda;
-use App\Http\Service\Policy\BayarAngsuran;
-use App\Http\Service\Policy\FeedBackPenagihan;
-use App\Http\Service\Policy\PelunasanAngsuran;
-
 use Exception, DB, Auth, Carbon\Carbon;
 
 use App\Service\Traits\IDRTrait;
 
+use App\Http\Controllers\V2\Traits\KreditTrait;
+
 class KreditController extends Controller
 {
+	use KreditTrait;
 	use IDRTrait;
 
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->middleware('scope:operasional.kredit')->only(['index', 'show']);
+
+		$this->middleware('scope:tagihan')->only(['store_tagihan']);
+		$this->middleware('scope:angsuran')->only(['store_angsuran', 'store_denda']);
 	}
 
 	public function index () 
@@ -125,16 +128,13 @@ class KreditController extends Controller
 			DB::BeginTransaction();
 			switch (request()->get('current')) {
 				case 'tagihan':
-					$feedback 	= new FeedBackPenagihan($aktif, Auth::user()['nip'], request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'), request()->get('rekening_id'));
-					$feedback->bayar();
+					$this->store_tagihan($aktif);
 					break;
 				case 'denda':
-					$denda 		= new BayarDenda($aktif, Auth::user()['nip'], request()->get('potongan'), request()->get('tanggal'), request()->get('rekening_id'));
-					$denda->bayar();
+					$this->store_denda($aktif);
 					break;
 				default:
-					$bayar 		= new BayarAngsuran($aktif, Auth::user()['nip'], request()->get('nth'), request()->get('tanggal'), request()->get('rekening_id'));
-					$bayar->bayar();
+					$this->store_angsuran($aktif);
 					break;
 			}
 			DB::commit();

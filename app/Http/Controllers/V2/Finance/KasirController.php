@@ -12,6 +12,7 @@ class KasirController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->middleware('scope:kasir');
 	}
 
 	public function index () 
