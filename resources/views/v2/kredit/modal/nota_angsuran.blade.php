@@ -104,6 +104,9 @@
 						<td class="angs-potongan text-right"></td>
 						<td class="angs-subtotal text-right"></td>
 					</tr>
+					<tr id="titipan-row"></tr>
+					<tr id="potongan-row"></tr>
+					<tr id="total-all-row"></tr>
 				</tbody>
 			</table>
 		</div>

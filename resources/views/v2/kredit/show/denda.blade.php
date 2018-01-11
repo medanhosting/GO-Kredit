@@ -97,7 +97,7 @@
 		var subtotal = 0;
 
 		// place for function
-		function parsingData(data, extended = false) {
+		function parsingDataDenda(data, extended = false) {
 			var root = $('tr#denda-row');
 			var parent = root.parent();
 
@@ -211,7 +211,7 @@
 
 				// 	ajxPot.get(urlLinkPotongan, dataAjax2);
 				// } else {
-					parsingData(resp.data.denda);
+					parsingDataDenda(resp.data);
 				// }
 			});
 

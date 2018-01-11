@@ -145,7 +145,7 @@
 		Route::any('angsuran/{id}/tagihan', 	['uses' => 'AngsuranController@tagihan', 	'as' => 'angsuran.tagihan']);
 		Route::any('angsuran/{id}/potongan', 	['uses' => 'AngsuranController@potongan', 	'as' => 'angsuran.potongan']);
 		Route::any('angsuran/{id}/denda',		['uses' => 'AngsuranController@denda',		'as' => 'angsuran.denda']);
-
+		Route::any('angsuran/{id}/titipan',		['uses' => 'AngsuranController@titipan',	'as' => 'angsuran.titipan']);
 	});
 
 	//ajax data log

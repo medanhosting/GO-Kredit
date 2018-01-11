@@ -137,12 +137,21 @@ class AngsuranController extends Controller
 		return response()->json(['message' => 'success', 'data' => $angsuran], 200);
 	}
 
-	public function denda($id) {
+	public function denda($id) 
+	{
 		$aktif		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
 
 		$denda 		= AngsuranDetail::displayingdenda()->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->get();
 		$t_denda 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->sum('amount');
 
-		return response()->json(['status' => 'success', 'data' => ['denda' => $denda, 'total_denda' => $t_denda]], 200);
+		return response()->json(['status' => 'success', 'data' => $denda], 200);
+	}
+
+	public function titipan($id) 
+	{
+		$aktif		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
+		$titipan 	= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->wheredoesnthave('details', function($q){$q;})->sum('jumlah');
+
+		return response()->json(['status' => 'success', 'data' => $titipan], 200);
 	}
 }
