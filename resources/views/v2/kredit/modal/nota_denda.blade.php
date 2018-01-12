@@ -34,24 +34,24 @@
 		</div>
 		<hr class="mt-1 mb-2" style="border-size: 2px;">
 
-		<table>
+		<table class="w-100">
 			<tr class="align-top">
 				<td style="width: 12.5%">AC / SPK</td>
-				<td style="width: 1%">:</td>
-				<td class="w-50 pl-2 pr-2">
+				<td style="width: 1.5%">:</td>
+				<td class="pl-2 pr-2" style="width: 36%;">
 					<p class="mb-2" style="border-bottom: 1px dotted #ccc">gak tau variabelnya</p>
 				</td>
 				<td style="width: 12.5%">Nama</td>
-				<td style="width: 1%">:</td>
-				<td class="w-25 pl-2 pr-2">
-					<p class="mb-2" style="border-bottom: 1px dotted #ccc">
+				<td style="width: 1.5%">:</td>
+				<td class="pl-2 pr-2" style="width: 36%;">
+					<p class="mb-2" style="border-bottom: 1px dotted #ccc;">
 						{{ $kredit_aktif['nasabah']['nama'] }}
 					</p>
 				</td>
 			</tr>
 		</table>
 		<div class="clearfix">&nbsp;</div>
-		<div id="temp-angsuran">
+		<div id="temp-denda">
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -63,12 +63,12 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr id="angsuran-row" style="display: none;">
-						<td class="angs-iteration text-center"></td>
-						<td class="angs-title"></td>
-						<td class="angs-denda text-right"></td>
-						<td class="angs-potongan text-right"></td>
-						<td class="angs-subtotal text-right"></td>
+					<tr id="denda-row" style="display: none;">
+						<td class="dend-iteration text-center"></td>
+						<td class="dend-title"></td>
+						<td class="dend-denda text-right"></td>
+						<td class="dend-potongan_denda text-right"></td>
+						<td class="dend-subtotal text-right"></td>
 					</tr>
 				</tbody>
 			</table>
@@ -77,6 +77,6 @@
 	
 	@slot ('footer')
 		<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-		<a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#konfirmasi-angsuran">Konfirmasi</a>
+		<a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#konfirmasi-denda">Konfirmasi</a>
 	@endslot 
 @endcomponent 

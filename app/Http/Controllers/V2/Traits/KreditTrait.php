@@ -6,6 +6,7 @@ use App\Http\Service\Policy\BayarDenda;
 use App\Http\Service\Policy\BayarAngsuran;
 use App\Http\Service\Policy\FeedBackPenagihan;
 
+use Auth;
 /**
  * Trait tanggal
  *
