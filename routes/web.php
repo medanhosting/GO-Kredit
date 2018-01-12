@@ -36,9 +36,9 @@
 			Route::resource('simulasi', 		'SimulasiController'); 
 			Route::resource('pengajuan', 		'PengajuanController'); 
 			Route::resource('putusan', 			'PutusanController'); 
-			Route::get('putusan/{id}/print ', ['uses' => 'PutusanController@print', 'as' => 'putusan.print']);
+			Route::get('putusan/{id}/print ', 	['uses' => 'PutusanController@print', 'as' => 'putusan.print']);
 			
-			Route::post('assign/{id}', 	['uses' => 	'PengajuanController@assign', 'as' => 'pengajuan.assign']);
+			Route::post('assign/{id}', 			['uses' => 	'PengajuanController@assign', 'as' => 'pengajuan.assign']);
 		});
 		Route::namespace('V2\Kredit')->group(function(){
 			Route::resource('kredit', 			'KreditController'); 
@@ -56,7 +56,8 @@
 			Route::post('karyawan/batch', 	['uses' => 'KaryawanController@batch', 	'as' => 'karyawan.batch']);
 		});
 		Route::namespace('V2\Finance')->group(function(){
-			Route::get('kasir', 		['uses' => 'KasirController@index', 	'as' => 'kasir.index']);
+			Route::resource('akun', 			'AkunController'); 
+			Route::resource('kasir', 			'KasirController'); 
 		});
 		Route::namespace('V2\Otorisasi')->group(function(){
 			Route::resource('passcode', 		'PasscodeController');

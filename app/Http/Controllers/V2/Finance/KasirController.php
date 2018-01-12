@@ -20,7 +20,7 @@ class KasirController extends Controller
 		view()->share('active_submenu', 'kasir');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-		$this->layout->pages 	= view('v2.kasir.index');
+		$this->layout->pages 	= view('v2.finance.kasir.index');
 		return $this->layout;
 	}
 }

@@ -7,7 +7,7 @@
 	</div>
 	<div class="row mt-3">
 		<div class="col-12 col-sm-auto text-center text-sm-right pt-sm-5 pb-3 sidebar-plain">
-			@include('v2.kasir.base')
+			@include('v2.finance.base')
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
