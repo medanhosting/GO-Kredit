@@ -40,7 +40,7 @@ class NotaBayar extends Model
 	use FakturTrait;
 	
 	protected $table 	= 'k_nota_bayar';
-	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'nip_karyawan', 'jumlah', 'nip_karyawan', 'penagihan_id', 'rekening_id'];
+	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'nip_karyawan', 'jumlah', 'nip_karyawan', 'penagihan_id', 'kode_akun'];
 	protected $hidden 	= [];
 	protected $appends	= ['jatuh_tempo'];
 
@@ -90,7 +90,8 @@ class NotaBayar extends Model
 			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'denda' and td.deleted_at is null) as denda"))
 			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'collector' and td.deleted_at is null) as collector"))
 			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'potongan' and td.deleted_at is null) as potongan"))
-			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.deleted_at is null) as subtotal"));
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.deleted_at is null) as subtotal"))
+			->where('jumlah', '>', 0);
 	}
 
 	public function scopeCountAmount($query){
@@ -127,6 +128,7 @@ class NotaBayar extends Model
 		$rules['nomor_faktur'] 		= ['required', 'string'];
 		$rules['nomor_kredit'] 		= ['required', 'string'];
 		$rules['tanggal'] 			= ['required', 'date_format:"Y-m-d H:i:s"'];
+		$rules['kode_akun'] 		= ['required', 'string'];
 
 		//////////////
 		// Validate //

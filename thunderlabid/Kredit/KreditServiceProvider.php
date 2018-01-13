@@ -36,10 +36,6 @@ class KreditServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
-		Event::listen('Thunderlabid\Kredit\Events\Rekening\RekeningCreating', 'Thunderlabid\Kredit\Listeners\Saving');
-		Event::listen('Thunderlabid\Kredit\Events\Rekening\RekeningUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
-		Event::listen('Thunderlabid\Kredit\Events\Rekening\RekeningDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
-
 		//////////////////////////
 		// Buat Jadwal Angsuran //
 		//////////////////////////
@@ -56,13 +52,6 @@ class KreditServiceProvider extends ServiceProvider
 		////////////////////////////////////////////////////
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
-
-		////////////////////////////////
-		// Tidak autofill Rekening ID //
-		////////////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Kredit\Listeners\AutoFillRekeningID');
-		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Kredit\Listeners\AutoFillRekeningID');
-
 	}
 
 	public function register()

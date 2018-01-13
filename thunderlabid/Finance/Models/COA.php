@@ -58,6 +58,10 @@ class COA extends Model
 		return $this->belongsTo(Account::class, 'kode_akun', 'kode_akun');
 	}
 
+	public function detail(){
+		return $this->hasOne(TransactionDetail::class, 'id', 'transaction_detail_id');
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------

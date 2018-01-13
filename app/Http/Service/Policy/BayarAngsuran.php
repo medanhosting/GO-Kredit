@@ -14,12 +14,12 @@ class BayarAngsuran
 {
 	use IDRTrait;
 
-	public function __construct(Aktif $aktif, $nip_karyawan, $nth, $tanggal, $rekening_id = null){
+	public function __construct(Aktif $aktif, $nip_karyawan, $nth, $tanggal, $kode_akun = null){
 		$this->kredit 			= $aktif;
 		$this->nip_karyawan 	= $nip_karyawan;
 		$this->nth 				= $nth;
 		$this->tanggal 			= $tanggal;
-		$this->rekening_id 		= $rekening_id;
+		$this->kode_akun 		= $kode_akun;
 	}
 
 	public function bayar(){
@@ -33,11 +33,11 @@ class BayarAngsuran
 			$nbt->tanggal 		= $this->tanggal;
 			$nbt->nip_karyawan 	= $this->nip_karyawan;
 			$nbt->jumlah 		= $this->formatMoneyTo($titipan);
-			$nbt->rekening_id 	= $this->rekening_id;
+			$nbt->kode_akun 	= $this->kode_akun;
 			$nbt->save();
 		}
 
-		$angsuran 	= AngsuranDetail::whereIn('nth', $this->nth)->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->get();
+		$angsuran 	= AngsuranDetail::whereIn('nth', $this->nth)->whereIn('tag', ['bunga', 'pokok'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->get();
 
 		$latest_pay = AngsuranDetail::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenotnull('nota_bayar_id')->wherein('tag', ['bunga', 'pokok'])->orderby('nth', 'desc')->first();
 		$should_pay = AngsuranDetail::displaying()->where('nomor_kredit', $this->kredit['nomor_kredit'])->whereIn('nth', $this->nth)->get();
@@ -62,7 +62,7 @@ class BayarAngsuran
 			$nb->tanggal 		= $this->tanggal;
 			$nb->nip_karyawan 	= $this->nip_karyawan;
 			$nb->jumlah 		= $this->formatMoneyTo($total_pay);
-			$nb->rekening_id 	= $this->rekening_id;
+			$nb->kode_akun 		= $this->kode_akun;
 			$nb->save();
 
 			foreach ($angsuran as $k => $v) {

@@ -73,6 +73,14 @@
 				</tbody>
 			</table>
 		</div>
+		<div class="clearfix"></div>
+		<div class="form-group row">
+			<div class="col-6">
+			</div>
+			<div class="col-6">
+				{!! Form::vSelect('Diambil Dari', 'kode_akun', $akun, '', ['class' => 'form-control text-info inline-edit text-right'], true) !!}
+			</div>
+		</div>
 	@endslot 
 	
 	@slot ('footer')

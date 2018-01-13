@@ -18,13 +18,13 @@ class FeedBackPenagihan
 	use IDRTrait;
 	use WaktuTrait;
 
-	public function __construct(Aktif $aktif, $nip_karyawan, $tanggal, $penerima, $nominal = null, $rekening_id = null){
+	public function __construct(Aktif $aktif, $nip_karyawan, $tanggal, $penerima, $nominal = null, $kode_akun = null){
 		$this->kredit 			= $aktif;
 		$this->nip_karyawan 	= $nip_karyawan;
 		$this->tanggal 			= $tanggal;
 		$this->penerima 		= $penerima;
 		$this->nominal 			= $this->formatMoneyFrom($nominal);
-		$this->rekening_id 		= $rekening_id;
+		$this->kode_akun 		= $kode_akun;
 	}
 
 	public function bayar(){
@@ -60,10 +60,11 @@ class FeedBackPenagihan
 				$nota_b->nip_karyawan 	= $this->nip_karyawan;
 				$nota_b->penagihan_id 	= $tagih->id;
 				$nota_b->jumlah 		= $this->formatMoneyTo($this->nominal);
-				$nota_b->rekening_id 	= $this->rekening_id;
+				$nota_b->kode_akun 		= $this->kode_akun;
 				$nota_b->save();
 	
-				$nb 	= AngsuranDetail::whereIn('nth', array_column($tunggakan->toArray(), 'nth'))->update(['nota_bayar_id' => $nota_b->id]);
+				$nb 	= AngsuranDetail::whereIn('nth', array_column($tunggakan->toArray(), 'nth'))->whereIn('tag', ['pokok', 'bunga'])->update(['nota_bayar_id' => $nota_b->id]);
+
 			}elseif($total < $this->nominal){
 				//simpan nota bayar
 				$nota_b = new NotaBayar;
@@ -72,11 +73,11 @@ class FeedBackPenagihan
 				$nota_b->tanggal 		= $this->tanggal;
 				$nota_b->nip_karyawan 	= $this->nip_karyawan;
 				$nota_b->penagihan_id 	= $tagih->id;
-				$nota_b->rekening_id 	= $this->rekening_id;
+				$nota_b->kode_akun 		= $this->kode_akun;
 				$nota_b->jumlah 		= $this->formatMoneyTo($total);
 				$nota_b->save();
 
-				$nb 	= AngsuranDetail::whereIn('nth', array_column($tunggakan->toArray(), 'nth'))->update(['nota_bayar_id' => $nota_b->id]);
+				$nb 	= AngsuranDetail::whereIn('nth', array_column($tunggakan->toArray(), 'nth'))->whereIn('tag', ['pokok', 'bunga'])->update(['nota_bayar_id' => $nota_b->id]);
 
 				//simpan nota bayar
 				$nota_b2 = new NotaBayar;
@@ -85,7 +86,7 @@ class FeedBackPenagihan
 				$nota_b2->tanggal 		= $this->tanggal;
 				$nota_b2->nip_karyawan 	= $this->nip_karyawan;
 				$nota_b2->penagihan_id 	= $tagih->id;
-				$nota_b2->rekening_id 	= $this->rekening_id;
+				$nota_b2->kode_akun 	= $this->kode_akun;
 				$nota_b2->jumlah 		= $this->formatMoneyTo($this->nominal - $total);
 				$nota_b2->save();
 			}else{
@@ -95,7 +96,7 @@ class FeedBackPenagihan
 				$nota_b->nomor_faktur 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
 				$nota_b->tanggal 		= $this->tanggal;
 				$nota_b->nip_karyawan 	= $this->nip_karyawan;
-				$nota_b->rekening_id 	= $this->rekening_id;
+				$nota_b->kode_akun 		= $this->kode_akun;
 				$nota_b->penagihan_id 	= $tagih->id;
 				$nota_b->jumlah 		= $this->formatMoneyTo($this->nominal);
 				$nota_b->save();

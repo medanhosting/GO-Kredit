@@ -30,7 +30,7 @@
 						<td class="text-right">{{$idr->formatMoneyTo($v['subtotal'])}}</td>
 						<td></td>
 					</tr>
-					@if(is_null($v['nota_bayar_id']) && !str_is($v['denda'], 'rp 0'))
+					@if(is_null($v['nota_bayar_id']) && !str_is($v['denda'], 'Rp 0'))
 						@php $is_paid 	= false; @endphp
 					@endif
 				@endforeach

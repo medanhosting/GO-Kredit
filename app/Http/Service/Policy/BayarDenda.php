@@ -14,12 +14,12 @@ class BayarDenda
 {
 	use IDRTrait;
 
-	public function __construct(Aktif $aktif, $nip_karyawan, $potongan, $tanggal, $rekening_id = null){
+	public function __construct(Aktif $aktif, $nip_karyawan, $potongan, $tanggal, $kode_akun = null){
 		$this->kredit 			= $aktif;
 		$this->nip_karyawan 	= $nip_karyawan;
 		$this->potongan 		= $potongan;
 		$this->tanggal 			= $tanggal;
-		$this->rekening_id 		= $rekening_id;
+		$this->kode_akun 		= $kode_akun;
 	}
 
 	public function bayar(){
@@ -49,7 +49,7 @@ class BayarDenda
 		$nb->nomor_kredit 	= $this->kredit['nomor_kredit'];
 		$nb->tanggal 		= $this->tanggal;
 		$nb->nip_karyawan 	= $this->nip_karyawan;
-		$nb->rekening_id 	= $this->rekening_id;
+		$nb->kode_akun 	= $this->kode_akun;
 		$nb->jumlah 		= $this->formatMoneyTo($amount - $potongan);
 		$nb->save();
 

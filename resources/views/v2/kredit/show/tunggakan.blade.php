@@ -54,7 +54,16 @@
 						{!! Form::text('nominal', $tunggakan['tunggakan'], ['class' => 'form-control mask-money inline-edit border-input w-25 text-info pb-1', 'placeholder' => 'Nominal'], true) !!}
 					</div>
 				</div>
-				
+
+				<div class="row mb-3">
+					<div class="col-2">
+						<label class="text-uppercase">Diambil Dari</label>
+					</div>
+					<div class="col">
+						{!! Form::select('kode_akun', $akun, null, ['class' => 'form-control text-info inline-edit text-right w-25']) !!}
+					</div>
+				</div>
+
 				<div class="row mb-1">
 					<div class="col offset-md-2">
 						<button class="btn btn-success">Tandai Penagihan</button>

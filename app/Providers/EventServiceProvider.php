@@ -103,5 +103,12 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusCreated', 'App\Listeners\AktivasiKreditDisetujui');
 		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusUpdated', 'App\Listeners\AktivasiKreditDisetujui');
 		// Event::listen('App\Events\AktivasiKredit', 'App\Listeners\AktivasiKreditDisetujui');
+
+		////////////////////////////
+		// Bantu Kasir Jurnaling  //
+		////////////////////////////
+		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreated', 'App\Listeners\AddCOA');
+		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdated', 'App\Listeners\AddCOA');
+		// Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailDeleted', 'App\Listeners\RemoveCOA');
 	}
 }

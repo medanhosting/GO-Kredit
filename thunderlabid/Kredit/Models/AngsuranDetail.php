@@ -84,11 +84,11 @@ class AngsuranDetail extends Model
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
 	public function scopeDisplaying($query){
-		return $query->selectraw(\DB::raw('SUM(IF(tag="potongan",amount,0)) as potongan'))->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))->selectraw('SUM(IF(tag="bunga",amount,IF(tag="pokok",amount,IF(tag="potongan",amount,0)))) as subtotal')->selectraw('min(tanggal) as tanggal_bayar')->selectraw('min(nota_bayar_id) as nota_bayar_id')->selectraw('nth')->selectraw('max(nomor_kredit) as nomor_kredit')->groupby('nth');
+		return $query->selectraw(\DB::raw('SUM(IF(tag="potongan",amount,0)) as potongan'))->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))->selectraw('SUM(IF(tag="bunga",amount,IF(tag="pokok",amount,IF(tag="potongan",amount,0)))) as subtotal')->selectraw('min(tanggal) as tanggal_bayar')->selectraw('min(nota_bayar_id) as nota_bayar_id')->selectraw('nth')->selectraw('max(nomor_kredit) as nomor_kredit')->whereIn('tag', ['potongan', 'pokok', 'bunga'])->groupby('nth');
 	}
 
 	public function scopeDisplayingDenda($query){
-		return $query->selectraw(\DB::raw('SUM(IF(tag="potongan_denda",amount,0)) as potongan_denda'))->selectraw(\DB::raw('SUM(IF(tag="denda",amount,0)) as denda'))->selectraw('SUM(IF(tag="potongan_denda",amount,IF(tag="denda",amount,0))) as subtotal')->selectraw('min(tanggal) as tanggal_bayar')->selectraw('min(nota_bayar_id) as nota_bayar_id')->selectraw('nth')->groupby('nth');
+		return $query->selectraw(\DB::raw('SUM(IF(tag="potongan_denda",amount,0)) as potongan_denda'))->selectraw(\DB::raw('SUM(IF(tag="denda",amount,0)) as denda'))->selectraw('SUM(IF(tag="potongan_denda",amount,IF(tag="denda",amount,0))) as subtotal')->selectraw('min(tanggal) as tanggal_bayar')->selectraw('min(nota_bayar_id) as nota_bayar_id')->whereIn('tag', ['denda', 'potongan_denda'])->selectraw('nth')->where('nth', '>', 0)->groupby('nth');
 	}
 
 	public function scopeLihatJatuhTempo($query, Carbon $value){
@@ -131,6 +131,7 @@ class AngsuranDetail extends Model
 			})
 			->selectraw("(select sum(kd2.amount) from k_angsuran_detail as kd2 where kd2.nomor_kredit = k_angsuran_detail.nomor_kredit and kd2.nota_bayar_id is null and kd2.deleted_at is null) as sisa_hutang")
 			->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
+			->wherein('tag', ['pokok', 'bunga'])
 			->groupby('nomor_kredit');
 	}
 	

@@ -194,8 +194,16 @@
 					</table>
 				</div>
 			</div>
+			
 			@if(str_is($putusan['pengajuan']['status_terakhir']['progress'], 'sudah') &&  str_is($putusan['pengajuan']['status_terakhir']['status'], 'setuju'))
 				<hr>
+				<div class="row">
+					<div class="col-6">
+					</div>
+					<div class="col-6">
+						{!! Form::vSelect('Diambil Dari', 'kode_akun', $akun, '', ['class' => 'form-control text-info inline-edit text-right'], true) !!}
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-12">
 						{!! Form::bsSubmit('Realisasikan', ['class' => 'btn btn-primary float-right']) !!}

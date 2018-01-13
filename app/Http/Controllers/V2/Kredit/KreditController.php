@@ -15,11 +15,13 @@ use Exception, DB, Auth, Carbon\Carbon;
 
 use App\Service\Traits\IDRTrait;
 
+use App\Http\Controllers\V2\Traits\AkunTrait;
 use App\Http\Controllers\V2\Traits\KreditTrait;
 
 class KreditController extends Controller
 {
 	use KreditTrait;
+	use AkunTrait;
 	use IDRTrait;
 
 	public function __construct()
@@ -49,10 +51,13 @@ class KreditController extends Controller
 	{
 		$aktif 		= Aktif::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->PembayaranBerikut()->first();
 
+		$akun 		= $this->get_akun(request()->get('kantor_aktif_id'));
+
 		//ANGSURAN
 		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
 
 		$denda 		= AngsuranDetail::displayingdenda()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
+
 		$t_denda 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
 
 		$titipan 	= NotaBayar::wheredoesnthave('details',  function($q){$q;})->where('nomor_kredit', $aktif['nomor_kredit'])->sum('jumlah');
@@ -116,7 +121,7 @@ class KreditController extends Controller
 
 		view()->share('kredit_id', $id);
 
-		$this->layout->pages 	= view('v2.kredit.show', compact('sp', 'denda', 't_denda', 'titipan'));
+		$this->layout->pages 	= view('v2.kredit.show', compact('sp', 'denda', 't_denda', 'titipan', 'akun'));
 		return $this->layout;
 	}
 

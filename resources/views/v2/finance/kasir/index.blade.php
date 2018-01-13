@@ -13,17 +13,15 @@
 			@component('bootstrap.card')
 				@slot('body')
 					<nav class="nav nav-tabs" id="myTab" role="tablist">
-						<a class="nav-item nav-link {{$is_jurnal_bank_tab}}" id="nav-jurnal-bank-tab" data-toggle="tab" href="#nav-jurnal-bank" role="tab" aria-controls="nav-jurnal-bank" aria-selected="true">Jurnal Bank</a>
-						<a class="nav-item nav-link {{$is_jurnal_kas_tab}}" id="nav-jurnal-kas-tab" data-toggle="tab" href="#nav-jurnal-kas" role="tab" aria-controls="nav-jurnal-kas" aria-selected="true">Jurnal Kas</a>
-						<a class="nav-item nav-link {{$is_kas_harian_tab}}" id="nav-kas-harian-tab" data-toggle="tab" href="#nav-kas-harian" role="tab" aria-controls="nav-kas-harian" aria-selected="true">Kas Harian</a>
+						@foreach($akun as $k => $v)
+							<a class="nav-item nav-link" id="nav-{{$v['kode_akun']}}-tab" data-toggle="tab" href="#nav-{{$v['kode_akun']}}" role="tab" aria-controls="nav-{{$v['kode_akun']}}" aria-selected="true">{{$v['akun']}}</a>
+						@endforeach
 					</nav>
 					<div class="tab-content" id="nav-tabContent">
-						<div class="tab-pane fade {{$is_jurnal_bank_tab}}" id="nav-jurnal-bank" role="tabpanel" aria-labelledby="nav-jurnal-bank-tab">
+						@foreach($akun as $k => $v)
+						<div class="tab-pane fade" id="nav-{{$v['kode_akun']}}" role="tabpanel" aria-labelledby="nav-{{$v['kode_akun']}}-tab">
 						</div>
-						<div class="tab-pane fade {{$is_jurnal_kas_tab}}" id="nav-jurnal-kas" role="tabpanel" aria-labelledby="nav-jurnal-kas-tab">
-						</div>
-						<div class="tab-pane fade {{$is_kas_harian_tab}}" id="nav-kas-harian" role="tabpanel" aria-labelledby="nav-kas-harian-tab">
-						</div>
+						@endforeach
 					</div>
 				@endslot
 			@endcomponent

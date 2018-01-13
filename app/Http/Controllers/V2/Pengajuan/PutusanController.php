@@ -10,12 +10,23 @@ use Thunderlabid\Pengajuan\Models\Status;
 
 use Thunderlabid\Survei\Models\Survei;
 
+use Thunderlabid\Kredit\Models\Aktif;
+use Thunderlabid\Kredit\Models\NotaBayar;
+use Thunderlabid\Kredit\Models\AngsuranDetail;
+
+
+use App\Http\Controllers\V2\Traits\AkunTrait;
 use App\Http\Controllers\V2\Traits\PengajuanTrait;
+
+use App\Service\Traits\IDRTrait;
+
 use Exception, Auth, DB;
 
 class PutusanController extends Controller
 {
 	use PengajuanTrait;
+	use AkunTrait;
+	use IDRTrait;
 	
 	public function __construct()
 	{
@@ -55,6 +66,8 @@ class PutusanController extends Controller
 			$putusan 			= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
 			$survei 			= Survei::where('pengajuan_id', $id)->first();
 
+			$akun 	= $this->get_akun(request()->get('kantor_aktif_id'));
+
 			if(request()->has('current')){
 				switch (request()->get('current')) {
 					case 'bukti_pencairan':
@@ -71,7 +84,7 @@ class PutusanController extends Controller
 			view()->share('active_submenu', 'putusan');
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-			$this->layout->pages 	= view('v2.putusan.show', compact('putusan', 'survei'));
+			$this->layout->pages 	= view('v2.putusan.show', compact('putusan', 'survei', 'akun'));
 			return $this->layout;
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());
@@ -100,7 +113,7 @@ class PutusanController extends Controller
 				$status->save();
 			}
 
-			if(request()->has('tanggal_pencairan')){
+			if(request()->has('tanggal_pencairan') && !str_is($putusan->pengajuan->status_terakhir, 'realisasi')){
 				$status 				= new Status;
 				$status->tanggal 		= request()->get('tanggal_pencairan');
 				$status->progress 		= 'sudah';
@@ -108,6 +121,30 @@ class PutusanController extends Controller
 				$status->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 				$status->pengajuan_id 	= $id;
 				$status->save();
+
+				//simpan nota bayar
+				$kredit 	= Aktif::where('nomor_pengajuan', $id)->first();
+				$total 		= $this->formatMoneyFrom($putusan->plafon_pinjaman);
+
+				$nb 				= new NotaBayar;
+				$nb->nomor_kredit 	= $kredit['nomor_kredit'];
+				$nb->nomor_faktur  	= NotaBayar::generatenomorfaktur($kredit['nomor_kredit']);
+				$nb->tanggal 		= $status->tanggal;
+				$nb->nip_karyawan 	= Auth::user()['nip'];
+				$nb->jumlah 		= $this->formatMoneyTo(0 - $total);
+				$nb->kode_akun		= request()->get('kode_akun');
+				$nb->save();
+
+				//angsuran detail
+				$ad 		= new AngsuranDetail;
+				$ad->nota_bayar_id 	= $nb->id;
+				$ad->nomor_kredit 	= $nb->nomor_kredit;
+				$ad->tanggal 		= $nb->tanggal;
+				$ad->nth 			= 0;
+				$ad->tag 			= 'pencairan';
+				$ad->amount 		= $nb->jumlah;
+				$ad->description 	= 'Pencairan Kredit';
+				$ad->save();
 			}
 
 			\DB::commit();
