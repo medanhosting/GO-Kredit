@@ -16,13 +16,15 @@ class CreateFinanceAccountTable extends Migration
 		Schema::create('f_account', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('kode_kantor')->nullable();
+			$table->string('akun_id')->nullable();
 			$table->string('akun')->nullable();
-			$table->string('kode_akun')->nullable();
-			$table->boolean('is_pasiva');
+			$table->string('nomor_perkiraan')->nullable();
+			$table->string('mata_uang')->default('IDR');
 			$table->timestamps();
 			$table->softDeletes();
 
-			$table->index(['deleted_at', 'kode_kantor', 'kode_akun']);
+			$table->index(['deleted_at', 'kode_kantor', 'akun_id']);
+			$table->index(['deleted_at', 'kode_kantor', 'nomor_perkiraan']);
 		});
 	}
 

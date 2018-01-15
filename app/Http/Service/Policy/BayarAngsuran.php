@@ -14,12 +14,12 @@ class BayarAngsuran
 {
 	use IDRTrait;
 
-	public function __construct(Aktif $aktif, $nip_karyawan, $nth, $tanggal, $kode_akun = null){
+	public function __construct(Aktif $aktif, $nip_karyawan, $nth, $tanggal, $nomor_perkiraan = null){
 		$this->kredit 			= $aktif;
 		$this->nip_karyawan 	= $nip_karyawan;
 		$this->nth 				= $nth;
 		$this->tanggal 			= $tanggal;
-		$this->kode_akun 		= $kode_akun;
+		$this->nomor_perkiraan 	= $nomor_perkiraan;
 	}
 
 	public function bayar(){
@@ -33,7 +33,7 @@ class BayarAngsuran
 			$nbt->tanggal 		= $this->tanggal;
 			$nbt->nip_karyawan 	= $this->nip_karyawan;
 			$nbt->jumlah 		= $this->formatMoneyTo($titipan);
-			$nbt->kode_akun 	= $this->kode_akun;
+			$nbt->nomor_perkiraan 	= $this->nomor_perkiraan;
 			$nbt->save();
 		}
 
@@ -62,7 +62,7 @@ class BayarAngsuran
 			$nb->tanggal 		= $this->tanggal;
 			$nb->nip_karyawan 	= $this->nip_karyawan;
 			$nb->jumlah 		= $this->formatMoneyTo($total_pay);
-			$nb->kode_akun 		= $this->kode_akun;
+			$nb->nomor_perkiraan 		= $this->nomor_perkiraan;
 			$nb->save();
 
 			foreach ($angsuran as $k => $v) {

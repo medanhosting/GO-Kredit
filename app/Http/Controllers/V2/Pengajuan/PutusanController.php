@@ -132,7 +132,7 @@ class PutusanController extends Controller
 				$nb->tanggal 		= $status->tanggal;
 				$nb->nip_karyawan 	= Auth::user()['nip'];
 				$nb->jumlah 		= $this->formatMoneyTo(0 - $total);
-				$nb->kode_akun		= request()->get('kode_akun');
+				$nb->nomor_perkiraan		= request()->get('nomor_perkiraan');
 				$nb->save();
 
 				//angsuran detail

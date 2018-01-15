@@ -102,7 +102,12 @@ class EventServiceProvider extends ServiceProvider
 		///////////////////////////////
 		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusCreated', 'App\Listeners\AktivasiKreditDisetujui');
 		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusUpdated', 'App\Listeners\AktivasiKreditDisetujui');
-		// Event::listen('App\Events\AktivasiKredit', 'App\Listeners\AktivasiKreditDisetujui');
+
+		////////////////////////////////
+		// AUTO CREATED BASIC ACCOUNT //
+		////////////////////////////////
+		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreated', 'App\Listeners\AutoCreateAccount');
+		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorUpdated', 'App\Listeners\AutoCreateAccount');
 
 		////////////////////////////
 		// Bantu Kasir Jurnaling  //

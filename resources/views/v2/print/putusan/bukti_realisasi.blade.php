@@ -110,8 +110,8 @@
 					@endforeach
 					@foreach($survei['jaminan_tanah_bangunan'] as $k => $v)
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{strtoupper($v['dokumen_survei']['collateral']['jenis'])}}
-							{{strtoupper($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['tipe'])}}
+							{{strtoupper(($v['dokumen_survei']['collateral']['jenis']))}}
+							{{strtoupper(str_replace('_', ' ', $v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['tipe']))}}
 							NOMOR 
 							{{strtoupper($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['nomor_sertifikat'])}}
 						</p>

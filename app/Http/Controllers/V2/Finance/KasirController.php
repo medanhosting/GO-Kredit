@@ -20,12 +20,23 @@ class KasirController extends Controller
 
 	public function index () 
 	{
-		$akun	= Account::where('kode_kantor', request()->get('kantor_aktif_id'))->where('is_pasiva', false)->with(['coas', 'coas.detail'])->get();
+		$dbefore 	= Carbon::parse('yesterday')->endofDay();
+		$dday 		= Carbon::now()->startofday()->addhours(15);
+
+		if(request()->has('q')){
+			$dbefore 	= Carbon::createFromFormat('d/m/Y', request()->get('q'))->subdays(1)->endofDay();
+			$dday 		= Carbon::createFromFormat('d/m/Y', request()->get('q'))->startofday()->addhours(15);
+		}
+
+		$balance 	= TransactionDetail::wherehas('account', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_account.akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '<=', $dbefore->format('Y-m-d H:i:s'))->sum('amount');
+
+		$out 		= TransactionDetail::wherehas('account', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_account.akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))->where('amount', '<=', 0)->sum('amount');
+		$in 		= TransactionDetail::wherehas('account', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_account.akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))->where('amount', '>=', 0)->sum('amount');
 
 		view()->share('active_submenu', 'kasir');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-		$this->layout->pages 	= view('v2.finance.kasir.index', compact('akun'));
+		$this->layout->pages 	= view('v2.finance.kasir.index', compact('balance', 'in', 'out', 'dbefore', 'dday'));
 		return $this->layout;
 	}
 }

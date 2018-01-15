@@ -60,7 +60,7 @@
 						<label class="text-uppercase">Diambil Dari</label>
 					</div>
 					<div class="col">
-						{!! Form::select('kode_akun', $akun, null, ['class' => 'form-control text-info inline-edit text-right w-25']) !!}
+						{!! Form::select('nomor_perkiraan', $akun, null, ['class' => 'form-control text-info inline-edit text-right w-25']) !!}
 					</div>
 				</div>
 

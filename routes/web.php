@@ -58,6 +58,7 @@
 		Route::namespace('V2\Finance')->group(function(){
 			Route::resource('akun', 			'AkunController'); 
 			Route::resource('kasir', 			'KasirController'); 
+			Route::resource('jurnal', 			'JurnalController'); 
 		});
 		Route::namespace('V2\Otorisasi')->group(function(){
 			Route::resource('passcode', 		'PasscodeController');

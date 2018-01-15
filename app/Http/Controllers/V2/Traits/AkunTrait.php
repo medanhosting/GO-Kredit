@@ -16,11 +16,11 @@ use Thunderlabid\Finance\Models\Account;
 trait AkunTrait {
 	
  	public function get_akun($kantor_id){
-		$acc	= Account::where('kode_kantor', $kantor_id)->where('is_pasiva', false)->get();
+		$acc	= Account::where('kode_kantor', $kantor_id)->wherenotnull('akun_id')->get();
 		$akun	= [];
 
 		foreach ($acc as $k => $v) {
-			$akun[$v['kode_akun']]	= $v['akun'];
+			$akun[$v['nomor_perkiraan']]	= $v['akun'];
 		}
 		return $akun;
  	}

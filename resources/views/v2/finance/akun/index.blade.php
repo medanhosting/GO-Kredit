@@ -11,29 +11,27 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('header')
-					<h5 class="py-2 pl-3 mb-0">&nbsp;&nbsp;AKUN</h5>
-				@endslot
 				@slot('body')
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th class="text-left">Aktiva</th>
-								<th class="text-right">Pasiva</th>
+								<th class="text-left">No Perkiraan</th>
+								<th class="text-left">Nama Rekening</th>
+								<th class="text-center">Mata Uang</th>
 							</tr>
 						</thead>
 						<tbody>
-							@foreach(range(0, $counter-1) as $k)
+							@foreach($akun as $k => $v)
 							<tr>
-								<td class="text-left">{{$aktiva[$k]['akun']}}</td>
-								<td class="text-right">{{$pasiva[$k]['akun']}}</td>
+								<td class="text-left">{{$v['nomor_perkiraan']}}</td>
+								<td class="text-left">{{$v['akun']}}</td>
+								<td class="text-center">{{$v['mata_uang']}}</td>
 							</tr>
 							@endforeach
 						</tbody>
 						<tfoot>
 							<tr>
-								<td class="text-left"><a  class="nav-link toggle_akun" data-toggle="modal" data-target="#akun" href="#" data-action="{{route('akun.store', ['kantor_aktif_id' => $kantor_aktif['id'], 'is_pasiva' => false])}}">Tambah Akun Aktiva</a></td>
-								<td class="text-right"><a  class="nav-link toggle_akun" data-toggle="modal" data-target="#akun" href="#" data-action="{{route('akun.store', ['kantor_aktif_id' => $kantor_aktif['id'], 'is_pasiva' => true])}}">Tambah Akun Pasiva</a></td>
+								<td class="text-left" colspan="3"><a  class="nav-link toggle_akun" data-toggle="modal" data-target="#akun" href="#" data-action="{{route('akun.store', ['kantor_aktif_id' => $kantor_aktif['id']])}}">Tambah Akun</a></td>
 							</tr>
 						</tfoot>
 					</table>
@@ -50,8 +48,8 @@
 
 		@slot ('body')
 			<p>Akun akan terdaftar untuk kebutuhan jurnal</p>
-
-			{!! Form::bsText('Kode Akun', 'kode_akun', null, ['class' => 'form-control', 'placeholder' => 'BANK.BCA.091237']) !!}
+			{!! Form::bsText('Kode Parent Akun', 'akun_nomor_perkiraan', null, ['class' => 'form-control', 'placeholder' => '110.100']) !!}
+			{!! Form::bsText('Kode Akun', 'nomor_perkiraan', null, ['class' => 'form-control', 'placeholder' => '110.101']) !!}
 			{!! Form::bsText('Nama Akun', 'akun', null, ['class' => 'form-control', 'placeholder' => 'Bank BCA 091237 Malang']) !!}
 			{!! Form::hidden('kantor_aktif_id', $kantor_aktif['id']) !!}
 		@endslot

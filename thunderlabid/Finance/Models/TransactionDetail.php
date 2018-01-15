@@ -58,6 +58,13 @@ class TransactionDetail extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
+	public function coa(){
+		return $this->belongsTo(COA::class, 'id', 'transaction_detail_id');
+	}
+
+	public function account(){
+		return $this->belongsToMany(Account::class, 'f_coa', 'transaction_detail_id', 'akun_id');
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION

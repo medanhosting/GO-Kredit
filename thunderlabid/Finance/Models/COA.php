@@ -24,7 +24,7 @@ class COA extends Model
 	use SoftDeletes;
 
 	protected $table 	= 'f_coa';
-	protected $fillable = ['transaction_detail_id', 'kode_akun'];
+	protected $fillable = ['transaction_detail_id', 'akun_id'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
@@ -55,7 +55,7 @@ class COA extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	public function account()
 	{
-		return $this->belongsTo(Account::class, 'kode_akun', 'kode_akun');
+		return $this->belongsTo(Account::class, 'akun_id', 'akun_id');
 	}
 
 	public function detail(){
@@ -88,7 +88,7 @@ class COA extends Model
 		// Create Rules //
 		//////////////////
 		$rules['transaction_detail_id'] = ['required'];
-		$rules['kode_akun'] 			= ['required', 'numeric'];
+		$rules['akun_id'] 				= ['required', 'numeric'];
 
 		//////////////
 		// Validate //

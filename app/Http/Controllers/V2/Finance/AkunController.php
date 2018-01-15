@@ -16,23 +16,25 @@ class AkunController extends Controller
 
 	public function index () 
 	{
-		$aktiva	= Account::where('kode_kantor', request()->get('kantor_aktif_id'))->where('is_pasiva', false)->get();
-		$pasiva	= Account::where('kode_kantor', request()->get('kantor_aktif_id'))->where('is_pasiva', true)->get();
-
-		$counter = max(count($aktiva), count($pasiva));
+		$akun	= Account::where('kode_kantor', request()->get('kantor_aktif_id'))->orderby('nomor_perkiraan', 'asc')->get();
 
 		view()->share('active_submenu', 'akun');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-		$this->layout->pages 	= view('v2.finance.akun.index', compact('aktiva', 'pasiva', 'counter'));
+		$this->layout->pages 	= view('v2.finance.akun.index', compact('akun'));
 		return $this->layout;
 	}
 
 	public function store(){
 		try {
-			$data 	= request()->only('kode_akun', 'akun', 'is_pasiva');
+			$parent = Account::where('nomor_perkiraan', request()->get('akun_nomor_perkiraan'))->where('kode_kantor', request()->get('kantor_aktif_id'))->first();
+
+			$data 	= request()->only('nomor_perkiraan', 'akun');
 			$akun 	= new Account;
 			$akun->fill($data);
+			if($parent){
+				$akun->akun_id 	= $parent['id'];
+			}
 			$akun->kode_kantor 	= request()->get('kantor_aktif_id');
 			$akun->save();
 

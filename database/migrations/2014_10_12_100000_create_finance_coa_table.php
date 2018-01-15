@@ -16,11 +16,11 @@ class CreateFinanceCOATable extends Migration
 		Schema::create('f_coa', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('transaction_detail_id');
-			$table->string('kode_akun');
+			$table->integer('akun_id');
 			$table->timestamps();
 			$table->softDeletes();
 
-			$table->index(['deleted_at', 'transaction_detail_id', 'kode_akun']);
+			$table->index(['deleted_at', 'transaction_detail_id', 'akun_id']);
 		});
 	}
 

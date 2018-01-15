@@ -18,13 +18,13 @@ class FeedBackPenagihan
 	use IDRTrait;
 	use WaktuTrait;
 
-	public function __construct(Aktif $aktif, $nip_karyawan, $tanggal, $penerima, $nominal = null, $kode_akun = null){
+	public function __construct(Aktif $aktif, $nip_karyawan, $tanggal, $penerima, $nominal = null, $nomor_perkiraan = null){
 		$this->kredit 			= $aktif;
 		$this->nip_karyawan 	= $nip_karyawan;
 		$this->tanggal 			= $tanggal;
 		$this->penerima 		= $penerima;
 		$this->nominal 			= $this->formatMoneyFrom($nominal);
-		$this->kode_akun 		= $kode_akun;
+		$this->nomor_perkiraan 		= $nomor_perkiraan;
 	}
 
 	public function bayar(){
@@ -60,7 +60,7 @@ class FeedBackPenagihan
 				$nota_b->nip_karyawan 	= $this->nip_karyawan;
 				$nota_b->penagihan_id 	= $tagih->id;
 				$nota_b->jumlah 		= $this->formatMoneyTo($this->nominal);
-				$nota_b->kode_akun 		= $this->kode_akun;
+				$nota_b->nomor_perkiraan 		= $this->nomor_perkiraan;
 				$nota_b->save();
 	
 				$nb 	= AngsuranDetail::whereIn('nth', array_column($tunggakan->toArray(), 'nth'))->whereIn('tag', ['pokok', 'bunga'])->update(['nota_bayar_id' => $nota_b->id]);
@@ -73,7 +73,7 @@ class FeedBackPenagihan
 				$nota_b->tanggal 		= $this->tanggal;
 				$nota_b->nip_karyawan 	= $this->nip_karyawan;
 				$nota_b->penagihan_id 	= $tagih->id;
-				$nota_b->kode_akun 		= $this->kode_akun;
+				$nota_b->nomor_perkiraan 		= $this->nomor_perkiraan;
 				$nota_b->jumlah 		= $this->formatMoneyTo($total);
 				$nota_b->save();
 
@@ -86,7 +86,7 @@ class FeedBackPenagihan
 				$nota_b2->tanggal 		= $this->tanggal;
 				$nota_b2->nip_karyawan 	= $this->nip_karyawan;
 				$nota_b2->penagihan_id 	= $tagih->id;
-				$nota_b2->kode_akun 	= $this->kode_akun;
+				$nota_b2->nomor_perkiraan 	= $this->nomor_perkiraan;
 				$nota_b2->jumlah 		= $this->formatMoneyTo($this->nominal - $total);
 				$nota_b2->save();
 			}else{
@@ -96,7 +96,7 @@ class FeedBackPenagihan
 				$nota_b->nomor_faktur 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
 				$nota_b->tanggal 		= $this->tanggal;
 				$nota_b->nip_karyawan 	= $this->nip_karyawan;
-				$nota_b->kode_akun 		= $this->kode_akun;
+				$nota_b->nomor_perkiraan 		= $this->nomor_perkiraan;
 				$nota_b->penagihan_id 	= $tagih->id;
 				$nota_b->jumlah 		= $this->formatMoneyTo($this->nominal);
 				$nota_b->save();

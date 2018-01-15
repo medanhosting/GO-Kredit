@@ -78,7 +78,7 @@
 			<div class="col-6">
 			</div>
 			<div class="col-6">
-				{!! Form::vSelect('Diambil Dari', 'kode_akun', $akun, '', ['class' => 'form-control text-info inline-edit text-right'], true) !!}
+				{!! Form::vSelect('Diambil Dari', 'nomor_perkiraan', $akun, '', ['class' => 'form-control text-info inline-edit text-right'], true) !!}
 			</div>
 		</div>
 	@endslot 

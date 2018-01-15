@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use Thunderlabid\Finance\Models\COA;
+use Thunderlabid\Finance\Models\Account;
 use Thunderlabid\Finance\Models\TransactionDetail;
 
 class AddCOA
@@ -48,18 +49,20 @@ class AddCOA
 			}
 
 			$td->tanggal 	= $model->tanggal;
-			$td->amount 	= $model->jumlah;
+			$td->amount 	= $v->amount;
 			$td->morph_reference_tag 	= 'kredit';
 			$td->morph_reference_id 	= $ref;
 			$td->description 			= $desc;
 			$td->save();
 
-			$coa 	= COA::where('transaction_detail_id', $td->id)->where('kode_akun', $model['kode_akun'])->first();
+			$akun 	= Account::where('kode_kantor', $model->kredit->kode_kantor)->where('nomor_perkiraan', $model->nomor_perkiraan)->firstorfail();
+
+			$coa 	= COA::where('transaction_detail_id', $td->id)->where('akun_id', $akun['id'])->first();
 			if(!$coa){
 				$coa 	= new COA;
 			}
-			$coa->transaction_detail_id 	= $td->id;
-			$coa->kode_akun 				= $model->kode_akun;
+			$coa->transaction_detail_id = $td->id;
+			$coa->akun_id 				= $akun->id;
 			$coa->save();
 		}
 	}
