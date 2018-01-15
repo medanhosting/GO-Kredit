@@ -61,6 +61,11 @@
 			Route::resource('akun', 			'AkunController'); 
 			Route::resource('kasir', 			'KasirController'); 
 			Route::resource('jurnal', 			'JurnalController'); 
+
+			Route::get('kas/penerimaan',	['uses' => 'KasController@penerimaan',		'as' => 'kas.penerimaan']);
+			Route::get('kas/pengeluaran',	['uses' => 'KasController@pengeluaran',		'as' => 'kas.pengeluaran']);
+			Route::get('bank/penerimaan',		['uses' => 'BankController@penerimaan',	'as' => 'bank.penerimaan']);
+			Route::get('bank/pengeluaran',		['uses' => 'BankController@pengeluaran','as' => 'bank.pengeluaran']);
 		});
 		Route::namespace('V2\Otorisasi')->group(function(){
 			Route::resource('passcode', 		'PasscodeController');

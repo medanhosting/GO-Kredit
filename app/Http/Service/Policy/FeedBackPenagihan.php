@@ -79,7 +79,7 @@ class FeedBackPenagihan
 
 				$nb 	= AngsuranDetail::whereIn('nth', array_column($tunggakan->toArray(), 'nth'))->whereIn('tag', ['pokok', 'bunga'])->update(['nota_bayar_id' => $nota_b->id]);
 
-				//simpan nota bayar
+				//simpan nota bayar titipan
 				$nota_b2 = new NotaBayar;
 				$nota_b2->nomor_kredit 	= $this->kredit['nomor_kredit'];
 				$nota_b2->nomor_faktur 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
@@ -89,6 +89,17 @@ class FeedBackPenagihan
 				$nota_b2->nomor_perkiraan 	= $this->nomor_perkiraan;
 				$nota_b2->jumlah 		= $this->formatMoneyTo($this->nominal - $total);
 				$nota_b2->save();
+
+				$titipan 	= new AngsuranDetail;
+				$titipan->nota_bayar_id 	= $nota_b2->id;
+				$titipan->nomor_kredit 		= $this->kredit['nomor_kredit'];
+				$titipan->tanggal 			= $this->tanggal;
+				$titipan->nth  				= $tunggakan[0]['nth'];
+				$titipan->tag 				= 'titipan';
+				$titipan->amount 			= $this->formatMoneyTo($this->nominal - $total);
+				$titipan->description 		= 'Titipan tagihan kredit nomor '.$this->kredit['nomor_kredit'];
+				$titipan->save();
+				dd($titipan);
 			}else{
 				//simpan nota bayar
 				$nota_b = new NotaBayar;
@@ -100,6 +111,16 @@ class FeedBackPenagihan
 				$nota_b->penagihan_id 	= $tagih->id;
 				$nota_b->jumlah 		= $this->formatMoneyTo($this->nominal);
 				$nota_b->save();
+
+				$titipan 	= new AngsuranDetail;
+				$titipan->nota_bayar_id 	= $nota_b->id;
+				$titipan->nomor_kredit 		= $this->kredit['nomor_kredit'];
+				$titipan->tanggal 			= $this->tanggal;
+				$titipan->nth  				= $tunggakan[0]['nth'];
+				$titipan->tag 				= 'titipan';
+				$titipan->amount 			= $this->formatMoneyTo($this->nominal);
+				$titipan->description 		= 'Titipan tagihan kredit nomor '.$this->kredit['nomor_kredit'];
+				$titipan->save();
 			}
 		}
 		return true;

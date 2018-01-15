@@ -67,7 +67,7 @@ class Penagihan extends Model
 	}
 
 	public function suratperingatan(){
-		return $this->hasone(SuratPeringatan::class, 'nomor_kredit', 'nomor_kredit')->where('tanggal', '<=', 'tanggal')->orderby('created_at', 'desc');
+		return $this->hasone(SuratPeringatan::class, 'penagihan_id');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

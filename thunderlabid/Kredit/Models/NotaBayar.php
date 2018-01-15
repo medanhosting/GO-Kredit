@@ -88,8 +88,9 @@ class NotaBayar extends Model
 			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'pokok' and td.deleted_at is null) as pokok"))
 			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'bunga' and td.deleted_at is null) as bunga"))
 			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'denda' and td.deleted_at is null) as denda"))
-			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'collector' and td.deleted_at is null) as collector"))
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'titipan' and td.deleted_at is null) as titipan"))
 			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'potongan' and td.deleted_at is null) as potongan"))
+			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.tag = 'potongan_denda' and td.deleted_at is null) as potongan_denda"))
 			->selectraw(\DB::raw("(select sum(td.amount) from k_angsuran_detail as td where k_nota_bayar.id = td.nota_bayar_id and td.deleted_at is null) as subtotal"))
 			->where('jumlah', '>', 0);
 	}

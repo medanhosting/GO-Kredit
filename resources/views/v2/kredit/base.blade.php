@@ -2,10 +2,10 @@
 px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['kredit']) ? 'active' : '' }}">
 	<i class="fa fa-credit-card-alt"></i>&nbsp;&nbsp;Kredit
 </a>
-<a href="{{route('angsuran.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
+<!-- <a href="{{route('angsuran.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
 px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['angsuran']) ? 'active' : '' }}">
 	<i class="fa fa-hand-rock-o"></i>&nbsp;&nbsp;Penerimaan Angsuran
-</a>
+</a> -->
 <a href="{{route('tunggakan.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
 px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['tunggakan']) ? 'active' : '' }}">
 	<i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;Laporan Tunggakan
