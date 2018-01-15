@@ -63,4 +63,21 @@ class TunggakanController extends Controller
 			return redirect()->back()->withErrors($e->getMessage());
 		}
 	}
+
+	public function print($id)
+	{
+		try {
+			if (request()->get('mode') == 'surat_peringatan') {
+				view()->share('html', ['title' => 'Surat Peringatan | ' . config()->get('app.name') . '.com']);
+
+				return view('v2.print.tunggakan.surat_peringatan');
+			} else {
+				view()->share('html', ['title' => 'Somasi | ' . config()->get('app.name') . '.com']);
+
+				return view('v2.print.tunggakan.somasi');
+			}
+		} catch (Exception $e) {
+			return redirect()->back()->withErrors($e->getMessage());
+		}
+	}
 }
