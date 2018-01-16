@@ -12,7 +12,14 @@
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
-				@slot('body')
+				@slot('header')
+					<h5 class="py-2 pl-3 mb-0 float-left">&nbsp;&nbsp;LAPORAN KAS HARIAN</h5>
+					<a href="{{ route('kasir.print', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success float-right btn btn-link">
+						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK LAPORAN KAS HARIAN
+					</a>
+				@endslot
+
+				<div class="card-body">
 					<div class="row">
 						<div class="col-12 col-sm-12 col-md-12">
 							{{-- SEARCH --}}
@@ -23,10 +30,10 @@
 									@endif
 								@endforeach
 								<div class="form-row align-items-end">
-									<div class='col-sm-2 order-1'>
-										{!! Form::bsText('Tanggal', 'q', $dday->format('d/m/Y'), ['placeholder' => 'tanggal', 'class' => 'mask-date form-control']) !!}
+									<div class='col-sm-2'>
+										{!! Form::bsText('Cari Tanggal', 'q', $dday->format('d/m/Y'), ['placeholder' => 'tanggal', 'class' => 'mask-date form-control']) !!}
 									</div>
-									<div class='col-auto order-3'>
+									<div class='col-auto'>
 										<div class="form-group">
 											<label for="">&nbsp;</label>
 											{!! Form::bsSubmit('<i class="fa fa-search"></i>', ['class' => 'btn btn-primary']) !!}
@@ -36,6 +43,7 @@
 							{!! Form::close() !!}
 						</div>
 					</div>
+					<hr class="mb-5"/>
 					<div class="row">
 						<div class="col-12 col-sm-12 col-md-12 text-center">
 							<h4>LAPORAN KAS HARIAN</h4>
@@ -115,6 +123,7 @@
 							Kami yang bertanda tangan dibawah ini telah melakukan pemeriksaan Fisik Kas sebagai berikut :
 						</div>
 					</div>
+					<div class="clearfix">&nbsp;</div>
 					<div class="row">
 						<div class="col-12 text-left">
 							<strong>Uang Kertas</strong>
@@ -260,7 +269,7 @@
 							</tr>
 						</tbody>
 					</table>
-				@endslot
+				</div>
 			@endcomponent
 		</div>
 	</div>
