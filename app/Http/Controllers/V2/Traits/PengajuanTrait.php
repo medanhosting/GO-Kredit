@@ -851,9 +851,10 @@ trait PengajuanTrait {
 			foreach ($survei['jaminan_kendaraan'] as $k => $v) {
 				$c_col 		= SurveiDetail::rule_of_valid_collateral_bpkb();
 				$total 		= $total + count($c_col);
-				$v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['has_foto']	= $v['has_foto'];
+				$doc 				= $v['dokumen_survei']['collateral']['bpkb'];
+				$doc['has_foto']	= $v['has_foto'];
 
-				$validator 	= Validator::make($v['dokumen_survei']['collateral']['bpkb'], $c_col);
+				$validator 	= Validator::make($doc, $c_col);
 				if ($validator->fails())
 				{
 					$complete 				= $complete + (count($c_col) - count($validator->messages()));
@@ -877,8 +878,9 @@ trait PengajuanTrait {
 				$c_col 		= SurveiDetail::rule_of_valid_collateral_sertifikat($v['dokumen_survei']['collateral']['jenis'], $v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['tipe']);
 				$total 		= $total + count($c_col);
 
-				$v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['has_foto']	= $v['has_foto'];
-				$validator 	= Validator::make($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']], $c_col);
+				$doc 				= $v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']];
+				$doc['has_foto']	= $v['has_foto'];
+				$validator 	= Validator::make($doc, $c_col);
 				if ($validator->fails())
 				{
 					$complete 				= $complete + (count($c_col) - count($validator->messages()));
@@ -896,7 +898,7 @@ trait PengajuanTrait {
 				}
 			}
 		}
-		
+
 		$percentage 	= floor(($complete / max($total, 1)) * 100);
 
 		view()->share('checker', $checker);
