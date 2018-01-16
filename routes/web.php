@@ -59,13 +59,17 @@
 		});
 		Route::namespace('V2\Finance')->group(function(){
 			Route::resource('akun', 			'AkunController'); 
-			Route::resource('kasir', 			'KasirController'); 
+			// Route::resource('kasir', 			'KasirController'); 
 			Route::resource('jurnal', 			'JurnalController'); 
 
 			Route::get('kas/penerimaan',	['uses' => 'KasController@penerimaan',		'as' => 'kas.penerimaan']);
 			Route::get('kas/pengeluaran',	['uses' => 'KasController@pengeluaran',		'as' => 'kas.pengeluaran']);
 			Route::get('bank/penerimaan',		['uses' => 'BankController@penerimaan',	'as' => 'bank.penerimaan']);
 			Route::get('bank/pengeluaran',		['uses' => 'BankController@pengeluaran','as' => 'bank.pengeluaran']);
+
+			// KASIR
+			Route::get('kasir',						['uses' => 'KasirController@index',		'as' => 'kasir.index']);
+			Route::get('kasir/print/kas/harian',	['uses' => 'KasirController@print',		'as' => 'kasir.print']);
 		});
 		Route::namespace('V2\Otorisasi')->group(function(){
 			Route::resource('passcode', 		'PasscodeController');
