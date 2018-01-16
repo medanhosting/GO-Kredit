@@ -9,7 +9,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>{{ isset($html['title']) ? $html['title'] : 'GO-KREDIT.COM' }}</title>
+		<title>{{ isset($html['title']) ? $html['title'] . ' | GO-KREDIT.COM'  : 'GO-KREDIT.COM' }}</title>
 
 		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
@@ -27,7 +27,7 @@
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-12 text-center">
-					<h4>LAPORAN KAS HARIAN</h4>
+					<h4><strong>LAPORAN KAS HARIAN</strong></h4>
 					<h4>PADA PENUTUPAN KAS, TANGGAL</h4>
 					<h4>{{ $dday->format('d/m/Y') }}</h4>
 				</div>

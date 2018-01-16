@@ -62,6 +62,8 @@
 			// Route::resource('kasir', 			'KasirController'); 
 			Route::resource('jurnal', 			'JurnalController'); 
 
+			Route::get('jurnal/{type}/print',			['uses' => 'JurnalController@print',	'as' => 'jurnal.print']);
+
 			Route::get('kas/penerimaan',	['uses' => 'KasController@penerimaan',		'as' => 'kas.penerimaan']);
 			Route::get('kas/pengeluaran',	['uses' => 'KasController@pengeluaran',		'as' => 'kas.pengeluaran']);
 			Route::get('bank/penerimaan',		['uses' => 'BankController@penerimaan',	'as' => 'bank.penerimaan']);

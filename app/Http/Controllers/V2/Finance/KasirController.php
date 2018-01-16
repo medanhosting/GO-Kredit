@@ -82,6 +82,8 @@ class KasirController extends Controller
 		view()->share('dbefore', $dbefore);
 		view()->share('dday', $dday);
 
+		view()->share('html', ['title' => 'LAPORAN KASIR HARIAN']);
+
 		return view('v2.print.finance.kasir.kas_harian');
 	}
 }

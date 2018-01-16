@@ -29,4 +29,15 @@ class JurnalController extends Controller
 		$this->layout->pages 	= view('v2.finance.jurnal.index', compact('akun'));
 		return $this->layout;
 	}
+
+	public function print ($type)
+	{
+		$akun 		= Account::wherenull('akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'))->with(['subakun', 'subakun.detailsin', 'subakun.detailsout'])->get();
+
+		view()->share('akun', $akun);
+		view()->share('type', $type);
+		view()->share('html', ['title' => 'JURNAL ' . strtoupper($type)]);
+
+		return view('v2.print.finance.jurnal.kas_or_bank');
+	}
 }
