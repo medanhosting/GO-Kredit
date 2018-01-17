@@ -64,8 +64,12 @@
 
 			Route::get('jurnal/{type}/print',			['uses' => 'JurnalController@print',	'as' => 'jurnal.print']);
 
-			Route::get('kas/penerimaan',	['uses' => 'KasController@penerimaan',		'as' => 'kas.penerimaan']);
-			Route::get('kas/pengeluaran',	['uses' => 'KasController@pengeluaran',		'as' => 'kas.pengeluaran']);
+			// KAS
+			Route::get('kas/penerimaan',		['uses' => 'KasController@penerimaan',		'as' => 'kas.penerimaan']);
+			Route::get('kas/pengeluaran',		['uses' => 'KasController@pengeluaran',		'as' => 'kas.pengeluaran']);
+			Route::get('kas/{type}/print',		['uses'	=> 'KasController@print',			'as' => 'kas.print']);
+
+			// BANK
 			Route::get('bank/penerimaan',		['uses' => 'BankController@penerimaan',	'as' => 'bank.penerimaan']);
 			Route::get('bank/pengeluaran',		['uses' => 'BankController@pengeluaran','as' => 'bank.pengeluaran']);
 

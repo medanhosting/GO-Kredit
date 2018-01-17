@@ -13,7 +13,10 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('header')
-					<h5 class="py-2 pl-2 mb-0">&nbsp;&nbsp;PENGELUARAN KAS</h5>
+					<h5 class="py-2 pl-2 mb-0 float-left">&nbsp;&nbsp;PENGELUARAN KAS</h5>
+					<a href="{{ route('kas.print', ['type' => 'pengeluaran', 'kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success float-right btn btn-link">
+						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK PENGELUARAN KAS
+					</a>
 				@endslot
 
 				<div class="card-body">
