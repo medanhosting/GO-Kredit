@@ -99,19 +99,7 @@
 									@endforeach
 								</div>
 								<div class="col-sm-5">
-									<p style="margin:5px;" class="text-secondary">CATATAN</p>
-									<p style="margin:5px;">
-										@if(!$v['is_complete'])
-											Data Belum Lengkap. 
-											<a href="{{route('pengajuan.permohonan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']])}}"><i>Lengkapi Sekarang</i></a>
-										@elseif($v['nasabah']['is_lama'] && $flag_j)
-											Nasabah & Jaminan Lama. 
-											<a data-toggle="modal" data-target="#lanjut-analisa" data-action="{{route('pengajuan.pengajuan.assign_analisa', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}" class="modal_analisa  text-success"><i>Lanjutkan Analisa</i></a>
-										@else
-											Data Sudah Lengkap. 
-											<a class="modal_assign text-success" data-toggle="modal" data-target="#assign-survei" data-action="{{route('pengajuan.permohonan.assign_survei', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'permohonan'])}}"><i>Assign Untuk Survei</i></a>
-										@endif
-									</p>
+								
 								</div>
 							</div>
 						</div>
