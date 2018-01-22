@@ -32,7 +32,7 @@ class Putusan extends Model
 	use IDRTrait;
 
 	protected $table	= 'p_putusan';
-	protected $fillable	= ['pengajuan_id', 'pembuat_keputusan', 'tanggal', 'is_baru', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'perc_provisi', 'provisi', 'administrasi', 'legal', 'checklists', 'putusan', 'catatan'];
+	protected $fillable	= ['pengajuan_id', 'pembuat_keputusan', 'tanggal', 'is_baru', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'perc_provisi', 'provisi', 'administrasi', 'legal', 'checklists', 'putusan', 'biaya_notaris', 'catatan'];
 	protected $hidden	= [];
 	protected $dates	= [];
 
@@ -99,6 +99,11 @@ class Putusan extends Model
 	public function setAdministrasiAttribute($variable)
 	{
 		$this->attributes['administrasi']		= $this->formatMoneyFrom($variable);
+	}
+
+	public function setBiayaNotarisAttribute($variable)
+	{
+		$this->attributes['biaya_notaris']		= $this->formatMoneyFrom($variable);
 	}
 
 	public function setLegalAttribute($variable)
@@ -219,6 +224,11 @@ class Putusan extends Model
 		return $this->formatMoneyTo($this->attributes['administrasi']);
 	}
 
+	public function getBiayaNotarisAttribute($variable)
+	{
+		return $this->formatMoneyTo($this->attributes['biaya_notaris']);
+	}
+
 	public function getLegalAttribute($variable)
 	{
 		return $this->formatMoneyTo($this->attributes['legal']);
@@ -240,6 +250,44 @@ class Putusan extends Model
 		$rules['administrasi']		= ['required'];
 		$rules['legal']				= ['required'];
 		$rules['putusan']			= ['required'];
+
+		return $rules;
+	}
+
+	public static function rule_of_checklist()
+	{
+		//required
+		$rules['objek.fotokopi_ktp_pemohon']		= ['required', 'in:ada'];
+		$rules['objek.fotokopi_npwp_siup']			= ['required', 'in:ada'];
+		$rules['objek.foto_jaminan']				= ['required', 'in:ada'];
+		$rules['pengikat.permohonan_kredit']		= ['required', 'in:ada'];
+		$rules['pengikat.survei_report']			= ['required', 'in:ada'];
+		$rules['pengikat.persetujuan_komite']		= ['required', 'in:ada'];
+		$rules['pengikat.perjanjian_kredit']		= ['required', 'in:ada'];
+		$rules['pengikat.pengakuan_hutang']			= ['required', 'in:ada'];
+		$rules['pengikat.pernyataan_analis']		= ['required', 'in:ada'];
+		$rules['pengikat.kuasa_menjual_dan_menarik_jaminan']	= ['required', 'in:ada'];
+		$rules['pengikat.penggantian_jaminan']					= ['required', 'in:ada'];
+		$rules['pengikat.pernyataan_belum_balik_nama']			= ['required', 'in:ada'];
+
+		$rules['objek.fotokopi_kk']								= ['required', 'in:ada,cadangkan'];
+		$rules['objek.fotokopi_ktp_keluarga']					= ['required', 'in:ada,cadangkan'];
+		$rules['objek.fotokopi_akta_nikah_cerai_pisah_harta'] 	= ['required', 'in:ada,cadangkan'];
+		$rules['objek.sertifikat_asli_dan_fotokopi']			= ['required', 'in:ada,cadangkan'];
+		$rules['objek.ajb']					= ['required', 'in:ada,cadangkan'];
+		$rules['objek.imb']					= ['required', 'in:ada,cadangkan'];
+		$rules['objek.pbb_terakhir']		= ['required', 'in:ada,cadangkan'];
+		$rules['objek.check_fisik'] 		= ['required', 'in:ada,cadangkan'];
+		$rules['objek.bpkb_asli_dan_fotokopi']			= ['required', 'in:ada,cadangkan'];
+		$rules['objek.fotokopi_faktur_dan_stnk']		= ['required', 'in:ada,cadangkan'];
+		$rules['objek.kwitansi_jual_beli_kosongan']		= ['required', 'in:ada,cadangkan'];
+		$rules['objek.kwitansi_ktp_sesuai_bpkb']		= ['required', 'in:ada,cadangkan'];
+		$rules['objek.asuransi_kendaraan']				= ['required', 'in:ada'];
+		$rules['pengikat.surat_persetujuan_keluarga']	= ['required', 'in:ada,cadangkan'];
+		$rules['pengikat.skmht_apht']				= ['required', 'in:ada,cadangkan'];
+		$rules['pengikat.surat_persetujuan_plang']	= ['required', 'in:ada,cadangkan'];
+		$rules['pengikat.feo']						= ['required', 'in:ada,cadangkan'];
+		$rules['pengikat.kuasa_pembebanan_feo']		= ['required', 'in:ada,cadangkan'];
 
 		return $rules;
 	}

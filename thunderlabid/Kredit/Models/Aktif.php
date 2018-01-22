@@ -36,7 +36,7 @@ class Aktif extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_aktif';
-	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'jenis_pinjaman', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal', 'kode_kantor', 'tanggal', 'ao'];
+	protected $fillable = ['nomor_kredit', 'nomor_pengajuan', 'jenis_pinjaman', 'nasabah', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'provisi', 'administrasi', 'legal', 'kode_kantor', 'tanggal', 'ao', 'biaya_notaris'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
@@ -124,6 +124,11 @@ class Aktif extends Model
 		$this->attributes['administrasi']		= $this->formatMoneyFrom($variable);
 	}
 
+	public function setBiayaNotarisAttribute($variable)
+	{
+		$this->attributes['biaya_notaris']		= $this->formatMoneyFrom($variable);
+	}
+
 	public function setLegalAttribute($variable)
 	{
 		$this->attributes['legal']				= $this->formatMoneyFrom($variable);
@@ -194,6 +199,11 @@ class Aktif extends Model
 	public function getAdministrasiAttribute($variable)
 	{
 		return $this->formatMoneyTo($this->attributes['administrasi']);
+	}
+
+	public function getBiayaNotarisAttribute($variable)
+	{
+		return $this->formatMoneyTo($this->attributes['biaya_notaris']);
 	}
 
 	public function getLegalAttribute($variable)

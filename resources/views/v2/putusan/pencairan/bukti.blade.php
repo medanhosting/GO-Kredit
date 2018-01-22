@@ -2,46 +2,23 @@
 @inject('tanggal', 'App\Service\UI\TanggalTranslater')
 @inject('carbon', 'Carbon\Carbon')
 
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-
-		<title>BUKTI REALISASI</title>
-
-		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
-		<!-- Fonts -->
-		<link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	</head>
-	<body>
-		<div class="container-fluid" style="width: 21cm;height: 29.7cm; ">
-			<div class="clearfix">&nbsp;</div>
+<div class="clearfix">&nbsp;</div>
+<div class="row justify-content-center">
+	<div class="col">
 			<div class="row">
-				<div class="col-6 text-left">
+				<div class="col-7 text-left">
 					<h3 class="mb-2">{{strtoupper($kantor_aktif['nama'])}}</h3>
-					<ul class="list-unstyled fa-ul">
-						<li>
-							<i class="fa fa-building-o fa-li" style="margin-top: .2rem;"></i>
-							{{ implode(' ', $kantor_aktif['alamat']) }}
-						</li>
-						<li>
-							<i class="fa fa-phone fa-li" style="margin-top: .2rem;"></i>
-							{{ $kantor_aktif['telepon'] }}
-						</li>
-					</ul>
+					<p class="mb-0"><i class="fa fa-building-o fa-fw"></i>&nbsp; {{implode(' ', $kantor_aktif['alamat'])}}</p>
+					<p class="mb-0"><i class="fa fa-phone fa-fw"></i>&nbsp; {{$kantor_aktif['telepon']}}</p>
 				</div>
-				<div class="col-6 text-right">
+				<div class="col-5 text-right">
 					<div class="row justify-content-end">
-						<div class="col-2">Nomor</div>
-						<div class="col-7">{{$notabayar['nomor_faktur']}}</div>
+						<div class="col-3">Nomor</div>
+						<div class="col-9">{{$notabayar['nomor_faktur']}}</div>
 					</div>
 					<div class="row justify-content-end">
-						<div class="col-2">Tanggal</div>
-						<div class="col-7">
+						<div class="col-3">Tanggal</div>
+						<div class="col-9">
 							{{$tanggal_p}}
 						</div>
 					</div>
@@ -49,7 +26,7 @@
 			</div>
 			<div class="row">
 				<div class="col text-center">
-					<h4 class="mb-1"><strong>BUKTI REALISASI KREDIT</strong></h4>
+					<h4 class="mb-1">BUKTI REALISASI KREDIT</h4>
 				</div>
 			</div>
 			<hr class="mt-1 mb-2" style="border-size: 2px;">
@@ -65,7 +42,7 @@
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{$notabayar['nomor_kredit']}}
+							{{ $putusan['nomor_kredit'] }}
 						</p>
 					</td>
 				</tr>
@@ -105,15 +82,15 @@
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
 							BPKB
 							{{strtoupper($v['dokumen_survei']['collateral']['bpkb']['tipe'])}}
-							{{strtoupper($v['dokumen_survei']['collateral']['bpkb']['merk'])}}
+							{{strtoupper($v['dokumen_survei']['collateral']['bpkb']['merk'])}}<br/>
 							NOMOR 
 							{{strtoupper($v['dokumen_survei']['collateral']['bpkb']['nomor_bpkb'])}}
 						</p>
 					@endforeach
 					@foreach($survei['jaminan_tanah_bangunan'] as $k => $v)
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{strtoupper(($v['dokumen_survei']['collateral']['jenis']))}}
-							{{strtoupper(str_replace('_', ' ', $v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['tipe']))}}
+							{{strtoupper($v['dokumen_survei']['collateral']['jenis'])}}
+							{{strtoupper(str_replace('_',' ',$v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['tipe']))}}<br/>
 							NOMOR 
 							{{strtoupper($v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['nomor_sertifikat'])}}
 						</p>
@@ -141,7 +118,7 @@
 					<td style="width: 1%">:</td>
 					<td class="pl-2 pr-2 text-capitalize" colspan="4">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{ $idr->terbilang($idr->formatMoneyFrom($putusan['plafon_pinjaman'])) }}
+							{{ $idr->terbilang($idr->formatMoneyFrom($putusan['plafon_pinjaman'])) }} Rupiah
 						</p>
 					</td>
 				</tr>
@@ -183,7 +160,7 @@
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{ $carbon::createFromFormat('d/m/Y H:i', $putusan['pengajuan']['status_putusan']['tanggal'])->format('d') }}
+							{{ $carbon::createFromFormat('d/m/Y H:i', $putusan['tanggal'])->format('d') }}
 						</p>
 					</td>
 				</tr>
@@ -224,12 +201,12 @@
 					<table class="table w-50 text-center ml-auto mr-5" style="height: 220px;">
 						<tbody>
 							<tr>
-								<td class="border-0">{{ $kantor_aktif['alamat']['kota'] }}, {{$tanggal_p}}</td>
+								<td class="border-0">{{ $kantor_aktif['alamat']['kota'] }}, {{ $tanggal_p }}</td>
 							</tr>
 							<tr>
 								<td class="border-0">
 									<p class="border border-left-0 border-right-0 border-bottom-0">
-										{{ $putusan['pengajuan']['nasabah']['nama'] }}
+									{{ $putusan['pengajuan']['nasabah']['nama'] }}
 									</p>
 								</td>
 							</tr>
@@ -237,6 +214,5 @@
 					</table>
 				</div>
 			</div>
-		</div>
-	</body>
-</html>
+	</div>
+</div>

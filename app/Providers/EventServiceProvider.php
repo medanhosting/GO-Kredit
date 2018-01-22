@@ -115,5 +115,12 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreated', 'App\Listeners\AddCOA');
 		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdated', 'App\Listeners\AddCOA');
 		// Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailDeleted', 'App\Listeners\RemoveCOA');
+
+
+		///////////////////////////////////////////
+		// Cadangkan Legalitas Yang Tidak Perlu  //
+		///////////////////////////////////////////
+		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusCreated', 'App\Listeners\CadangkanLegalitas');
+		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusUpdated', 'App\Listeners\CadangkanLegalitas');
 	}
 }

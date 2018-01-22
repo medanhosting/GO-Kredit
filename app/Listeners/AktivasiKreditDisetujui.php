@@ -10,9 +10,12 @@ use App\Exceptions\AppException;
 use Carbon\Carbon;
 
 use Thunderlabid\Kredit\Models\Aktif;
+use App\Service\Traits\KreditGeneratorTrait;
 
 class AktivasiKreditDisetujui
 {
+	use KreditGeneratorTrait;
+	
 	/**
 	 * Create the event listener.
 	 *
@@ -34,12 +37,14 @@ class AktivasiKreditDisetujui
 
 		//BUTUH PENGECEKAN PUTUSAN
 		if($event->data->status =='realisasi' && $event->data->progress=='sudah' && $model->putusan == 'setuju'){
+
+			//SIMPAN KREDIT
 			$aktif 		= Aktif::where('nomor_pengajuan', $model->pengajuan_id)->first();
 
 			if(!$aktif){
 				$aktif 	= new Aktif;
 			}
-			$aktif->nomor_kredit 	= $this->generateNomorKredit($model);
+			$aktif->nomor_kredit 	= $model->nomor_kredit;
 			$aktif->nomor_pengajuan = $model->pengajuan_id;
 			$aktif->jenis_pinjaman 	= $model->pengajuan->analisa->jenis_pinjaman;
 			$aktif->nasabah 		= $model->pengajuan->nasabah;
@@ -49,39 +54,11 @@ class AktivasiKreditDisetujui
 			$aktif->provisi 		= $model->perc_provisi;
 			$aktif->administrasi 	= $model->administrasi;
 			$aktif->legal 			= $model->legal;
+			$aktif->biaya_notaris 	= $model->biaya_notaris;
 			$aktif->tanggal 		= $model->tanggal;
 			$aktif->kode_kantor 	= $model->pengajuan->kode_kantor;
 			$aktif->ao 				= $model->pengajuan->ao;
 			$aktif->save();
 		}
-	}
-
-	protected function generateNomorKredit($model)
-	{
-		$first_letter       = $model->pengajuan->kode_kantor;
-		
-		if(str_is($model->pengajuan->analisa->jenis_pinjaman,'pa')){
-			$first_letter 	= $first_letter.'.002.';
-		}else{
-			$first_letter 	= $first_letter.'.001.';
-		}
-
-		$first_letter       = $first_letter.Carbon::now()->format('Y').'.';
-
-		$prev_data          = Aktif::where('nomor_kredit', 'like', $first_letter.'%')->orderby('nomor_kredit', 'desc')->first();
-
-		if($prev_data)
-		{
-			$last_letter	= explode('.', $prev_data['nomor_kredit']);
-			$last_letter	= ((int)$last_letter[3] * 1) + 1;
-		}
-		else
-		{
-			$last_letter	= 1;
-		}
-
-		$last_letter		= str_pad($last_letter, 4, '0', STR_PAD_LEFT);
-
-		return $first_letter.$last_letter;
 	}
 }

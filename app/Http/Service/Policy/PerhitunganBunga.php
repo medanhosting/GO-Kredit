@@ -182,7 +182,7 @@ class PerhitunganBunga
 			foreach (range(1, $bulan-1) as $k) 
 			{
 				$angsuran_bulanan 	= 0;
-				$angsuran_bunga  	= ceil((($p_pinjaman * ($rincian['bunga_per_tahun']/100))/5)/100) * 100;
+				$angsuran_bunga  	= ceil((($p_pinjaman * ($rincian['bunga_per_tahun']/100))/6)/100) * 100;
 
 				$sisa_pinjaman 		= $sisa_pinjaman - $angsuran_bulanan;
 
@@ -194,9 +194,9 @@ class PerhitunganBunga
 			}
 
 			$rincian['angsuran'][$bulan]['bulan']			= Carbon::now()->addmonths($bulan)->format('M/Y');
-			$rincian['angsuran'][$bulan]['angsuran_bunga']	= $this->formatMoneyTo(0);
+			$rincian['angsuran'][$bulan]['angsuran_bunga']	= $this->formatMoneyTo($angsuran_bunga);
 			$rincian['angsuran'][$bulan]['angsuran_pokok']	= $this->formatMoneyTo($p_pinjaman);
-			$rincian['angsuran'][$bulan]['total_angsuran']	= $this->formatMoneyTo($p_pinjaman);
+			$rincian['angsuran'][$bulan]['total_angsuran']	= $this->formatMoneyTo($p_pinjaman + $angsuran_bunga);
 			$rincian['angsuran'][$bulan]['sisa_pinjaman']	= $this->formatMoneyTo(0);
 			
 			return $rincian;

@@ -485,7 +485,7 @@ trait PengajuanTrait {
 
 			if(!request()->has('checklists'))
 			{
-				$data_input 					= request()->only('tanggal', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'perc_provisi', 'administrasi', 'legal', 'putusan', 'catatan');
+				$data_input 					= request()->only('tanggal', 'plafon_pinjaman', 'suku_bunga', 'jangka_waktu', 'perc_provisi', 'administrasi', 'legal', 'biaya_notaris', 'putusan', 'catatan');
 
 				$data_input['pembuat_keputusan']= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 				$data_input['pengajuan_id']		= $permohonan['id'];

@@ -84,6 +84,11 @@ class Pengajuan extends Model
 		return $this->hasOne(Status::class, 'pengajuan_id')->where('status', 'permohonan')->orderby('tanggal', 'asc');
 	}
 
+	public function status_putusan()
+	{
+		return $this->hasOne(Status::class, 'pengajuan_id')->where('status', 'putusan')->orderby('tanggal', 'desc');
+	}
+
 	public function status_realisasi()
 	{
 		return $this->hasOne(Status::class, 'pengajuan_id')->where('status', 'realisasi')->orderby('tanggal', 'asc');

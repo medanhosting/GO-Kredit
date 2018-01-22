@@ -36,7 +36,7 @@
 			Route::resource('simulasi', 		'SimulasiController'); 
 			Route::resource('pengajuan', 		'PengajuanController'); 
 			Route::resource('putusan', 			'PutusanController'); 
-			Route::get('putusan/{id}/print ', 	['uses' => 'PutusanController@print', 'as' => 'putusan.print']);
+			Route::get('putusan/{id}/print', 	['uses' => 'PutusanController@print', 'as' => 'putusan.print']);
 			
 			Route::post('assign/{id}', 			['uses' => 	'PengajuanController@assign', 'as' => 'pengajuan.assign']);
 		});

@@ -54,6 +54,11 @@
 			</div>
 			<div class="row">
 				<div class="col">
+					{!! Form::vText('Biaya Notaris', 'biaya_notaris', $putusan['biaya_notaris'], ['class' => 'form-control inline-edit text-info mask-money border-input pb-1 w-50', 'placeholder' => 'Rp 70.000'], true) !!}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
 					{!! Form::vSelect('Putusan', 'putusan', ['setuju' => 'Setuju', 'tolak' => 'Tolak'], $putusan['putusan'], ['class' => 'form-control custom-select text-info border-input inline-edit pb-1 w-25'], true) !!}
 				</div>
 			</div>

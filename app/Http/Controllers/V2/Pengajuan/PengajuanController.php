@@ -83,7 +83,7 @@ class PengajuanController extends Controller
 				throw new Exception("Data tidak ada!", 1);
 			}
 
-			$survei 		= Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_tanah_bangunan'])->first();
+			$survei 		= Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'jaminan_kendaraan.foto', 'jaminan_tanah_bangunan.foto'])->first();
 
 			$analisa 		= Analisa::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
 			$putusan 		= Putusan::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->first();
@@ -116,6 +116,9 @@ class PengajuanController extends Controller
 	}
 
 	public function store($id = null){
+		
+		\DB::begintransaction();
+
 		$permohonan 	= Pengajuan::findornew($id);
 
 		if(str_is($permohonan->status_terakhir->status, 'putusan')){
@@ -129,9 +132,11 @@ class PengajuanController extends Controller
 		}
 
 		if($returned instanceof Pengajuan){
+			\DB::commit();
 			return redirect()->route('pengajuan.show', ['id' => $returned['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
 		}
-		
+	
+		\DB::rollback();
 		return redirect()->back()->withErrors($returned);
 	}
 
@@ -144,6 +149,9 @@ class PengajuanController extends Controller
 	}
 
 	public function assign($id = null){
+
+		\DB::begintransaction();
+
 		$permohonan 	= Pengajuan::findorfail($id);
 
 		$returned 		= [];
@@ -157,14 +165,17 @@ class PengajuanController extends Controller
 			$returned 	= $this->assign_realisasi($permohonan);
 
 			if($returned instanceof Model){
+			\DB::commit();
 			return redirect()->route('putusan.show', ['id' => $returned['pengajuan_id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
 		}
 		}
 
 		if($returned instanceof Model){
+			\DB::commit();
 			return redirect()->route('pengajuan.show', ['id' => $returned['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
 		}
-		
+
+		\DB::rollback();
 		return redirect()->back()->withErrors($returned);
 	}
 

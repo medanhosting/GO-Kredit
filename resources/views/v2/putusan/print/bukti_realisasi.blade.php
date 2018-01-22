@@ -23,7 +23,7 @@
 			<div class="row">
 				<div class="col-6 text-left">
 					<h3 class="mb-2">{{strtoupper($kantor_aktif['nama'])}}</h3>
-					<ul class="list-unstyled fa-ul">
+					<ul class="list-unstyled fa-ul mb-2">
 						<li>
 							<i class="fa fa-building-o fa-li" style="margin-top: .2rem;"></i>
 							{{ implode(' ', $kantor_aktif['alamat']) }}
@@ -141,7 +141,7 @@
 					<td style="width: 1%">:</td>
 					<td class="pl-2 pr-2 text-capitalize" colspan="4">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{ $idr->terbilang($idr->formatMoneyFrom($putusan['plafon_pinjaman'])) }}
+							{{ $idr->terbilang($idr->formatMoneyFrom($putusan['plafon_pinjaman'])) }} Rupiah
 						</p>
 					</td>
 				</tr>
@@ -183,7 +183,7 @@
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{ $carbon::createFromFormat('d/m/Y H:i', $putusan['pengajuan']['status_putusan']['tanggal'])->format('d') }}
+							{{ $carbon::createFromFormat('d/m/Y H:i', $putusan['tanggal'])->format('d') }}
 						</p>
 					</td>
 				</tr>

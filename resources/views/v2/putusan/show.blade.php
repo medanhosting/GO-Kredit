@@ -18,27 +18,79 @@
 						</a>
 						&nbsp;&nbsp;DETAIL PUTUSAN KREDIT
 					</h5>
-					<a href="{{ route('putusan.print', ['id' => $putusan['pengajuan_id'], 'mode' => $kc, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="text-success float-right btn btn-link">
-						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK NOTA BUKTI REALISASI
-					</a>
 				@endslot
 			
 				<div class="card-body">
 					<div class="row">
 						<div class="col-12 col-sm-12 col-md-12">
-							<nav class="nav nav-tabs underline" id="myTab" role="tablist">
-								<a class="nav-item nav-link {{$is_legalitas_tab}}" id="nav-legalitas-tab" data-toggle="tab" href="#nav-legalitas" role="tab" aria-controls="nav-legalitas" aria-selected="true">Legalitas Realisasi</a>
-								<a class="nav-item nav-link {{$is_bukti_pencairan_tab}}" id="nav-bukti-pencairan-tab" data-toggle="tab" href="#nav-bukti-pencairan" role="tab" aria-controls="nav-bukti-pencairan" aria-selected="true">Bukti Pencairan</a>
-							</nav>
 							<!-- Nav tabs -->
+
+							<ul class="nav nav-tabs underline" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link {{ $is_active_realisasi }}" data-toggle="tab" id="realisasi-menu" role="tab" href="#realisasi-pane">
+										Legalitas Realisasi
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {{ $is_active_pencairan }}" data-toggle="tab" id="pencairan-menu" role="tab" href="#pencairan-pane">
+										Bukti Realisasi
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link {{ $is_active_setoran }}" data-toggle="tab" id="setoran-menu" role="tab" href="#setoran-pane">
+										Setoran Realisasi
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<!-- Tab panes -->
 							<div class="tab-content">
-								<div class="tab-pane fade {{$is_legalitas_tab}}" id="nav-legalitas" role="tabpanel">
+								{{-- realisasi --}}
+								<div class="tab-pane {!! $is_active_realisasi !!}" id="realisasi-pane" role="tabpanel">
 									<div class="clearfix">&nbsp;</div>
-									@include('v2.putusan.legalitas.list')
+									<div class="row">
+										<div class="col-3">
+											<!-- sidebar -->
+											@include('v2.putusan.legalitas.sidebar')
+										</div>
+										<div class="col">
+											<!-- catatan -->
+											@include('v2.putusan.legalitas.list')
+										</div>
+									</div>
 								</div>
-								<div class="tab-pane fade {{$is_bukti_pencairan_tab}}" id="nav-bukti-pencairan" role="tabpanel">
+
+								{{-- pencairan --}}
+								<div class="tab-pane {!! $is_active_pencairan !!}" id="pencairan-pane" role="tabpanel">
 									<div class="clearfix">&nbsp;</div>
-									@include('v2.putusan.legalitas.bukti')
+									<div class="row">
+										<div class="col-3">
+											<!-- sidebar -->
+											@include('v2.putusan.pencairan.sidebar')
+										</div>
+										<div class="col">
+											<!-- catatan -->
+											@include('v2.putusan.pencairan.bukti')
+										</div>
+									</div>
+								</div>
+
+								{{-- setoran --}}
+								<div class="tab-pane {!! $is_active_setoran !!}" id="setoran-pane" role="tabpanel">
+									<div class="clearfix">&nbsp;</div>
+									<div class="row">
+										<div class="col-3">
+											<!-- sidebar -->
+											@include('v2.putusan.setoran.sidebar')
+										</div>
+										<div class="col">
+											<!-- catatan -->
+											@include('v2.putusan.setoran.bukti')
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -47,6 +99,9 @@
 			@endcomponent
 		</div>
 	</div>
+
+	@include('v2.helper.password')
+
 @endpush
 
 @push('submenu')

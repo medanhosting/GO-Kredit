@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\PengajuanExpiredChecker::class,
         \App\Console\Commands\HitungDendaAngsuran::class,
+        \App\Console\Commands\Release::class,
     ];
 
     /**

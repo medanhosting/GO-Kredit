@@ -34,7 +34,7 @@ class MutasiJaminan extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_mutasi_jaminan';
-	protected $fillable = ['nomor_kredit', 'tanggal', 'tag', 'description', 'documents', 'nomor_jaminan', 'status', 'mutasi_jaminan_id'];
+	protected $fillable = ['nomor_kredit', 'tanggal', 'tag', 'deskripsi', 'dokumen', 'nomor_jaminan', 'status', 'mutasi_jaminan_id', 'kategori', 'karyawan'];
 	protected $hidden 	= [];
 	protected $appends	= ['possible_action'];
 	protected $rules	= [];
@@ -81,9 +81,14 @@ class MutasiJaminan extends Model
 		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
 	}
 
-	public function setDocumentsAttribute($variable)
+	public function setDokumenAttribute($variable)
 	{
-		$this->attributes['documents']	= json_encode($variable);
+		$this->attributes['dokumen']	= json_encode($variable);
+	}
+
+	public function setKaryawanAttribute($variable)
+	{
+		$this->attributes['karyawan']	= json_encode($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -126,9 +131,14 @@ class MutasiJaminan extends Model
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 
-	public function getDocumentsAttribute($variable)
+	public function getDokumenAttribute($variable)
 	{
-		return json_decode($this->attributes['documents'], true);
+		return json_decode($this->attributes['dokumen'], true);
+	}
+
+	public function getKaryawanAttribute($variable)
+	{
+		return json_decode($this->attributes['karyawan'], true);
 	}
 
 	public function getPossibleActionAttribute($value){

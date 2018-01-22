@@ -19,10 +19,12 @@ class CreateKreditMutasiJaminanTable extends Migration
 			$table->string('nomor_kredit');
 			$table->string('nomor_jaminan');
 			$table->datetime('tanggal');
+			$table->string('kategori');
 			$table->string('tag');
 			$table->string('status');
-			$table->text('description')->nullable();
-			$table->text('documents');
+			$table->text('deskripsi')->nullable();
+			$table->text('dokumen');
+			$table->text('karyawan');
 			$table->timestamps();
 			$table->softDeletes();
 			
