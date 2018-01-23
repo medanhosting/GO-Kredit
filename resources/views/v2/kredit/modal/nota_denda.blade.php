@@ -67,7 +67,7 @@
 						<td class="dend-iteration text-center"></td>
 						<td class="dend-title"></td>
 						<td class="dend-denda text-right"></td>
-						<td class="dend-potongan_denda text-right"></td>
+						<td class="dend-restitusi_denda text-right"></td>
 						<td class="dend-subtotal text-right"></td>
 					</tr>
 				</tbody>

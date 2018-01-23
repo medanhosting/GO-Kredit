@@ -33,20 +33,26 @@ class TandaiJaminanKeluar
 	{
 		$model	= $event->data;
 
-		$not_yet_paid 	= AngsuranDetail::where('tanggal', '>', Carbon::createFromFormat('d/m/Y H:i', $model->tanggal))->wherenull('nota_bayar_id')->where('nomor_kredit', $model->nomor_kredit)->count();
+		if(!is_null($model->nota_bayar_id)){
+			$not_yet_paid 	= AngsuranDetail::wherenull('nota_bayar_id')->where('nomor_kredit', $model->nomor_kredit)->count();
 
-		if(!$not_yet_paid){
-			$jaminan 	= MutasiJaminan::where('nomor_kredit', $model->nomor_kredit)->get();
-			foreach ($jaminan as $k => $v) {
-				$m_jaminan 					= new MutasiJaminan;
-				$m_jaminan->nomor_kredit 	= $v->nomor_kredit;
-				$m_jaminan->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-				$m_jaminan->tag 			= 'out';
-				$m_jaminan->nomor_jaminan 	= $v->nomor_jaminan;
-				$m_jaminan->status 			= 'completed';
-				$m_jaminan->description 	= 'Jaminan Keluar';
-				$m_jaminan->documents 		= $v->documents;
-				$m_jaminan->save();
+			if(!$not_yet_paid){
+				$ids 		= MutasiJaminan::where('nomor_kredit', $model['nomor_kredit'])->selectraw('max(id) as id, max(tanggal) as tanggal')->groupby('nomor_jaminan')->orderby('tanggal', 'desc')->get()->toArray();
+
+				$jaminan 	= MutasiJaminan::wherein('id', array_column($ids, 'id'))->get();
+				foreach ($jaminan as $k => $v) {
+					$m_jaminan 					= new MutasiJaminan;
+					$m_jaminan->nomor_kredit 	= $v->nomor_kredit;
+					$m_jaminan->nomor_jaminan 	= $v->nomor_jaminan;
+					$m_jaminan->kategori 		= $v->kategori;
+					$m_jaminan->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+					$m_jaminan->tag 			= $v->tag;
+					$m_jaminan->status 			= 'titipan';
+					$m_jaminan->deskripsi 		= 'Angsuran Lunas';
+					$m_jaminan->dokumen 		= $v->dokumen;
+					$m_jaminan->karyawan 		= $v->karyawan;
+					$m_jaminan->save();
+				}
 			}
 		}
 	}

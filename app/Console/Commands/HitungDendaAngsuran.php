@@ -18,7 +18,7 @@ class HitungDendaAngsuran extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'gokredit:hitungdenda';
+	protected $signature = 'gokredit:hitungdenda {--nomor=}';
 
 	/**
 	 * The console command description.
@@ -47,36 +47,46 @@ class HitungDendaAngsuran extends Command
 		$this->info("--------------------------------------------------------");
 		$this->info('HITUNG DENDA');
 		$this->info("--------------------------------------------------------");
-		$this->checking();
+		$this->hitung_denda();
 		$this->info("\n--------------------------------------------------------");
 		$this->info('DONE');
 		$this->info("--------------------------------------------------------\n");
 	}
 
-	public function checking()
+	public function hitung_denda()
 	{
-		$limit 		= Carbon::now()->subDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->startOfDay();
+		//checkdays
+		$limit 		= Carbon::now()->subDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->endofday();
+		$angsuran 	= AngsuranDetail::HitungTunggakanBeberapaWaktuLalu($limit)->with(['kredit', 'notabayar'])->groupby('nth');
 
-		$angsuran 	= AngsuranDetail::wherenull('nota_bayar_id')->selectraw('min(tanggal) as tanggal')->selectraw('nomor_kredit')->selectraw('nth')->where('tanggal', '<=', $limit->format('Y-m-d H:i:s'))->groupby(\DB::raw('nomor_kredit, nth'))->get();
-
-		$db 		= Config::get('kredit.denda_perbulan');
+		if(!is_null($this->option('nomor'))){
+			$angsuran 	= $angsuran->where('nomor_kredit', $this->option('nomor'));
+		}
+		$angsuran 	= $angsuran->get();
 
 		foreach ($angsuran as $k => $v) {
-			$now 	= Carbon::createFromFormat('d/m/Y H:i', $v['tanggal'])->diffInMonths($limit) + 1;
+			//case nota bayar terlambat
+			if(is_null($v->nota_bayar_id)){
+				$d_passed 	= Carbon::parse($limit)->diffIndays(Carbon::createfromformat('d/m/Y H:i', $v->tanggal));
+			}else{
+				$d_passed 	= Carbon::createfromformat('d/m/Y H:i', $v->notabayar->tanggal)->diffIndays(Carbon::createfromformat('d/m/Y H:i', $v->tanggal));
+			}
 
-			$td		= AngsuranDetail::where('nomor_kredit', $v['nomor_kredit'])->where('tag', 'denda')->where('nth', $v['nth'])->count();
+			$db 	= ($v->tunggakan * $v->kredit->persentasi_denda * ($d_passed-Config::get('kredit.batas_pembayaran_angsuran_hari')))/100;
 
-			if($now > $td){
-				foreach (range(1, ($now - $td)) as $k2) {
-					$d_d 				= new AngsuranDetail;
-					$d_d->nomor_kredit 	= $v['nomor_kredit'];
-					$d_d->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-					$d_d->nth 			= $v['nth'];
-					$d_d->tag 			= 'denda';
-					$d_d->amount 		= $this->formatMoneyTo($db);
-					$d_d->description 	= 'Denda Bulan Ke - '.($k2 + $td);
-					$d_d->save();
+			$td		= AngsuranDetail::where('nomor_kredit', $v['nomor_kredit'])->where('tag', 'denda')->where('nth', $v['nth'])->first();
+
+			if($db != $this->formatMoneyFrom($td->amount)){
+				if(!$td){
+					$td 			= new AngsuranDetail;
 				}
+				$td->nomor_kredit 	= $v['nomor_kredit'];
+				$td->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+				$td->nth 			= $v['nth'];
+				$td->tag 			= 'denda';
+				$td->amount 		= $this->formatMoneyTo($db);
+				$td->description 	= 'Denda Angsuran Ke - '.$v->nth;
+				$td->save();
 			}
 		}
 	}

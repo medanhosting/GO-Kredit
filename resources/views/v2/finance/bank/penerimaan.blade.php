@@ -112,7 +112,7 @@
 											</td>
 											<td class="text-right">
 												{{$idr->formatMoneyTo(0)}}
-												<!-- {{$idr->formatMoneyTo($v['potongan'] + $v['potongan_denda'])}} -->
+												<!-- {{$idr->formatMoneyTo($v['potongan'] + $v['restitusi_denda'])}} -->
 											</td>
 											<td class="text-center">
 												{{$v['nomor_perkiraan']}}

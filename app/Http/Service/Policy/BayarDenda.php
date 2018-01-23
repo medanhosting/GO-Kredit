@@ -23,7 +23,7 @@ class BayarDenda
 	}
 
 	public function bayar(){
-		$amount 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->sum('amount');
+		$amount 	= AngsuranDetail::whereIn('tag', ['denda', 'restitusi_denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->sum('amount');
 
 		$first 		= AngsuranDetail::whereIn('tag', ['denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->orderby('nth', 'asc')->first();
 
@@ -37,12 +37,12 @@ class BayarDenda
 			$ptg->nomor_kredit 	= $this->kredit['nomor_kredit'];
 			$ptg->tanggal 		= $this->tanggal;
 			$ptg->nth 			= $first->nth;
-			$ptg->tag 			= 'potongan_denda';
+			$ptg->tag 			= 'restitusi_denda';
 			$ptg->amount 		= $this->formatMoneyTo(0 - $potongan);
 			$ptg->save();
 		}
 
-		$denda 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->get();
+		$denda 	= AngsuranDetail::whereIn('tag', ['denda', 'restitusi_denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->get();
 
 		$nb 	= new NotaBayar;
 		$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);

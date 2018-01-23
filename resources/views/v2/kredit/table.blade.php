@@ -81,8 +81,8 @@
 				<td>
 					@foreach($v['jaminan'] as $k)
 						<p class="mb-1">
-							{{strtoupper($k['documents']['jenis'])}} Nomor : {{strtoupper($k['documents'][$k['documents']['jenis']]['nomor_bpkb'])}}
-							{{strtoupper($k['documents'][$k['documents']['jenis']]['nomor_sertifikat'])}}
+							{{strtoupper($k['dokumen']['jenis'])}} Nomor : {{strtoupper($k['dokumen'][$k['dokumen']['jenis']]['nomor_bpkb'])}}
+							{{strtoupper($k['dokumen'][$k['dokumen']['jenis']]['nomor_sertifikat'])}}
 						</p>
 					@endforeach
 				</td>

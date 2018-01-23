@@ -34,7 +34,7 @@ class Penagihan extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_penagihan';
-	protected $fillable = ['nomor_kredit', 'nip_karyawan', 'tanggal', 'tag', 'penerima'];
+	protected $fillable = ['nomor_kredit', 'karyawan', 'tanggal', 'tag', 'penerima'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];
@@ -120,6 +120,11 @@ class Penagihan extends Model
 		$this->attributes['penerima']	= json_encode($variable);
 	}
 
+	public function setKaryawanAttribute($variable)
+	{
+		$this->attributes['karyawan']	= json_encode($variable);
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
 	// ------------------------------------------------------------------------------------------------------------
@@ -134,7 +139,7 @@ class Penagihan extends Model
 		// Create Rules //
 		//////////////////
 		$rules['nomor_kredit'] 		= ['required', 'string'];
-		$rules['nip_karyawan'] 		= ['required', 'string'];
+		$rules['karyawan'] 			= ['required', 'string'];
 		$rules['tanggal'] 			= ['required', 'date_format:"Y-m-d H:i:s"'];
 
 		//////////////
@@ -163,5 +168,10 @@ class Penagihan extends Model
 	public function getPenerimaAttribute($variable)
 	{
 		return json_decode($this->attributes['penerima'], true);
+	}
+
+	public function getKaryawanAttribute($variable)
+	{
+		return json_decode($this->attributes['karyawan'], true);
 	}
 }

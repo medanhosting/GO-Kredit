@@ -21,17 +21,16 @@
 						<th class="text-right">Bunga</th>
 						<th class="text-right">Potongan</th>
 						<th class="text-right">Jumlah</th>
-						<th class="text-center">
+						<th class="text-center" style="width: 5%">
 							<input type="checkbox" class="check-all">
 						</th>
-						<th class="text-center"></th>
 					</tr>
 				</thead>
 				<tbody>
 					@foreach($angsuran as $k => $v)
 						<tr @if($v['is_tunggakan']) class="text-danger" @endif>
 							<td class="text-center">{{ $loop->iteration }}</td>
-							<td class="text-left">{{Carbon\Carbon::parse($v['tanggal_bayar'])->format('d/m/Y H:i')}}</td>
+							<td class="text-left">{{Carbon\Carbon::parse($v['tanggal_bayar'])->format('d/m/Y')}}</td>
 							<td class="text-right">{{$idr->formatMoneyTo($v['pokok'])}}</td>
 							<td class="text-right">{{$idr->formatMoneyTo($v['bunga'])}}</td>
 							<td class="text-right">{{$idr->formatMoneyTo($v['potongan'])}}</td>
@@ -40,14 +39,8 @@
 								@if (is_null($v['nota_bayar_id']))
 									<input type="checkbox" name="nth[]" value="{{$v['nth']}}">
 								@else
-									<i class="fa fa-check text-primary"></i>
-									
-								@endif
-							</td>
-							<td class="text-center">
-								@if (!is_null($v['nota_bayar_id']))
-									<a href="{{route('angsuran.show', array_merge(['id' => $aktif['nomor_kredit'], 'nota_bayar_id' => $v['nota_bayar_id']], request()->all()))}}">
-										Nota Angsuran
+									<a  href="{{route('angsuran.show', array_merge(['id' => $aktif['nomor_kredit'], 'nota_bayar_id' => $v['nota_bayar_id']], request()->all()))}}">
+										<i class="fa fa-check text-primary"></i>
 									</a>
 								@endif
 							</td>
@@ -62,7 +55,7 @@
 						<th class="text-right align-middle">
 							<h5 class="mb-0"><strong>{{ $idr->formatMoneyTo($total) }}</strong></h5>
 						</th>
-						<th class="text-center align-middle" colspan="2">
+						<th class="text-center align-middle">
 							<a href="#" class="btn btn-primary btn-bayar-semua invisible" 
 							data-toggle="modal" 
 							data-target="#summary-angsuran" 
@@ -70,7 +63,7 @@
 							data-url-potongan="{{ route('angsuran.potongan', ['id' => $aktif['nomor_kredit']]) }}" 
 							data-kantor-aktif-id="{{ $kantor_aktif_id }}"
 							data-url-terbilang="{[ route('terbilang') }}"
-							data-url-titipan="{{ route('angsuran.titipan', ['id' => $aktif['nomor_kredit']]) }}">&emsp;Bayar yang tercentang&emsp;</a>
+							data-url-titipan="{{ route('angsuran.titipan', ['id' => $aktif['nomor_kredit']]) }}">Bayar</a>
 						</th>
 					</tr>
 				</tfoot>

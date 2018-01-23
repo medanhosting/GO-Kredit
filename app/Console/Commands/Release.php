@@ -57,11 +57,11 @@ class Release extends Command
 
 	public function v1()
 	{
-		Artisan::call('migrate', ['--path' => 'database/migrations/1.0.0/']);
+		Artisan::call('migrate:refresh', ['--path' => 'database/migrations/1.0.0/']);
 	}
 
 	public function v2()
 	{
-		Artisan::call('migrate', ['--path' => 'database/migrations/2.0.0/']);
+		Artisan::call('migrate:refresh', ['--path' => 'database/migrations/2.0.0/']);
 	}
 }

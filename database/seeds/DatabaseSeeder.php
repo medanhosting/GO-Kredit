@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
 		$this->call(SurveiTableSeeder::class);
 		$this->call(AnalisaTableSeeder::class);
 		$this->call(PutusanTableSeeder::class);
-		// $this->call(KreditAktifTableSeeder::class);
+		$this->call(KreditAktifTableSeeder::class);
 		// $this->call(SurveiTakePictureTableSeeder::class);
 		
 		// $this->call(PengajuanDuplicateTableSeeder::class);

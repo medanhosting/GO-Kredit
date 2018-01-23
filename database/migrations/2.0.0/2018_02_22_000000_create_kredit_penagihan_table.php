@@ -16,10 +16,10 @@ class CreateKreditPenagihanTable extends Migration
 		Schema::create('k_penagihan', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('nomor_kredit');
-			$table->string('nip_karyawan');
 			$table->datetime('tanggal')->nullable();
 			$table->string('tag');
 			$table->text('penerima')->nullable();
+			$table->string('karyawan')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			

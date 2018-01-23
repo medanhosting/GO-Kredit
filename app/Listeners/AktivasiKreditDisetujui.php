@@ -55,6 +55,7 @@ class AktivasiKreditDisetujui
 			$aktif->administrasi 	= $model->administrasi;
 			$aktif->legal 			= $model->legal;
 			$aktif->biaya_notaris 	= $model->biaya_notaris;
+			$aktif->persentasi_denda= $model->persentasi_denda;
 			$aktif->tanggal 		= $model->tanggal;
 			$aktif->kode_kantor 	= $model->pengajuan->kode_kantor;
 			$aktif->ao 				= $model->pengajuan->ao;

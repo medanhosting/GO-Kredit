@@ -44,14 +44,21 @@ class KreditServiceProvider extends ServiceProvider
 		///////////////////////////
 		// Tandai Jaminan Keluar //
 		///////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
-		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
+		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
+		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
 
 		////////////////////////////////////////////////////
 		// Tidak boleh melakukan pembayaran setelah jam 3 //
 		////////////////////////////////////////////////////
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
 		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
+
+
+		//////////////////
+		// Hitung Denda //
+		//////////////////
+		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreated', 'Thunderlabid\Kredit\Listeners\RecalculateDenda');
+		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdated', 'Thunderlabid\Kredit\Listeners\RecalculateDenda');
 	}
 
 	public function register()

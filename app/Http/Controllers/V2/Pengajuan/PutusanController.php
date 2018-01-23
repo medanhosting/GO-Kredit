@@ -162,8 +162,7 @@ class PutusanController extends Controller
 				$putusan->fill($data_input);
 				$putusan->save();
 			}
-
-			if(request()->has('status') && !str_is($putusan->pengajuan->status_terakhir, 'realisasi')){
+			elseif(request()->has('status') && !str_is($putusan->pengajuan->status_terakhir, 'realisasi')){
 				$status 				= new Status;
 				$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
 				$status->progress 		= 'sudah';
@@ -172,8 +171,7 @@ class PutusanController extends Controller
 				$status->pengajuan_id 	= $id;
 				$status->save();
 			}
-
-			if(request()->has('nomor_perkiraan')){
+			elseif(request()->has('nomor_perkiraan')){
 				if(request()->has('setoran')){
 
 					//simpan nota bayar

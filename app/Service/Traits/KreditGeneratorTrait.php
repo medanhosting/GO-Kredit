@@ -18,7 +18,7 @@ trait KreditGeneratorTrait {
 	protected function generateNomorKredit($model)
 	{
 		$first_letter       = $model->pengajuan->kode_kantor;
-		
+
 		if(str_is($model->pengajuan->analisa->jenis_pinjaman,'pa')){
 			$first_letter 	= $first_letter.'.002.';
 		}else{
@@ -32,7 +32,7 @@ trait KreditGeneratorTrait {
 		if($prev_data)
 		{
 			$last_letter	= explode('.', $prev_data['nomor_kredit']);
-			$last_letter	= ((int)$last_letter[3] * 1) + 1;
+			$last_letter	= ((int)$last_letter[4] * 1) + 1;
 		}
 		else
 		{

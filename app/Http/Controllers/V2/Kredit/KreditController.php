@@ -36,7 +36,7 @@ class KreditController extends Controller
 
 	public function index () 
 	{
-		$aktif 		= Aktif::kantor(request()->get('kantor_aktif_id'))->PembayaranBerikut()->with(['jaminan'])->paginate(15, ['*'], 'aktif');
+		$aktif 		= Aktif::kantor(request()->get('kantor_aktif_id'))->PembayaranBerikut()->with(['jaminan' => function($q){$q->selectraw('max(id) as id, max(nomor_kredit) as nomor_kredit, max(tag) as tag, max(tanggal) as tanggal, max(dokumen) as dokumen')->groupby('nomor_jaminan');}])->paginate(15, ['*'], 'aktif');
 
 		view()->share('is_aktif_tab', 'show active');
 
@@ -49,38 +49,34 @@ class KreditController extends Controller
 
 	public function show($id) 
 	{
-		$aktif 		= Aktif::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->PembayaranBerikut()->first();
+		$aktif	= Aktif::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->PembayaranBerikut()->first();
+		$akun	= $this->get_akun(request()->get('kantor_aktif_id'));
+		$today	= Carbon::now();
 
-		$akun 		= $this->get_akun(request()->get('kantor_aktif_id'));
+		//PANEL ANGSURAN. DATA STAT, DATA DENDA, DATA ANGSURAN
+		//DATA STAT
+		$stat['sisa_hutang']		= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->wherenull('nota_bayar_id')->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
+		$stat['total_titipan']		= AngsuranDetail::whereIn('tag', ['titipan', 'pengambilan_titipan'])->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->sum('amount');
+		$stat['total_denda']		= AngsuranDetail::whereIn('tag', ['denda', 'restitusi_denda'])->wherenull('nota_bayar_id')->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
 
-		//ANGSURAN
+		//DATA ANGSURAN
 		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
-
+	
+		//DATA DENDA
 		$denda 		= AngsuranDetail::displayingdenda()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
-
-		$t_denda 	= AngsuranDetail::whereIn('tag', ['denda', 'potongan_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
-
-		$titipan 	= NotaBayar::wheredoesnthave('details',  function($q){$q;})->where('nomor_kredit', $aktif['nomor_kredit'])->sum('jumlah');
-
-		$total		= array_sum(array_column($angsuran->toArray(), 'subtotal'));
-
-		//CHECK TITIPAN
-		$titipan 	= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->wheredoesnthave('details', function($q){$q;})->sum('jumlah');
 		
-		//TUNGGAKAN
-		$today		= Carbon::now();
-		// $dday		= Carbon::createFromFormat('d/m/Y H:i', $aktif['tanggal']);
-		$tunggakan  = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->orderby('tanggal', 'asc')->first();
-		//CHECK SP YANG BELUM DIKIRIM
-		$sp 		= SuratPeringatan::wheredoesnthave('penagihan', function($q){$q;})->first();
+		//PANEL TUNGGAKAN/PENAGIHAN
+		$stat['last_pay'] 			= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
+		$stat['total_tunggakan']	= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->wherenull('nota_bayar_id')->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->sum('amount');
 
-		$riwayat_t  = AngsuranDetail::where('nomor_kredit', $aktif['nomor_kredit'])->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->orderby('tanggal', 'asc')->get();
+		$stat['last_sp'] 			= SuratPeringatan::orderby('tanggal', 'desc')->first();
 
-		$latest_pay = NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
+		//DATA SP
+		$suratperingatan 	= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->with(['penagihan' => function($q){$q->HitungNotaBayar();}])->get();
 
-		$penagihan 	= Penagihan::wherehas('kredit', function($q)use($id){$q->where('kode_kantor', request()->get('kantor_aktif_id'))->where('id', $id);})->HitungNotaBayar()->orderby('tanggal', 'asc')->get();
-
-		$jaminan 	= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->get();
+		//PANEL JAMINAN
+		$ids 		= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->selectraw('max(id) as id, max(tanggal) as tanggal')->groupby('nomor_jaminan')->orderby('tanggal', 'desc')->get()->toArray();
+		$jaminan 	= MutasiJaminan::wherein('id', array_column($ids, 'id'))->get();
 
 		if(request()->get('current')){
 			switch (strtolower(request()->get('current'))) {
@@ -110,18 +106,17 @@ class KreditController extends Controller
 		view()->share('active_submenu', 'kredit');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
+		view()->share('akun', $akun);
 		view()->share('aktif', $aktif);
 		view()->share('angsuran', $angsuran);
-		view()->share('total', $total);
-		view()->share('tunggakan', $tunggakan);
-		view()->share('latest_pay', $latest_pay);
-		view()->share('riwayat_t', $riwayat_t);
-		view()->share('penagihan', $penagihan);
 		view()->share('jaminan', $jaminan);
+		view()->share('suratperingatan', $suratperingatan);
+		view()->share('denda', $denda);
+		view()->share('stat', $stat);
 
 		view()->share('kredit_id', $id);
 
-		$this->layout->pages 	= view('v2.kredit.show', compact('sp', 'denda', 't_denda', 'titipan', 'akun'));
+		$this->layout->pages 	= view('v2.kredit.show');
 		return $this->layout;
 	}
 

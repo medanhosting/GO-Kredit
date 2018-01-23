@@ -1,3 +1,4 @@
+@inject('idr', 'App\Service\UI\IDRTranslater')
 @push('main')
 	<div class="row justify-content-center">
 		<div class="col-auto px-5 pt-2">
@@ -36,23 +37,13 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link {{$is_denda_tab}}" data-toggle="tab" href="#denda" role="tab">
-										Denda 
-									</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link {{$is_tunggakan_tab}}" data-toggle="tab" href="#tunggakan" role="tab">
-										Tunggakan 
-									</a>
-								</li>
-								<li class="nav-item">
 									<a class="nav-link {{$is_penagihan_tab}}" data-toggle="tab" href="#penagihan" role="tab">
 										Penagihan 
 									</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link {{$is_jaminan_tab}}" data-toggle="tab" href="#jaminan" role="tab">
-										Mutasi Jaminan 
+										Stok Jaminan 
 									</a>
 								</li>
 							</ul>
@@ -65,18 +56,97 @@
 								</div>
 								<!-- tab angsuran -->
 								<div class="tab-pane {{$is_angsuran_tab}}" id="angsuran" role="tabpanel">
-									@include('v2.kredit.show.angsuran')
+									<div class="clearfix">&nbsp;</div>
+									<div class="clearfix">&nbsp;</div>
+									<div class="row">
+										<div class="col-4">
+											<a href="#" style="text-decoration: none !important; color:inherit">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{$idr->formatMoneyTo($stat['sisa_hutang'])}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>SISA HUTANG</p> @endslot
+											@endcomponent
+											</a>
+										</div>
+										<div class="col-4">
+											<a href="#" style="text-decoration: none !important; color:inherit">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{$idr->formatMoneyTo($stat['total_titipan'])}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>TOTAL TITIPAN</p> @endslot
+											@endcomponent
+											</a>
+										</div>
+										<div class="col-4">
+											<a href="#" style="text-decoration: none !important; color:inherit">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{$idr->formatMoneyTo($stat['total_denda'])}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>TOTAL DENDA</p> @endslot
+											@endcomponent
+											</a>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-8">
+											@include('v2.kredit.show.angsuran')
+										</div>
+										<div class="col-4">
+											@include('v2.kredit.show.denda')
+										</div>
+									</div>
 								</div>
-								<!-- tab denda -->
-								<div class="tab-pane {{$is_denda_tab}}" id="denda" role="tabpanel">
-									@include('v2.kredit.show.denda')
-								</div>
-								<!-- tab tunggakan -->
-								<div class="tab-pane {{$is_tunggakan_tab}}" id="tunggakan" role="tabpanel">
-									@include('v2.kredit.show.tunggakan')
-								</div>
-								<!-- tab penagihan -->
 								<div class="tab-pane {{$is_penagihan_tab}}" id="penagihan" role="tabpanel">
+									<div class="clearfix">&nbsp;</div>
+									<div class="clearfix">&nbsp;</div>
+									<div class="row">
+										<div class="col-4">
+											<a href="#" style="text-decoration: none !important; color:inherit">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{$idr->formatMoneyTo($stat['total_tunggakan'])}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>TOTAL TUNGGAKAN</p> @endslot
+											@endcomponent
+											</a>
+										</div>
+										<div class="col-4">
+											<a href="#" style="text-decoration: none !important; color:inherit">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{$stat['last_pay']['tanggal']}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>TANGGAL PEMBAYARAN TERAKHIR</p> @endslot
+											@endcomponent
+											</a>
+										</div>
+										<div class="col-4">
+											<a href="#" style="text-decoration: none !important; color:inherit">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{strtoupper(str_replace('_',' ',$stat['last_sp']['tag']))}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>SP TERAKHIR DIKELUARKAN</p> @endslot
+											@endcomponent
+											</a>
+										</div>
+									</div>
+
 									@include('v2.kredit.show.penagihan')
 								</div>
 								<!-- tab jaminan -->

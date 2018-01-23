@@ -28,6 +28,7 @@ class CreateKreditAktifTable extends Migration
 			$table->double('legal');
 			$table->double('biaya_notaris');
 			$table->datetime('tanggal');
+			$table->double('persentasi_denda')->default(0.5);
 			$table->text('ao');
 			$table->timestamps();
 			$table->softDeletes();

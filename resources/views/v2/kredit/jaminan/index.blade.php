@@ -75,13 +75,14 @@
 						<tbody>
 							@php $lua = null @endphp
 							@forelse($jaminan as $k => $v)
-								@if($lua != $v['updated_at']->format('d/m/Y'))
+								@php $tgl =  \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
+								@if($lua != $tgl)
 									<tr>
 										<td colspan="4" class="bg-light">
-											{{$v['updated_at']->format('d/m/Y')}}
+											{{$tgl}}
 										</td>
 									</tr>
-									@php $lua = $v['updated_at']->format('d/m/Y') @endphp
+									@php $lua = $tgl @endphp
 								@endif
 								<tr class="text-center">
 									<td class="text-left">
@@ -89,28 +90,28 @@
 										{{$v['kredit']['nasabah']['telepon']}}
 									</td>
 									<td>
-										@if(is_null($v['taken_at']))
+										@if(str_is($v['tag'], 'in'))
 											<i class="fa fa-arrow-down text-success"></i>
 										@else
 											<i class="fa fa-arrow-up text-danger"></i>
 										@endif
 									</td>
 									<td>
-										{{$v['description']}}
+										{{$v['deskripsi']}}
 									</td>
-									<td class="text-left">
-										@if(str_is($v['documents']['jenis'], 'shm'))
-											<h6>SHM</h6>
-											Nomor Sertifikat {{$v['documents']['shm']['nomor_sertifikat']}}<br/>
-											{{implode(', ', $v['documents']['shm']['alamat'])}}
-										@elseif(str_is($v['documents']['jenis'], 'shgb'))
-											<h6>SHGB</h6>
-											Nomor Sertifikat {{$v['documents']['shgb']['nomor_sertifikat']}}<br/>
-											{{implode(', ', $v['documents']['shgb']['alamat'])}}
+									<td class="text-left w-50">
+										@if(str_is($v['dokumen']['jenis'], 'shm'))
+											<h6>SHM - {{strtoupper(str_replace('_',' ',$v['kategori']))}}</h6>
+											Nomor Sertifikat {{$v['dokumen']['shm']['nomor_sertifikat']}}<br/>
+											{{implode(', ', $v['dokumen']['shm']['alamat'])}}
+										@elseif(str_is($v['dokumen']['jenis'], 'shgb'))
+											<h6>SHGB - {{strtoupper(str_replace('_',' ',$v['kategori']))}}</h6>
+											Nomor Sertifikat {{$v['dokumen']['shgb']['nomor_sertifikat']}}<br/>
+											{{implode(', ', $v['dokumen']['shgb']['alamat'])}}
 										@else
-											<h6>BPKB</h6>
-											Nomor BPKB {{$v['documents']['bpkb']['nomor_bpkb']}}<br/>
-											Kendaraan {{str_replace('_', ' ', $v['documents']['bpkb']['jenis'])}} - {{$v['documents']['bpkb']['merk']}} , {{$v['documents']['bpkb']['tipe']}} ({{$v['documents']['bpkb']['tahun']}})
+											<h6>BPKB - {{strtoupper(str_replace('_',' ',$v['kategori']))}}</h6>
+											Nomor BPKB {{$v['dokumen']['bpkb']['nomor_bpkb']}}<br/>
+											Kendaraan {{str_replace('_', ' ', $v['dokumen']['bpkb']['jenis'])}} - {{$v['dokumen']['bpkb']['merk']}} , {{$v['dokumen']['bpkb']['tipe']}} ({{$v['dokumen']['bpkb']['tahun']}})
 										@endif
 									</td>
 								</tr>
