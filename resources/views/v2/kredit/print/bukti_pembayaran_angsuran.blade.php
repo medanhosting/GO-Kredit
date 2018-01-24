@@ -9,7 +9,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>BUKTI NOTA ANGSURAN</title>
+		<title>BUKTI ANGSURAN KREDIT</title>
 
 		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 

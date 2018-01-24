@@ -18,17 +18,18 @@ class FeedBackPenagihan
 	use IDRTrait;
 	use WaktuTrait;
 
-	public function __construct(Aktif $aktif, $karyawan, $tanggal, $penerima, $nominal = null, $nomor_perkiraan = null){
+	public function __construct(Aktif $aktif, $karyawan, $tanggal, $penerima, $nominal = null, $nomor_perkiraan = null, $sp_id = null){
 		$this->kredit 			= $aktif;
 		$this->karyawan 		= $karyawan;
 		$this->tanggal 			= $tanggal;
 		$this->penerima 		= $penerima;
 		$this->nominal 			= $this->formatMoneyFrom($nominal);
-		$this->nomor_perkiraan 		= $nomor_perkiraan;
+		$this->nomor_perkiraan 	= $nomor_perkiraan;
+		$this->sp_id 			= $sp_id;
 	}
 
 	public function bayar(){
-		$find_exists_sp 		= SuratPeringatan::where('nomor_kredit', $this->kredit['nomor_kredit'])->where('tanggal', '<=', $this->formatdatetimefrom($this->tanggal))->wheredoesnthave('penagihan', function($q){$q;})->get();
+		$find_exists_sp 		= SuratPeringatan::where('nomor_kredit', $this->kredit['nomor_kredit'])->where('id', $this->sp_id)->first();
 
 		$tagih 		= new Penagihan;
 		$tagih->karyawan 		= $this->karyawan;
@@ -38,10 +39,8 @@ class FeedBackPenagihan
 		$tagih->tag 			= 'completed';
 		$tagih->save();
 
-		foreach ($find_exists_sp as $k => $v) {
-			$v->penagihan_id 	= $tagih->id;
-			$v->save();
-		}
+		$find_exists_sp->penagihan_id 	= $tagih->id;
+		$find_exists_sp->save();
 
 		if(!is_null($this->nominal)){
 
@@ -120,8 +119,11 @@ class FeedBackPenagihan
 				$titipan->amount 			= $this->formatMoneyTo($this->nominal);
 				$titipan->description 		= 'Titipan tagihan kredit nomor '.$this->kredit['nomor_kredit'];
 				$titipan->save();
+
+				$tagih->nota_bayar_id 	= $nota_b->id;
+				$tagih->save();
 		// 	}
-		// }
+		}
 		return true;
 	}
 }

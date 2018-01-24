@@ -3,7 +3,7 @@
 namespace Thunderlabid\Finance;
 
 use Illuminate\Support\ServiceProvider;
-use Event;
+use Event, Config;
 
 class FinanceServiceProvider extends ServiceProvider
 {
@@ -27,6 +27,7 @@ class FinanceServiceProvider extends ServiceProvider
 
 	public function register()
 	{
-		
+		Config::set('finance.nomor_perkiraan_denda', '140.600');
+		Config::set('finance.nomor_perkiraan_titipan', '100.300');
 	}
 }

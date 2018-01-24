@@ -9,7 +9,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>BUKTI NOTA ANGSURAN</title>
+		<title>BUKTI PEMBAYARAN DENDA</title>
 
 		<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
@@ -49,7 +49,7 @@
 			</div>
 			<div class="row">
 				<div class="col text-center">
-					<h4 class="mb-1"><strong>BUKTI ANGSURAN KREDIT</strong></h4>
+					<h4 class="mb-1"><strong>BUKTI PEMBAYARAN DENDA</strong></h4>
 				</div>
 			</div>
 			<hr class="mt-3 mb-2" style="border-size: 2px;">
@@ -61,13 +61,6 @@
 					<td class="w-25 pl-2 pr-2">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{$angsuran['nomor_kredit']}}</p>
 					</td>
-					<td style="width: 12.5%">AO</td>
-					<td style="width: 1%">:</td>
-					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">&nbsp;</p>
-					</td>
-				</tr>
-				<tr class="align-top">
 					<td style="width: 12.5%">Nama</td>
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
@@ -75,71 +68,35 @@
 							{{ $angsuran['kredit']['nasabah']['nama'] }}
 						</p>
 					</td>
-					<td style="width: 12.5%">Angsuran Ke-</td>
-					<td style="width: 1%">:</td>
-					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							@foreach($angsuran['details'] as $k => $v)
-								@if ($loop->last)
-									{{ $v['nth'] }}
-								@else
-									{{ $v['nth'] }}, 
-								@endif
-							@endforeach
-						</p>
-					</td>
-				</tr>
-				<tr class="align-top">
-					<td style="width: 12.5%">Alamat</td>
-					<td style="width: 1%">:</td>
-					<td class="w-25 pl-2 pr-2 text-capitalize">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{ strtolower(implode(' ', $angsuran['kredit']['nasabah']['alamat'])) }}
-						</p>
-					</td>
-					<td style="width: 12.5%">Sisa Angsuran</td>
-					<td style="width: 1%">:</td>
-					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{ $idr->formatMoneyTo($sisa_angsuran) }}</p>
-					</td>
-				</tr>
-				<tr class="align-top">
-					<td style="width: 12.5%">Telp.</td>
-					<td style="width: 1%">:</td>
-					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{ $angsuran['kredit']['nasabah']['telepon'] }}</p>
-					</td>
 				</tr>
 				<tr class="align-top">
 					<td colspan="6">
 						<div class="clearfix">&nbsp;</div>
 						<div class="clearfix">&nbsp;</div>
-						<table class="table w-100 table-bordered">
+						<table class="table table-bordered">
 							<thead>
 								<tr>
-									<th>#</th>
-									<th>Angsuran</th>
-									<th class="text-right">Pokok</th>
-									<th class="text-right">Bunga</th>
-									<th class="text-right">Potongan</th>
-									<th class="text-right">Sub Total</th>
+									<th class="text-center" style="width: 5%;">#</th>
+									<th class="text-left" style="width: 22%;">Deskripsi</th>
+									<th class="text-right" style="width: 20%;">Denda</th>
+									<th class="text-right">Restitusi</th>
+									<th class="text-right">Subtotal</th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach ($angsuran['details'] as $k => $v)
 									<tr>
 										<td>{{ $loop->iteration }}</td>
-										<td>Angsuran ke- {{ $v['nth'] }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['pokok']) }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['bunga']) }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['potongan']) }}</td>
+										<td>Denda ke- {{ $v['nth'] }}</td>
+										<td class="text-right">{{ $idr->formatMoneyTo($v['denda']) }}</td>
+										<td class="text-right">{{ $idr->formatMoneyTo($v['restitusi_denda']) }}</td>
 										<td class="text-right">{{ $idr->formatMoneyTo($v['subtotal']) }}</td>
 									</tr>
 								@endforeach
 							</tbody>
 							<tfoot>
 								<tr>
-									<td class="text-right" colspan="5"><h5><strong>Total</strong></h5></td>
+									<td class="text-right" colspan="4"><h5><strong>Total</strong></h5></td>
 									<td class="text-right"><h5><strong>{{ $angsuran['jumlah'] }}</strong></h5></td>
 								</tr>
 							</tfoot>

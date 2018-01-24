@@ -50,8 +50,8 @@ class KreditServiceProvider extends ServiceProvider
 		////////////////////////////////////////////////////
 		// Tidak boleh melakukan pembayaran setelah jam 3 //
 		////////////////////////////////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
-		Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
+		// Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
+		// Event::listen('Thunderlabid\Kredit\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Kredit\Listeners\NoPaymentAfter3PM');
 
 
 		//////////////////

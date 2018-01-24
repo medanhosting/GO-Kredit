@@ -8,7 +8,7 @@ use Thunderlabid\Kredit\Models\AngsuranDetail;
 
 use App\Service\Traits\IDRTrait;
 
-use Carbon\Carbon;
+use Carbon\Carbon, Config;
 
 class BayarAngsuran
 {
@@ -24,19 +24,7 @@ class BayarAngsuran
 
 	public function bayar(){
 		///check titipan
-		$titipan 	= AngsuranDetail::where('nomor_kredit', $this->kredit['nomor_kredit'])->where('tag', ['titipan', 'pengambilan_titipan'])->sum('amount');
-
-		//keluarkan titipan
-		if($titipan>0){
-			$nbt 	= new NotaBayar;
-			$nbt->nomor_faktur 		= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
-			$nbt->nomor_kredit 		= $this->kredit['nomor_kredit'];
-			$nbt->tanggal 			= $this->tanggal;
-			$nbt->nip_karyawan 		= $this->nip_karyawan;
-			$nbt->jumlah 			= $this->formatMoneyTo($titipan);
-			$nbt->nomor_perkiraan 	= $this->nomor_perkiraan;
-			$nbt->save();
-		}
+		$titipan 	= AngsuranDetail::where('nomor_kredit', $this->kredit['nomor_kredit'])->whereIn('tag', ['titipan', 'pengambilan_titipan'])->sum('amount');
 
 		$angsuran 	= AngsuranDetail::whereIn('nth', $this->nth)->whereIn('tag', ['bunga', 'pokok'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->get();
 
@@ -63,7 +51,7 @@ class BayarAngsuran
 			$nb->tanggal 		= $this->tanggal;
 			$nb->nip_karyawan 	= $this->nip_karyawan;
 			$nb->jumlah 		= $this->formatMoneyTo($total_pay);
-			$nb->nomor_perkiraan 		= $this->nomor_perkiraan;
+			$nb->nomor_perkiraan= $this->nomor_perkiraan;
 			$nb->save();
 
 			foreach ($angsuran as $k => $v) {
@@ -74,8 +62,18 @@ class BayarAngsuran
 			}
 
 			if($titipan > 0){
+				//simpan notabayar
+				$nbti 					= new NotaBayar;
+				$nbti->nomor_faktur 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
+				$nbti->nomor_kredit 	= $this->kredit['nomor_kredit'];
+				$nbti->tanggal 			= $this->tanggal;
+				$nbti->nip_karyawan 	= $this->nip_karyawan;
+				$nbti->jumlah 			= $this->formatMoneyTo(0 - min($titipan, $total_pay));
+				$nbti->nomor_perkiraan 	= Config::get('finance.nomor_perkiraan_titipan');
+				$nbti->save();
+
 				$pad 	= new AngsuranDetail;
-				$pad->nota_bayar_id	= $nb->id;
+				$pad->nota_bayar_id	= $nbti->id;
 				$pad->nomor_kredit 	= $this->kredit['nomor_kredit'];
 				$pad->tanggal 		= $this->tanggal;
 				$pad->nth 			= $latest_pay['nth'] + 1;

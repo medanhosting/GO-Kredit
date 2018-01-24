@@ -177,13 +177,14 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
-        // Barryvdh\Debugbar\ServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         // Laravel\Passport\PassportServiceProvider::class,
 
         Thunderlabid\Manajemen\ManajemenServiceProvider::class,
         Thunderlabid\Pengajuan\PengajuanServiceProvider::class,
         Thunderlabid\Survei\SurveiServiceProvider::class,
         Thunderlabid\Kredit\KreditServiceProvider::class,
+        Thunderlabid\Finance\FinanceServiceProvider::class,
 
     ],
 

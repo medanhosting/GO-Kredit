@@ -55,6 +55,13 @@
 						{{ $kredit_aktif['nasabah']['nama'] }}
 					</p>
 				</td>
+				<td style="width: 12.5%">Angsuran Ke-</td>
+				<td style="width: 1%">:</td>
+				<td class="w-25 pl-2 pr-2 text-capitalize">
+					<p class="mb-2 periode_bln" style="border-bottom: 1px dotted #ccc"></p>
+				</td>
+			</tr>
+			<tr class="align-top">
 				<td style="width: 12.5%">Alamat</td>
 				<td style="width: 1%">:</td>
 				<td class="w-25 pl-2 pr-2 text-capitalize">
@@ -62,17 +69,17 @@
 						{!! ucfirst(strtolower(implode(', ', $kredit_aktif['nasabah']['alamat']))) !!}
 					</p>
 				</td>
+				<td style="width: 12.5%">Sisa Angsuran</td>
+				<td style="width: 1%">:</td>
+				<td class="w-25 pl-2 pr-2 text-capitalize">
+					<p class="mb-2 sisa_angsuran" style="border-bottom: 1px dotted #ccc">&nbsp;</p>
+				</td>
 			</tr>
 			<tr class="align-top">
 				<td style="width: 12.5%">Telp.</td>
 				<td style="width: 1%">:</td>
 				<td class="w-25 pl-2 pr-2">
 					<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{ $kredit_aktif['nasabah']['telepon'] }}</p>
-				</td>
-				<td style="width: 12.5%">Periode Bulan</td>
-				<td style="width: 1%">:</td>
-				<td class="w-25 pl-2 pr-2 text-capitalize">
-					<p class="mb-2 periode_bln" style="border-bottom: 1px dotted #ccc"></p>
 				</td>
 			</tr>
 		</table>
@@ -109,7 +116,7 @@
 			<div class="col-6">
 			</div>
 			<div class="col-6">
-				{!! Form::vSelect('Diambil Dari', 'nomor_perkiraan', $akun, '', ['class' => 'form-control text-info inline-edit text-right'], true) !!}
+				{!! Form::vSelect('Disetor Ke', 'nomor_perkiraan', $akun, '', ['class' => 'form-control text-info inline-edit text-right'], true) !!}
 			</div>
 		</div>
 	@endslot 

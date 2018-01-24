@@ -15,6 +15,7 @@
 					<th class="text-center align-middle">Angs<br/>Ke-</th>
 					<th class="text-right align-middle">Denda</th>
 					<th class="text-right align-middle">Restitusi</th>
+					<th class="text-center align-middle">Sudah<br/>Dibayar</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -23,6 +24,13 @@
 						<td class="text-center">{{$v['nth']}}</td>
 						<td class="text-right">{{$idr->formatMoneyTo($v['denda'])}}</td>
 						<td class="text-right">{{$idr->formatMoneyTo($v['restitusi_denda'])}}</td>
+						<td class="text-center">
+							@if(!is_null($v['nota_bayar_id']))
+								<a  href="{{route('angsuran.show', array_merge(['id' => $aktif['nomor_kredit'], 'nota_bayar_id' => $v['nota_bayar_id'], 'case' => 'denda'], request()->all()))}}">
+									<i class="fa fa-check text-primary"></i>
+								</a>
+							@endif
+						</td>
 					</tr>
 					@if(is_null($v['nota_bayar_id']) && !str_is($v['denda'], 'Rp 0'))
 						@php $is_paid 	= false; @endphp
@@ -31,7 +39,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<th class="" colspan="3">
+					<th class="" colspan="4">
 						@if(!$is_paid && count($denda))
 							<a href="#" class="btn btn-block btn-primary btn-bayar-denda" data-toggle="modal" data-target="#summary-denda" 
 							data-url-denda="{{ route('angsuran.denda', ['id' => $aktif['nomor_kredit']]) }}" 
@@ -43,7 +51,7 @@
 			</tfoot>
 		</table>
 
-		{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+		{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'denda']), 'method' => 'PATCH']) !!}
 			@include('v2.kredit.modal.nota_denda', [
 				'kredit_aktif' 	=> $aktif,
 				'tanggal_now'	=> $carbon->now()->format('d/m/Y H:i'),
