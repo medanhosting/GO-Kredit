@@ -679,8 +679,8 @@
 				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jtbalamat.kecamatan').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][alamat][kecamatan]');
 				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jtbalamat.kota').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][alamat][kota]');
 
-				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jktahunoleh').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][tahun_perolehan]');
-				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jknilai').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][nilai_jaminan]');
+				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jtbtahunoleh').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][tahun_perolehan]');
+				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jtbnilai').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][nilai_jaminan]');
 				
 			// reInitAjaxAlamat($("#clonedJaminanTB"+cloneIndexJaminanTB));
 		}
