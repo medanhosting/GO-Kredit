@@ -26,8 +26,10 @@ class PermohonanController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:permohonan');
-		
+		$this->middleware('scope:operasional.permohonan')->only(['index', 'show']);
+		$this->middleware('scope:permohonan')->only(['create', 'store', 'edit', 'update', 'destroy', 'assign_survei']);
+
+
 		$this->middleware('required_password')->only(['destroy', 'assign_survei']);
 	}
 
@@ -319,6 +321,7 @@ class PermohonanController extends Controller
 			if(request()->has('nasabah'))
 			{
 				$data_input['nasabah']				= request()->get('nasabah'); 
+				$data_input['nasabah']['keluarga']	= $permohonan['nasabah']['keluarga'];
 			}
 
 			if(request()->has('keluarga'))

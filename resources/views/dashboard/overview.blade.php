@@ -38,7 +38,7 @@
 		</div>
 		<div class="row align-items-center">
 			<div class="col">
-				@if(in_array('permohonan', $scopes['scopes']))
+				@if(in_array('permohonan', $scopes['scopes']) || in_array('operasional', $scopes['scopes']))
 					<a href="{{ route('pengajuan.permohonan.index', ['status' => 'permohonan', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style" style="color:#fff">
 						<div class="progress_menu">
 							<i class="d-block fa fa-file-o fa-2x" style="padding-bottom:5px;padding-top:10px;"></i>
@@ -53,7 +53,7 @@
 				@endif
 			</div>
 			<div class="col">
-				@if(in_array('survei', $scopes['scopes']))
+				@if(in_array('survei', $scopes['scopes']) || in_array('operasional', $scopes['scopes']))
 					<a href="{{ route('pengajuan.survei.index', ['status' => 'survei', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style" style="color:#fff">
 						<div class="progress_menu">
 							<i class="d-block fa fa-file-o fa-2x" style="padding-bottom:5px;padding-top:10px;"></i>
@@ -68,7 +68,7 @@
 				@endif
 			</div>
 			<div class="col">
-				@if(in_array('analisa', $scopes['scopes']))
+				@if(in_array('analisa', $scopes['scopes']) || in_array('operasional', $scopes['scopes']))
 					<a href="{{ route('pengajuan.analisa.index', ['status' => 'analisa', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style" style="color:#fff">
 						<div class="progress_menu">
 							<i class="d-block fa fa-file-o fa-2x" style="padding-bottom:5px;padding-top:10px;"></i>
@@ -83,7 +83,7 @@
 				@endif
 			</div>
 			<div class="col">
-				@if(in_array('analisa', $scopes['scopes']))
+				@if(in_array('analisa', $scopes['scopes']) || in_array('operasional', $scopes['scopes']))
 					<a href="{{ route('pengajuan.putusan.index', ['status' => 'putusan', 'kantor_aktif_id' => $kantor_aktif_id]) }}" class="card-link text-style" style="color:#fff">
 						<div class="progress_menu">
 							<i class="d-block fa fa-file-o fa-2x" style="padding-bottom:5px;padding-top:10px;"></i>

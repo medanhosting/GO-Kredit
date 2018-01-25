@@ -24,7 +24,8 @@ class PutusanController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:putusan');
+		$this->middleware('scope:operasional.putusan')->only(['index', 'show']);
+		$this->middleware('scope:putusan')->only(['store', 'update']);
 	}
 
 	public function index ($status = ['putusan', 'setuju', 'tolak']) 
@@ -62,9 +63,9 @@ class PutusanController extends Controller
 			});
 		}
 
-		if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan'))
+		if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan') || in_array('operasional', $penempatan['scopes']))
 		{
-			$pengajuan 			= $pengajuan->where('p_status.karyawan->nip', Auth::user()['nip'])->whereIn('p_status.progress', ['perlu', 'sedang', 'sudah']);
+			$pengajuan 			= $pengajuan->whereIn('p_status.progress', ['perlu', 'sedang', 'sudah']);
 		}
 		else
 		{
