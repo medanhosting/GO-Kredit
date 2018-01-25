@@ -81,7 +81,7 @@
 											</td>
 											<td class="text-left">
 												@foreach($v['suratperingatan'] as $v0)
-													<a href="{{ route('tunggakan.print', ['id' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id]) }}">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a><br>
+													<a href="{{ route('tunggakan.print', ['id' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id, 'sp_id' => $v0]) }}">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a><br>
 													<small>{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v0['tanggal'])->diffForHumans()}}</small><br/>
 												@endforeach
 
@@ -92,7 +92,7 @@
 												@endif
 											</td>
 											<td>
-												<a href="{{route('kredit.show', ['id' => $v['kredit']['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'tunggakan'])}}">Lihat Kredit</a>
+												<a href="{{route('kredit.show', ['id' => $v['kredit']['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'penagihan'])}}">Lihat Kredit</a>
 											</td>
 										</tr>
 									@empty

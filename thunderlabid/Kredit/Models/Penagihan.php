@@ -34,7 +34,7 @@ class Penagihan extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_penagihan';
-	protected $fillable = ['nomor_kredit', 'karyawan', 'tanggal', 'tag', 'penerima'];
+	protected $fillable = ['nomor_kredit', 'karyawan', 'tanggal', 'tag', 'penerima', 'nota_bayar_id'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];
@@ -68,6 +68,10 @@ class Penagihan extends Model
 
 	public function suratperingatan(){
 		return $this->hasone(SuratPeringatan::class, 'penagihan_id');
+	}
+
+	public function notabayar(){
+		return $this->belongsto(NotaBayar::class, 'nota_bayar_id');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

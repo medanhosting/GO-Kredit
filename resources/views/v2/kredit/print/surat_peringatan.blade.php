@@ -42,46 +42,46 @@
 					<div class="row">
 						<div class="col-4">Nomor</div>
 						<div class="col-8">
-							<p class="mb-1" style="border-bottom: 1px dotted #ccc">: &nbsp;</p>
+							<p class="mb-1" style="border-bottom: 1px dotted #ccc">: {{$surat['nomor_surat']}}</p>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-4">Periphal</div>
 						<div class="col-8">
-							<p class="mb-1" style="border-bottom: 1px dotted #ccc">: &nbsp;</p>
+							<p class="mb-1" style="border-bottom: 1px dotted #ccc">: {{ucwords(str_replace('_',' ', $surat['tag']))}}</p>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-4">Sifat</div>
 						<div class="col-8">
-							<p class="mb-1" style="border-bottom: 1px dotted #ccc">: &nbsp;</p>
+							<p class="mb-1" style="border-bottom: 1px dotted #ccc">: Penting</p>
 						</div>
 					</div>
 				</div>
 				<div class="col-6 text-right">
-					<p>Malang, 20 Januari 2018</p>
-					<div class="row justify-content-end">
-						<div class="col-9 text-center">
-							<p class="mb-1">Kepada</p>
-							<p class="mb-1">Yth. Bapak/Ibu {{ isset($name) ? $name : 'nama - gak tau variable' }}</p>
-							<p>Di-tempat</p>
-						</div>
-					</div>
+					<p>{{ $kantor_aktif['alamat']['kota'] }}, {{$tanggal_surat->format('d/m/Y')}}</p>
 				</div>
 			</div>
 			<div class="clearfix">&nbsp;</div>
+			<div class="row">
+				<div class="col-9 text-left">
+					<p class="mb-1">Kepada</p>
+					<p class="mb-1">Yth. Bapak/Ibu {{$surat['kredit']['nasabah']['nama']}}</p>
+					<p>{{implode(' ', $surat['kredit']['nasabah']['alamat'])}}</p>
+				</div>
+			</div>
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-12">
 					<p>Dengan Hormat,</p>
 					<p class="text-justify">
-						Sehubungan dengan Surat Perjanjian Kredit  Nomor : <strong class="border-dotted">{{ isset($nomor_kredit) ? $nomor_kredit : 'Nomor Kredit - gak tau variable' }}</strong class="border-dotted"> atas nama Bapak/Ibu <strong class="border-dotted">{{ isset($name) ? $name : 'Nama - gak tau variable' }}</strong>
+						Sehubungan dengan Surat Perjanjian Kredit  Nomor : <strong class="border-dotted">{{ $surat['nomor_kredit'] }}</strong class="border-dotted"> atas nama Bapak/Ibu <strong class="border-dotted">{{ $surat['kredit']['nasabah']['nama'] }}</strong>
 						yang telah menunggak sebanyak 1 (satu) kali angsuran terhitung sejak tanggal <strong class="border-dotted">{{ isset($tanggal) ? $tanggal : 'tanggal - gak tau variable' }}</strong> sampai dengan hari ini, 
-						dengan total tunggakan sebesar <strong class="border-dotted">{{ isset($tunggakan) ? $tunggakan : 'tunggakan - gak tau variable' }}</strong> (<strong class="border-dotted">{{ isset($terbilang) ? $terbilang : 'terbilang - gak tau variable' }}</strong>).
+						dengan total tunggakan sebesar <strong class="border-dotted">{{ $idr->formatMoneyTo($t_tunggakan['tunggakan']) }}</strong> (<strong class="border-dotted">{{ucwords($idr->terbilang($t_tunggakan['tunggakan']))}} Rupiah</strong>).
 					</p>
 					<p class="text-justify">
 						Kami mengharapkan informasi dari Bapak/Ibu atas alasan keterlambatan pembayaran angsuran ini serta rencana pembayaran yang akan dilakukan. 
-						Untuk menghubungi kami, Bapak/Ibu dapat langsung menelepon di nomor <strong class="border-dotted">{{ isset($nomor_kantor) ? $nomor_kantor : 'No kantor - gak tau variable' }}</strong> ke bagian Administrasi Collection atau datang langsung ke kantor selama jam kerja
+						Untuk menghubungi kami, Bapak/Ibu dapat langsung menelepon di nomor <strong class="border-dotted">{{ $kantor_aktif['telepon'] }}</strong> ke bagian Administrasi Collection atau datang langsung ke kantor selama jam kerja.
 					</p>
 					<p class="text-justify">
 						Demikian surat pemberitahuan ini kami sampaikan dan atas perhatian serta kerjasama Bapak/Ibu kami sampaikan Terima Kasih.
@@ -91,29 +91,20 @@
 			<div class="clearfix">&nbsp;</div>
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
-				<div class="col-4">
-					<div class="row justify-content-start">
-						<div class="col-12 text-center">
-							<p>Diterima Oleh</p>
-							<div class="clearfix">&nbsp;</div>
-							<div class="clearfix">&nbsp;</div>
-							<div class="clearfix">&nbsp;</div>
-							<p>( <strong>{{ isset($diterima_oleh) ? $diterma_oleh : 'diterima oleh - gak tau variable' }}</strong> )</p>
-						</div>
-					</div>
+				<div class="col-6 text-center">
+					<p>Diterima Oleh</p>
+					<div class="clearfix">&nbsp;</div>
+					<div class="clearfix">&nbsp;</div>
+					<div class="clearfix">&nbsp;</div>
+					<p>( <strong>{{ $surat['kredit']['nasabah']['nama'] }}</strong> )</p>
 				</div>
-				<div class="col-7 text-right">
-					<div class="row justify-content-end">
-						<div class="col-12 text-center">
-								<p>{{ $kantor_aktif['nama'] }}</p>
-								<div class="clearfix">&nbsp;</div>
-								<div class="clearfix">&nbsp;</div>
-								<div class="clearfix">&nbsp;</div>
-								<div class="clearfix"><u>{{ isset($nama_pimpinan) ? $nama_pimpinan : 'nama pimpinan - gak tau variable' }}</u></div>
-								<p><strong>Pimpinan</strong></p>
-							</div>
-						</div>
-					</div>
+				<div class="col-6 text-center">
+					<p>{{ $kantor_aktif['nama'] }}</p>
+					<div class="clearfix">&nbsp;</div>
+					<div class="clearfix">&nbsp;</div>
+					<div class="clearfix">&nbsp;</div>
+					<div class="clearfix"><u>{{ $pimpinan['orang']['nama'] }}</u></div>
+					<p><strong>Pimpinan</strong></p>
 				</div>
 			</div>
 		</div>

@@ -16,10 +16,12 @@
 			<td>{{$v['tanggal']}}</td>
 			<td class="text-left">
 				{{strtoupper(str_replace('_',' ',$v['tag']))}}
+				<br/>
+				<a href="{{ route('tunggakan.print', ['id' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id, 'sp_id' => $v['id']]) }}" target="_blank">Cetak {{ucwords(str_replace('_', ' ', $v['tag']))}}</a>
 			</td>
 			<td>
 				@if(!$v['penagihan'])
-					{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'nip_karyawan' => Auth::user()['nip'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'tagihan']), 'method' => 'PATCH']) !!}
+					{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'nip_karyawan' => Auth::user()['nip'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'tagihan', 'sp_id' => $v['id']]), 'method' => 'PATCH']) !!}
 					<div class="row mb-1">
 						<div class="col-4">
 							<label class="text-uppercase">Nama Penerima</label>
@@ -52,7 +54,7 @@
 							<label class="text-uppercase">Diambil Dari</label>
 						</div>
 						<div class="col-8">
-							{!! Form::select('nomor_perkiraan', $akun, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
+							{!! Form::select('nomor_perkiraan', $a_tt, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
 						</div>
 					</div>
 

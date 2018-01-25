@@ -53,7 +53,7 @@
 							<h5 class="mb-0"><strong>Total</strong></h5>
 						</th>
 						<th class="text-right align-middle">
-							<h5 class="mb-0"><strong>{{ $idr->formatMoneyTo($total) }}</strong></h5>
+							<h5 class="mb-0"><strong>{{ $idr->formatMoneyTo($stat['total_hutang']) }}</strong></h5>
 						</th>
 						<th class="text-center align-middle">
 							<a href="#" class="btn btn-primary btn-bayar-semua invisible" 

@@ -68,7 +68,7 @@ class KasController extends Controller
 
 		$angsuran 		= $angsuran->wherehas('details', function($q){$q;})->where('jumlah', '<', 0)->get();
 
-		$total_money 	= TransactionDetail::wherehas('account', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_account.akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>=', $today->startofday()->format('Y-m-d H:i:s'))->where('tanggal', '<=', $today->endofday()->format('Y-m-d H:i:s'))->sum('amount');
+		$total_money 	= TransactionDetail::wherehas('account', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_account.akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '<=', $today->endofday()->format('Y-m-d H:i:s'))->sum('amount');
 
 		view()->share('active_submenu', 'kas_keluar');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));

@@ -8,6 +8,8 @@ use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Kredit\Models\AngsuranDetail;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
 
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+
 use Exception, Auth, Carbon\Carbon;
 
 class TunggakanController extends Controller
@@ -67,14 +69,51 @@ class TunggakanController extends Controller
 	public function print($id)
 	{
 		try {
-			if (request()->get('mode') == 'surat_peringatan') {
+			$surat 	= SuratPeringatan::where('nomor_kredit', $id)->where('id', request()->get('sp_id'))->first();
+			$tanggal_surat 	= Carbon::createFromFormat('d/m/Y H:i', $surat->tanggal);
+			
+			$t_tunggakan 	= AngsuranDetail::HitungTunggakanBeberapaWaktuLalu($tanggal_surat)->where('nomor_kredit', $id)->selectraw('count(nth) as jumlah_tunggakan')->first();
+			 
+			$before 		= AngsuranDetail::TunggakanBeberapaWaktuLalu($tanggal_surat)
+			->where('nomor_kredit', $id)
+			->whereIn('tag', ['denda', 'restitusi_denda'])
+			->selectraw(\DB::raw('SUM(IF(tag="denda",amount,IF(tag="restitusi_denda",amount,0))) as denda'))
+			->groupby('nomor_kredit')
+			->first();
+
+			$middle 		= AngsuranDetail::where('tanggal', '<=', $tanggal_surat->format('Y-m-d H:i:s'))
+			->where('nomor_kredit', $id)
+			->whereIn('tag', ['titipan', 'pengambilan_titipan'])
+			->selectraw(\DB::raw('SUM(IF(tag="titipan",amount,IF(tag="pengambilan_titipan",amount,0))) as titipan'))
+			->groupby('nomor_kredit')
+			->first();
+
+			$after 			= AngsuranDetail::where('tanggal', '>', $tanggal_surat->format('Y-m-d H:i:s'))
+			->where('nomor_kredit', $id)
+			->whereIn('tag', ['pokok', 'bunga'])
+			->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))
+			->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))
+			->groupby('nomor_kredit')
+			->first();
+
+			$pimpinan 		= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('role', 'pimpinan')->where('tanggal_masuk', '>=', $tanggal_surat->format('Y-m-d H:i:s'))->where(function($q)use($tanggal_surat){$q->where('tanggal_keluar', '<=', $tanggal_surat->format('Y-m-d H:i:s'))->orwherenull('tanggal_keluar');})->first();
+
+			view()->share('surat', $surat);
+			view()->share('tanggal_surat', $tanggal_surat);
+			view()->share('t_tunggakan', $t_tunggakan);
+			view()->share('before', $before);
+			view()->share('middle', $middle);
+			view()->share('after', $after);
+			view()->share('pimpinan', $pimpinan);
+
+			if (str_is('surat_peringatan*', $surat->tag)) {
 				view()->share('html', ['title' => 'Surat Peringatan | ' . config()->get('app.name') . '.com']);
 
-				return view('v2.print.tunggakan.surat_peringatan');
+				return view('v2.kredit.print.surat_peringatan');
 			} else {
 				view()->share('html', ['title' => 'Somasi | ' . config()->get('app.name') . '.com']);
 
-				return view('v2.print.tunggakan.somasi');
+				return view('v2.kredit.print.surat_somasi');
 			}
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());

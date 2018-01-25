@@ -318,7 +318,7 @@ class PutusanController extends Controller
 					}
 
 					$pimpinan 			= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('role', 'pimpinan')->where('tanggal_masuk', '>=', $tanggal)->where(function($q)use($tanggal){$q->where('tanggal_keluar', '<=', $tanggal)->orwherenull('tanggal_keluar');})->first();
-					
+
 					if($mode=='perjanjian_kredit' && $data['analisa']['jenis_pinjaman']=='pa')
 					{
 						$mode 	= 'perjanjian_kredit_angsuran';

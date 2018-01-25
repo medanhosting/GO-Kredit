@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, Carbon\Carbon;
 use App\Service\Traits\WaktuTrait;
 use App\Service\Traits\IDRTrait;
 
@@ -33,7 +33,7 @@ class SuratPeringatan extends Model
 	protected $table 	= 'k_surat_peringatan';
 	protected $fillable = ['nomor_kredit', 'nth', 'tanggal', 'tag', 'nip_karyawan', 'penagihan_id'];
 	protected $hidden 	= [];
-	protected $appends	= [];
+	protected $appends	= ['nomor_surat'];
 
 	protected $rules	= [];
 	protected $errors;
@@ -121,5 +121,11 @@ class SuratPeringatan extends Model
 	public function getTanggalAttribute($variable)
 	{
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
+	}
+
+	public function getNomorSuratAttribute($variable)
+	{
+		$tgl 	= Carbon::parse($this->attributes['tanggal']);
+		return $this->nomor_kredit.'-'.$tgl->format('d.m');
 	}
 }

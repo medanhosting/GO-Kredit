@@ -11,7 +11,7 @@ use Thunderlabid\Kredit\Models\SuratPeringatan;
 use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
-use Exception, DB, Auth, Carbon\Carbon;
+use Exception, DB, Auth, Carbon\Carbon, Config;
 
 use App\Service\Traits\IDRTrait;
 
@@ -51,6 +51,8 @@ class KreditController extends Controller
 	{
 		$aktif	= Aktif::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->PembayaranBerikut()->first();
 		$akun	= $this->get_akun(request()->get('kantor_aktif_id'));
+		$a_tt	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_titipan'));
+		$a_dd	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_denda'));
 		$today	= Carbon::now();
 
 		//PANEL ANGSURAN. DATA STAT, DATA DENDA, DATA ANGSURAN
@@ -68,11 +70,12 @@ class KreditController extends Controller
 		//PANEL TUNGGAKAN/PENAGIHAN
 		$stat['last_pay'] 			= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
 		$stat['total_tunggakan']	= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->wherenull('nota_bayar_id')->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->sum('amount');
+		$stat['total_hutang']		= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
 
-		$stat['last_sp'] 			= SuratPeringatan::orderby('tanggal', 'desc')->first();
+		$stat['last_sp'] 			= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->orderby('created_at', 'desc')->first();
 
 		//DATA SP
-		$suratperingatan 	= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->with(['penagihan' => function($q){$q->HitungNotaBayar();}])->get();
+		$suratperingatan 	= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->with(['penagihan', 'penagihan.notabayar'])->get();
 
 		//PANEL JAMINAN
 		$ids 		= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->selectraw('max(id) as id, max(tanggal) as tanggal')->groupby('nomor_jaminan')->orderby('tanggal', 'desc')->get()->toArray();
@@ -116,7 +119,7 @@ class KreditController extends Controller
 
 		view()->share('kredit_id', $id);
 
-		$this->layout->pages 	= view('v2.kredit.show');
+		$this->layout->pages 	= view('v2.kredit.show', compact('a_tt'));
 		return $this->layout;
 	}
 

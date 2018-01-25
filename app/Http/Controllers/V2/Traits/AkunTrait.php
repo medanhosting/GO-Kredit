@@ -15,8 +15,12 @@ use Thunderlabid\Finance\Models\Account;
  */
 trait AkunTrait {
 	
- 	public function get_akun($kantor_id){
-		$acc	= Account::where('kode_kantor', $kantor_id)->wherenotnull('akun_id')->get();
+ 	public function get_akun($kantor_id, $kode = null){
+		$acc	= Account::where('kode_kantor', $kantor_id)->wherenotnull('akun_id');
+ 		if(!is_null($kode)){
+ 			$acc 	= $acc->where('nomor_perkiraan', $kode);
+ 		}
+ 		$acc 	= $acc->get();
 		$akun	= [];
 
 		foreach ($acc as $k => $v) {

@@ -24,7 +24,7 @@ trait KreditTrait {
  	}
 
  	public function store_tagihan($aktif){
- 		$feedback 	= new FeedBackPenagihan($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'), request()->get('nomor_perkiraan'));
+ 		$feedback 	= new FeedBackPenagihan($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'), request()->get('nomor_perkiraan'), request()->get('sp_id'));
 		$feedback->bayar();
  	}
 
