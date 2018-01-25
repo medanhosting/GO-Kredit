@@ -76,6 +76,10 @@ class NotaBayar extends Model
 	public function details(){
 		return $this->hasMany(AngsuranDetail::class, 'nota_bayar_id');
 	}
+
+	public function penagihan(){
+		return $this->belongsto(Penagihan::class, 'penagihan_id');
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------

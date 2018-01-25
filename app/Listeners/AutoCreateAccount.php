@@ -76,6 +76,7 @@ class AutoCreateAccount
 		}
 
 		foreach ($codes as $k => $v) {
+			$parent 	= Account::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['parent'])->first();
 			$acc 		= Account::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
 
 			if(!$acc){
@@ -85,7 +86,7 @@ class AutoCreateAccount
 			$acc->kode_kantor 			= $model['id'];
 			$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
 			$acc->akun 					= $v['akun'];
-			$acc->akun_id 				= $v['parent'];
+			$acc->akun_id 				= $parent->id;
 			$acc->save();
 		}
 	}

@@ -95,6 +95,8 @@ class AngsuranController extends Controller
 
 			if(str_is($case, 'angsuran')){
 				$angsuran['details']= AngsuranDetail::displaying()->where('nomor_kredit', $id);
+			}elseif(str_is($case, 'sementara')){
+				$angsuran['details']= AngsuranDetail::where('nomor_kredit', $id);
 			}else{
 				$angsuran['details']= AngsuranDetail::displayingdenda()->where('nomor_kredit', $id);
 			}

@@ -51,7 +51,7 @@
 
 					<div class="row mb-1">
 						<div class="col-4">
-							<label class="text-uppercase">Diambil Dari</label>
+							<label class="text-uppercase">Disetor Ke</label>
 						</div>
 						<div class="col-8">
 							{!! Form::select('nomor_perkiraan', $a_tt, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
@@ -89,7 +89,7 @@
 							<label class="text-uppercase">Nominal</label>
 						</div>
 						<div class="col-8">
-							{!! Form::label($idr->formatmoneyTo($v['penagihan']['pelunasan'] + $v['penagihan']['titipan'])) !!}
+							{!! $v['penagihan']['notabayar']['jumlah'] !!}
 						</div>
 					</div>
 
@@ -101,6 +101,14 @@
 							{!! Form::label($v['penagihan']['karyawan']['nama']) !!}
 						</div>
 					</div>
+					@if($v['penagihan']['notabayar'])
+					<div class="row mb-1">
+						<div class="col-12">
+							<a href="{{ route('angsuran.print', ['id' => $v['nomor_kredit'], 'nota_bayar_id' => $v['penagihan']['notabayar']['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'sementara']) }}" target="__blank" class="text-success float-right btn btn-link">
+							Cetak Bukti Angsuran Sementara</a>
+						</div>
+					</div>
+					@endif
 				@endif
 			</td>
 		</tr>
