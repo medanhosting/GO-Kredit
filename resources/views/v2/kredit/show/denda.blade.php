@@ -48,11 +48,31 @@
 						@endif
 					</th>
 				</tr>
+				<tr>
+					<th colspan="4">
+						<a href="#" class="btn btn-block btn-primary btn-bayar-denda" data-toggle="modal" data-target="#retuitit-denda" 
+						data-url-denda="{{ route('angsuran.denda', ['id' => $aktif['nomor_kredit']]) }}" 
+						data-kantor-aktif-id="{{ $kantor_aktif_id }}"
+						data-url-terbilang="{[ route('terbilang') }}">Restitusi Denda</a>
+					</th>
+				</tr>
 			</tfoot>
 		</table>
 
 		{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'denda']), 'method' => 'PATCH']) !!}
 			@include('v2.kredit.modal.nota_denda', [
+				'kredit_aktif' 	=> $aktif,
+				'tanggal_now'	=> $carbon->now()->format('d/m/Y H:i'),
+			])
+
+			{!! Form::hidden('current', 'denda') !!}
+			{!! Form::hidden('potongan', 'Rp 0') !!}
+
+			@include('v2.kredit.modal.konfirmasi_denda')
+		{!! Form::close() !!}
+
+		{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'denda']), 'method' => 'PATCH']) !!}
+			@include('v2.kredit.modal.restitusi_denda', [
 				'kredit_aktif' 	=> $aktif,
 				'tanggal_now'	=> $carbon->now()->format('d/m/Y H:i'),
 			])
@@ -134,59 +154,9 @@
 				kantor_aktif_id = $(this).attr('data-kantor-aktif-id');
 				
 			urlLinkDenda = $(this).attr('data-url-denda');
-			// urlLinkPotongan = $(this).attr('data-url-potongan');
 
 			ajxDend.defineOnSuccess(function(resp){
-				// check potongan
-				// if (checked_all() === true) {
-				// 	var ajxPot = window.ajax;
-				// 	var dataAjax2 = {};
-					
-				// 	parsingData(resp.data, true);
-
-				// 	ajxPot.defineOnSuccess(function(resp){
-				// 		var parent2 = $('tr#angsuran-row').parent();
-				// 		var potongan = resp.data.replace(/\./g, '').replace('-', '').slice(3);
-
-				// 		parent2.append('<tr> \
-				// 							<td class="text-right" colspan="5"><h5>Potongan</h5></td> \
-				// 							<td class="text-right text-danger"><h5>' + resp.data  + '</h5></td> \
-				// 						</tr>');
-
-				// 		var total_angsuran = subtotal - potongan;
-
-				// 		parent2.append('<tr> \
-				// 				<td class="text-right text-info" colspan="5"><h5><strong>Total Bayar Angsuran</strong></h5></td> \
-				// 				<td class="text-right text-info"><h5><strong>Rp ' + window.numberFormat.set(total_angsuran)  + '</strong></h5></td> \
-				// 			</tr>');
-
-				// 		// terbilang
-				// 		var ajxTerbilang = window.ajax;
-
-				// 		ajxTerbilang.defineOnSuccess(function(resp){
-				// 			parent2.append('<tr> \
-				// 								<td class="text-left"><strong>Terbilang</strong></td> \
-				// 								<td class="text-left text-capitalize" colspan="7"><i>	' + resp.data + '</i></td> \
-				// 							</tr>');
-				// 		});
-			
-				// 		ajxTerbilang.defineOnError(function(resp){
-			
-				// 		});
-			
-				// 		ajxTerbilang.get('{{ route("terbilang")  }}', {money: total_angsuran});
-				// 	});
-
-				// 	ajxPot.defineOnError(function(resp){
-				// 		console.log('error');
-				// 	});
-
-				// 	dataAjax2.kantor_aktif_id = kantor_aktif_id;
-
-				// 	ajxPot.get(urlLinkPotongan, dataAjax2);
-				// } else {
-					parsingDataDenda(resp.data);
-				// }
+				parsingDataDenda(resp.data);
 			});
 
 			ajxDend.defineOnError(function(resp){

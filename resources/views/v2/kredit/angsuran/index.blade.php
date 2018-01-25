@@ -62,7 +62,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									@php $lua = null @endphp
+									@php $lua = null; @endphp
 									@forelse($angsuran as $k => $v)
 										@php $pa = \Carbon\Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
 										@if($lua != $pa)
@@ -71,7 +71,7 @@
 													{{$pa}}
 												</td>
 											</tr>
-											@php $lua = $pa @endphp
+											@php $lua = $pa; @endphp
 										@endif
 										<tr class="text-center">
 											<td class="text-left">
