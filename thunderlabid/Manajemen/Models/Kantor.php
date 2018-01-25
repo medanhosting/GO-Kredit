@@ -22,6 +22,8 @@ use Thunderlabid\Manajemen\Events\Kantor\KantorUpdating;
 use Thunderlabid\Manajemen\Events\Kantor\KantorDeleting;
 // use Thunderlabid\Manajemen\Events\Kantor\KantorDeleted;
 
+use Carbon\Carbon;
+
 class Kantor extends Model
 {
 	use SoftDeletes;
@@ -63,6 +65,11 @@ class Kantor extends Model
 	public function penempatan()
 	{
 		return $this->hasMany(PenempatanKaryawan::class, 'kantor_id');
+	}
+
+	public function pimpinan()
+	{
+		return $this->hasOne(PenempatanKaryawan::class, 'kantor_id')->where('role', 'like', 'pimpinan')->Active(Carbon::now());
 	}
 
 	public function pusat()

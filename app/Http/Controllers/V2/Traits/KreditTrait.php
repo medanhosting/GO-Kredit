@@ -19,8 +19,18 @@ use Auth;
 trait KreditTrait {
 	
  	public function store_denda($aktif){
-		$denda 		= new BayarDenda($aktif, Auth::user()['nip'], request()->get('potongan'), request()->get('tanggal'), request()->get('nomor_perkiraan'));
+		$denda 		= new BayarDenda($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'), request()->get('nomor_perkiraan'));
 		$denda->bayar();
+ 	}
+	
+ 	public function store_permintaan_restitusi($aktif){
+		$denda 		= new BayarDenda($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'));
+		$denda->permintaan_restitusi(request()->get('jenis'), request()->get('nominal'), request()->get('alasan'));
+ 	}
+
+ 	public function store_validasi_restitusi($aktif){
+		$denda 		= new BayarDenda($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'));
+		$denda->validasi_restitusi(request()->get('is_approved'));
  	}
 
  	public function store_tagihan($aktif){

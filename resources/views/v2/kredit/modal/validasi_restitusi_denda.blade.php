@@ -1,4 +1,4 @@
-@component('bootstrap.modal', ['id' => 'retuitit-denda', 'size' => 'modal-lg']) 
+@component('bootstrap.modal', ['id' => 'validasi-restitusi-denda', 'size' => 'modal-lg']) 
 	@slot ('title') 
 		Permohonan Keringanan Denda
 	@endslot 
@@ -51,7 +51,7 @@
 				<td style="width: 1.5%">:</td>
 				<td class="pl-2 pr-2" style="width: 36%;">
 					<p class="mb-2" style="border-bottom: 1px dotted #ccc;">
-						gak tau variable
+						{{implode(' ', $kredit_aktif['nasabah']['alamat'])}}
 					</p>
 				</td>
 			</tr>
@@ -60,59 +60,53 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th class="text-center" style="width: 20%;">Tunggakan</th>
-					<th class="text-right" style="width: 20%;">Jumlah</th>
-					<th class="text-left" style="width: 40%;">Alasan</th>
-					<th class="text-center" style="width: 20%">Tanda Tangan</th>
+					<th class="text-center" style="width: 15%;">Tunggakan</th>
+					<th class="text-right" style="width: 30%;">Jumlah</th>
+					<th class="text-left" style="width: 45%;">Alasan</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td class="">Pokok</td>
-					<td class="text-right">Rp 10.050.000</td>
+					<td>Denda</td>
+					<td class="text-right">{{$idr->formatMoneyTo($stat['total_denda'])}}</td>
 					<td class="text-left" rowspan="5">
-						{!! Form::vTextarea(null, 'alasan', $restitusi['alasan'], ['class' => 'form-control inline-edit border-input text-info pb-1', 'placeholder' => 'Alasan', 'rows' => 5, 'cols' => 8, 'style' => 'resize: none;'], true) !!}
+						{{$restitusi['alasan']}}
 					</td>
-					<td class="text-center" rowspan="5">&nbsp;</td>
 				</tr>
 				<tr>
-					<td class="">Jasa</td>
-					<td class="text-right">Rp 10.050.000</td>
+					<td>Total</td>
+					<td class="text-right">{{$idr->formatMoneyTo($stat['total_denda'])}}</td>
 				</tr>
+
 				<tr>
-					<td class="">Denda</td>
-					<td class="text-right">Rp 10.050.000</td>
-				</tr>
-				<tr>
-					<td class="">Total</td>
-					<td class="text-right">Rp 10.050.000</td>
-				</tr>
-				<tr>
-					<td class="">Kesanggupan Bayar</td>
-					<td class="text-right">Rp 10.050.000</td>
+					<td>Kesanggupan Bayar</td>
+					<td class="text-right">{{$idr->formatMoneyTo($stat['total_denda'] - $stat['total_restitusi'])}}</td>
 				</tr>
 			</tbody>
-		</table>
-
+		</table>		
 		<div class="row bg-dark">
 			<div class="col text-center">
 				<h4 class="mb-0 p-1 text-light">PERSETUJUAN KERINGANAN</h4>
 			</div>
 		</div>
 
-		<div class="clearfix"></div>
+		<div class="clearfix">&nbsp;</div>
 		<table class="table table-bordered">
 			<thead>
 				<tr>
 					<th class="text-center" style="width: 15%;">Nominal Persetujuan</th>
-					<th class="text-right" style="width: 30%;">
-						{!! Form::vText(null, 'legal', $putusan['legal'], ['class' => 'form-control inline-edit text-info mask-money border-input pb-1 w-100', 'placeholder' => 'Rp 70.000'], true) !!}
+					<th class="text-right align-middle" style="width: 30%;">
+						@if($stat['total_restitusi'] > 1000000)
+							{{$idr->formatMoneyto($stat['total_restitusi'])}}
+						@endif
 					</th>
-					<th class="text-right" style="width: 30%;">
-						{!! Form::vText(null, 'legal', $putusan['legal'], ['class' => 'form-control inline-edit text-info mask-money border-input pb-1 w-100', 'placeholder' => 'Rp 70.000'], true) !!}
+					<th class="text-right align-middle" style="width: 30%;">
+						@if($stat['total_restitusi'] <= 1000000)
+							{{$idr->formatMoneyto($stat['total_restitusi'])}}
+						@endif
 					</th>
-					<th class="text-right" style="width: 30%">
-						{!! Form::vText(null, 'legal', $putusan['legal'], ['class' => 'form-control inline-edit text-info mask-money border-input pb-1 w-100', 'placeholder' => 'Rp 70.000'], true) !!}
+					<th class="text-right align-middle" style="width: 30%">
+						&nbsp;
 					</th>
 				</tr>
 			</thead>
@@ -134,7 +128,7 @@
 	@endslot 
 	
 	@slot ('footer')
-		<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-		<a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#konfirmasi-denda">Konfirmasi</a>
+		<button type="submit" name="is_approved" value=0 class = "btn btn-primary">Tolak</button>  
+		<button type="submit" name="is_approved" value=1 class = "btn btn-primary">Setuju</button>  
 	@endslot 
 @endcomponent 

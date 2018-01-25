@@ -13,8 +13,9 @@ use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 use Thunderlabid\Log\Models\Kredit;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 
-use Auth;
+use Auth, Validator;
 use Carbon\Carbon;
+use Illuminate\Support\MessageBag;
 
 class Controller extends BaseController
 {
@@ -28,7 +29,17 @@ class Controller extends BaseController
 		//GET PILIHAN KANTOR
 		$this->kantor 		= Kantor::wherehas('penempatan', function($q)use($hari_ini){$q->where('orang_id', $this->me['id'])->active($hari_ini);})->orderby('nama', 'asc')->get(['id', 'nama', 'jenis', 'tipe']);
 
-		$this->kantor_aktif	= Kantor::find(request()->get('kantor_aktif_id'));
+		$this->kantor_aktif	= Kantor::where('id', request()->get('kantor_aktif_id'))->with(['pimpinan', 'pimpinan.orang'])->first();
+
+		//validating kantor aktif
+		if($this->kantor_aktif && !str_is($this->kantor_aktif['tipe'], 'holding')){
+			$returned 		= $this->check_kantor_aktif($this->kantor_aktif->toArray());
+
+			if($returned instanceOf MessageBag){
+				abort(503, $returned);
+			}
+		}
+
 		$this->scopes 		= PenempatanKaryawan::where('orang_id', $this->me['id'])->active($hari_ini)->where('kantor_id', request()->get('kantor_aktif_id'))->first();
 
 		if(in_array('holding', array_column($this->kantor->toArray(), 'tipe'))){
@@ -82,4 +93,43 @@ class Controller extends BaseController
 		return Pengajuan::wherein('id', $k_ids)->get();
 	}
 
+	protected function check_kantor_aktif($kantor){
+		$rules['nama']	= ['required'];
+		$rules['geolocation.latitude']	= ['required'];
+		$rules['geolocation.longitude']	= ['required'];
+		$rules['telepon']				= ['required'];
+		$rules['alamat.alamat']	= ['required'];
+		$rules['alamat.kota']	= ['required'];
+		$rules['tipe']			= ['required'];
+		$rules['pimpinan.orang.nama']			= ['required'];
+		$rules['pimpinan.orang.telepon']		= ['required'];
+		$rules['pimpinan.orang.alamat.alamat']	= ['required'];
+		$rules['pimpinan.orang.alamat.kota']	= ['required'];
+
+		$messages['nama.required']				= 'Nama Kantor';
+		$messages['geolocation.latitude.required'] 		= 'Alamat Kantor';
+		$messages['geolocation.longitude.required'] 	= 'Alamat Kantor';
+		$messages['alamat.alamat.required'] 	= 'Alamat Kantor';
+		$messages['alamat.kota.required'] 		= 'Alamat Kantor';
+		
+		$messages['tipe.required'] 							= 'Tipe Kantor';
+		$messages['telepon.required'] 						= 'Telepon Kantor';
+		$messages['pimpinan.orang.nama.required'] 			= 'Pimpinan Kantor';
+		$messages['pimpinan.orang.telepon.required'] 		= 'Telepon Pimpinan Kantor';
+		$messages['pimpinan.orang.alamat.alamat.required'] 	= 'Alamat Pimpinan Kantor';
+		$messages['pimpinan.orang.alamat.kota.required'] 	= 'Alamat Pimpinan Kantor';
+
+		//////////////
+		// Validate //
+		//////////////
+		$validator = Validator::make($kantor, $rules, $messages);
+		if ($validator->fails())
+		{
+			return $validator->messages();
+		}
+		else
+		{
+			return 'safe';
+		}
+	}
 }

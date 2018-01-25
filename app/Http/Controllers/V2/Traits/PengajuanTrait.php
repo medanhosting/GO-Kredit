@@ -63,6 +63,19 @@ trait PengajuanTrait {
 			}
 		}
 
+		if (request()->has('aplikasi_'.$status))
+		{
+			$cari	= request()->get('aplikasi_'.$status);
+			switch (strtolower($cari)) {
+				case 'aplikasi-oranye':
+					$result 	= $result->where('is_mobile', true);
+					break;
+				case 'aplikasi-hijau':
+					$result 	= $result->where('is_mobile', true)->wherenull('ao');
+					break;
+			}
+		}
+
 		if (request()->has('sort_'.$status)){
 			$sort	= request()->get('sort_'.$status);
 			switch (strtolower($sort)) {

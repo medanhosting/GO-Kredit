@@ -39,7 +39,7 @@
 												<th class="text-center">#</th>
 												<th class="text-center">Kantor</th>
 												<th class="text-center">Jabatan</th>
-												<th class="text-center w-50">Scopes</th>
+												<th class="text-center" style="width: 30%">Scopes</th>
 												<th class="text-center">Masa Kerja</th>
 												<th class="text-center">&nbsp;</th>
 											</tr>
@@ -48,14 +48,14 @@
 											@forelse($karyawan['penempatan'] as $k => $v)
 											<tr>
 												<td class="text-center">{{ ($k + 1) }}</td>
-												<td class="text-center">{{ ucwords(str_replace('_', ' ', $v['kantor']['nama'])) }}</td>
-												<td class="text-center">{{ ucwords(str_replace('_', ' ', $v['role'])) }}</td>
-												<td class="text-center" style="max-width:320px;">
+												<td class="text-left">{{ ucwords(str_replace('_', ' ', $v['kantor']['nama'])) }}</td>
+												<td class="text-left">{{ ucwords(str_replace('_', ' ', $v['role'])) }}</td>
+												<td class="text-left" style="width: 30%">
 													@foreach($v['scopes'] as $k3 => $v3)
-														<span class="badge badge-primary"> manage {{$v3}} </span>
+														<span class="badge badge-secondary"> manage {{$v3}} </span>
 													@endforeach
 												</td>
-												<td class="text-center">{{ $v['tanggal_masuk'] }} - 
+												<td class="text-left" style="width: 25%">{{ $v['tanggal_masuk'] }} - 
 													@if(is_null($v['tanggal_keluar']))
 														<i>sekarang</i>
 													@else
@@ -63,12 +63,19 @@
 													@endif
 												</td>
 												<td class="text-center">
-													<a href="#" data-toggle="modal" class="mutasi_karyawan" data-target="#mutasi" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'],'penempatan_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'mutasi'])}}">
-														<i class="fa fa-exchange"></i>
-													</a> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-													<a href="#" data-toggle="modal" class="resign_karyawan" data-target="#resign" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'],'penempatan_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'resign'])}}">
-														<i class="fa fa-close"></i>
+													@if(is_null($v['tanggal_keluar']))
+													<a href="#" data-toggle="modal" class="btn btn-success btn-sm mutasi_karyawan" data-target="#mutasi" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'],'penempatan_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'mutasi'])}}">
+														MUTASI
+													</a> 
+													<br/><br/>
+													<a href="#" data-toggle="modal" class="btn btn-success btn-sm resign_karyawan" data-target="#resign" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'],'penempatan_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'resign'])}}">
+														RESIGN
 													</a>
+													<br/><br/>
+													<a href="#" data-toggle="modal" class="btn btn-success btn-sm edit_kewenangan" data-target="#edit" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'],'penempatan_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'edit_kewenangan'])}}" data-jabatan="{{$v['role']}}" data-scopes="{{$v['scopes']}}">
+														EDIT KEWENANGAN
+													</a>
+													@endif
 												</td>
 											</tr>
 											@empty
@@ -80,8 +87,8 @@
 										<tfoot>
 											<tr>
 												<td colspan="6" class="text-right">
-													<a href="#" class="assign_karyawan" data-toggle="modal" data-target="#assign" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'assign'])}}">
-														Penempatan Baru
+													<a href="#" class="btn btn-success btn-sm assign_karyawan" data-toggle="modal" data-target="#assign" data-action="{{route('karyawan.update', ['orang_id' => $karyawan['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'mode' => 'assign'])}}">
+														PENEMPATAN BARU
 													</a>
 												</td>
 											</tr>
@@ -201,6 +208,38 @@
 			{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
 		@endslot
 	@endcomponent
+
+
+	@component ('bootstrap.modal', ['id' => 'edit', 'form' => true, 'method' => 'patch', 'url' => '#'])
+		@slot ('title')
+			Edit Kewenangan
+		@endslot
+
+		@slot ('body')
+			<p>Untuk edit kewenangan, harap mengisi form berikut</p>
+			<fieldset class="form-group">
+				<label class="text-sm">JABATAN</label>
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<select class="jabatan-select form-control" name="kantor[role]" style="width:100%"></select>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="text-sm">WEWENANG</label>
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<select class="scopes-select form-control" name="kantor[scopes][]" multiple="multiple" style="width:100%"></select>	
+					</div>
+				</div>
+			</fieldset>
+		@endslot
+
+		@slot ('footer')
+			<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
+			{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
+		@endslot
+	@endcomponent
 @endpush
 
 @push('submenu')
@@ -229,6 +268,12 @@
 
 		function parsingDataAttributeMutasi(){
 			$('#mutasi').find('form').attr('action', $(this).attr("data-action"));
+		}
+
+		$("a.edit_kewenangan").on("click", parsingDataAttributeEditWewenang);
+
+		function parsingDataAttributeEditWewenang(){
+			$('#edit').find('form').attr('action', $(this).attr("data-action"));
 		}
 	</script>
 @endpush

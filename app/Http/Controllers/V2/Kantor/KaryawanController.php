@@ -65,6 +65,19 @@ class KaryawanController extends Controller
 	{
 		$karyawan 				= Orang::findornew($id);
 		
+		if(request()->has('current')){
+			switch (request()->get('current')) {
+				case 'penempatan':
+					view()->share('is_penempatan_tab', 'active show');
+					break;
+				default:
+					view()->share('is_create_tab', 'active show');
+					break;
+			}			
+		}else{
+			view()->share('is_create_tab', 'active show');
+		}
+
 		view()->share('active_submenu', 'karyawan');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
@@ -131,6 +144,9 @@ class KaryawanController extends Controller
 				case 'resign':
 					return $this->resign(request()->get('penempatan_id'));
 					break;
+				case 'edit_kewenangan':
+					return $this->edit_kewenangan(request()->get('penempatan_id'));
+					break;
 				default:
 					return $this->penempatan_baru($id);
 					break;
@@ -157,10 +173,10 @@ class KaryawanController extends Controller
 			$penempatan_baru->save();
 			DB::commit();
 
-			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id']]));
+			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id'], 'current' => 'penempatan']));
 		} catch (Exception $e) {
 			DB::rollback();
-			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
+			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id'], 'current' => 'penempatan']))->withErrors($e->getMessage());
 		}
 	}
 
@@ -174,10 +190,10 @@ class KaryawanController extends Controller
 
 			DB::commit();
 
-			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id']]));
+			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id'], 'current' => 'penempatan']));
 		} catch (Exception $e) {
 			DB::rollback();
-			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
+			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id'], 'current' => 'penempatan']))->withErrors($e->getMessage());
 		}
 	}
 
@@ -203,12 +219,32 @@ class KaryawanController extends Controller
 
 			DB::commit();
 
-			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id']]));
+			return redirect(route('karyawan.show', ['id' => $penempatan_simpan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id'], 'current' => 'penempatan']));
 		} catch (Exception $e) {
 			DB::rollback();
-			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id']]))->withErrors($e->getMessage());
+			return redirect(route('karyawan.show', ['id' => $penempatan_simpan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id'], 'current' => 'penempatan']))->withErrors($e->getMessage());
 		}
 	}
+
+
+	private function edit_kewenangan($penempatan_id)
+	{
+		try {
+			DB::beginTransaction();
+			$kantor 				= request()->get('kantor');
+			$penempatan 			= PenempatanKaryawan::findorfail($penempatan_id);
+			$penempatan->role 		= $kantor['role'];
+			$penempatan->scopes 	= $kantor['scopes'];
+			$penempatan->save();
+			DB::commit();
+
+			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id'], 'current' => 'penempatan']));
+		} catch (Exception $e) {
+			DB::rollback();
+			return redirect(route('karyawan.show', ['id' => $penempatan->orang_id, 'kantor_aktif_id' => $this->kantor_aktif['id'], 'current' => 'penempatan']))->withErrors($e->getMessage());
+		}
+	}
+
 
 	public function batch()
 	{

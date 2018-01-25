@@ -36,6 +36,11 @@ class KreditServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
+
+		Event::listen('Thunderlabid\Kredit\Events\PermintaanRestitusi\PermintaanRestitusiCreating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\PermintaanRestitusi\PermintaanRestitusiUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\PermintaanRestitusi\PermintaanRestitusiDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
+
 		//////////////////////////
 		// Buat Jadwal Angsuran //
 		//////////////////////////

@@ -38,24 +38,35 @@
 				@endforeach
 			</tbody>
 			<tfoot>
+				@if(!$is_paid && count($denda))
 				<tr>
 					<th class="" colspan="4">
-						@if(!$is_paid && count($denda))
 							<a href="#" class="btn btn-block btn-primary btn-bayar-denda" data-toggle="modal" data-target="#summary-denda" 
 							data-url-denda="{{ route('angsuran.denda', ['id' => $aktif['nomor_kredit']]) }}" 
 							data-kantor-aktif-id="{{ $kantor_aktif_id }}"
 							data-url-terbilang="{[ route('terbilang') }}">Bayar</a>
-						@endif
 					</th>
 				</tr>
+				@if($stat['total_restitusi'])
 				<tr>
 					<th colspan="4">
-						<a href="#" class="btn btn-block btn-primary btn-bayar-denda" data-toggle="modal" data-target="#retuitit-denda" 
+						<a href="#" class="btn btn-block btn-warning btn-bayar-denda" data-toggle="modal" data-target="#validasi-restitusi-denda" 
+						data-url-denda="{{ route('angsuran.denda', ['id' => $aktif['nomor_kredit']]) }}" 
+						data-kantor-aktif-id="{{ $kantor_aktif_id }}"
+						data-url-terbilang="{[ route('terbilang') }}">Konfirmasi Permohonan Restitusi</a>
+					</th>
+				</tr>
+				@else
+				<tr>
+					<th colspan="4">
+						<a href="#" class="btn btn-block btn-primary btn-bayar-denda" data-toggle="modal" data-target="#permintaan-restitusi-denda" 
 						data-url-denda="{{ route('angsuran.denda', ['id' => $aktif['nomor_kredit']]) }}" 
 						data-kantor-aktif-id="{{ $kantor_aktif_id }}"
 						data-url-terbilang="{[ route('terbilang') }}">Restitusi Denda</a>
 					</th>
 				</tr>
+				@endif
+				@endif
 			</tfoot>
 		</table>
 
@@ -71,16 +82,24 @@
 			@include('v2.kredit.modal.konfirmasi_denda')
 		{!! Form::close() !!}
 
-		{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'denda']), 'method' => 'PATCH']) !!}
-			@include('v2.kredit.modal.restitusi_denda', [
+		{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'permintaan_restitusi']), 'method' => 'PATCH']) !!}
+			@include('v2.kredit.modal.permintaan_restitusi_denda', [
 				'kredit_aktif' 	=> $aktif,
 				'tanggal_now'	=> $carbon->now()->format('d/m/Y H:i'),
 			])
 
-			{!! Form::hidden('current', 'denda') !!}
-			{!! Form::hidden('potongan', 'Rp 0') !!}
+			{!! Form::hidden('current', 'permintaan_restitusi') !!}
 
-			@include('v2.kredit.modal.konfirmasi_denda')
+		{!! Form::close() !!}
+
+		{!! Form::open(['url' => route('kredit.update', ['id' => $aktif['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'validasi_restitusi']), 'method' => 'PATCH']) !!}
+			@include('v2.kredit.modal.validasi_restitusi_denda', [
+				'kredit_aktif' 	=> $aktif,
+				'tanggal_now'	=> $carbon->now()->format('d/m/Y H:i'),
+			])
+
+			{!! Form::hidden('current', 'validasi_restitusi') !!}
+
 		{!! Form::close() !!}
 	</div>
 </div>

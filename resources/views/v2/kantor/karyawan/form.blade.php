@@ -41,7 +41,7 @@
 			</label>
 			<!-- <label class="text-sm">Alamat Lengkap</label> -->
 			<div class="row">
-				@include('templates.alamat.ajax-alamat', ['kecamatan' => $karyawan['alamat']['kecamatan'], 'prefix' => 'alamat'])
+				@include('templates.alamat.ajax-alamat', ['kecamatan' => $karyawan['alamat']['kecamatan'], 'prefix' => 'alamat', 'alamat' => $karyawan['alamat']])
 			</div>
 		</fieldset>
 

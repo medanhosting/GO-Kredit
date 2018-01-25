@@ -22,6 +22,15 @@
 				<option value="jaminan-sertifikat" @if(str_is(request()->get('jaminan_'.$s_pre), 'jaminan-sertifikat')) selected @endif>Jaminan Sertifikat</option>
 			</select>
 		</div>
+		<!-- FILTER BERDASARKAN PIRANTI PENGAJUAN -->
+		<div class="col-sm-2">
+			<label>Berdasarkan Apps</label>
+			<select class="form-control custom-select" name="aplikasi_{{$s_pre}}">
+				<option value="semua">Semua</option>
+				<option value="aplikasi-oranye" @if(str_is(request()->get('aplikasi_'.$s_pre), 'aplikasi-oranye')) selected @endif>Go-Kredit Oranye</option>
+				<option value="aplikasi-hijau" @if(str_is(request()->get('aplikasi_'.$s_pre), 'aplikasi-hijau')) selected @endif>Go-Kredit Hijau</option>
+			</select>
+		</div>
 		<div class="col-sm-2">
 			<label>Urutkan</label>
 			<!-- URUTKAN BERDASARKAN NAMA/TANGGAL -->

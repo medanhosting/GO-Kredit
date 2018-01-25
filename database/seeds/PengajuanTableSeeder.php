@@ -130,12 +130,13 @@ class PengajuanTableSeeder extends Seeder
 
 			if($mobile)
 			{
-				$nip_ao 		= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
+				// $nip_ao 		= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
 				// $nasabah 		= [];
 				// $nasabah['telepon']	= $faker->phoneNumber;
 				$dokumen_pelengkap 	= ['ktp' => $foto[rand(0,4)]];
 			}
-			elseif(rand(1,1))
+			
+			if(rand(1,1))
 			{
 				$nip_ao 		= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
 			}

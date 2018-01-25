@@ -8,6 +8,7 @@ use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Kredit\Models\AngsuranDetail;
 use Thunderlabid\Kredit\Models\NotaBayar;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
+use Thunderlabid\Kredit\Models\PermintaanRestitusi;
 use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
@@ -64,9 +65,11 @@ class KreditController extends Controller
 		//DATA ANGSURAN
 		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
 	
-		//DATA DENDA
+		//DATA DENDA, PERMINTAAN RESTITUSI
 		$denda 		= AngsuranDetail::displayingdenda()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
-		
+		$stat['total_restitusi'] 	= PermintaanRestitusi::where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('is_approved')->sum('amount');
+		$restitusi 	= PermintaanRestitusi::where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('is_approved')->first();
+
 		//PANEL TUNGGAKAN/PENAGIHAN
 		$stat['last_pay'] 			= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
 		$stat['total_tunggakan']	= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->wherenull('nota_bayar_id')->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->sum('amount');
@@ -115,6 +118,7 @@ class KreditController extends Controller
 		view()->share('jaminan', $jaminan);
 		view()->share('suratperingatan', $suratperingatan);
 		view()->share('denda', $denda);
+		view()->share('restitusi', $restitusi);
 		view()->share('stat', $stat);
 
 		view()->share('kredit_id', $id);
@@ -132,6 +136,12 @@ class KreditController extends Controller
 			switch (request()->get('current')) {
 				case 'tagihan':
 					$this->store_tagihan($aktif);
+					break;
+				case 'permintaan_restitusi':
+					$this->store_permintaan_restitusi($aktif);
+					break;
+				case 'validasi_restitusi':
+					$this->store_validasi_restitusi($aktif);
 					break;
 				case 'denda':
 					$this->store_denda($aktif);
