@@ -11,15 +11,15 @@ class DatabaseSeeder extends Seeder
 	 */
 	public function run()
 	{
-		$this->call(IndonesiaTableSeeder::class);
+		// $this->call(IndonesiaTableSeeder::class);
 		// $this->call(LiveTableSeeder::class);
-		// $this->call(FinanceTableSeeder::class);
-		// $this->call(ManajemenTableSeeder::class);
-		// $this->call(PengajuanTableSeeder::class);
-		// $this->call(SurveiTableSeeder::class);
-		// $this->call(AnalisaTableSeeder::class);
-		// $this->call(PutusanTableSeeder::class);
-		// $this->call(KreditAktifTableSeeder::class);
+		$this->call(FinanceTableSeeder::class);
+		$this->call(ManajemenTableSeeder::class);
+		$this->call(PengajuanTableSeeder::class);
+		$this->call(SurveiTableSeeder::class);
+		$this->call(AnalisaTableSeeder::class);
+		$this->call(PutusanTableSeeder::class);
+		$this->call(KreditAktifTableSeeder::class);
 		// $this->call(SurveiTakePictureTableSeeder::class);
 		
 		// $this->call(PengajuanDuplicateTableSeeder::class);
