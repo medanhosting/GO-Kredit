@@ -14,6 +14,8 @@ use Carbon\Carbon;
 
 use Thunderlabid\Survei\Traits\IDRTrait;
 
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+
 class SurveiController extends Controller
 {
 	use IDRTrait;
@@ -24,26 +26,45 @@ class SurveiController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:survei');
+		$this->middleware('scope:operasional.survei')->only(['index', 'show']);
+		$this->middleware('scope:survei')->only(['store', 'update', 'assign_survei']);
 
 		$this->middleware('required_passcode')->only(['store', 'update']);
 	}
 
 	public function index ($status = 'survei') 
 	{
-		$kecamatan 	= SurveiLokasi::whereHas('survei', function($q){
-							$q->where('kode_kantor', request()->get('kantor_aktif_id'));
-						})->whereHas('survei.surveyor', function($q){
-							$q->where('nip', Auth::user()['nip']);
-						})->wherenotnull('kota')->wherenotnull('kecamatan')
-						->select('kota', 'kecamatan')->selectraw('count(id) as total')
-						->orderby('kota', 'asc')->groupby('kota', 'kecamatan')->get();
+		$penempatan 	= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('orang_id', Auth::user()['id'])->active(Carbon::now())->first();
 
-		$survei 	= SurveiLokasi::whereHas('survei', function($q){
-							$q->where('kode_kantor', request()->get('kantor_aktif_id'));
-						})->whereHas('survei.surveyor', function($q){
-							$q->where('nip', Auth::user()['nip']);
-						})->wherenotnull('kota')->wherenotnull('kecamatan');
+		if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan') || in_array('operasional', $penempatan['scopes']))
+		{
+			$kecamatan 	= SurveiLokasi::whereHas('survei', function($q){
+								$q->where('kode_kantor', request()->get('kantor_aktif_id'));
+							})->wherenotnull('kota')->wherenotnull('kecamatan')
+							->select('kota', 'kecamatan')->selectraw('count(id) as total')
+							->orderby('kota', 'asc')->groupby('kota', 'kecamatan')->get();
+
+			$survei 	= SurveiLokasi::whereHas('survei', function($q){
+								$q->where('kode_kantor', request()->get('kantor_aktif_id'));
+							})->wherenotnull('kota')->wherenotnull('kecamatan');
+		}
+		else
+		{
+			$kecamatan 	= SurveiLokasi::whereHas('survei', function($q){
+								$q->where('kode_kantor', request()->get('kantor_aktif_id'));
+							})->whereHas('survei.surveyor', function($q){
+								$q->where('nip', Auth::user()['nip']);
+							})->wherenotnull('kota')->wherenotnull('kecamatan')
+							->select('kota', 'kecamatan')->selectraw('count(id) as total')
+							->orderby('kota', 'asc')->groupby('kota', 'kecamatan')->get();
+
+			$survei 	= SurveiLokasi::whereHas('survei', function($q){
+								$q->where('kode_kantor', request()->get('kantor_aktif_id'));
+							})->whereHas('survei.surveyor', function($q){
+								$q->where('nip', Auth::user()['nip']);
+							})->wherenotnull('kota')->wherenotnull('kecamatan');
+		}
+		
 
 		if(request()->has('kota'))
 		{
@@ -132,9 +153,9 @@ class SurveiController extends Controller
 				$sp 						= strtolower($ds_capacity['capacity']['status_pernikahan']);
 
 				if(str_is($sp, 'tk')){
-					$tk 					= $this->formatMoneyTo(1500000);
+					$ds_capacity['capacity']['tanggungan_keluarga']	= $this->formatMoneyTo(1500000);
 				}elseif(str_is($sp, 'k')){
-					$tk 					= $this->formatMoneyTo(3000000);
+					$ds_capacity['capacity']['tanggungan_keluarga']	= $this->formatMoneyTo(3000000);
 				}else{
 					$anak 					= str_replace('k-', '', $sp) * 1;
 					$ds_capacity['capacity']['tanggungan_keluarga']	= $this->formatMoneyTo(3000000 + ($anak * 1250000));
@@ -251,11 +272,20 @@ class SurveiController extends Controller
 	public function show($id, $status = 'survei')
 	{
 		try {
-			$lokasi 	= SurveiLokasi::whereHas('survei', function($q){
-					$q->where('kode_kantor', request()->get('kantor_aktif_id'));
-				})->whereHas('survei.surveyor', function($q){
-					$q->where('nip', Auth::user()['nip']);
-				})->where('id', $id)->first();
+			$penempatan 	= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('orang_id', Auth::user()['id'])->active(Carbon::now())->first();
+
+			if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan') || in_array('operasional', $penempatan['scopes']))
+			{
+				$lokasi 	= SurveiLokasi::whereHas('survei', function($q){
+						$q->where('kode_kantor', request()->get('kantor_aktif_id'));
+					})->where('id', $id)->first();
+			}else{
+				$lokasi 	= SurveiLokasi::whereHas('survei', function($q){
+						$q->where('kode_kantor', request()->get('kantor_aktif_id'));
+					})->whereHas('survei.surveyor', function($q){
+						$q->where('nip', Auth::user()['nip']);
+					})->where('id', $id)->first();
+			}
 
 			$survei 		= Survei::where('id', $lokasi['survei_id'])->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'surveyor', 'jaminan_kendaraan.foto', 'jaminan_tanah_bangunan.foto'])->first()->toArray();
 

@@ -146,7 +146,7 @@
 											<br/>
 											<label class="mb-1">FOTO KTP</label><br/>
 											<label class="custom-file">
-												<input type="file" class="custom-file-input">
+												<input type="file" class="custom-file-input" name="dokumen_pelengkap[ktp]">
 
 												<span class="custom-file-control"></span>
 											</label>
@@ -636,6 +636,13 @@
 		}
 
 		///CLONE FORM JAMINAN TANAH BANGUNAN///
+		// $( document ).ready(function() {
+		// 	var len = $(".clonedJaminanTB").length;
+		// 	for (var i = 1; i <= len; i++) {
+		// 		reInitAjaxAlamat($("#clonedJaminanTB"+i));
+		// 	}
+		// });
+
 		var cloneIndexJaminanTB = $(".clonedJaminanTB").length;
 
 		function cloneJaminanTB(){
@@ -671,7 +678,6 @@
 				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jtbalamat.kelurahan').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][alamat][kelurahan]');
 				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jtbalamat.kecamatan').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][alamat][kecamatan]');
 				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jtbalamat.kota').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][alamat][kota]');
-
 				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jtbtahunoleh').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][tahun_perolehan]');
 				$("#clonedJaminanTB"+cloneIndexJaminanTB).find('.jtbnilai').attr('name', 'jaminan_tanah_bangunan['+cloneIndexJaminanTB+'][nilai_jaminan]');
 		}
@@ -837,6 +843,52 @@
 
 		function parsingDataAttributeModalAssign(){
 			$('#assign-survei').find('form').attr('action', $(this).attr("data-action"));
+		}
+
+		function reInitAjaxAlamat(parent){
+			parent.find(".ajax-teritori-kecamatan").select2({
+				ajax: {
+					url: "{{route('distrik.index')}}",
+					data: function (params) {
+							return {
+								q: params.term // search term
+							};
+						},
+					processResults: function (data, params) {
+						return {
+							results:  $.map(data, function (kecamatan) {
+								return {
+									pusat: kecamatan.kota.nama,
+									text: kecamatan.nama,
+									id: kecamatan.nama
+								}
+							})
+						};
+					},
+				}
+			});
+
+			parent.find(".ajax-teritori-kota").select2({
+				ajax: {
+					url: "{{route('regensi.index')}}",
+					data: function (params) {
+					var kecamatan = parent.find('.ajax-teritori-kecamatan').select2('data');
+							return {
+								q: kecamatan[0].pusat // search term
+							};
+						},
+					processResults: function (data, params) {
+						return {
+							results:  $.map(data, function (kota) {
+								return {
+									text: kota.nama,
+									id: kota.nama
+								}
+							})
+						};
+					},
+				}
+			});
 		}
 	</script>
 @endpush

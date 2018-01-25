@@ -15,6 +15,8 @@ use Thunderlabid\Manajemen\Models\Orang;
 
 use Thunderlabid\Log\Models\Kredit;
 
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+
 use Exception, Auth, Validator;
 use Carbon\Carbon;
 
@@ -26,7 +28,8 @@ class AnalisaController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:analisa');
+		$this->middleware('scope:operasional.analisa')->only(['index', 'show']);
+		$this->middleware('scope:analisa')->only(['store', 'update']);
 	}
 
 	public function index ($status = 'analisa') 
@@ -62,7 +65,14 @@ class AnalisaController extends Controller
 			});
 		}
 
-		$pengajuan 				= $pengajuan->where('p_status.karyawan->nip', Auth::user()['nip'])->orderby('p_pengajuan.created_at', $urut)->paginate();
+		$penempatan 	= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('orang_id', Auth::user()['id'])->active(Carbon::now())->first();
+
+		if(str_is($penempatan['role'], 'komisaris') || str_is($penempatan['role'], 'pimpinan') || in_array('operasional', $penempatan['scopes']))
+		{
+			$pengajuan 				= $pengajuan->orderby('p_pengajuan.created_at', $urut)->paginate();
+		}else{
+			$pengajuan 				= $pengajuan->where('p_status.karyawan->nip', Auth::user()['nip'])->orderby('p_pengajuan.created_at', $urut)->paginate();
+		}
 
 		view()->share('pengajuan', $pengajuan);
 		view()->share('status', $status);

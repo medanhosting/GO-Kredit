@@ -1,6 +1,6 @@
 @component('bootstrap.modal', ['id' => 'summary-denda', 'size' => 'modal-lg']) 
 	@slot ('title') 
-		Detail Angsuran
+		Detail Denda
 	@endslot 
 
 	@slot ('body')
