@@ -153,16 +153,16 @@
 												@endif
 											</td>
 											<td>
-												@if($v['titipan'][0]['titipan'] * 1)
-													T
-												@endif
-											</td>
-											<td>
 												@php 	
 													$total 	= $v['angsuran'][0]['pokok'] + $v['angsuran'][0]['bunga'];
 													$titip 	= floor($v['titipan'][0]['titipan']/$total);
 												@endphp
-
+												
+												@if($titip > 0)
+													T
+												@endif
+											</td>
+											<td>
 												@if(str_is($v['jenis_pinjaman'], 'pa') && $titip > 0)
 													{{$idr->formatMoneyTo($v['angsuran'][0]['pokok'])}}
 												@endif
