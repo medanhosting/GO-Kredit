@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Exception, DB, Auth, Carbon\Carbon;
 
+use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Finance\Models\Account;
 use Thunderlabid\Finance\Models\TransactionDetail;
 
@@ -18,7 +19,7 @@ class KasirController extends Controller
 		$this->middleware('scope:kasir');
 	}
 
-	public function index () 
+	public function lkh() 
 	{
 		$dbefore 	= Carbon::parse('yesterday')->endofDay();
 		$dday 		= Carbon::now()->startofday()->addhours(15);
@@ -37,6 +38,61 @@ class KasirController extends Controller
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 		$this->layout->pages 	= view('v2.finance.kasir.index', compact('balance', 'in', 'out', 'dbefore', 'dday'));
+		return $this->layout;
+	}
+
+	public function jurnalpagi() 
+	{
+		$today 	= Carbon::now();
+		if(request()->has('q')){
+			$today 	= Carbon::createFromFormat('d/m/Y', request()->get('q'));
+		}
+		$sday 	= $today->startofday()->format('Y-m-d H:i:s');
+		$eday 	= $today->startofday()->format('Y-m-d H:i:s');
+
+		$kredit 	= Aktif::wherehas('angsuran', function($q)use($sday){$q->where(function($q)use($sday){
+				$q
+				->wherenull('nota_bayar_id')
+				->orwhereraw(\DB::raw('(select nb.tanggal from k_nota_bayar as nb where nb.id = k_angsuran_detail.nota_bayar_id and nb.tanggal >= "'.$sday.'" limit 1) >= k_angsuran_detail.tanggal'))
+				;
+			});})->with(['angsuran_terakhir', 'angsuran' => function($q)use($sday){$q
+			->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))
+			->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))
+			->selectraw(\DB::raw('nth'))
+			->selectraw(\DB::raw('nomor_kredit'))
+			->wherein('tag', ['pokok', 'bunga'])
+			->where('tanggal', '>=', $sday)
+			->groupby('nth')
+			->orderby('nth', 'asc')
+			->groupby('nomor_kredit')
+			;},
+			'tunggakan' 	=> function($q)use($eday){$q
+			->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))
+			->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))
+			->selectraw(\DB::raw('min(nth) as nth'))
+			->selectraw(\DB::raw('count(nth) as tgk'))
+			->selectraw(\DB::raw('nomor_kredit'))
+			->TunggakanBeberapaWaktuLalu(Carbon::parse($eday))
+			->groupby('nomor_kredit')
+			;},
+			'denda' 	=> function($q)use($sday){$q
+			->selectraw(\DB::raw('SUM(IF(tag="denda",amount,IF(tag="restitusi_denda",amount,0))) as denda'))
+			->selectraw(\DB::raw('nomor_kredit'))
+			->where('tanggal', '<', $sday)
+			->groupby('nomor_kredit')
+			;},
+			'titipan' 	=> function($q)use($sday){$q
+			->selectraw(\DB::raw('SUM(IF(tag="titipan",amount,IF(tag="pengambilan_titipan",amount,0))) as titipan'))
+			->selectraw(\DB::raw('nomor_kredit'))
+			->where('tanggal', '<', $sday)
+			->groupby('nomor_kredit')
+			;},
+			])->paginate();
+
+		view()->share('active_submenu', 'jurnalpagi');
+		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+
+		$this->layout->pages 	= view('v2.finance.kasir.jurnalpagi', compact('kredit'));
 		return $this->layout;
 	}
 

@@ -18,7 +18,7 @@
 				<a href="#" class="nav-link disabled"><i class="fa fa-credit-card-alt"></i>&nbsp;&nbsp;Kredit</a>
 				@endif
 				@if(in_array('kasir', $scopes->scopes))
-				<a href="{{ route('kasir.index', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
+				<a href="{{ route('kasir.lkh', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
 				<i class="fa fa-line-chart"></i>&nbsp;&nbsp;Keuangan</a>
 				@else
 				<a href="#" class="nav-link disabled"><i class="fa fa-line-chart"></i>&nbsp;&nbsp;Keuangan</a>

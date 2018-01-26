@@ -69,6 +69,22 @@ class Aktif extends Model
 		return $this->hasMany(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit');
 	}
 
+	public function tunggakan(){
+		return $this->hasMany(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['pokok', 'bunga']);
+	}
+
+	public function denda(){
+		return $this->hasMany(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['denda', 'restitusi_denda']);
+	}
+
+	public function titipan(){
+		return $this->hasMany(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['titipan', 'pengambilan_titipan']);
+	}
+
+	public function angsuran_terakhir(){
+		return $this->hasOne(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit')->where('tag', 'pokok')->orderby('tanggal', 'desc');
+	}
+
 	public function penagihan(){
 		return $this->hasMany(Penagihan::class, 'nomor_kredit', 'nomor_kredit');
 	}

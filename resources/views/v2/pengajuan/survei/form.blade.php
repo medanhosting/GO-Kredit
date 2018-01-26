@@ -58,7 +58,7 @@
 		@forelse($survei['character']['dokumen_survei']['character']['informasi'] as $k => $v)
 		<div class="row">
 			<div class="col">
-				{!! Form::vText('Informasi '.$k, 'character[informasi][$k]', $v, ['class' => 'form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
+				{!! Form::vText('Informasi '.$k, 'character[informasi]['.$k.']', $v, ['class' => 'form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Baru pindah ke lingkungan ini'], true) !!}
 			</div>
 		</div>
 		@empty
