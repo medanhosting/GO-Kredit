@@ -127,6 +127,47 @@ class Aktif extends Model
 		return $query->where('kode_kantor', $variable);
 	}
 
+	public function scopeBuatJurnalPagi($query, $sday, $eday){
+		return $query->wherehas('angsuran', function($q)use($sday){$q->where(function($q)use($sday){
+				$q
+				->where('tanggal', '>=', $sday)
+				->orwherenull('nota_bayar_id')
+				;
+			});})->with(['angsuran_terakhir', 'angsuran' => function($q)use($sday){$q
+			->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))
+			->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))
+			->selectraw(\DB::raw('nth'))
+			->selectraw(\DB::raw('nomor_kredit'))
+			->wherein('tag', ['pokok', 'bunga'])
+			->where('tanggal', '>=', $sday)
+			->groupby('nth')
+			->orderby('nth', 'asc')
+			->groupby('nomor_kredit')
+			;},
+			'tunggakan' 	=> function($q)use($sday){$q
+			->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))
+			->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))
+			->selectraw(\DB::raw('min(nth) as nth'))
+			->selectraw(\DB::raw('count(nth) as tgk'))
+			->selectraw(\DB::raw('nomor_kredit'))
+			->TunggakanBeberapaWaktuLalu(Carbon::parse($sday))
+			->groupby('nomor_kredit')
+			;},
+			'denda' 	=> function($q)use($sday){$q
+			->selectraw(\DB::raw('SUM(IF(tag="denda",amount,IF(tag="restitusi_denda",amount,0))) as denda'))
+			->selectraw(\DB::raw('nomor_kredit'))
+			->where('tanggal', '<', $sday)
+			->groupby('nomor_kredit')
+			;},
+			'titipan' 	=> function($q)use($sday){$q
+			->selectraw(\DB::raw('SUM(IF(tag="titipan",amount,IF(tag="pengambilan_titipan",amount,0))) as titipan'))
+			->selectraw(\DB::raw('nomor_kredit'))
+			->where('tanggal', '<', $sday)
+			->groupby('nomor_kredit')
+			;},
+			]);
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
 	// ------------------------------------------------------------------------------------------------------------
