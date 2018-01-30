@@ -81,13 +81,14 @@
 				<tr>
 					<td>Jenis Restitusi</td>
 					<td class="text-right">
-						{!! Form::bsSelect(null, 'jenis', ['restitusi_3_hari' => 'Restitusi 3 Hari', 'restitusi_nominal' => 'Restitusi Nominal'],restitusi_3_hari, ['class' => 'form-control inline-edit text-info border-input pb-1 w-100'], true) !!}
+						{!! Form::select('jenis', ['restitusi_3_hari' => 'Restitusi 3 Hari', 'restitusi_nominal' => 'Restitusi Nominal'], restitusi_3_hari, ['class' => 'form-control inline-edit text-info border-input pb-1 text-right', 'id' => 'select-jenis-restitusi']) !!}
 					</td>
 				</tr>
 				<tr>
 					<td>Nominal Restitusi</td>
-					<td class="text-right">
-						{!! Form::bsText(null, 'nominal', null, ['class' => 'form-control inline-edit text-info mask-money border-input pb-1 w-100', 'placeholder' => 'Rp 70.000'], true) !!}
+					<td class="text-right pb-1">
+						{!! Form::text('nominal', 'Rp 0', ['id' => 'text-nominal-restitusi', 'class' => 'form-control inline-edit text-info mask-money border-input w-100']) !!}
+						{!! Form::label(null, $idr->formatMoneyTo($r3d), ['id' => 'label-nominal-restitusi']) !!}
 					</td>
 				</tr>
 			</tbody>
@@ -99,3 +100,24 @@
 		{!! Form::bsSubmit('Ajukan', ['class' => 'btn btn-primary']) !!}
 	@endslot 
 @endcomponent 
+
+@push ('js')
+	<script type="text/javascript">
+		
+		$("#text-nominal-restitusi").hide();
+		$("#label-nominal-restitusi").show();
+
+		$("#select-jenis-restitusi").on("change", displayNominalRestitusi);
+
+		///HIDE MASA BERLAKU JAMINAN TB JIKA JENIS SHM///
+		function displayNominalRestitusi(){
+			if($(this).val()=='restitusi_3_hari'){
+				$("#text-nominal-restitusi").hide();
+				$("#label-nominal-restitusi").show();
+			}else{
+				$("#text-nominal-restitusi").show();
+				$("#label-nominal-restitusi").hide();
+			}
+		}
+	</script>
+@endpush

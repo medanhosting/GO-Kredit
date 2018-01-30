@@ -258,7 +258,7 @@ class Putusan extends Model
 	{
 		//required
 		$rules['objek.fotokopi_ktp_pemohon']		= ['required', 'in:ada'];
-		$rules['objek.fotokopi_npwp_siup']			= ['required', 'in:ada'];
+		// $rules['objek.fotokopi_npwp_siup']			= ['required', 'in:ada'];
 		$rules['objek.foto_jaminan']				= ['required', 'in:ada'];
 		$rules['pengikat.permohonan_kredit']		= ['required', 'in:ada'];
 		$rules['pengikat.survei_report']			= ['required', 'in:ada'];
@@ -274,8 +274,8 @@ class Putusan extends Model
 		$rules['objek.fotokopi_ktp_keluarga']					= ['required', 'in:ada,cadangkan'];
 		$rules['objek.fotokopi_akta_nikah_cerai_pisah_harta'] 	= ['required', 'in:ada,cadangkan'];
 		$rules['objek.sertifikat_asli_dan_fotokopi']			= ['required', 'in:ada,cadangkan'];
-		$rules['objek.ajb']					= ['required', 'in:ada,cadangkan'];
-		$rules['objek.imb']					= ['required', 'in:ada,cadangkan'];
+		// $rules['objek.ajb']					= ['required', 'in:ada,cadangkan'];
+		// $rules['objek.imb']					= ['required', 'in:ada,cadangkan'];
 		$rules['objek.pbb_terakhir']		= ['required', 'in:ada,cadangkan'];
 		$rules['objek.check_fisik'] 		= ['required', 'in:ada,cadangkan'];
 		$rules['objek.bpkb_asli_dan_fotokopi']			= ['required', 'in:ada,cadangkan'];

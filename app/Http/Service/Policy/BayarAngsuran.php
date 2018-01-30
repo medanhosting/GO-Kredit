@@ -10,6 +10,8 @@ use App\Service\Traits\IDRTrait;
 
 use Carbon\Carbon, Config;
 
+use App\Exceptions\AppException;
+
 class BayarAngsuran
 {
 	use IDRTrait;
@@ -52,6 +54,7 @@ class BayarAngsuran
 			$nb->nip_karyawan 	= $this->nip_karyawan;
 			$nb->jumlah 		= $this->formatMoneyTo($total_pay);
 			$nb->nomor_perkiraan= $this->nomor_perkiraan;
+			$nb->jenis 			= 'angsuran';
 			$nb->save();
 
 			foreach ($angsuran as $k => $v) {
@@ -70,6 +73,7 @@ class BayarAngsuran
 				$nbti->nip_karyawan 	= $this->nip_karyawan;
 				$nbti->jumlah 			= $this->formatMoneyTo(0 - min($titipan, $total_pay));
 				$nbti->nomor_perkiraan 	= Config::get('finance.nomor_perkiraan_titipan');
+				$nbti->jenis 			= 'pengambilan_titipan';
 				$nbti->save();
 
 				$pad 	= new AngsuranDetail;
@@ -95,6 +99,39 @@ class BayarAngsuran
 				$pad->save();
 			}
 
+		}
+	}
+
+	public function bayar_sebagian($nominal){
+		$angsuran 	= AngsuranDetail::whereIn('tag', ['bunga', 'pokok'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->selectraw('sum(amount) as total')->selectraw('nth')->groupby('nth')->orderby('nth', 'asc')->first();
+
+		$titipan 	= AngsuranDetail::where('nomor_kredit', $this->kredit['nomor_kredit'])->whereIn('tag', ['titipan', 'pengambilan_titipan'])->sum('amount');
+
+		if(!$angsuran){
+			throw new AppException(['nominal' => 'Tidak Ada Angsuran Lagi'], 1);
+		}
+		elseif(($angsuran['total'] - $titipan) > $this->formatMoneyFrom($nominal)){
+			$nb 		= new NotaBayar;
+			$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
+			$nb->nomor_kredit 	= $this->kredit['nomor_kredit'];
+			$nb->tanggal 		= $this->tanggal;
+			$nb->nip_karyawan 	= $this->nip_karyawan;
+			$nb->jumlah 		= $nominal;
+			$nb->nomor_perkiraan= $this->nomor_perkiraan;
+			$nb->jenis 			= 'angsuran_sementara';
+			$nb->save();
+
+			$pad 		= new AngsuranDetail;
+			$pad->nota_bayar_id	= $nb->id;
+			$pad->nomor_kredit 	= $this->kredit['nomor_kredit'];
+			$pad->tanggal 		= $this->tanggal;
+			$pad->nth 			= $angsuran['nth'];
+			$pad->tag 			= 'titipan';
+			$pad->amount 		= $nominal;
+			$pad->description 	= 'Titipan Melalui Kasir';
+			$pad->save();
+		}else{
+			throw new AppException(['nominal' => 'Pembayaran Cukup Untuk Melunasi 1 Angsuran'], 1);
 		}
 	}
 }

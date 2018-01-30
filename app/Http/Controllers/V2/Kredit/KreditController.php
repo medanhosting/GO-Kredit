@@ -19,6 +19,8 @@ use App\Service\Traits\IDRTrait;
 use App\Http\Controllers\V2\Traits\AkunTrait;
 use App\Http\Controllers\V2\Traits\KreditTrait;
 
+use App\Http\Service\Policy\BayarDenda;
+
 class KreditController extends Controller
 {
 	use KreditTrait;
@@ -59,20 +61,26 @@ class KreditController extends Controller
 		//PANEL ANGSURAN. DATA STAT, DATA DENDA, DATA ANGSURAN
 		//DATA STAT
 		$stat['sisa_hutang']		= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->wherenull('nota_bayar_id')->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
-		$stat['total_titipan']		= AngsuranDetail::whereIn('tag', ['titipan', 'pengambilan_titipan'])->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->sum('amount');
+		$stat['total_titipan']		= AngsuranDetail::whereIn('tag', ['titipan', 'pengambilan_titipan'])->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->wherehas('notabayar', function($q){$q->where('nomor_perkiraan', Config::get('finance.nomor_perkiraan_titipan'));})->sum('amount');
 		$stat['total_denda']		= AngsuranDetail::whereIn('tag', ['denda', 'restitusi_denda'])->wherenull('nota_bayar_id')->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
 
 		//DATA ANGSURAN
 		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
+		$notabayar 	= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->get();
+		$titipan 	= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->where('nomor_perkiraan', Config::get('finance.nomor_perkiraan_titipan_kolektor'))->get();
 	
 		//DATA DENDA, PERMINTAAN RESTITUSI
 		$denda 		= AngsuranDetail::displayingdenda()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
 		$stat['total_restitusi'] 	= PermintaanRestitusi::where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('is_approved')->sum('amount');
 		$restitusi 	= PermintaanRestitusi::where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('is_approved')->first();
+		$r3d 		= BayarDenda::hitung_r3d(Carbon::now()->format('d/m/Y H:i'), $aktif['persentasi_denda']);
 
 		//PANEL TUNGGAKAN/PENAGIHAN
 		$stat['last_pay'] 			= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
 		$stat['total_tunggakan']	= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->wherenull('nota_bayar_id')->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->sum('amount');
+		
+		$stat['jumlah_tunggakan']	= count(AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->wherenull('nota_bayar_id')->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->groupby('nth')->get(['nth']));
+
 		$stat['total_hutang']		= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
 
 		$stat['last_sp'] 			= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->orderby('created_at', 'desc')->first();
@@ -115,11 +123,14 @@ class KreditController extends Controller
 		view()->share('akun', $akun);
 		view()->share('aktif', $aktif);
 		view()->share('angsuran', $angsuran);
+		view()->share('notabayar', $notabayar);
+		view()->share('titipan', $titipan);
 		view()->share('jaminan', $jaminan);
 		view()->share('suratperingatan', $suratperingatan);
 		view()->share('denda', $denda);
 		view()->share('restitusi', $restitusi);
 		view()->share('stat', $stat);
+		view()->share('r3d', $r3d);
 
 		view()->share('kredit_id', $id);
 
@@ -136,6 +147,12 @@ class KreditController extends Controller
 			switch (request()->get('current')) {
 				case 'tagihan':
 					$this->store_tagihan($aktif);
+					break;
+				case 'penerimaan_titipan_tagihan':
+					$this->penerimaan_titipan_tagihan($aktif);
+					break;
+				case 'bayar_sebagian':
+					$this->store_bayar_sebagian($aktif);
 					break;
 				case 'permintaan_restitusi':
 					$this->store_permintaan_restitusi($aktif);

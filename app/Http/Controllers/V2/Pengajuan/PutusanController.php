@@ -188,6 +188,7 @@ class PutusanController extends Controller
 					$nb->nomor_kredit 		= $putusan->nomor_kredit;
 					$nb->jumlah 			= $this->formatMoneyTo($total);
 					$nb->nomor_perkiraan	= request()->get('nomor_perkiraan');
+					$nb->jenis 				= 'setoran_pencairan';
 					$nb->save();
 
 					$idx 				= ['provisi', 'administrasi', 'legal', 'biaya_notaris'];
@@ -221,6 +222,7 @@ class PutusanController extends Controller
 					$nb->nomor_kredit 		= $putusan->nomor_kredit;
 					$nb->jumlah 			= $this->formatMoneyTo(0 - $total);
 					$nb->nomor_perkiraan	= request()->get('nomor_perkiraan');
+					$nb->jenis 				= 'pencairan';
 					$nb->save();
 
 					//angsuran detail

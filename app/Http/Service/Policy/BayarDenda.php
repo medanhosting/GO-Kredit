@@ -30,8 +30,7 @@ class BayarDenda
 
 		if(str_is('restitusi_3_hari', $jenis)){
 			$pr->jenis 		= $jenis;
-			$tunggakan		= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->wherenull('nota_bayar_id')->where('nomor_kredit', $this->kredit['nomor_kredit'])->where('tanggal', '<=', Carbon::createfromformat('d/m/Y H:i', $this->tanggal)->format('Y-m-d H:i:s'))->sum('amount');
-			$pr->amount 	= $this->formatMoneyTo(($tunggakan * $this->kredit['persentasi_denda'] * 3)/100);
+			$pr->amount 	= $this->formatMoneyTo($this->hitung_restitusi_3_hari($this->tanggal, $this->kredit['persentasi_denda']));
 		}else{
 			$pr->jenis 		= 'restitusi_nominal';
 			$pr->amount 	= $nominal;
@@ -43,6 +42,18 @@ class BayarDenda
 		$pr->save();
 	}
 
+	private function hitung_restitusi_3_hari($tanggal, $persentasi_denda){
+		$tunggakan 		= AngsuranDetail::HitungTunggakanBeberapaWaktuLalu(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->get();
+
+		return ($tunggakan[0]['tunggakan'] * $persentasi_denda * 3)/100;
+	}
+
+	public static function hitung_r3d($tanggal, $persentasi_denda){
+		$tunggakan 		= AngsuranDetail::HitungTunggakanBeberapaWaktuLalu(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->get();
+
+		return ($tunggakan[0]['tunggakan'] * $persentasi_denda * 3)/100;
+	}
+	
 	public function validasi_restitusi($is_approved){
 		$pr 			= PermintaanRestitusi::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('is_approved')->first();
 

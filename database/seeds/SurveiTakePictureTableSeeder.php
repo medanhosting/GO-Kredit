@@ -131,7 +131,7 @@ class SurveiTakePictureTableSeeder extends Seeder
 		];
 
 		//SIMPAN JAMINAN
-		$ids 			= ['1801.1801.0003.0001', '1801.1801.0003.0002'];
+		$ids 			= ['1801.1801.0002.0101'];
 		$pengajuan 		= Pengajuan::wherein('id', $ids)->get();
 
 		foreach ($pengajuan as $key => $value) 

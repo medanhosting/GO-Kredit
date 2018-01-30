@@ -49,14 +49,14 @@
 						</div>
 					</div>
 
-					<div class="row mb-1">
+					<!-- <div class="row mb-1">
 						<div class="col-4">
 							<label class="text-uppercase">Disetor Ke</label>
 						</div>
 						<div class="col-8">
 							{!! Form::select('nomor_perkiraan', $a_tt, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
 						</div>
-					</div>
+					</div> -->
 
 					<div class="row mb-1">
 						<div class="col text-right">

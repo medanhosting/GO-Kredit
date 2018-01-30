@@ -57,6 +57,7 @@ class FeedBackPenagihan
 			$nota_b->nomor_perkiraan= $this->nomor_perkiraan;
 			$nota_b->penagihan_id 	= $tagih->id;
 			$nota_b->jumlah 		= $this->formatMoneyTo($this->nominal);
+			$nota_b->jenis 			= 'angsuran_sementara';
 			$nota_b->save();
 
 			$titipan 	= new AngsuranDetail;
@@ -73,5 +74,11 @@ class FeedBackPenagihan
 			$tagih->save();
 		}
 		return true;
+	}
+
+	public function penerimaan_titipan_tagihan($nota_bayar_id){
+		$nota_b = NotaBayar::where('id', $nota_bayar_id)->first();
+		$nota_b->nomor_perkiraan 	= $this->nomor_perkiraan;
+		$nota_b->save();
 	}
 }

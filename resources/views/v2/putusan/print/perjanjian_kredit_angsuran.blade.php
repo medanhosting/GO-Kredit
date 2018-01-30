@@ -272,7 +272,7 @@
 						</ol>
 					</p>
 					<p>
-						Demikian syarat-syarat tersebut diatas merupakan satu kesatuan yang tidak terpisahkan dari SURAT PERJANJIAN KREDIT. No. _________________ tertanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}} yang telah dimengerti dan disepakati oleh kedua belah pihak.
+						Demikian syarat-syarat tersebut diatas merupakan satu kesatuan yang tidak terpisahkan dari SURAT PERJANJIAN KREDIT. No. {{$putusan['nomor_kredit']}} tertanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}} yang telah dimengerti dan disepakati oleh kedua belah pihak.
 					</p>
 				</div> 
 			</div> 

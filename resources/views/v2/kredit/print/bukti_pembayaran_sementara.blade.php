@@ -59,7 +59,13 @@
 					<td style="width: 15%">Telah Diterima Dari</td>
 					<td style="width: 1%">:</td>
 					<td class="w-50 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{$angsuran['penagihan']['penerima']['nama']}}</p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
+						@if($angsuran['penagihan'])
+							{{$angsuran['penagihan']['penerima']['nama']}}
+						@else
+							{{$angsuran['kredit']['nasabah']['nama']}}
+						@endif
+						&nbsp;</p>
 					</td>
 				</tr>
 				<tr class="align-top">

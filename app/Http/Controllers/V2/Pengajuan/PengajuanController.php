@@ -165,14 +165,19 @@ class PengajuanController extends Controller
 			$returned 	= $this->assign_realisasi($permohonan);
 
 			if($returned instanceof Model){
-			\DB::commit();
-			return redirect()->route('putusan.show', ['id' => $returned['pengajuan_id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
-		}
+				\DB::commit();
+
+				if(str_is($returned->status, 'setuju')){
+					return redirect()->route('putusan.show', ['id' => $returned['pengajuan_id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+				}
+
+				return redirect()->route('putusan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id'), 'current' => $returned->status]);
+			}
 		}
 
 		if($returned instanceof Model){
 			\DB::commit();
-			return redirect()->route('pengajuan.show', ['id' => $returned['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+			return redirect()->route('pengajuan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
 		}
 
 		\DB::rollback();

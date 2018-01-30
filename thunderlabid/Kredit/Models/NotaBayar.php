@@ -40,9 +40,9 @@ class NotaBayar extends Model
 	use FakturTrait;
 	
 	protected $table 	= 'k_nota_bayar';
-	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'nip_karyawan', 'jumlah', 'nip_karyawan', 'penagihan_id', 'nomor_perkiraan'];
+	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'jumlah', 'nip_karyawan', 'penagihan_id', 'nomor_perkiraan', 'jenis'];
 	protected $hidden 	= [];
-	protected $appends	= ['jatuh_tempo'];
+	protected $appends	= ['jatuh_tempo', 'deskripsi'];
 
 	protected $rules	= [];
 	protected $errors;
@@ -167,4 +167,26 @@ class NotaBayar extends Model
 		return Carbon::parse($this->attributes['tanggal'])->addDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i');
 	}
 
+	public function getDeskripsiAttribute($variable){
+		$deskripsi 	= 'Bukti Transaksi';
+		switch ($this->attributes['jenis']) {
+			case 'pencairan':
+				$deskripsi 	= 'Bukti Pencairan Kredit';
+				break;
+			case 'setoran_pencairan':
+				$deskripsi 	= 'Bukti Setoran Pencairan Kredit';
+				break;
+			case 'angsuran':
+				$deskripsi 	= 'Bukti Angsuran Kredit';
+				break;	
+			case 'angsuran_sementara':
+				$deskripsi 	= 'Bukti Angsuran Sementara';
+				break;	
+			case 'pengambilan_titipan':
+				$deskripsi 	= 'Bukti Pengambilan Titipan';
+				break;	
+		}
+
+		return $deskripsi;
+	}
 }

@@ -6,7 +6,7 @@ use App\Http\Service\Policy\BayarDenda;
 use App\Http\Service\Policy\BayarAngsuran;
 use App\Http\Service\Policy\FeedBackPenagihan;
 
-use Auth;
+use Auth, Config;
 /**
  * Trait tanggal
  *
@@ -34,12 +34,22 @@ trait KreditTrait {
  	}
 
  	public function store_tagihan($aktif){
- 		$feedback 	= new FeedBackPenagihan($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'), request()->get('nomor_perkiraan'), request()->get('sp_id'));
+ 		$feedback 	= new FeedBackPenagihan($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'), request()->get('penerima'), request()->get('nominal'), Config::get('finance.nomor_perkiraan_titipan_kolektor'), request()->get('sp_id'));
 		$feedback->bayar();
+ 	}
+
+ 	public function penerimaan_titipan_tagihan($aktif){
+ 		$feedback 	= new FeedBackPenagihan($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, null, null, Config::get('finance.nomor_perkiraan_titipan'), null);
+		$feedback->penerimaan_titipan_tagihan(request()->get('nota_bayar_id'));
  	}
 
  	public function store_angsuran($aktif){
  		$bayar 		= new BayarAngsuran($aktif, Auth::user()['nip'], request()->get('nth'), request()->get('tanggal'), request()->get('nomor_perkiraan'));
 		$bayar->bayar();
+ 	}
+
+ 	public function store_bayar_sebagian($aktif){
+ 		$bayar 		= new BayarAngsuran($aktif, Auth::user()['nip'], null, request()->get('tanggal'), Config::get('finance.nomor_perkiraan_titipan'));
+		$bayar->bayar_sebagian(request()->get('nominal'));
  	}
 }

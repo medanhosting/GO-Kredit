@@ -29,5 +29,6 @@ class FinanceServiceProvider extends ServiceProvider
 	{
 		Config::set('finance.nomor_perkiraan_denda', '140.600');
 		Config::set('finance.nomor_perkiraan_titipan', '100.300');
+		Config::set('finance.nomor_perkiraan_titipan_kolektor', '100.310');
 	}
 }

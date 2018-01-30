@@ -59,20 +59,18 @@
 									<div class="clearfix">&nbsp;</div>
 									<div class="clearfix">&nbsp;</div>
 									<div class="row">
+
 										<div class="col-4">
-											<a href="#" style="text-decoration: none !important; color:inherit">
 											@component('bootstrap.card')
 												@slot('title') 
 													<h4 class='text-center'>
-														{{$idr->formatMoneyTo($stat['sisa_hutang'])}}
+														{{$idr->formatMoneyTo($stat['total_tunggakan'])}}
 													</h4><hr> 
 												@endslot
-												@slot('body') <p class='text-center'>SISA HUTANG</p> @endslot
+												@slot('body') <p class='text-center'>TOTAL {{$stat['jumlah_tunggakan']}} ANGSURAN JATUH TEMPO</p> @endslot
 											@endcomponent
-											</a>
 										</div>
 										<div class="col-4">
-											<a href="#" style="text-decoration: none !important; color:inherit">
 											@component('bootstrap.card')
 												@slot('title') 
 													<h4 class='text-center'>
@@ -81,27 +79,47 @@
 												@endslot
 												@slot('body') <p class='text-center'>TOTAL TITIPAN</p> @endslot
 											@endcomponent
-											</a>
 										</div>
 										<div class="col-4">
-											<a href="#" style="text-decoration: none !important; color:inherit">
 											@component('bootstrap.card')
 												@slot('title') 
 													<h4 class='text-center'>
-														{{$idr->formatMoneyTo($stat['total_denda'])}}
+														{{$idr->formatMoneyTo($stat['total_tunggakan'] - $stat['total_titipan'])}}
 													</h4><hr> 
 												@endslot
-												@slot('body') <p class='text-center'>TOTAL DENDA</p> @endslot
+												@slot('body') <p class='text-center'>TOTAL ANGSURAN YANG HARUS DIBAYAR</p> @endslot
 											@endcomponent
-											</a>
 										</div>
 									</div>
+
+									<div class="clearfix">&nbsp;</div>
+									<div class="clearfix">&nbsp;</div>
+									<div class="row">
+										<div class="col-8">
+											@include('v2.kredit.show.bayar_angsuran')
+										</div>
+										<div class="col-4">
+											@include('v2.kredit.show.titipan_angsuran')
+										</div>
+										<!-- <div class="col-4">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{$idr->formatMoneyTo($stat['total_pelunasan'])}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>SIMULASI PELUNASAN ANGSURAN</p> @endslot
+											@endcomponent
+										</div> -->
+									</div>
+
 									<div class="row">
 										<div class="col-8">
 											@include('v2.kredit.show.angsuran')
 										</div>
 										<div class="col-4">
-											@include('v2.kredit.show.denda')
+											@include('v2.kredit.show.kas_kolektor')
+											<!-- @include('v2.kredit.show.denda') -->
 										</div>
 									</div>
 								</div>
@@ -110,7 +128,6 @@
 									<div class="clearfix">&nbsp;</div>
 									<div class="row">
 										<div class="col-4">
-											<a href="#" style="text-decoration: none !important; color:inherit">
 											@component('bootstrap.card')
 												@slot('title') 
 													<h4 class='text-center'>
@@ -119,10 +136,8 @@
 												@endslot
 												@slot('body') <p class='text-center'>TOTAL TUNGGAKAN</p> @endslot
 											@endcomponent
-											</a>
 										</div>
 										<div class="col-4">
-											<a href="#" style="text-decoration: none !important; color:inherit">
 											@component('bootstrap.card')
 												@slot('title') 
 													<h4 class='text-center'>
@@ -131,10 +146,8 @@
 												@endslot
 												@slot('body') <p class='text-center'>TANGGAL PEMBAYARAN TERAKHIR</p> @endslot
 											@endcomponent
-											</a>
 										</div>
 										<div class="col-4">
-											<a href="#" style="text-decoration: none !important; color:inherit">
 											@component('bootstrap.card')
 												@slot('title') 
 													<h4 class='text-center'>
@@ -143,7 +156,6 @@
 												@endslot
 												@slot('body') <p class='text-center'>SP TERAKHIR DIKELUARKAN</p> @endslot
 											@endcomponent
-											</a>
 										</div>
 									</div>
 

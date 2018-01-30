@@ -22,6 +22,7 @@ class CreateKreditNotaBayarTable extends Migration
 			$table->double('jumlah')->nullable();
 			$table->string('nip_karyawan');
 			$table->string('nomor_perkiraan')->nullable();
+			$table->string('jenis')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			
