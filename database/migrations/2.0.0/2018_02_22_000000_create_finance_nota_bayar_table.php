@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateKreditPermintaanRestitusiTable extends Migration
+class CreateFinanceNotaBayarTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -13,20 +13,18 @@ class CreateKreditPermintaanRestitusiTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('k_permintaan_restitusi', function (Blueprint $table) {
+		Schema::create('f_nota_bayar', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('nomor_kredit');
+			$table->string('nomor_faktur');
+			$table->string('morph_reference_id')->nullable();
+			$table->string('morph_reference_tag')->nullable();
 			$table->datetime('tanggal');
-			$table->boolean('is_approved')->nullable();
-			$table->string('nomor_faktur')->nullable();
 			$table->string('jenis');
-			$table->double('jumlah');
-			$table->text('alasan')->nullable();
 			$table->text('karyawan')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'nomor_kredit']);
+            $table->index(['deleted_at', 'morph_reference_tag']);
 		});
 	}
 
@@ -37,6 +35,6 @@ class CreateKreditPermintaanRestitusiTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('k_permintaan_restitusi');
+		Schema::dropIfExists('f_nota_bayar');
 	}
 }

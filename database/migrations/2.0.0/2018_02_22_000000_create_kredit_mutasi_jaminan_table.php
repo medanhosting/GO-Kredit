@@ -29,6 +29,7 @@ class CreateKreditMutasiJaminanTable extends Migration
 			$table->softDeletes();
 			
             $table->index(['deleted_at', 'nomor_kredit']);
+            $table->index(['deleted_at', 'nomor_jaminan']);
 		});
 	}
 

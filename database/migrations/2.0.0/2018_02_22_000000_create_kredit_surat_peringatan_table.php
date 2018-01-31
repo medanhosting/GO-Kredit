@@ -15,16 +15,16 @@ class CreateKreditSuratPeringatanTable extends Migration
 	{
 		Schema::create('k_surat_peringatan', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('penagihan_id')->nullable();
 			$table->string('nomor_kredit');
 			$table->integer('nth');
 			$table->string('tag');
 			$table->datetime('tanggal');
-			$table->string('nip_karyawan');
-			$table->string('penagihan_id')->nullable();
+			$table->text('karyawan');
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'nip_karyawan']);
+            $table->index(['deleted_at', 'nomor_kredit']);
 		});
 	}
 

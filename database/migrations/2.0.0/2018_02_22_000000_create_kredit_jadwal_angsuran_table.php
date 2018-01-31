@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateKreditNotaBayarTable extends Migration
+class CreateKreditJadwalAngsuranTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -13,20 +13,19 @@ class CreateKreditNotaBayarTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('k_nota_bayar', function (Blueprint $table) {
+		Schema::create('k_jadwal_angsuran', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('nomor_kredit');
-			$table->string('nomor_faktur');
-			$table->string('penagihan_id')->nullable();
+			$table->string('nomor_faktur')->nullable();
 			$table->datetime('tanggal');
-			$table->double('jumlah')->nullable();
-			$table->string('nip_karyawan');
-			$table->string('nomor_perkiraan')->nullable();
-			$table->string('jenis')->nullable();
+			$table->integer('nth')->nullable();
+			$table->double('jumlah');
+			$table->text('deskripsi')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'nip_karyawan']);
+            $table->index(['deleted_at', 'nomor_kredit']);
+            $table->index(['deleted_at', 'nomor_faktur']);
 		});
 	}
 
@@ -37,6 +36,6 @@ class CreateKreditNotaBayarTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('k_nota_bayar');
+		Schema::dropIfExists('k_jadwal_angsuran');
 	}
 }
