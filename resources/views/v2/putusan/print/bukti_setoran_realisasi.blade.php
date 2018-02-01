@@ -65,18 +65,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								@php $total = 0 @endphp
 								@foreach($notabayar['details'] as $k => $v)
 								<tr>
 									<td class="p-1">{{$v['deskripsi']}}</td>
 									<td class="p-1 text-right">{{$v['jumlah']}}</td>
 								</tr>
-								@php $total = $total + $idr->formatMoneyFrom($v['jumlah']) @endphp
 								@endforeach
 							<tfoot>
 								<tr>
 									<th class="p-1">Total</th>
-									<th class="p-1 text-right">{{ $idr->formatMoneyTo($total) }}</th>
+									<th class="p-1 text-right">{{ $notabayar['jumlah'] }}</th>
 								</tr>
 							</tfoot>
 						</table>
@@ -140,7 +138,7 @@
 				</div>
 				<div class="col-6">
 					<p class="mb-0 pt-2" style="border-bottom: 1px dotted #ccc">
-						<i>Terbilang : {{ ucwords($idr->terbilang($total)) }} Rupiah</i>
+						<i>Terbilang : {{ ucwords($idr->terbilang($idr->formatMoneyFrom($notabayar['jumlah']))) }} Rupiah</i>
 					</p>
 					<table class="table w-50 text-center ml-auto mr-5" style="height: 200px;">
 						<tbody>
