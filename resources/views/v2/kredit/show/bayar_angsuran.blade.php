@@ -15,7 +15,7 @@
 					<input type="checkbox" class="check-all pb-0"> Bayar Semua
 				</div>
 				@foreach($angsuran as $k => $v)
-					@if (is_null($v['nota_bayar_id']))
+					@if (is_null($v['nomor_faktur']))
 						<div class="col-3 mb-1">
 							<input type="checkbox" name="nth[]" value="{{$v['nth']}}">
 							Angsuran Ke - {{$v['nth']}}

@@ -112,10 +112,8 @@ class EventServiceProvider extends ServiceProvider
 		////////////////////////////
 		// Bantu Kasir Jurnaling  //
 		////////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreated', 'App\Listeners\AddCOA');
-		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdated', 'App\Listeners\AddCOA');
-		// Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailDeleted', 'App\Listeners\RemoveCOA');
-
+		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiCreated', 'App\Listeners\AutoJournal');
+		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiUpdated', 'App\Listeners\AutoJournal');
 
 		///////////////////////////////////////////
 		// Cadangkan Legalitas Yang Tidak Perlu  //

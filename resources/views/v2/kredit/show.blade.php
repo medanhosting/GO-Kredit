@@ -101,18 +101,7 @@
 										<div class="col-4">
 											@include('v2.kredit.show.titipan_angsuran')
 										</div>
-										<!-- <div class="col-4">
-											@component('bootstrap.card')
-												@slot('title') 
-													<h4 class='text-center'>
-														{{$idr->formatMoneyTo($stat['total_pelunasan'])}}
-													</h4><hr> 
-												@endslot
-												@slot('body') <p class='text-center'>SIMULASI PELUNASAN ANGSURAN</p> @endslot
-											@endcomponent
-										</div> -->
 									</div>
-
 									<div class="row">
 										<div class="col-8">
 											@include('v2.kredit.show.angsuran')
@@ -123,48 +112,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="tab-pane {{$is_penagihan_tab}}" id="penagihan" role="tabpanel">
-									<div class="clearfix">&nbsp;</div>
-									<div class="clearfix">&nbsp;</div>
-									<div class="row">
-										<div class="col-4">
-											@component('bootstrap.card')
-												@slot('title') 
-													<h4 class='text-center'>
-														{{$idr->formatMoneyTo($stat['total_tunggakan'])}}
-													</h4><hr> 
-												@endslot
-												@slot('body') <p class='text-center'>TOTAL TUNGGAKAN</p> @endslot
-											@endcomponent
-										</div>
-										<div class="col-4">
-											@component('bootstrap.card')
-												@slot('title') 
-													<h4 class='text-center'>
-														{{$stat['last_pay']['tanggal']}}
-													</h4><hr> 
-												@endslot
-												@slot('body') <p class='text-center'>TANGGAL PEMBAYARAN TERAKHIR</p> @endslot
-											@endcomponent
-										</div>
-										<div class="col-4">
-											@component('bootstrap.card')
-												@slot('title') 
-													<h4 class='text-center'>
-														{{strtoupper(str_replace('_',' ',$stat['last_sp']['tag']))}}
-													</h4><hr> 
-												@endslot
-												@slot('body') <p class='text-center'>SP TERAKHIR DIKELUARKAN</p> @endslot
-											@endcomponent
-										</div>
-									</div>
-
-									@include('v2.kredit.show.penagihan')
-								</div>
-								<!-- tab jaminan -->
-								<div class="tab-pane {{$is_jaminan_tab}}" id="jaminan" role="tabpanel">
-									@include('v2.kredit.show.jaminan')
-								</div>
+								
 							</div>
 						</div>
 					</div>

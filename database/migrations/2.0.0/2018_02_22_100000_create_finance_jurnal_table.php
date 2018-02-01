@@ -16,11 +16,13 @@ class CreateFinanceJurnalTable extends Migration
 		Schema::create('f_jurnal', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('detail_transaksi_id');
-			$table->integer('coa_id');
+			$table->datetime('tanggal');
+			$table->string('coa_id');
+			$table->double('jumlah');
 			$table->timestamps();
 			$table->softDeletes();
 
-			$table->index(['deleted_at', 'detail_transaksi_id', 'coa_id']);
+			$table->index(['deleted_at', 'detail_transaksi_id']);
 		});
 	}
 

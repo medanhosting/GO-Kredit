@@ -65,7 +65,7 @@
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{$notabayar['nomor_kredit']}}
+							{{$notabayar['morph_reference_id']}}
 						</p>
 					</td>
 				</tr>

@@ -66,23 +66,23 @@ class Aktif extends Model
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
 	public function angsuran(){
-		return $this->hasMany(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit');
+		return $this->hasMany(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit');
 	}
 
 	public function tunggakan(){
-		return $this->hasMany(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['pokok', 'bunga']);
+		return $this->hasMany(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['pokok', 'bunga']);
 	}
 
 	public function denda(){
-		return $this->hasMany(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['denda', 'restitusi_denda']);
+		return $this->hasMany(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['denda', 'restitusi_denda']);
 	}
 
 	public function titipan(){
-		return $this->hasMany(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['titipan', 'pengambilan_titipan']);
+		return $this->hasMany(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['titipan', 'pengambilan_titipan']);
 	}
 
 	public function angsuran_terakhir(){
-		return $this->hasOne(AngsuranDetail::class, 'nomor_kredit', 'nomor_kredit')->where('tag', 'pokok')->orderby('tanggal', 'desc');
+		return $this->hasOne(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit')->where('tag', 'pokok')->orderby('tanggal', 'desc');
 	}
 
 	public function penagihan(){
@@ -101,7 +101,7 @@ class Aktif extends Model
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
 	public function scopePembayaranBerikut($query){
-		return $query->selectraw('k_aktif.*')->selectraw(\DB::raw("(select min(tanggal) from k_angsuran_detail where k_angsuran_detail.nomor_kredit = k_aktif.nomor_kredit and k_angsuran_detail.deleted_at is null and k_angsuran_detail.nota_bayar_id is null) as tanggal_pembayaran_berikut"))->selectraw(\DB::raw("(select sum(amount) from k_angsuran_detail where k_angsuran_detail.nomor_kredit = k_aktif.nomor_kredit and k_angsuran_detail.deleted_at is null and k_angsuran_detail.nota_bayar_id is null and k_angsuran_detail.tanggal <= tanggal_pembayaran_berikut) as jumlah_pembayaran_berikut"));
+		return $query->selectraw('k_aktif.*')->selectraw(\DB::raw("(select min(tanggal) from k_jadwal_angsuran where k_jadwal_angsuran.nomor_kredit = k_aktif.nomor_kredit and k_jadwal_angsuran.deleted_at is null and k_jadwal_angsuran.nomor_faktur is null) as tanggal_pembayaran_berikut"))->selectraw(\DB::raw("(select sum(jumlah) from k_jadwal_angsuran where k_jadwal_angsuran.nomor_kredit = k_aktif.nomor_kredit and k_jadwal_angsuran.deleted_at is null and k_jadwal_angsuran.nomor_faktur is null and k_jadwal_angsuran.tanggal <= tanggal_pembayaran_berikut) as jumlah_pembayaran_berikut"));
 	}
 
 	public function scopeLihatJatuhTempo($query, Carbon $value){

@@ -3,6 +3,7 @@
 namespace Thunderlabid\Finance\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 
 use Validator;
@@ -24,7 +25,7 @@ class COA extends Model
 	use SoftDeletes;
 
 	protected $table 	= 'f_coa';
-	protected $fillable = ['transaction_detail_id', 'akun_id'];
+	protected $fillable = ['kode_kantor', 'nomor_perkiraan', 'akun', 'coa_id', 'mata_uang'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 
@@ -53,13 +54,20 @@ class COA extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
-	public function account()
-	{
-		return $this->belongsTo(Account::class, 'akun_id', 'akun_id');
+	public function subakun(){
+		return $this->hasmany(COA::class, 'akun_id');
 	}
 
-	public function detail(){
-		return $this->hasOne(TransactionDetail::class, 'id', 'transaction_detail_id');
+	public function coas(){
+		return $this->hasMany(COA::class, 'nomor_perkiraan', 'nomor_perkiraan');
+	}
+
+	public function detailsin(){
+		return $this->belongsToMany(TransactionDetail::class, 'f_coa', 'akun_id', 'transaction_detail_id')->where('amount', '>=', 0)->selectraw('amount as jumlah');
+	}
+
+	public function detailsout(){
+		return $this->belongsToMany(TransactionDetail::class, 'f_coa', 'akun_id', 'transaction_detail_id')->where('amount', '<=', 0)->selectraw('amount as jumlah');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -87,8 +95,9 @@ class COA extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['transaction_detail_id'] = ['required'];
-		$rules['akun_id'] 				= ['required', 'numeric'];
+		$rules['kode_kantor'] 		= ['required', 'string'];
+		$rules['akun'] 				= ['required', 'string'];
+		$rules['nomor_perkiraan'] 	= ['required', 'string'];
 
 		//////////////
 		// Validate //

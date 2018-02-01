@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\V2\Traits;
 
-use Thunderlabid\Finance\Models\Account;
+use Thunderlabid\Finance\Models\COA;
 
 /**
  * Trait tanggal
@@ -16,7 +16,7 @@ use Thunderlabid\Finance\Models\Account;
 trait AkunTrait {
 	
  	public function get_akun($kantor_id, $kode = null){
-		$acc	= Account::where('kode_kantor', $kantor_id)->wherenotnull('akun_id');
+		$acc	= COA::where('kode_kantor', $kantor_id)->wherenotnull('coa_id');
  		if(!is_null($kode)){
  			$acc 	= $acc->where('nomor_perkiraan', $kode);
  		}

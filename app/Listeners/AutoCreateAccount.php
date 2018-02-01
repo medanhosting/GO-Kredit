@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use Thunderlabid\Finance\Models\Account;
+use Thunderlabid\Finance\Models\COA;
 
 class AutoCreateAccount
 {
@@ -42,6 +42,8 @@ class AutoCreateAccount
 			'akun'				=> 'RUPA-RUPA AKTIVA'],
 			['nomor_perkiraan'	=> '180.000',
 			'akun'				=> 'AYAT SILANG (REKENING ANTARA)'],
+			['nomor_perkiraan'	=> '400.000',
+			'akun'				=> 'PENDAPATAN'],
 		];
 
 		$codes 	= [
@@ -59,18 +61,48 @@ class AutoCreateAccount
 			'parent'			=> '100.300'],
 
 
+			['nomor_perkiraan'	=> '120.100',
+			'akun'				=> 'Pinjaman Angsuran',
+			'parent'			=> '120.000'],
+			['nomor_perkiraan'	=> '120.200',
+			'akun'				=> 'Pinjaman Tetap',
+			'parent'			=> '120.000'],
+
+
 			['nomor_perkiraan'	=> '140.600',
 			'akun'				=> 'Piutang Denda',
 			'parent'			=> '140.000'],
+
+			['nomor_perkiraan'	=> '401.000',
+			'akun'				=> 'Pendapatan Operasional',
+			'parent'			=> '400.000'],
+			['nomor_perkiraan'	=> '401.100',
+			'akun'				=> 'Pendapatan Bunga',
+			'parent'			=> '401.000'],
+			['nomor_perkiraan'	=> '401.200',
+			'akun'				=> 'Provisi dan Administrasi',
+			'parent'			=> '401.000'],
+			['nomor_perkiraan'	=> '401.201',
+			'akun'				=> 'Provisi',
+			'parent'			=> '401.200'],
+			['nomor_perkiraan'	=> '401.202',
+			'akun'				=> 'Administrasi Pinjaman',
+			'parent'			=> '401.200'],
+			['nomor_perkiraan'	=> '401.204',
+			'akun'				=> 'Legalitas',
+			'parent'			=> '401.200'],
+			['nomor_perkiraan'	=> '401.205',
+			'akun'				=> 'Biaya Notaris',
+			'parent'			=> '401.200'],
 		];
 
 		$model 	= $event->data;
 		
 		foreach ($pcodes as $k => $v) {
-			$acc 		= Account::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
+			$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
 
 			if(!$acc){
-				$acc	= new Account;
+				$acc	= new COA;
 			}
 
 			$acc->kode_kantor 			= $model['id'];
@@ -80,17 +112,17 @@ class AutoCreateAccount
 		}
 
 		foreach ($codes as $k => $v) {
-			$parent 	= Account::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['parent'])->first();
-			$acc 		= Account::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
+			$parent 	= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['parent'])->first();
+			$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
 
 			if(!$acc){
-				$acc	= new Account;
+				$acc	= new COA;
 			}
 
 			$acc->kode_kantor 			= $model['id'];
 			$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
 			$acc->akun 					= $v['akun'];
-			$acc->akun_id 				= $parent->id;
+			$acc->coa_id 				= $parent->id;
 			$acc->save();
 		}
 	}

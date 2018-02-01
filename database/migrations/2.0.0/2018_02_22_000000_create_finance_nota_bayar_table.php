@@ -19,6 +19,7 @@ class CreateFinanceNotaBayarTable extends Migration
 			$table->string('morph_reference_id')->nullable();
 			$table->string('morph_reference_tag')->nullable();
 			$table->datetime('tanggal');
+			$table->double('jumlah');
 			$table->string('jenis');
 			$table->text('karyawan')->nullable();
 			$table->timestamps();

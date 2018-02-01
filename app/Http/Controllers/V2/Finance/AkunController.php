@@ -4,7 +4,7 @@ namespace App\Http\Controllers\V2\Finance;
 
 use App\Http\Controllers\Controller;
 
-use Thunderlabid\Finance\Models\Account;
+use Thunderlabid\Finance\Models\COA;
 
 class AkunController extends Controller
 {
@@ -16,7 +16,7 @@ class AkunController extends Controller
 
 	public function index () 
 	{
-		$akun	= Account::where('kode_kantor', request()->get('kantor_aktif_id'))->orderby('nomor_perkiraan', 'asc')->get();
+		$akun	= COA::where('kode_kantor', request()->get('kantor_aktif_id'))->orderby('nomor_perkiraan', 'asc')->get();
 
 		view()->share('active_submenu', 'akun');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
@@ -27,13 +27,13 @@ class AkunController extends Controller
 
 	public function store(){
 		try {
-			$parent = Account::where('nomor_perkiraan', request()->get('akun_nomor_perkiraan'))->where('kode_kantor', request()->get('kantor_aktif_id'))->first();
+			$parent = COA::where('nomor_perkiraan', request()->get('akun_nomor_perkiraan'))->where('kode_kantor', request()->get('kantor_aktif_id'))->first();
 
 			$data 	= request()->only('nomor_perkiraan', 'akun');
-			$akun 	= new Account;
+			$akun 	= new COA;
 			$akun->fill($data);
 			if($parent){
-				$akun->akun_id 	= $parent['id'];
+				$akun->coa_id 	= $parent['id'];
 			}
 			$akun->kode_kantor 	= request()->get('kantor_aktif_id');
 			$akun->save();

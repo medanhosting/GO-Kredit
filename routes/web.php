@@ -58,6 +58,8 @@
 			Route::post('karyawan/batch', 		['uses' => 'KaryawanController@batch', 	'as' => 'karyawan.batch']);
 		});
 		Route::namespace('V2\Finance')->group(function(){
+			Route::get('test/jurnal',			['uses' => 'JurnalController@test',	'as' => 'jurnal.test']);
+
 			Route::resource('akun', 			'AkunController'); 
 			// Route::resource('kasir', 			'KasirController'); 
 			Route::resource('jurnal', 			'JurnalController'); 

@@ -36,6 +36,9 @@
 				@else
 				<a href="#" class="nav-link disabled"><i class="fa fa-unlock-alt"></i>&nbsp;&nbsp;Passcode</a>
 				@endif
+
+				<a href="{{ route('jurnal.test', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" class="nav-link">
+				<i class="fa fa-book"></i>&nbsp;&nbsp;Jurnal</a>
 			</nav>
 		</div>
 	</div>

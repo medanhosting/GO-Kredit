@@ -12,8 +12,9 @@ class FinanceTableSeeder extends Seeder
 	 */
 	public function run()
 	{
-		DB::table('f_account')->truncate();
+		DB::table('f_nota_bayar')->truncate();
 		DB::table('f_coa')->truncate();
-		DB::table('f_transaction_detail')->truncate();
+		DB::table('f_jurnal')->truncate();
+		DB::table('f_detail_transaksi')->truncate();
 	}
 }

@@ -39,9 +39,9 @@ class ManajemenTableSeeder extends Seeder
 		Kantor::create(['nama'   => 'Koperasi Mentari Jaya', 'alamat' => ['alamat' => 'Jl. Mulawarman 3', 'rt' => '004', 'rw' => '001', 'kelurahan' => 'Coban Camit', 'kecamatan' => 'Kota Lama', 'kota' => 'Jombang', 'provinsi' => 'Jawa Timur'], 'geolocation' => ['latitude' => -7.5613891, 'longitude' => 111.9783402], 'telepon' => '031 844366', 'tipe' => 'cabang', 'jenis' => 'koperasi']);
 
 		//BASIC ADMIN
-		Orang::create(['nama'   => 'Chelsy Mooy', 'email' => 'chelsy@thunderlab.id', 'password' => 'adminadmin']);
-		Orang::create(['nama'   => 'Agil Mahendra', 'email' => 'agil@thunderlab.id', 'password' => 'adminadmin']);
-		Orang::create(['nama'   => 'Budi Purnomo', 'email' => 'budi@thunderlab.id', 'password' => 'adminadmin']);
+		Orang::create(['nama'   => 'Chelsy Mooy', 'email' => 'chelsy@thunderlab.id', 'password' => 'adminadmin', 'alamat' => ['alamat' => 'Jl. Letjen Sutoyo 102B', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Blimbing', 'kecamatan' => 'Blimbing', 'kota' => 'Malang', 'provinsi' => 'Jawa Timur'], 'telepon' => '031 248671']);
+		Orang::create(['nama'   => 'Agil Mahendra', 'email' => 'agil@thunderlab.id', 'password' => 'adminadmin', 'alamat' => ['alamat' => 'Jl. Letjen Sutoyo 102B', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Blimbing', 'kecamatan' => 'Blimbing', 'kota' => 'Malang', 'provinsi' => 'Jawa Timur'], 'telepon' => '031 248672']);
+		Orang::create(['nama'   => 'Budi Purnomo', 'email' => 'budi@thunderlab.id', 'password' => 'adminadmin', 'alamat' => ['alamat' => 'Jl. Letjen Sutoyo 102B', 'rt' => '002', 'rw' => '006', 'kelurahan' => 'Blimbing', 'kecamatan' => 'Blimbing', 'kota' => 'Malang', 'provinsi' => 'Jawa Timur'], 'telepon' => '031 248673']);
 
 		//BASIC SCOPES = DISCONTINUED
 		// $this->scopes();

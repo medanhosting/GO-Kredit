@@ -12,8 +12,9 @@ use Thunderlabid\Pengajuan\Models\Status;
 use Thunderlabid\Survei\Models\Survei;
 
 use Thunderlabid\Kredit\Models\Aktif;
-use Thunderlabid\Kredit\Models\NotaBayar;
-use Thunderlabid\Kredit\Models\AngsuranDetail;
+use Thunderlabid\Finance\Models\NotaBayar;
+use Thunderlabid\Finance\Models\DetailTransaksi;
+use Thunderlabid\Finance\Models\Jurnal;
 
 use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
@@ -74,8 +75,9 @@ class PutusanController extends Controller
 			$total 		= $this->formatMoneyFrom($putusan->plafon_pinjaman);
 			$ts 		= $this->formatMoneyFrom($putusan->provisi) + $this->formatMoneyFrom($putusan->administrasi) + $this->formatMoneyFrom($putusan->legal) + $this->formatMoneyFrom($putusan->biaya_notaris);
 			$survei 	= Survei::where('pengajuan_id', $id)->first();
-			$notabayar 	= NotaBayar::where('nomor_kredit', $putusan['nomor_kredit'])->where('jumlah', (0-$total))->first();
-			$setoran 	= NotaBayar::where('nomor_kredit', $putusan['nomor_kredit'])->where('jumlah', $ts)->first();
+			
+			$notabayar 	= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'pencairan')->first();
+			$setoran 	= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'setoran_pencairan')->first();
 
 			$angsuran 	= new PerhitunganBunga($putusan['plafon_pinjaman'], $putusan['pengajuan']['kemampuan_angsur'], $putusan['suku_bunga']);
 
@@ -177,66 +179,60 @@ class PutusanController extends Controller
 					//simpan nota bayar
 					$total 		= $this->formatMoneyFrom($putusan->provisi) + $this->formatMoneyFrom($putusan->administrasi) + $this->formatMoneyFrom($putusan->legal) + $this->formatMoneyFrom($putusan->biaya_notaris);
 
-					$nb 					= NotaBayar::where('nomor_kredit', $putusan['nomor_kredit'])->where('jumlah', $total)->first();
+					$nb 		= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'setoran_pencairan')->first();
 					if(!$nb){
 						$nb 				= new NotaBayar;
 						$nb->nomor_faktur  	= NotaBayar::generatenomorfaktur($putusan['nomor_kredit']);
 						$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-						$nb->nip_karyawan 	= Auth::user()['nip'];
+						$nb->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 					}
 
-					$nb->nomor_kredit 		= $putusan->nomor_kredit;
-					$nb->jumlah 			= $this->formatMoneyTo($total);
-					$nb->nomor_perkiraan	= request()->get('nomor_perkiraan');
-					$nb->jenis 				= 'setoran_pencairan';
+					$nb->morph_reference_id		= $putusan->nomor_kredit;
+					$nb->morph_reference_tag	= 'kredit';
+					$nb->jenis 					= 'setoran_pencairan';
+					$nb->jumlah 				= $this->formatMoneyTo($total);
 					$nb->save();
 
 					$idx 				= ['provisi', 'administrasi', 'legal', 'biaya_notaris'];
 
 					foreach ($idx as $k => $v) {
-						$ad 			= AngsuranDetail::where('nota_bayar_id', $nb->id)->where('nth', 0)->where('tag', $v)->first();
+						$ad 			= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->where('tag', $v)->first();
 						if(!$ad){
-							$ad 		= new AngsuranDetail;
+							$ad 		= new DetailTransaksi;
 						}
-						$ad->nota_bayar_id 	= $nb->id;
-						$ad->nomor_kredit 	= $nb->nomor_kredit;
-						$ad->tanggal 		= $nb->tanggal;
-						$ad->nth 			= 0;
+						$ad->nomor_faktur 	= $nb->nomor_faktur;
 						$ad->tag 			= $v;
-						$ad->amount 		= $putusan[$v];
-						$ad->description 	= ucwords(str_replace('_', ' ', $v));
+						$ad->jumlah 		= $putusan[$v];
+						$ad->deskripsi 		= ucwords(str_replace('_', ' ', $v)).' Kredit';
 						$ad->save();
 					}
 				}else{
 					//simpan nota bayar
 					$total 		= $this->formatMoneyFrom($putusan->plafon_pinjaman);
 
-					$nb 					= NotaBayar::where('nomor_kredit', $putusan['nomor_kredit'])->where('jumlah', (0-$total))->first();
+					$nb 		= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'pencairan')->first();
 					if(!$nb){
 						$nb 				= new NotaBayar;
 						$nb->nomor_faktur  	= NotaBayar::generatenomorfaktur($putusan['nomor_kredit']);
 						$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-						$nb->nip_karyawan 	= Auth::user()['nip'];
+						$nb->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 					}
 
-					$nb->nomor_kredit 		= $putusan->nomor_kredit;
-					$nb->jumlah 			= $this->formatMoneyTo(0 - $total);
-					$nb->nomor_perkiraan	= request()->get('nomor_perkiraan');
-					$nb->jenis 				= 'pencairan';
+					$nb->morph_reference_id		= $putusan->nomor_kredit;
+					$nb->morph_reference_tag	= 'kredit';
+					$nb->jenis 					= 'pencairan';
+					$nb->jumlah 				= $this->formatMoneyTo(0 - $total);
 					$nb->save();
 
 					//angsuran detail
-					$ad 			= AngsuranDetail::where('nota_bayar_id', $nb->id)->where('nth', 0)->where('tag', 'realisasi')->first();
+					$ad			= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->where('tag', 'pencairan')->first();
 					if(!$ad){
-						$ad 		= new AngsuranDetail;
+						$ad		= new DetailTransaksi;
 					}
-					$ad->nota_bayar_id 	= $nb->id;
-					$ad->nomor_kredit 	= $nb->nomor_kredit;
-					$ad->tanggal 		= $nb->tanggal;
-					$ad->nth 			= 0;
-					$ad->tag 			= 'realisasi';
-					$ad->amount 		= $nb->jumlah;
-					$ad->description 	= 'Realisasi Kredit';
+					$ad->nomor_faktur 	= $nb->nomor_faktur;
+					$ad->tag 			= 'pencairan';
+					$ad->jumlah 		= $this->formatMoneyTo(0 - $total);
+					$ad->deskripsi 		= 'Pencairan Kredit';
 					$ad->save();
 				}
 			}
@@ -269,7 +265,7 @@ class PutusanController extends Controller
 				case 'bukti_realisasi':
 					$survei 	= Survei::where('pengajuan_id', $id)->first();
 					$total 		= $this->formatMoneyFrom($putusan->plafon_pinjaman);
-					$notabayar 	= NotaBayar::where('nomor_kredit', $putusan['nomor_kredit'])->where('jumlah', (0-$total))->first();
+					$notabayar 	= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'pencairan')->first();
 
 					$angsuran 	= new PerhitunganBunga($putusan['plafon_pinjaman'], $putusan['pengajuan']['kemampuan_angsur'], $putusan['suku_bunga']);
 
@@ -293,7 +289,7 @@ class PutusanController extends Controller
 					break;
 				case 'setoran_realisasi':
 					$total 		= $this->formatMoneyFrom($putusan->provisi) + $this->formatMoneyFrom($putusan->administrasi) + $this->formatMoneyFrom($putusan->legal) + $this->formatMoneyFrom($putusan->biaya_notaris);
-					$notabayar 	= NotaBayar::where('nomor_kredit', $putusan['nomor_kredit'])->where('jumlah', $total)->with(['details'])->first();
+					$notabayar 	= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'setoran_pencairan')->first();
 					$tanggal_s 	= Carbon::createFromFormat('d/m/Y H:i', $notabayar['tanggal'])->format('d/m/Y');
 
 					view()->share('tanggal_s', $tanggal_s);

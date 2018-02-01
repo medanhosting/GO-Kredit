@@ -12,17 +12,21 @@ class FinanceServiceProvider extends ServiceProvider
 		////////////////
 		// Validation //
 		////////////////
-		Event::listen('Thunderlabid\Finance\Events\Account\AccountCreating', 'Thunderlabid\Finance\Listeners\Saving');
-		Event::listen('Thunderlabid\Finance\Events\Account\AccountUpdating', 'Thunderlabid\Finance\Listeners\Saving');
-		Event::listen('Thunderlabid\Finance\Events\Account\AccountDeleting', 'Thunderlabid\Finance\Listeners\Deleting');
-
 		Event::listen('Thunderlabid\Finance\Events\COA\COACreating', 'Thunderlabid\Finance\Listeners\Saving');
 		Event::listen('Thunderlabid\Finance\Events\COA\COAUpdating', 'Thunderlabid\Finance\Listeners\Saving');
 		Event::listen('Thunderlabid\Finance\Events\COA\COADeleting', 'Thunderlabid\Finance\Listeners\Deleting');
 
-		Event::listen('Thunderlabid\Finance\Events\TransactionDetail\TransactionDetailCreating', 'Thunderlabid\Finance\Listeners\Saving');
-		Event::listen('Thunderlabid\Finance\Events\TransactionDetail\TransactionDetailUpdating', 'Thunderlabid\Finance\Listeners\Saving');
-		Event::listen('Thunderlabid\Finance\Events\TransactionDetail\TransactionDetailDeleting', 'Thunderlabid\Finance\Listeners\Deleting');
+		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiCreating', 'Thunderlabid\Finance\Listeners\Saving');
+		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiUpdating', 'Thunderlabid\Finance\Listeners\Saving');
+		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiDeleting', 'Thunderlabid\Finance\Listeners\Deleting');
+
+		Event::listen('Thunderlabid\Finance\Events\Jurnal\JurnalCreating', 'Thunderlabid\Finance\Listeners\Saving');
+		Event::listen('Thunderlabid\Finance\Events\Jurnal\JurnalUpdating', 'Thunderlabid\Finance\Listeners\Saving');
+		Event::listen('Thunderlabid\Finance\Events\Jurnal\JurnalDeleting', 'Thunderlabid\Finance\Listeners\Deleting');
+
+		Event::listen('Thunderlabid\Finance\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Finance\Listeners\Saving');
+		Event::listen('Thunderlabid\Finance\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Finance\Listeners\Saving');
+		Event::listen('Thunderlabid\Finance\Events\NotaBayar\NotaBayarDeleting', 'Thunderlabid\Finance\Listeners\Deleting');
 	}
 
 	public function register()

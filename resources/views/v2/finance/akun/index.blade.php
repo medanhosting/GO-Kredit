@@ -22,7 +22,7 @@
 						</thead>
 						<tbody>
 							@foreach($akun as $k => $v)
-							<tr @if(is_null($v['akun_id'])) class="bg-dark text-white" @endif>
+							<tr @if(is_null($v['coa_id'])) class="bg-dark text-white" @endif>
 								<td class="text-left">{{$v['nomor_perkiraan']}}</td>
 								<td class="text-left">{{$v['akun']}}</td>
 								<td class="text-center">{{$v['mata_uang']}}</td>

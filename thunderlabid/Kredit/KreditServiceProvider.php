@@ -24,9 +24,9 @@ class KreditServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\SuratPeringatan\SuratPeringatanDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
-		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreating', 'Thunderlabid\Kredit\Listeners\Saving');
-		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
-		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
+		Event::listen('Thunderlabid\Kredit\Events\JadwalAngsuran\JadwalAngsuranCreating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\JadwalAngsuran\JadwalAngsuranUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\JadwalAngsuran\JadwalAngsuranDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
 		Event::listen('Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanCreating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanUpdating', 'Thunderlabid\Kredit\Listeners\Saving');

@@ -7,7 +7,7 @@ namespace Thunderlabid\Kredit\Listeners;
 ///////////////
 use App\Exceptions\AppException;
 
-use Thunderlabid\Kredit\Models\AngsuranDetail;
+use Thunderlabid\Kredit\Models\JadwalAngsuran;
 
 use App\Http\Service\Policy\PerhitunganBunga;
 
@@ -43,24 +43,13 @@ class BuatJadwalAngsuran
 		}
 
 		foreach ($pb['angsuran'] as $k => $v) {
-			$p_d 	= new AngsuranDetail;
+			$p_d 	= new JadwalAngsuran;
 			$p_d->nomor_kredit = $model->nomor_kredit;
 			$p_d->tanggal 		= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->addmonths($k)->format('d/m/Y H:i');
 			$p_d->nth 			= $k;
-			$p_d->tag 			= 'pokok';
-			$p_d->amount 		= $v['angsuran_pokok'];
-			$p_d->description 	= 'Angsuran Pokok Bulan Ke - '.$k;
+			$p_d->jumlah 		= $v['total_angsuran'];
+			$p_d->deskripsi 	= 'Angsuran Bulan Ke - '.$k;
 			$p_d->save();
-
-			$b_d 	= new AngsuranDetail;
-			$b_d->nomor_kredit = $model->nomor_kredit;
-			$b_d->tanggal 		= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->addmonths($k)->format('d/m/Y H:i');
-			$b_d->nth 			= $k;
-			$b_d->tag 			= 'bunga';
-			$b_d->amount 		= $v['angsuran_bunga'];
-			$b_d->description 	= 'Angsuran Bunga Bulan Ke - '.$k;
-			$b_d->save();
-
 		}
 	}
 }
