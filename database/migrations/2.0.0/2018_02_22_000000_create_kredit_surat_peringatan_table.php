@@ -15,7 +15,6 @@ class CreateKreditSuratPeringatanTable extends Migration
 	{
 		Schema::create('k_surat_peringatan', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('penagihan_id')->nullable();
 			$table->string('nomor_kredit');
 			$table->integer('nth');
 			$table->string('tag');

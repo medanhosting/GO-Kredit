@@ -36,7 +36,7 @@ class JadwalAngsuran extends Model
 	use WaktuTrait;
 	
 	protected $table 	= 'k_jadwal_angsuran';
-	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'nth', 'jumlah', 'deskripsi'];
+	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'tanggal_bayar', 'nth', 'jumlah', 'deskripsi'];
 	protected $hidden 	= [];
 	protected $appends	= ['is_tunggakan'];
 	protected $rules	= [];
@@ -122,22 +122,31 @@ class JadwalAngsuran extends Model
 			->selectraw('nomor_kredit')
 			->selectraw('min(nth) as nth')
 			->selectraw('min(tanggal) as tanggal')
-			->selectraw("sum(amount) as tunggakan")
-			->selectraw("max(nota_bayar_id) as nota_bayar_id")
+			->selectraw('max(tanggal_bayar) as tanggal_bayar')
+			->selectraw("sum(jumlah) as tunggakan")
 			->tunggakanBeberapaWaktuLalu($value)
-			->selectraw("(select sum(kd2.amount) from k_angsuran_detail as kd2 where kd2.nomor_kredit = k_angsuran_detail.nomor_kredit and kd2.nota_bayar_id is null and kd2.deleted_at is null) as sisa_hutang")
-			->wherein('tag', ['pokok', 'bunga'])
+			->selectraw("(select sum(kd2.jumlah) from k_jadwal_angsuran as kd2 where kd2.nomor_kredit = k_jadwal_angsuran.nomor_kredit and (kd2.tanggal_bayar is null or kd2.tanggal_bayar > '".$value->format('Y-m-d H:i:s')."') and kd2.deleted_at is null) as sisa_hutang")
 			->groupby('nomor_kredit');
 	}
 
 	public function scopeTunggakanBeberapaWaktuLalu($query, Carbon $value){
 		return $query->where(function($q)use($value){
 				$q
-				->wherenull('nota_bayar_id')
-				->orwhereraw(\DB::raw('(select nb.tanggal from k_nota_bayar as nb where nb.id = k_angsuran_detail.nota_bayar_id and nb.tanggal >= "'.$value->format('Y-m-d H:i:s').'" limit 1) >= k_angsuran_detail.tanggal'))
+				->where(function($q)use($value){
+					$q
+					->wherenull('nomor_faktur')
+					->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
+					;
+				})
+				->orwhere(function($q)use($value){
+					$q
+					->whereraw(\DB::raw('DATE_FORMAT(tanggal ,"%Y-%m-%d") < DATE_FORMAT(tanggal_bayar ,"%Y-%m-%d")'))
+					->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
+					->where('tanggal_bayar', '>=', $value->format('Y-m-d H:i:s'))
+					;
+				})
 				;
 			})
-			->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
 		;
 	}
 	
@@ -159,6 +168,11 @@ class JadwalAngsuran extends Model
 	public function setTanggalAttribute($variable)
 	{
 		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
+	}
+
+	public function setTanggalBayarAttribute($variable)
+	{
+		$this->attributes['tanggal_bayar']	= $this->formatDateTimeFrom($variable);
 	}
 
 	public function setJumlahAttribute($variable)
@@ -213,6 +227,11 @@ class JadwalAngsuran extends Model
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 
+	public function getTanggalBayarAttribute($variable)
+	{
+		return $this->formatDateTimeTo($this->attributes['tanggal_bayar']);
+	}
+
 	public function getIsTunggakanAttribute($variable)
 	{
 		$tanggal 	= Carbon::now();
@@ -224,33 +243,4 @@ class JadwalAngsuran extends Model
 		return false;
 	}
 
-	public function getShouldIssueSuratPeringatanAttribute($variable)
-	{
-		$data 	= null;
-		$total 	= $this->suratperingatan()->count();
-		if($total >= 6){
-			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1', 'surat_somasi_2', 'surat_somasi_3'];
-			$data['keluarkan'] 	= null;
-		}elseif($total < 6 && $total > 4){
-			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1'];
-			$data['keluarkan'] 	= 'surat_somasi_3';
-		}elseif($total < 5 && $total > 3){
-			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1'];
-			$data['keluarkan'] 	= 'surat_somasi_2';
-		}elseif($total < 4 && $total > 2){
-			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3'];
-			$data['keluarkan'] 	= 'surat_somasi_1';
-		}elseif($total < 3 && $total > 1){
-			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2'];
-			$data['keluarkan'] 	= 'surat_peringatan_3';
-		}elseif($total < 2 && $total > 0){
-			$data['cetak']		= ['surat_peringatan_1'];
-			$data['keluarkan'] 	= 'surat_peringatan_2';
-		}elseif($total==0){
-			$data['cetak']		= [];
-			$data['keluarkan'] 	= 'surat_peringatan_1';
-		}
-
-		return $data;
-	}
 }

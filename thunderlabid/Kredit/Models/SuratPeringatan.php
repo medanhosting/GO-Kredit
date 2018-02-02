@@ -31,7 +31,7 @@ class SuratPeringatan extends Model
 	use FakturTrait;
 	
 	protected $table 	= 'k_surat_peringatan';
-	protected $fillable = ['nomor_kredit', 'nth', 'tanggal', 'tag', 'nip_karyawan', 'penagihan_id'];
+	protected $fillable = ['nomor_kredit', 'nth', 'tanggal', 'tag', 'karyawan', 'penagihan_id'];
 	protected $hidden 	= [];
 	protected $appends	= ['nomor_surat'];
 
@@ -65,7 +65,7 @@ class SuratPeringatan extends Model
 	}
 
 	public function penagihan(){
-		return $this->hasone(Penagihan::class, 'id', 'penagihan_id')->orderby('created_at', 'desc');
+		return $this->hasone(Penagihan::class, 'surat_peringatan_id')->orderby('created_at', 'desc');
 	}
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
@@ -83,6 +83,10 @@ class SuratPeringatan extends Model
 		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
 	}
 
+	public function setKaryawanAttribute($variable)
+	{
+		$this->attributes['karyawan']		= json_encode($variable);
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
 	// ------------------------------------------------------------------------------------------------------------
@@ -121,6 +125,11 @@ class SuratPeringatan extends Model
 	public function getTanggalAttribute($variable)
 	{
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
+	}
+
+	public function getKaryawanAttribute($variable)
+	{
+		return json_decode($this->attributes['karyawan'], true);
 	}
 
 	public function getNomorSuratAttribute($variable)

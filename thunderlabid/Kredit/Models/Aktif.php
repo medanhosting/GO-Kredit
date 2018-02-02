@@ -69,20 +69,8 @@ class Aktif extends Model
 		return $this->hasMany(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit');
 	}
 
-	public function tunggakan(){
-		return $this->hasMany(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['pokok', 'bunga']);
-	}
-
-	public function denda(){
-		return $this->hasMany(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['denda', 'restitusi_denda']);
-	}
-
-	public function titipan(){
-		return $this->hasMany(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit')->wherein('tag', ['titipan', 'pengambilan_titipan']);
-	}
-
-	public function angsuran_terakhir(){
-		return $this->hasOne(JadwalAngsuran::class, 'nomor_kredit', 'nomor_kredit')->where('tag', 'pokok')->orderby('tanggal', 'desc');
+	public function suratperingatan(){
+		return $this->hasMany(SuratPeringatan::class, 'nomor_kredit', 'nomor_kredit');
 	}
 
 	public function penagihan(){
@@ -281,5 +269,36 @@ class Aktif extends Model
 	public function getAoAttribute($variable)
 	{
 		return json_decode($this->attributes['ao'], true);
+	}
+
+	
+	public function getShouldIssueSuratPeringatanAttribute($variable)
+	{
+		$data 	= null;
+		$total 	= $this->suratperingatan()->count();
+		if($total >= 6){
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1', 'surat_somasi_2', 'surat_somasi_3'];
+			$data['keluarkan'] 	= null;
+		}elseif($total < 6 && $total > 4){
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1'];
+			$data['keluarkan'] 	= 'surat_somasi_3';
+		}elseif($total < 5 && $total > 3){
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3', 'surat_somasi_1'];
+			$data['keluarkan'] 	= 'surat_somasi_2';
+		}elseif($total < 4 && $total > 2){
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2', 'surat_peringatan_3'];
+			$data['keluarkan'] 	= 'surat_somasi_1';
+		}elseif($total < 3 && $total > 1){
+			$data['cetak']		= ['surat_peringatan_1', 'surat_peringatan_2'];
+			$data['keluarkan'] 	= 'surat_peringatan_3';
+		}elseif($total < 2 && $total > 0){
+			$data['cetak']		= ['surat_peringatan_1'];
+			$data['keluarkan'] 	= 'surat_peringatan_2';
+		}elseif($total==0){
+			$data['cetak']		= [];
+			$data['keluarkan'] 	= 'surat_peringatan_1';
+		}
+
+		return $data;
 	}
 }

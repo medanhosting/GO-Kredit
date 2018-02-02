@@ -39,6 +39,15 @@ class AutoJournal
 		elseif(in_array($model->tag, ['provisi', 'administrasi', 'legal', 'biaya_notaris'])){
 			$this->journal_setoran_pencairan($model);
 		}
+		elseif(in_array($model->tag, ['pokok', 'bunga'])){
+			$this->journal_setoran_angsuran($model);
+		}
+		elseif(in_array($model->tag, ['titipan_pokok', 'titipan_bunga'])){
+			$this->journal_setoran_angsuran_sementara($model);
+		}
+		elseif(in_array($model->tag, ['restitusi_titipan_pokok', 'restitusi_titipan_bunga'])){
+			$this->journal_restitusi_titipan($model);
+		}
 	}
 
 	private function journal_pencairan($model){
@@ -113,6 +122,136 @@ class AutoJournal
 		$data->detail_transaksi_id 	= $model->id;
 		$data->tanggal 				= $model->notabayar->tanggal;
 		$data->coa_id 				= $coa_pdpt->id;
+		$data->jumlah 				= $this->formatMoneyTo(0 - abs($jumlah));
+		$data->save();
+	}
+
+
+	private function journal_setoran_angsuran($model){
+		//check kredit
+		$kredit 	= Aktif::where('nomor_kredit', $model->notabayar->morph_reference_id)->first();
+
+		if(str_is($model->tag, 'bunga')){
+			if(str_is($kredit->jenis_pinjaman, 'pa')){
+				$coa_piut 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kredit->kode_kantor)->first();
+			}else{
+				$coa_piut 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kredit->kode_kantor)->first();
+			}
+			$coa_pdpt 		= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kredit->kode_kantor)->first();
+		}elseif(str_is($model->tag, 'pokok')){
+			if(str_is($kredit->jenis_pinjaman, 'pa')){
+				$coa_piut 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kredit->kode_kantor)->first();
+				$coa_pdpt 	= COA::where('nomor_perkiraan', '120.100')->where('kode_kantor', $kredit->kode_kantor)->first();
+			}else{
+				$coa_piut 	= COA::where('nomor_perkiraan', '120.400')->where('kode_kantor', $kredit->kode_kantor)->first();
+				$coa_pdpt 	= COA::where('nomor_perkiraan', '120.200')->where('kode_kantor', $kredit->kode_kantor)->first();
+			}
+		}
+
+		$jumlah 		= $this->formatMoneyFrom($model->jumlah);
+
+		//tambah piutang
+		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_piut->id)->first();
+		if(!$data){
+			$data 	= new Jurnal;
+		}
+		$data->detail_transaksi_id 	= $model->id;
+		$data->tanggal 				= $model->notabayar->tanggal;
+		$data->coa_id 				= $coa_piut->id;
+		$data->jumlah 				= $this->formatMoneyTo(abs($jumlah));
+		$data->save();
+		
+		//kurang pendapatan
+		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_pdpt->id)->first();
+		if(!$data){
+			$data 	= new Jurnal;
+		}
+		$data->detail_transaksi_id 	= $model->id;
+		$data->tanggal 				= $model->notabayar->tanggal;
+		$data->coa_id 				= $coa_pdpt->id;
+		$data->jumlah 				= $this->formatMoneyTo(0 - abs($jumlah));
+		$data->save();
+	}
+
+	private function journal_setoran_angsuran_sementara($model){
+		//check kredit
+		$kredit 	= Aktif::where('nomor_kredit', $model->notabayar->morph_reference_id)->first();
+		
+		$jumlah 	= $this->formatMoneyFrom($model->jumlah);
+
+		if(str_is($kredit->jenis_pinjaman, 'pa')){
+			if(str_is($model->tag, 'titipan_bunga')){
+				$coa_piut 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kredit->kode_kantor)->first();
+			}else{
+				$coa_piut 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kredit->kode_kantor)->first();
+			}
+		}else{
+			$coa_piut 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kredit->kode_kantor)->first();
+		}
+		$coa_titip 		= COA::where('nomor_perkiraan', '200.210')->where('kode_kantor', $kredit->kode_kantor)->first();
+
+		//tambah titipan
+		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_titip->id)->first();
+		if(!$data){
+			$data 	= new Jurnal;
+		}
+		$data->detail_transaksi_id 	= $model->id;
+		$data->tanggal 				= $model->notabayar->tanggal;
+		$data->coa_id 				= $coa_titip->id;
+		$data->jumlah 				= $this->formatMoneyTo(abs($jumlah));
+		$data->save();
+		
+		//kurang piutang
+		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_piut->id)->first();
+		if(!$data){
+			$data 	= new Jurnal;
+		}
+		$data->detail_transaksi_id 	= $model->id;
+		$data->tanggal 				= $model->notabayar->tanggal;
+		$data->coa_id 				= $coa_piut->id;
+		$data->jumlah 				= $this->formatMoneyTo(0 - abs($jumlah));
+		$data->save();
+	}
+
+	private function journal_restitusi_titipan($model){
+		//check kredit
+		$kredit 	= Aktif::where('nomor_kredit', $model->notabayar->morph_reference_id)->first();
+		
+		$jumlah 	= $this->formatMoneyFrom($model->jumlah);
+
+		if(str_is($kredit->jenis_pinjaman, 'pa')){
+			if(str_is($model->tag, 'restitusi_titipan_pokok')){
+				$coa_piut 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kredit->kode_kantor)->first();
+				$coa_pyd 	= COA::where('nomor_perkiraan', '120.100')->where('kode_kantor', $kredit->kode_kantor)->first();
+			}else{
+				$coa_piut 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kredit->kode_kantor)->first();
+				$coa_pyd 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kredit->kode_kantor)->first();
+			}
+		}else{
+			$coa_piut 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kredit->kode_kantor)->first();
+			$coa_pyd 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kredit->kode_kantor)->first();
+		}
+		
+
+		//tambah piutang
+		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_piut->id)->first();
+		if(!$data){
+			$data 	= new Jurnal;
+		}
+		$data->detail_transaksi_id 	= $model->id;
+		$data->tanggal 				= $model->notabayar->tanggal;
+		$data->coa_id 				= $coa_piut->id;
+		$data->jumlah 				= $this->formatMoneyTo(abs($jumlah));
+		$data->save();
+		
+		//kurang pyd
+		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_pyd->id)->first();
+		if(!$data){
+			$data 	= new Jurnal;
+		}
+		$data->detail_transaksi_id 	= $model->id;
+		$data->tanggal 				= $model->notabayar->tanggal;
+		$data->coa_id 				= $coa_pyd->id;
 		$data->jumlah 				= $this->formatMoneyTo(0 - abs($jumlah));
 		$data->save();
 	}

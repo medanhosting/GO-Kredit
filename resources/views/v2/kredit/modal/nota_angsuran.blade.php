@@ -90,9 +90,6 @@
 					<tr>
 						<th class="text-center" style="width: 5%;">#</th>
 						<th class="text-left" style="width: 22%;">Deskripsi</th>
-						<th class="text-right" style="width: 20%;">Pokok</th>
-						<th class="text-right">Bunga</th>
-						<th class="text-right">Potongan</th>
 						<th class="text-right">Subtotal</th>
 					</tr>
 				</thead>
@@ -100,9 +97,6 @@
 					<tr id="angsuran-row" style="display: none;">
 						<td class="angs-iteration text-center"></td>
 						<td class="angs-title"></td>
-						<td class="angs-pokok text-right"></td>
-						<td class="angs-bunga text-right"></td>
-						<td class="angs-potongan text-right"></td>
 						<td class="angs-subtotal text-right"></td>
 					</tr>
 					<tr id="titipan-row"></tr>
@@ -110,14 +104,6 @@
 					<tr id="total-all-row"></tr>
 				</tbody>
 			</table>
-		</div>
-		<div class="clearfix"></div>
-		<div class="form-group row">
-			<div class="col-6">
-			</div>
-			<div class="col-6">
-				{!! Form::vSelect('Disetor Ke', 'nomor_perkiraan', $akun, '', ['class' => 'form-control text-info inline-edit text-right'], true) !!}
-			</div>
 		</div>
 	@endslot 
 	

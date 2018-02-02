@@ -18,6 +18,7 @@ class CreateKreditJadwalAngsuranTable extends Migration
 			$table->string('nomor_kredit');
 			$table->string('nomor_faktur')->nullable();
 			$table->datetime('tanggal');
+			$table->datetime('tanggal_bayar')->nullable();
 			$table->integer('nth')->nullable();
 			$table->double('jumlah');
 			$table->text('deskripsi')->nullable();

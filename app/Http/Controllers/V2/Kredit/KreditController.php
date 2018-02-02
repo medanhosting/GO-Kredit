@@ -12,6 +12,7 @@ use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
 use Thunderlabid\Finance\Models\NotaBayar;
+use Thunderlabid\Finance\Models\DetailTransaksi;
 use Exception, DB, Auth, Carbon\Carbon, Config;
 
 use App\Service\Traits\IDRTrait;
@@ -61,14 +62,17 @@ class KreditController extends Controller
 		//PANEL ANGSURAN. DATA STAT, DATA DENDA, DATA ANGSURAN
 		//DATA STAT
 		$stat['sisa_hutang']		= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->sum('jumlah');
-		// $stat['total_titipan']		= AngsuranDetail::whereIn('tag', ['titipan', 'pengambilan_titipan'])->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->wherehas('notabayar', function($q){$q->where('nomor_perkiraan', Config::get('finance.nomor_perkiraan_titipan'));})->sum('amount');
+		$stat['total_titipan']		= DetailTransaksi::whereIn('tag', ['titipan_pokok', 'titipan_bunga', 'restitusi_titipan_pokok', 'restitusi_titipan_bunga'])->wherehas('notabayar', function($q)use($aktif){$q->where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit');})->sum('jumlah');
+
+		$stat['angsuran_bulanan']	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('nth', 'asc')->where('nth', 1)->sum('jumlah');
+		$stat['jumlah_titipan']		= floor($stat['total_titipan']/$stat['angsuran_bulanan']);
 		// $stat['total_denda']		= AngsuranDetail::whereIn('tag', ['denda', 'restitusi_denda'])->wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
 
 		//DATA ANGSURAN
 		$angsuran 	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->get();
 		$notabayar 	= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->get();
-		// $titipan 	= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->where('nomor_perkiraan', Config::get('finance.nomor_perkiraan_titipan_kolektor'))->get();
-	
+		$titipan 	= Penagihan::where('nomor_kredit', $aktif['nomor_kredit'])->where('tag', 'completing')->get();
+
 		// //DATA DENDA, PERMINTAAN RESTITUSI
 		// $denda 		= AngsuranDetail::displayingdenda()->where('nomor_kredit', $aktif['nomor_kredit'])->get();
 		// $stat['total_restitusi'] 	= PermintaanRestitusi::where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('is_approved')->sum('amount');
@@ -76,21 +80,21 @@ class KreditController extends Controller
 		// $r3d 		= BayarDenda::hitung_r3d(Carbon::now()->format('d/m/Y H:i'), $aktif['persentasi_denda']);
 
 		// //PANEL TUNGGAKAN/PENAGIHAN
-		// $stat['last_pay'] 			= NotaBayar::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->first();
+		$stat['last_pay'] 			= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->orderby('tanggal', 'desc')->first();
 		$stat['total_tunggakan']	= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->sum('jumlah');
 		
 		$stat['jumlah_tunggakan']	= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->where('tanggal', '<=', $today->format('Y-m-d H:i:s'))->count();
 
 		// $stat['total_hutang']		= AngsuranDetail::whereIn('tag', ['pokok', 'bunga'])->where('nomor_kredit', $aktif['nomor_kredit'])->sum('amount');
 
-		// $stat['last_sp'] 			= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->orderby('created_at', 'desc')->first();
+		$stat['last_sp']	= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->orderby('created_at', 'desc')->first();
 
 		// //DATA SP
-		// $suratperingatan 	= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->with(['penagihan', 'penagihan.notabayar'])->get();
+		$suratperingatan 	= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->with(['penagihan'])->get();
 
 		// //PANEL JAMINAN
-		// $ids 		= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->selectraw('max(id) as id, max(tanggal) as tanggal')->groupby('nomor_jaminan')->orderby('tanggal', 'desc')->get()->toArray();
-		// $jaminan 	= MutasiJaminan::wherein('id', array_column($ids, 'id'))->get();
+		$ids 		= MutasiJaminan::where('nomor_kredit', $aktif['nomor_kredit'])->selectraw('max(id) as id, max(tanggal) as tanggal')->groupby('nomor_jaminan')->orderby('tanggal', 'desc')->get()->toArray();
+		$jaminan 	= MutasiJaminan::wherein('id', array_column($ids, 'id'))->get();
 
 		if(request()->get('current')){
 			switch (strtolower(request()->get('current'))) {

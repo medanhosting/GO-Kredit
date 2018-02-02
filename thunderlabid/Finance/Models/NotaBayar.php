@@ -102,12 +102,17 @@ class NotaBayar extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	public function setTanggalAttribute($variable)
 	{
-		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
+		$this->attributes['tanggal']		= $this->formatDateTimeFrom($variable);
 	}
 
 	public function setJumlahAttribute($variable)
 	{
-		$this->attributes['jumlah']		= $this->formatMoneyFrom($variable);
+		$this->attributes['jumlah']			= $this->formatMoneyFrom($variable);
+	}
+
+	public function setKaryawanAttribute($variable)
+	{
+		$this->attributes['karyawan']		= json_encode($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -152,6 +157,11 @@ class NotaBayar extends Model
 	public function getJumlahAttribute($variable)
 	{
 		return $this->formatMoneyTo($this->attributes['jumlah']);
+	}
+
+	public function getKaryawanAttribute($variable)
+	{
+		return json_decode($this->attributes['karyawan'], true);
 	}
 
 	public function getJatuhTempoAttribute($variable){

@@ -2,7 +2,7 @@
 
 namespace App\Http\Service\Policy;
 
-use Thunderlabid\Kredit\Models\AngsuranDetail;
+use Thunderlabid\Kredit\Models\JadwalAngsuran;
 use Thunderlabid\Kredit\Models\Aktif;
 
 use App\Service\Traits\IDRTrait;
@@ -24,7 +24,7 @@ class PelunasanAngsuran
 	// 	$kredit 	= Angsuran::where('nomor_kredit', $nomor_kredit)->where('id', '<>', $exlude_id)->wherenull('paid_at')->get(['id']);
 
 	// 	$ids 		= array_column($kredit->toArray(), 'id');
-	// 	$ad 		= AngsuranDetail::whereIn('angsuran_id', $ids)->where('tag', '<>', 'bunga')->sum('amount');
+	// 	$ad 		= JadwalAngsuran::whereIn('angsuran_id', $ids)->where('tag', '<>', 'bunga')->sum('amount');
 
 	// 	return self::formatMoneyto($ad);
 	// }
@@ -39,8 +39,24 @@ class PelunasanAngsuran
 		$aktif 		= Aktif::where('nomor_kredit', $nomor_kredit)->first();
 
 		//find last paid
-		$kredit 	= AngsuranDetail::where('nomor_kredit', $nomor_kredit)->wherein('tag', ['pokok', 'bunga'])->wherenotnull('nota_bayar_id')->orderby('nth', 'desc')->first();
-		$tb 		= AngsuranDetail::where('nomor_kredit', $nomor_kredit)->where('tag', 'bunga')->wherenull('nota_bayar_id')->sum('amount');
+		$kredit 	= JadwalAngsuran::where('nomor_kredit', $nomor_kredit)->wherenotnull('nomor_faktur')->orderby('nth', 'desc')->first();
+
+		if(str_is($aktif['jenis_pinjaman'], 'pa'))
+		{
+			$rincian 	= new PerhitunganBunga($aktif['plafon_pinjaman'], 'Rp 0', $aktif['suku_bunga'], null, null, null, $aktif['jangka_waktu']);
+			$rincian 	= $rincian->pa();
+
+			$tb 		= self::formatMoneyFrom($rincian['angsuran'][$kredit['nth']+1]['angsuran_bunga']) * ($aktif['jangka_waktu'] - ($kredit['nth']*1));
+		}
+		elseif(str_is($aktif['jenis_pinjaman'], 'pt') && $kredit['nth'] < $aktif['jangka_waktu'])
+		{
+			$rincian 	= new PerhitunganBunga($aktif['plafon_pinjaman'], 'Rp 0', $aktif['suku_bunga'], null, null, null, $aktif['jangka_waktu']);
+			$rincian 	= $rincian->pt();
+			$tb 		= self::formatMoneyFrom($rincian['angsuran'][$kredit['nth']+1]['angsuran_bunga']) * ($aktif['jangka_waktu'] - ($kredit['nth']*1));
+		}else{
+			$tb 	= 0;
+		}
+
 		//check pelunasan > 1/2 masa nth
 		$max_jw 	= ceil($aktif['jangka_waktu']/2);
 

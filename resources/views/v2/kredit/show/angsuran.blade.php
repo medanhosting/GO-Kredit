@@ -28,11 +28,11 @@
 						<td class="text-right">{{$v['jumlah']}}</td>
 						<td class="text-center">
 							@if(str_is($v['jenis'], 'angsuran'))
-								<a href="{{ route('angsuran.print', ['id' => $v['nomor_kredit'], 'nota_bayar_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success">
+								<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nota_bayar_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success">
 									CETAK
 								</a>
 							@elseif(str_is($v['jenis'], 'angsuran_sementara'))
-								<a href="{{ route('angsuran.print', ['id' => $v['nomor_kredit'], 'nota_bayar_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'sementara']) }}" target="__blank" class="text-success">
+								<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nota_bayar_id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'sementara']) }}" target="__blank" class="text-success">
 									CETAK
 								</a>
 							@else

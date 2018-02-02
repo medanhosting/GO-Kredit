@@ -80,14 +80,13 @@
 												{{ $idr->formatMoneyTo($v['sisa_hutang']) }}
 											</td>
 											<td class="text-left">
-												@foreach($v['suratperingatan'] as $v0)
-													<a href="{{ route('tunggakan.print', ['id' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id, 'sp_id' => $v0]) }}">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a><br>
+												@foreach($v['kredit']['suratperingatan'] as $v0)
+													<a href="{{ route('tunggakan.print', ['id' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id, 'sp_id' => $v0]) }}" target="__blank">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a><br>
 													<small>{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v0['tanggal'])->diffForHumans()}}</small><br/>
 												@endforeach
-
-												@if(is_null($v['nota_bayar_id']))
+												@if(is_null($v['nomor_faktur']) && !$read_only)
 													<a href="{{route('tunggakan.show', ['id' => $v['nomor_kredit'], 'nomor_kredit' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id])}}" class="alert-link">
-														Keluarkan {{ucwords(str_replace('_', ' ', $v['should_issue_surat_peringatan']['keluarkan']))}}
+													Keluarkan {{ucwords(str_replace('_', ' ', $v['kredit']['should_issue_surat_peringatan']['keluarkan']))}}
 													</a>
 												@endif
 											</td>

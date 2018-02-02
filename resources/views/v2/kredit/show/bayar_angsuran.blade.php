@@ -132,12 +132,12 @@
 
 			if (extended === true) {
 				parent.before('	<tr> \
-									<td class="text-right" colspan="5"><h5>Total</h5></td> \
+									<td class="text-right" colspan="2"><h5>Total</h5></td> \
 									<td class="text-right"><h5>Rp ' + window.numberFormat.set(subtotal)  + '</h5></td> \
 								</tr>');
 			} else {
 				parent.before('	<tr> \
-									<td class="text-right text-info" colspan="5"><h5><strong>Total</strong></h5></td> \
+									<td class="text-right text-info" colspan="2"><h5><strong>Total</strong></h5></td> \
 									<td class="text-right text-info"><h5><strong>Rp ' + window.numberFormat.set(subtotal)  + '</strong></h5></td> \
 								</tr>');
 			}
@@ -150,7 +150,7 @@
 			ajxTitipan.defineOnSuccess(function(resp){
 				titipan = resp.data;
 				$('#titipan-row').before('	<tr> \
-				<td class="text-right" colspan="5"><h5>Titipan</h5></td> \
+				<td class="text-right" colspan="2"><h5>Titipan</h5></td> \
 				<td class="text-right text-danger"><h5>Rp -' + window.numberFormat.set(titipan)  + '</h5></td> \
 				</tr>');
 			});
@@ -168,7 +168,7 @@
 			var dataAjax2 = {};
 
 			ajxPot.defineOnSuccess(function(resp){
-				$('#potongan-row').html('<td class="text-right" colspan="5"><h5>Potongan</h5></td> \
+				$('#potongan-row').html('<td class="text-right" colspan="2"><h5>Potongan</h5></td> \
 										<td class="text-right text-danger"><h5>' + resp.data  + '</h5></td>');
 				
 				potongan = resp.data.replace(/\./g, '').replace('-', '').slice(3);
@@ -250,7 +250,7 @@
 				setTimeout(function(){
 					total_angsuran = subtotal - potongan - titipan;
 	
-					$('#total-all-row').html('<td class="text-right text-info" colspan="5"><h5><strong>Total Bayar Angsuran</strong></h5></td> \
+					$('#total-all-row').html('<td class="text-right text-info" colspan="2"><h5><strong>Total Bayar Angsuran</strong></h5></td> \
 										<td class="text-right text-info"><h5><strong>Rp ' + window.numberFormat.set(total_angsuran)  + '</strong></h5></td>');
 										
 					parsingTerbilang(resp.data, { money: total_angsuran});

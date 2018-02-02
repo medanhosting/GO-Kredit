@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 
 use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Kredit\Models\NotaBayar;
-use Thunderlabid\Kredit\Models\AngsuranDetail;
+use Thunderlabid\Kredit\Models\JadwalAngsuran;
+use Thunderlabid\Finance\Models\DetailTransaksi;
 
 use App\Service\Traits\IDRTrait;
 
@@ -58,15 +59,15 @@ class AngsuranController extends Controller
 		}
 
 		if(str_is($case, 'angsuran')){
-			$angsuran['details']= AngsuranDetail::displaying()->where('nomor_kredit', $id);
+			$angsuran['details']= JadwalAngsuran::displaying()->where('nomor_kredit', $id);
 		}else{
-			$angsuran['details']= AngsuranDetail::displayingdenda()->where('nomor_kredit', $id);
+			$angsuran['details']= JadwalAngsuran::displayingdenda()->where('nomor_kredit', $id);
 		}
 
 		$angsuran['details']	= $angsuran['details']->where('nota_bayar_id', request()->get('nota_bayar_id'));
 		$angsuran['details'] 	= $angsuran['details']->get()->toArray();
 
-		$sisa_angsuran			= AngsuranDetail::where('nomor_kredit', $id)->whereIn('tag', ['pokok', 'bunga'])->where(function($q)use($tanggal_bayar){$q->wherehas('notabayar', function($q)use($tanggal_bayar){$q->where('tanggal' , '>', $tanggal_bayar->format('Y-m-d H:i:s'));})->orwherenull('nota_bayar_id');})->sum('amount');
+		$sisa_angsuran			= JadwalAngsuran::where('nomor_kredit', $id)->whereIn('tag', ['pokok', 'bunga'])->where(function($q)use($tanggal_bayar){$q->wherehas('notabayar', function($q)use($tanggal_bayar){$q->where('tanggal' , '>', $tanggal_bayar->format('Y-m-d H:i:s'));})->orwherenull('nota_bayar_id');})->sum('amount');
 		
 		view()->share('angsuran', $angsuran);
 		view()->share('tanggal_bayar', $tanggal_bayar);
@@ -94,16 +95,16 @@ class AngsuranController extends Controller
 			}
 
 			if(str_is($case, 'angsuran')){
-				$angsuran['details']= AngsuranDetail::displaying()->where('nomor_kredit', $id);
+				$angsuran['details']= JadwalAngsuran::displaying()->where('nomor_kredit', $id);
 			}elseif(str_is($case, 'sementara')){
-				$angsuran['details']= AngsuranDetail::where('nomor_kredit', $id);
+				$angsuran['details']= JadwalAngsuran::where('nomor_kredit', $id);
 			}else{
-				$angsuran['details']= AngsuranDetail::displayingdenda()->where('nomor_kredit', $id);
+				$angsuran['details']= JadwalAngsuran::displayingdenda()->where('nomor_kredit', $id);
 			}
 			$angsuran['details']	= $angsuran['details']->where('nota_bayar_id', request()->get('nota_bayar_id'));
 			$angsuran['details'] 	= $angsuran['details']->get()->toArray();
 
-			$sisa_angsuran			= AngsuranDetail::where('nomor_kredit', $id)->whereIn('tag', ['pokok', 'bunga'])->where(function($q)use($tanggal_bayar){$q->wherehas('notabayar', function($q)use($tanggal_bayar){$q->where('tanggal' , '>', $tanggal_bayar->format('Y-m-d H:i:s'));})->orwherenull('nota_bayar_id');})->sum('amount');
+			$sisa_angsuran			= JadwalAngsuran::where('nomor_kredit', $id)->whereIn('tag', ['pokok', 'bunga'])->where(function($q)use($tanggal_bayar){$q->wherehas('notabayar', function($q)use($tanggal_bayar){$q->where('tanggal' , '>', $tanggal_bayar->format('Y-m-d H:i:s'));})->orwherenull('nota_bayar_id');})->sum('amount');
 
 			view()->share('angsuran', $angsuran);
 			view()->share('tanggal_bayar', $tanggal_bayar);
@@ -130,7 +131,7 @@ class AngsuranController extends Controller
 
 		$nth 		= array_flatten(request()->get('nth'));
 		
-		$angsuran 	= AngsuranDetail::displaying()->where('nomor_kredit', $aktif['nomor_kredit']);
+		$angsuran 	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit']);
 
 		if(is_array($nth)){
 			$angsuran 	= $angsuran->wherein('nth', $nth);
@@ -138,7 +139,7 @@ class AngsuranController extends Controller
 			$angsuran 	= $angsuran->where('nth', $nth);
 		}
 
-		$angsuran 	= $angsuran->get();
+		$angsuran 	= $angsuran->get(['nth', 'jumlah as subtotal']);
 
 		return response()->json(['message' => 'success', 'data' => $angsuran], 200);
 	}
@@ -147,15 +148,15 @@ class AngsuranController extends Controller
 	{
 		$aktif		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
 
-		$denda 		= AngsuranDetail::displayingdenda()->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->get();
-		$t_denda 	= AngsuranDetail::whereIn('tag', ['denda', 'restitusi_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->sum('amount');
+		$denda 		= JadwalAngsuran::displayingdenda()->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->get();
+		$t_denda 	= JadwalAngsuran::whereIn('tag', ['denda', 'restitusi_denda'])->where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('nota_bayar_id')->sum('amount');
 
 		return response()->json(['status' => 'success', 'data' => $denda], 200);
 	}
 
 	public function titipan($id) 
 	{
-		$titipan 	= AngsuranDetail::where('nomor_kredit', $id)->whereIn('tag', ['titipan', 'pengambilan_titipan'])->sum('amount');
+		$titipan	= DetailTransaksi::whereIn('tag', ['titipan_pokok', 'titipan_bunga', 'restitusi_titipan_pokok', 'restitusi_titipan_bunga'])->wherehas('notabayar', function($q)use($id){$q->where('morph_reference_id', $id)->where('morph_reference_tag', 'kredit');})->sum('jumlah');
 
 		return response()->json(['status' => 'success', 'data' => $titipan], 200);
 	}

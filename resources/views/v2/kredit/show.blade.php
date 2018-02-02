@@ -77,7 +77,7 @@
 														{{$idr->formatMoneyTo($stat['total_titipan'])}}
 													</h4><hr> 
 												@endslot
-												@slot('body') <p class='text-center'>TOTAL TITIPAN</p> @endslot
+												@slot('body') <p class='text-center'>TITIPAN CUKUP MEMBAYAR {{$stat['jumlah_titipan']}} ANGSURAN</p> @endslot
 											@endcomponent
 										</div>
 										<div class="col-4">
@@ -113,6 +113,49 @@
 									</div>
 								</div>
 								
+								<div class="tab-pane {{$is_penagihan_tab}}" id="penagihan" role="tabpanel">
+									<div class="clearfix">&nbsp;</div>
+									<div class="clearfix">&nbsp;</div>
+									<div class="row">
+										<div class="col-4">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{$idr->formatMoneyTo($stat['total_tunggakan'])}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>TOTAL {{$stat['jumlah_tunggakan']}} ANGSURAN JATUH TEMPO</p> @endslot
+											@endcomponent
+										</div>
+										<div class="col-4">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{$stat['last_pay']['tanggal']}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>TANGGAL PEMBAYARAN TERAKHIR</p> @endslot
+											@endcomponent
+										</div>
+										<div class="col-4">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{strtoupper(str_replace('_',' ',$stat['last_sp']['tag']))}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>SP TERAKHIR DIKELUARKAN</p> @endslot
+											@endcomponent
+										</div>
+									</div>
+
+									@include('v2.kredit.show.penagihan')
+								</div>
+								
+								<!-- tab jaminan -->
+								<div class="tab-pane {{$is_jaminan_tab}}" id="jaminan" role="tabpanel">
+									@include('v2.kredit.show.jaminan')
+								</div>
 							</div>
 						</div>
 					</div>

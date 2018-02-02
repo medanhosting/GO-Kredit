@@ -42,6 +42,10 @@ class AutoCreateAccount
 			'akun'				=> 'RUPA-RUPA AKTIVA'],
 			['nomor_perkiraan'	=> '180.000',
 			'akun'				=> 'AYAT SILANG (REKENING ANTARA)'],
+			['nomor_perkiraan'	=> '200.000',
+			'akun'				=> 'KEWAJIBAN'],
+			['nomor_perkiraan'	=> '260.000',
+			'akun'				=> 'PENDAPATAN YANG DITANGGUHKAN'],
 			['nomor_perkiraan'	=> '400.000',
 			'akun'				=> 'PENDAPATAN'],
 		];
@@ -67,18 +71,54 @@ class AutoCreateAccount
 			['nomor_perkiraan'	=> '120.200',
 			'akun'				=> 'Pinjaman Tetap',
 			'parent'			=> '120.000'],
+			['nomor_perkiraan'	=> '120.300',
+			'akun'				=> 'Pokok PA Jatuh Tempo',
+			'parent'			=> '120.000'],
+			['nomor_perkiraan'	=> '120.400',
+			'akun'				=> 'Pokok PT Jatuh Tempo',
+			'parent'			=> '120.000'],
 
+
+			['nomor_perkiraan'	=> '140.100',
+			'akun'				=> 'Piutang Bunga Pinjaman Angsuran',
+			'parent'			=> '140.000'],
+			['nomor_perkiraan'	=> '140.200',
+			'akun'				=> 'Piutang Bunga Pinjaman Tetap',
+			'parent'			=> '140.000'],
 
 			['nomor_perkiraan'	=> '140.600',
 			'akun'				=> 'Piutang Denda',
 			'parent'			=> '140.000'],
 
+			['nomor_perkiraan'	=> '200.200',
+			'akun'				=> 'Titipan',
+			'parent'			=> '200.000'],
+			['nomor_perkiraan'	=> '200.210',
+			'akun'				=> 'Titipan Angsuran',
+			'parent'			=> '200.200'],
+
+			['nomor_perkiraan'	=> '260.110',
+			'akun'				=> 'PYD Bunga',
+			'parent'			=> '260.000'],
+
+
 			['nomor_perkiraan'	=> '401.000',
 			'akun'				=> 'Pendapatan Operasional',
 			'parent'			=> '400.000'],
+			
 			['nomor_perkiraan'	=> '401.100',
 			'akun'				=> 'Pendapatan Bunga',
 			'parent'			=> '401.000'],
+			['nomor_perkiraan'	=> '401.120',
+			'akun'				=> 'Pihak Ketiga Bukan Bank',
+			'parent'			=> '401.000'],
+			['nomor_perkiraan'	=> '401.121',
+			'akun'				=> 'Bunga Pinjaman Angsuran',
+			'parent'			=> '401.120'],
+			['nomor_perkiraan'	=> '401.122',
+			'akun'				=> 'Bunga Pinjaman Tetap',
+			'parent'			=> '401.120'],
+
 			['nomor_perkiraan'	=> '401.200',
 			'akun'				=> 'Provisi dan Administrasi',
 			'parent'			=> '401.000'],
@@ -95,7 +135,7 @@ class AutoCreateAccount
 			'akun'				=> 'Biaya Notaris',
 			'parent'			=> '401.200'],
 		];
-
+		
 		$model 	= $event->data;
 		
 		foreach ($pcodes as $k => $v) {

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Validator, Carbon\Carbon;
 
 use App\Service\Traits\WaktuTrait;
+use App\Service\Traits\IDRTrait;
 
 ///////////////
 // Exception //
@@ -32,9 +33,10 @@ use Thunderlabid\Kredit\Events\Penagihan\PenagihanRestoring;
 class Penagihan extends Model
 {
 	use WaktuTrait;
+	use IDRTrait;
 
 	protected $table 	= 'k_penagihan';
-	protected $fillable = ['nomor_kredit', 'karyawan', 'tanggal', 'tag', 'penerima', 'nota_bayar_id'];
+	protected $fillable = ['surat_peringatan_id', 'nomor_kredit', 'nomor_faktur', 'tag', 'penerima', 'jumlah', 'tanggal', 'karyawan'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];
@@ -119,6 +121,11 @@ class Penagihan extends Model
 		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
 	}
 
+	public function setJumlahAttribute($variable)
+	{
+		$this->attributes['jumlah']			= $this->formatMoneyFrom($variable);
+	}
+
 	public function setPenerimaAttribute($variable)
 	{
 		$this->attributes['penerima']	= json_encode($variable);
@@ -167,6 +174,11 @@ class Penagihan extends Model
 	public function getTanggalAttribute($variable)
 	{
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
+	}
+
+	public function getJumlahAttribute($variable)
+	{
+		return $this->formatMoneyTo($this->attributes['jumlah']);
 	}
 
 	public function getPenerimaAttribute($variable)
