@@ -183,8 +183,8 @@ class NotaBayar extends Model
 			case 'angsuran_sementara':
 				$deskripsi 	= 'Bukti Angsuran Sementara';
 				break;	
-			case 'pengambilan_titipan':
-				$deskripsi 	= 'Bukti Pengambilan Titipan';
+			case 'memorial_titipan':
+				$deskripsi 	= 'Bukti Memorial Pengambilan Titipan';
 				break;	
 		}
 

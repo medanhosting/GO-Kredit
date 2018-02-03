@@ -59,7 +59,7 @@
 														<td>{{$v2['nomor_perkiraan']}}</td>
 														<td>{{$v2['akun']}}</td>
 														@php 
-															$total = array_sum(array_column($v2['detailsin']->toArray(), 'jumlah'));
+															$total = array_sum(array_column($v2['detailsin']->toArray(), 'amount'));
 														@endphp
 														<td class="text-right">{{$idr->formatMoneyTo($total)}}</td>
 													</tr>
@@ -85,7 +85,7 @@
 														<td>{{$v2['nomor_perkiraan']}}</td>
 														<td>{{$v2['akun']}}</td>
 														@php 
-															$total = array_sum(array_column($v2['detailsout']->toArray(), 'jumlah'));
+															$total = array_sum(array_column($v2['detailsout']->toArray(), 'amount'));
 														@endphp
 														<td class="text-right">{{$idr->formatMoneyTo(abs($total))}}</td>
 													</tr>

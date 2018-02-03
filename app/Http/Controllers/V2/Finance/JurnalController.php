@@ -20,7 +20,7 @@ class JurnalController extends Controller
 
 	public function index () 
 	{
-		$akun 		= COA::wherenull('akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'))->with(['subakun', 'subakun.detailsin', 'subakun.detailsout'])->get();
+		$akun 		= COA::wherenull('coa_id')->where('kode_kantor', request()->get('kantor_aktif_id'))->with(['subakun', 'subakun.detailsin', 'subakun.detailsout'])->get();
 
 		view()->share('active_submenu', 'jurnal');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
@@ -185,7 +185,16 @@ class JurnalController extends Controller
 			$acc->save();
 		}
 
-		$jurnal 	= Jurnal::orderby('detail_transaksi_id', 'asc')->get();
+		$jurnal 	= Jurnal::selectraw('sum(f_jurnal.jumlah) jumlah')
+		->selectraw('max(f_jurnal.tanggal) as tanggal')
+		->selectraw('coa_id')
+		->selectraw('f_detail_transaksi.nomor_faktur as nomor_faktur')
+		->join('f_detail_transaksi', 'f_detail_transaksi.id', 'detail_transaksi_id')
+		->groupby('coa_id')
+		->groupby('nomor_faktur')
+		->orderby('nomor_faktur', 'asc')
+		->get()
+		;
 
 		view()->share('jurnal', $jurnal);
 		view()->share('html', ['title' => 'JURNAL']);

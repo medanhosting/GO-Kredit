@@ -28,7 +28,7 @@
 							@foreach($jurnal as $k => $v)
 							<tr>
 								<td>{{$v['tanggal']}}</td>
-								<td>{{$v['detail']['nomor_faktur']}}</td>
+								<td>{{$v['nomor_faktur']}}</td>
 								<td>
 									@if($v['debit'])
 										{{$v['coa']['akun']}}

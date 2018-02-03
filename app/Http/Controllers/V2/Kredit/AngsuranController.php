@@ -5,8 +5,8 @@ namespace App\Http\Controllers\V2\Kredit;
 use App\Http\Controllers\Controller;
 
 use Thunderlabid\Kredit\Models\Aktif;
-use Thunderlabid\Kredit\Models\NotaBayar;
 use Thunderlabid\Kredit\Models\JadwalAngsuran;
+use Thunderlabid\Finance\Models\NotaBayar;
 use Thunderlabid\Finance\Models\DetailTransaksi;
 
 use App\Service\Traits\IDRTrait;
@@ -84,7 +84,7 @@ class AngsuranController extends Controller
 	public function print ($id)
 	{
 		try {
-			$angsuran 				= NotaBayar::where('id', request()->get('nota_bayar_id'))->where('nomor_kredit', $id)->firstorfail();
+			$angsuran 				= NotaBayar::where('nomor_faktur', request()->get('nomor_faktur'))->where('morph_reference_id', $id)->where('morph_reference_tag', 'kredit')->firstorfail();
 			$tanggal_bayar 			= Carbon::createFromFormat('d/m/Y H:i', $angsuran->tanggal);
 
 			$angsuran['kredit']		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
@@ -95,21 +95,23 @@ class AngsuranController extends Controller
 			}
 
 			if(str_is($case, 'angsuran')){
-				$angsuran['details']= JadwalAngsuran::displaying()->where('nomor_kredit', $id);
+				$angsuran['details']= DetailTransaksi::where('nomor_faktur', $angsuran['nomor_faktur']);
 			}elseif(str_is($case, 'sementara')){
-				$angsuran['details']= JadwalAngsuran::where('nomor_kredit', $id);
+				$angsuran['details']= DetailTransaksi::where('nomor_faktur', $angsuran['nomor_faktur']);
 			}else{
-				$angsuran['details']= JadwalAngsuran::displayingdenda()->where('nomor_kredit', $id);
+				$angsuran['details']= DetailTransaksi::where('nomor_faktur', $angsuran['nomor_faktur']);
 			}
-			$angsuran['details']	= $angsuran['details']->where('nota_bayar_id', request()->get('nota_bayar_id'));
 			$angsuran['details'] 	= $angsuran['details']->get()->toArray();
 
-			$sisa_angsuran			= JadwalAngsuran::where('nomor_kredit', $id)->whereIn('tag', ['pokok', 'bunga'])->where(function($q)use($tanggal_bayar){$q->wherehas('notabayar', function($q)use($tanggal_bayar){$q->where('tanggal' , '>', $tanggal_bayar->format('Y-m-d H:i:s'));})->orwherenull('nota_bayar_id');})->sum('amount');
+			$nth 	= implode(', ', array_column(JadwalAngsuran::where('nomor_faktur', $angsuran['nomor_faktur'])->get(['nth'])->toArray(), 'nth'));
+
+			$sisa_angsuran 			= JadwalAngsuran::where('nomor_kredit', $id)->HitungTunggakanBeberapaWaktuLalu($tanggal_bayar)->first()['sisa_hutang'];
 
 			view()->share('angsuran', $angsuran);
 			view()->share('tanggal_bayar', $tanggal_bayar);
 			view()->share('sisa_angsuran', $sisa_angsuran);
 			view()->share('id', $id);
+			view()->share('nth', $nth);
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 			return view('v2.kredit.print.bukti_pembayaran_'.$case);

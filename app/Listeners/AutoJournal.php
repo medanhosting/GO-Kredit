@@ -218,20 +218,18 @@ class AutoJournal
 		$kredit 	= Aktif::where('nomor_kredit', $model->notabayar->morph_reference_id)->first();
 		
 		$jumlah 	= $this->formatMoneyFrom($model->jumlah);
+		
+		$coa_ttp 	= COA::where('nomor_perkiraan', '200.210')->where('kode_kantor', $kredit->kode_kantor)->first();
 
 		if(str_is($kredit->jenis_pinjaman, 'pa')){
 			if(str_is($model->tag, 'restitusi_titipan_pokok')){
 				$coa_piut 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kredit->kode_kantor)->first();
-				$coa_pyd 	= COA::where('nomor_perkiraan', '120.100')->where('kode_kantor', $kredit->kode_kantor)->first();
 			}else{
 				$coa_piut 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kredit->kode_kantor)->first();
-				$coa_pyd 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kredit->kode_kantor)->first();
 			}
 		}else{
 			$coa_piut 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kredit->kode_kantor)->first();
-			$coa_pyd 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kredit->kode_kantor)->first();
 		}
-		
 
 		//tambah piutang
 		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_piut->id)->first();
@@ -244,14 +242,14 @@ class AutoJournal
 		$data->jumlah 				= $this->formatMoneyTo(abs($jumlah));
 		$data->save();
 		
-		//kurang pyd
-		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_pyd->id)->first();
+		//kurang titipan
+		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_ttp->id)->first();
 		if(!$data){
 			$data 	= new Jurnal;
 		}
 		$data->detail_transaksi_id 	= $model->id;
 		$data->tanggal 				= $model->notabayar->tanggal;
-		$data->coa_id 				= $coa_pyd->id;
+		$data->coa_id 				= $coa_ttp->id;
 		$data->jumlah 				= $this->formatMoneyTo(0 - abs($jumlah));
 		$data->save();
 	}

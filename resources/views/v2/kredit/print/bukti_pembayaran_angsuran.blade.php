@@ -59,7 +59,7 @@
 					<td style="width: 12.5%">AC / SPK</td>
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{$angsuran['nomor_kredit']}}</p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{$angsuran['morph_reference_id']}}</p>
 					</td>
 					<td style="width: 12.5%">AO</td>
 					<td style="width: 1%">:</td>
@@ -79,13 +79,7 @@
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							@foreach($angsuran['details'] as $k => $v)
-								@if ($loop->last)
-									{{ $v['nth'] }}
-								@else
-									{{ $v['nth'] }}, 
-								@endif
-							@endforeach
+							{{$nth}}
 						</p>
 					</td>
 				</tr>
@@ -119,9 +113,6 @@
 								<tr>
 									<th>#</th>
 									<th>Angsuran</th>
-									<th class="text-right">Pokok</th>
-									<th class="text-right">Bunga</th>
-									<th class="text-right">Potongan</th>
 									<th class="text-right">Sub Total</th>
 								</tr>
 							</thead>
@@ -129,17 +120,14 @@
 								@foreach ($angsuran['details'] as $k => $v)
 									<tr>
 										<td>{{ $loop->iteration }}</td>
-										<td>Angsuran ke- {{ $v['nth'] }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['pokok']) }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['bunga']) }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['potongan']) }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['subtotal']) }}</td>
+										<td>{{ $v['deskripsi'] }}</td>
+										<td class="text-right">{{ $v['jumlah'] }}</td>
 									</tr>
 								@endforeach
 							</tbody>
 							<tfoot>
 								<tr>
-									<td class="text-right" colspan="5"><h5><strong>Total</strong></h5></td>
+									<td class="text-right" colspan="2"><h5><strong>Total</strong></h5></td>
 									<td class="text-right"><h5><strong>{{ $angsuran['jumlah'] }}</strong></h5></td>
 								</tr>
 							</tfoot>

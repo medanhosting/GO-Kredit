@@ -38,7 +38,7 @@ class JadwalAngsuran extends Model
 	protected $table 	= 'k_jadwal_angsuran';
 	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'tanggal_bayar', 'nth', 'jumlah', 'deskripsi'];
 	protected $hidden 	= [];
-	protected $appends	= ['is_tunggakan'];
+	protected $appends	= [];
 	protected $rules	= [];
 	protected $errors;
 

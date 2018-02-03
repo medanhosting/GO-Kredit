@@ -2,14 +2,14 @@
 px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['kasir']) ? 'active' : '' }}">
 	<i class="fa fa-sticky-note-o"></i>&nbsp;&nbsp;LKH
 </a>
-<a href="{{route('kasir.jurnalpagi', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
+<!-- <a href="{{route('kasir.jurnalpagi', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
 px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['jurnalpagi']) ? 'active' : '' }}">
 	<i class="fa fa-sticky-note-o"></i>&nbsp;&nbsp;Jurnal Pagi
-</a>
-<!-- <a href="{{route('jurnal.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
+</a> -->
+<a href="{{route('jurnal.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
 px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['jurnal']) ? 'active' : '' }}">
 	<i class="fa fa-book"></i>&nbsp;&nbsp;Jurnal
-</a> -->
+</a>
 <!-- <a href="{{route('kas.penerimaan', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
 px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['kas_masuk']) ? 'active' : '' }}">
 	<i class="fa fa-hand-rock-o"></i>&nbsp;&nbsp;Penerimaan Kas

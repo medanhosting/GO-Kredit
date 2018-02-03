@@ -55,7 +55,7 @@ class COA extends Model
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
 	public function subakun(){
-		return $this->hasmany(COA::class, 'akun_id');
+		return $this->hasmany(COA::class, 'coa_id');
 	}
 
 	public function coas(){
@@ -63,11 +63,11 @@ class COA extends Model
 	}
 
 	public function detailsin(){
-		return $this->belongsToMany(TransactionDetail::class, 'f_coa', 'akun_id', 'transaction_detail_id')->where('amount', '>=', 0)->selectraw('amount as jumlah');
+		return $this->belongsToMany(DetailTransaksi::class, 'f_jurnal', 'coa_id', 'detail_transaksi_id')->where('f_jurnal.jumlah', '>=', 0)->selectraw('f_jurnal.jumlah as amount');
 	}
 
 	public function detailsout(){
-		return $this->belongsToMany(TransactionDetail::class, 'f_coa', 'akun_id', 'transaction_detail_id')->where('amount', '<=', 0)->selectraw('amount as jumlah');
+		return $this->belongsToMany(DetailTransaksi::class, 'f_jurnal', 'coa_id', 'detail_transaksi_id')->where('f_jurnal.jumlah', '<=', 0)->selectraw('f_jurnal.jumlah as amount');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

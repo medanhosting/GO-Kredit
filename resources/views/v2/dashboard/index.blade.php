@@ -127,7 +127,7 @@
 										<i class="fa fa-phone"></i>&nbsp;{{ $v['kredit']['nasabah']['telepon']}}
 									</td>
 									<td class="text-right col-auto">
-										<span class="text-info">{{$idr->formatMoneyTo($v['subtotal'])}}</span>
+										<span class="text-info">{{$v['jumlah']}}</span>
 									</td>
 								</tr>
 							@empty
@@ -210,7 +210,7 @@
 						</thead>
 						<tbody>
 							@forelse($data['list_tunggakan'] as $k => $v)
-								<tr class="text-center" href="{{route('kredit.show', ['id' => $v['kredit']['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'tunggakan'])}}">
+								<tr class="text-center" href="{{route('kredit.show', ['id' => $v['kredit']['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'current' => 'penagihan'])}}">
 									<td class="text-left">
 										<p class="mb-0">{{ $v['kredit']['nasabah']['nama'] }}</p>
 										<p class="mb-0">{{ $v['kredit']['nasabah']['telepon'] }}</p>
@@ -225,8 +225,8 @@
 										{{ $idr->formatMoneyTo($v['sisa_hutang']) }}
 									</td>
 									<td class="text-left">
-										@foreach($v['suratperingatan'] as $v0)
-											<a href="">Cetak {{ucwords(str_replace('_', ' ', $v0['tag']))}}</a><br>
+										@foreach($v['kredit']['suratperingatan'] as $v0)
+											<span class="text-danger">{{ucwords(str_replace('_', ' ', $v0['tag']))}}</span><br>
 											<small>{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v0['tanggal'])->diffForHumans()}}</small><br/>
 										@endforeach
 									</td>

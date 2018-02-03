@@ -9,7 +9,8 @@ use Exception, DB, Auth, Carbon\Carbon;
 
 use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Finance\Models\Account;
-use Thunderlabid\Finance\Models\TransactionDetail;
+use Thunderlabid\Finance\Models\Jurnal;
+use Thunderlabid\Finance\Models\DetailTransaksi;
 
 class KasirController extends Controller
 {
@@ -29,10 +30,9 @@ class KasirController extends Controller
 			$dday 		= Carbon::createFromFormat('d/m/Y', request()->get('q'))->startofday()->addhours(15);
 		}
 
-		$balance 	= TransactionDetail::wherehas('account', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_account.akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '<=', $dbefore->format('Y-m-d H:i:s'))->sum('amount');
-
-		$out 		= TransactionDetail::wherehas('account', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_account.akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))->where('amount', '<=', 0)->sum('amount');
-		$in 		= TransactionDetail::wherehas('account', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_account.akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))->where('amount', '>=', 0)->sum('amount');
+		$balance 	= Jurnal::wherehas('coa', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_coa.coa_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '<=', $dbefore->format('Y-m-d H:i:s'))->sum('jumlah');
+		$out 		= Jurnal::wherehas('coa', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_coa.coa_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))->where('jumlah', '<=', 0)->sum('jumlah');
+		$in 		= Jurnal::wherehas('coa', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_coa.coa_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))->where('jumlah', '>=', 0)->sum('jumlah');
 
 		view()->share('active_submenu', 'kasir');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));

@@ -72,7 +72,7 @@
 					<td style="width: 15%">No Rek / SPK</td>
 					<td style="width: 1%">:</td>
 					<td class="w-50 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc"> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; / {{$angsuran['nomor_kredit']}}</p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc"> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; / {{$angsuran['morph_reference_id']}}</p>
 					</td>
 				</tr>
 				<tr class="align-top">
@@ -93,7 +93,15 @@
 					<td style="width: 15%">Untuk Pembayaran</td>
 					<td style="width: 1%">:</td>
 					<td class="w-50 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc"> Tunggakan Angsuran </p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
+							@foreach($angsuran['details'] as $k => $v)
+								@if ($loop->last)
+									{{$v['deskripsi']}}
+								@else
+									{{$v['deskripsi']}}, 
+								@endif
+							@endforeach
+						</p>
 					</td>
 				</tr>
 			</table>			
