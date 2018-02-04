@@ -87,7 +87,7 @@
 														{{$idr->formatMoneyTo($stat['total_tunggakan'] - $stat['total_titipan'])}}
 													</h4><hr> 
 												@endslot
-												@slot('body') <p class='text-center'>TOTAL ANGSURAN YANG HARUS DIBAYAR</p> @endslot
+												@slot('body') <p class='text-center'>TOTAL TUNGGAKAN YANG HARUS DIBAYAR</p> @endslot
 											@endcomponent
 										</div>
 									</div>
@@ -102,13 +102,39 @@
 											@include('v2.kredit.show.titipan_angsuran')
 										</div>
 									</div>
+									<div class="clearfix">&nbsp;</div>
+									<div class="clearfix">&nbsp;</div>
+									<div class="row">
+										<div class="col-4">
+											@component('bootstrap.card')
+												@slot('title') 
+													<h4 class='text-center'>
+														{{$idr->formatMoneyTo($stat['total_denda'] - $stat['total_restitusi'])}}
+													</h4><hr> 
+												@endslot
+												@slot('body') <p class='text-center'>TOTAL DENDA YANG HARUS DIBAYAR</p> @endslot
+											@endcomponent
+											<div class="clearfix">&nbsp;</div>
+											<div class="clearfix">&nbsp;</div>
+											@include('v2.kredit.show.bayar_denda')
+										</div>
+										<div class="col-4">
+											@if($restitusi)
+												@include('v2.kredit.show.konfirmasi_restitusi')
+											@else
+												@include('v2.kredit.show.permohonan_restitusi')
+											@endif
+										</div>
+										<div class="col-4">
+											@include('v2.kredit.show.kas_kolektor')
+										</div>
+									</div>
 									<div class="row">
 										<div class="col-8">
 											@include('v2.kredit.show.angsuran')
 										</div>
 										<div class="col-4">
-											@include('v2.kredit.show.kas_kolektor')
-											<!-- @include('v2.kredit.show.denda') -->
+											@include('v2.kredit.show.denda')
 										</div>
 									</div>
 								</div>

@@ -79,7 +79,7 @@
 
 					<div class="row">
 						<div class="col-3">
-							- Tunggakan Angsuran ({{$t_tunggakan->jumlah_tunggakan/2}})
+							- Tunggakan Angsuran ({{$t_tunggakan->jumlah_tunggakan}})
 						</div>
 						<div class="col-2 text-right">
 							{{$idr->formatmoneyto($t_tunggakan->tunggakan)}}&emsp;&nbsp;

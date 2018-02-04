@@ -1,7 +1,5 @@
 @inject('carbon', 'Carbon\Carbon')
 
-<div class="clearfix">&nbsp;</div>
-<div class="clearfix">&nbsp;</div>
 @component('bootstrap.card')
 	@slot('title') 
 		<h5 class='text-left'>

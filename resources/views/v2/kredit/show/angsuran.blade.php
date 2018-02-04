@@ -35,6 +35,10 @@
 								<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'sementara']) }}" target="__blank" class="text-success">
 									CETAK
 								</a>
+							@elseif(str_is($v['jenis'], 'denda'))
+								<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'denda']) }}" target="__blank" class="text-success">
+									CETAK
+								</a>
 							@else
 								<a href="#"></a>
 							@endif

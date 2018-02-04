@@ -150,6 +150,25 @@ class JadwalAngsuran extends Model
 		;
 	}
 	
+	public function scopeHistoriTunggakan($query, Carbon $value){
+		return $query->where(function($q)use($value){
+				$q
+				->where(function($q)use($value){
+					$q
+					->wherenull('nomor_faktur')
+					->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
+					;
+				})
+				->orwhere(function($q)use($value){
+					$q
+					->whereraw(\DB::raw('DATE_FORMAT(tanggal ,"%Y-%m-%d") < DATE_FORMAT(tanggal_bayar ,"%Y-%m-%d")'))
+					->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
+					;
+				})
+				;
+			})
+		;
+	}
 	public function scopeHitungTotalHutang($query, $nomor_kredit){
 		return $query->where('nomor_kredit', $nomor_kredit)->sum('amount');
 	}

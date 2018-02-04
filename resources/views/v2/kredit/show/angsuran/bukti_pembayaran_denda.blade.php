@@ -80,8 +80,6 @@
 										<tr>
 											<th class="text-center" style="width: 5%;">#</th>
 											<th class="text-left" style="width: 22%;">Deskripsi</th>
-											<th class="text-right" style="width: 20%;">Denda</th>
-											<th class="text-right">Restitusi</th>
 											<th class="text-right">Subtotal</th>
 										</tr>
 									</thead>
@@ -89,16 +87,14 @@
 										@foreach ($angsuran['details'] as $k => $v)
 											<tr>
 												<td>{{ $loop->iteration }}</td>
-												<td>Denda ke- {{ $v['nth'] }}</td>
-												<td class="text-right">{{ $idr->formatMoneyTo($v['denda']) }}</td>
-												<td class="text-right">{{ $idr->formatMoneyTo($v['restitusi_denda']) }}</td>
-												<td class="text-right">{{ $idr->formatMoneyTo($v['subtotal']) }}</td>
+												<td>{{ $v['deskripsi'] }}</td>
+												<td class="text-right">{{ $v['jumlah'] }}</td>
 											</tr>
 										@endforeach
 									</tbody>
 									<tfoot>
 										<tr>
-											<td class="text-right" colspan="4"><h5><strong>Total</strong></h5></td>
+											<td class="text-right" colspan="2"><h5><strong>Total</strong></h5></td>
 											<td class="text-right"><h5><strong>{{ $angsuran['jumlah'] }}</strong></h5></td>
 										</tr>
 									</tfoot>

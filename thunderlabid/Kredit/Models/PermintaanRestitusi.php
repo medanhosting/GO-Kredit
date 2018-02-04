@@ -36,7 +36,7 @@ class PermintaanRestitusi extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_permintaan_restitusi';
-	protected $fillable = ['nomor_kredit', 'tanggal', 'is_approved', 'nota_bayar_id', 'jenis', 'amount', 'alasan', 'karyawan'];
+	protected $fillable = ['nomor_kredit', 'tanggal', 'is_approved', 'nota_bayar_id', 'jenis', 'jumlah', 'alasan', 'karyawan'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];
@@ -88,9 +88,9 @@ class PermintaanRestitusi extends Model
 		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
 	}
 
-	public function setAmountAttribute($variable)
+	public function setJumlahAttribute($variable)
 	{
-		$this->attributes['amount']		= $this->formatMoneyFrom($variable);
+		$this->attributes['jumlah']		= $this->formatMoneyFrom($variable);
 	}
 
 	public function setKaryawanAttribute($variable)
@@ -138,9 +138,9 @@ class PermintaanRestitusi extends Model
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 
-	public function getAmountAttribute($variable)
+	public function getJumlahAttribute($variable)
 	{
-		return $this->formatMoneyTo($this->attributes['amount']);
+		return $this->formatMoneyTo($this->attributes['jumlah']);
 	}
 	
 	public function getKaryawanAttribute($variable)

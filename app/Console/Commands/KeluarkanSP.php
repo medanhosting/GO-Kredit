@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Thunderlabid\Kredit\Models\AngsuranDetail;
+use Thunderlabid\Kredit\Models\JadwalAngsuran;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
 use Carbon\Carbon, Config, Auth;
 
@@ -57,7 +57,7 @@ class KeluarkanSP extends Command
 	{
 		//checkdays
 		$limit 		= Carbon::now()->subDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->endofday();
-		$angsuran 	= AngsuranDetail::HitungTunggakanBeberapaWaktuLalu($limit)->selectraw('count(nth) as total_tunggakan')->selectraw('max(nth) as last_nth')->groupby('nth');
+		$angsuran 	= JadwalAngsuran::HitungTunggakanBeberapaWaktuLalu($limit)->selectraw('count(nth) as total_tunggakan');
 
 		if(!is_null($this->option('nomor'))){
 			$angsuran 	= $angsuran->where('nomor_kredit', $this->option('nomor'));
@@ -90,10 +90,10 @@ class KeluarkanSP extends Command
 				if(!$new_sp){
 					$new_sp 				= new SuratPeringatan;
 					$new_sp->nomor_kredit 	= $v['nomor_kredit'];
-					$new_sp->nth 			= $v['last_nth'];
+					$new_sp->nth 			= $v['nth'];
 					$new_sp->tanggal 		= $limit->format('d/m/Y H:i');
 					$new_sp->tag 			= $tag;
-					$new_sp->nip_karyawan 	= 'GOKREDIT';
+					$new_sp->karyawan 		= ['nip' => 'GOKREDIT', 'nama' => 'GOKREDIT'];
 					$new_sp->save();
 				}
 			}

@@ -20,7 +20,7 @@ trait KreditTrait {
 	
  	public function store_denda($aktif){
 		$denda 		= new BayarDenda($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'), request()->get('nomor_perkiraan'));
-		$denda->bayar();
+		$denda->bayar(request()->get('nominal'));
  	}
 	
  	public function store_permintaan_restitusi($aktif){

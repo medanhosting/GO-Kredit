@@ -7,6 +7,8 @@ use Thunderlabid\Kredit\Models\Aktif;
 
 use App\Service\Traits\IDRTrait;
 
+use Carbon\Carbon;
+
 class PelunasanAngsuran
 {
 	use IDRTrait;
@@ -35,24 +37,25 @@ class PelunasanAngsuran
 	 * @return void
 	 */
 	public static function potongan($nomor_kredit){
+		$today 		= Carbon::now();
 		//find kredit jangka_waktu
 		$aktif 		= Aktif::where('nomor_kredit', $nomor_kredit)->first();
 
-		//find last paid
-		$kredit 	= JadwalAngsuran::where('nomor_kredit', $nomor_kredit)->wherenotnull('nomor_faktur')->orderby('nth', 'desc')->first();
+		//find angsuran terdekat
+		$kredit 	= JadwalAngsuran::where('nomor_kredit', $nomor_kredit)->where('tanggal', '>', $today->endofday()->format('Y-m-d H:i:s'))->orderby('nth', 'asc')->first();
 
 		if(str_is($aktif['jenis_pinjaman'], 'pa'))
 		{
 			$rincian 	= new PerhitunganBunga($aktif['plafon_pinjaman'], 'Rp 0', $aktif['suku_bunga'], null, null, null, $aktif['jangka_waktu']);
 			$rincian 	= $rincian->pa();
 
-			$tb 		= self::formatMoneyFrom($rincian['angsuran'][$kredit['nth']+1]['angsuran_bunga']) * ($aktif['jangka_waktu'] - ($kredit['nth']*1));
+			$tb 		= self::formatMoneyFrom($rincian['angsuran'][$kredit['nth']]['angsuran_bunga']) * ($aktif['jangka_waktu'] - ($kredit['nth']*1 - 1));
 		}
 		elseif(str_is($aktif['jenis_pinjaman'], 'pt') && $kredit['nth'] < $aktif['jangka_waktu'])
 		{
 			$rincian 	= new PerhitunganBunga($aktif['plafon_pinjaman'], 'Rp 0', $aktif['suku_bunga'], null, null, null, $aktif['jangka_waktu']);
 			$rincian 	= $rincian->pt();
-			$tb 		= self::formatMoneyFrom($rincian['angsuran'][$kredit['nth']+1]['angsuran_bunga']) * ($aktif['jangka_waktu'] - ($kredit['nth']*1));
+			$tb 		= self::formatMoneyFrom($rincian['angsuran'][$kredit['nth']]['angsuran_bunga']) * ($aktif['jangka_waktu'] - ($kredit['nth']*1 - 1));
 		}else{
 			$tb 	= 0;
 		}

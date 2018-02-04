@@ -6,14 +6,22 @@ use App\Http\Controllers\Controller;
 
 use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Kredit\Models\JadwalAngsuran;
+use Thunderlabid\Kredit\Models\PermintaanRestitusi;
+use Thunderlabid\Finance\Models\NotaBayar;
+use Thunderlabid\Finance\Models\DetailTransaksi;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
 
 use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+
+use App\Service\Traits\IDRTrait;
+use App\Http\Service\Policy\PerhitunganBunga;
 
 use Exception, Auth, Carbon\Carbon;
 
 class TunggakanController extends Controller
 {
+	use IDRTrait;
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -76,31 +84,43 @@ class TunggakanController extends Controller
 
 			$t_tunggakan 	= JadwalAngsuran::HitungTunggakanBeberapaWaktuLalu($tanggal_surat)->where('nomor_kredit', $id)->selectraw('count(nth) as jumlah_tunggakan')->first();
 
-			$before 		= null;
-			$after 			= null;
-			$middle 		= null;
-			 
-			// $before 		= JadwalAngsuran::TunggakanBeberapaWaktuLalu($tanggal_surat)
-			// ->where('nomor_kredit', $id)
-			// ->whereIn('tag', ['denda', 'restitusi_denda'])
-			// ->selectraw(\DB::raw('SUM(IF(tag="denda",amount,IF(tag="restitusi_denda",amount,0))) as denda'))
-			// ->groupby('nomor_kredit')
-			// ->first();
+			//hitung denda before
+			$rd			= JadwalAngsuran::TunggakanBeberapaWaktuLalu($tanggal_surat)->where('nomor_kredit', $id)->groupby('nth')->selectraw('sum(jumlah * ('.$surat->kredit['persentasi_denda'].'/100)) as tunggakan')->selectraw('DATEDIFF(min(tanggal),IFNULL(min(tanggal_bayar),"'.$tanggal_surat->format('Y-m-d H:i:s').'")) as days')->selectraw('nth')->get();
 
-			// $middle 		= JadwalAngsuran::where('tanggal', '<=', $tanggal_surat->format('Y-m-d H:i:s'))
-			// ->where('nomor_kredit', $id)
-			// ->whereIn('tag', ['titipan', 'pengambilan_titipan'])
-			// ->selectraw(\DB::raw('SUM(IF(tag="titipan",amount,IF(tag="pengambilan_titipan",amount,0))) as titipan'))
-			// ->groupby('nomor_kredit')
-			// ->first();
+			$before['denda'] 		= 0;
+			foreach ($rd as $k => $v) {
+				$before['denda'] 	= $before['denda'] + ($v['tunggakan'] * abs($v['days'])); 
+			}
+			$before['denda']		= $before['denda'] - NotaBayar::where('morph_reference_id', $id)->where('morph_reference_tag', 'kredit')->where('jenis', 'denda')->where('tanggal', '<=', $tanggal_surat->format('Y-m-d H:i:s'))->sum('jumlah') - PermintaanRestitusi::where('nomor_kredit', $id)->where('tanggal', '<=', $tanggal_surat->format('Y-m-d H:i:s'))->where('is_approved', true)->sum('jumlah');
 
-			// $after 			= JadwalAngsuran::where('tanggal', '>', $tanggal_surat->format('Y-m-d H:i:s'))
-			// ->where('nomor_kredit', $id)
-			// ->whereIn('tag', ['pokok', 'bunga'])
-			// ->selectraw(\DB::raw('SUM(IF(tag="pokok",amount,0)) as pokok'))
-			// ->selectraw(\DB::raw('SUM(IF(tag="bunga",amount,0)) as bunga'))
-			// ->groupby('nomor_kredit')
-			// ->first();
+			//hitung titipan middle
+			$middle['titipan']	= DetailTransaksi::whereIn('tag', ['titipan_pokok', 'titipan_bunga', 'restitusi_titipan_pokok', 'restitusi_titipan_bunga'])->wherehas('notabayar', function($q)use($id, $tanggal_surat){$q->where('morph_reference_id', $id)->where('morph_reference_tag', 'kredit')->where('tanggal', '<=', $tanggal_surat->format('Y-m-d H:i:s'));})->sum('jumlah');
+
+			//hitung bunga n pokok after
+			$hbp	= JadwalAngsuran::where('tanggal', '>', $tanggal_surat->format('Y-m-d H:i:s'))
+				->where('nomor_kredit', $id)
+				->get(['nth'])
+				->toarray()
+				;
+
+			if(str_is($surat->kredit['jenis_pinjaman'], 'pa'))
+			{
+				$rincian 	= new PerhitunganBunga($surat->kredit['plafon_pinjaman'], 'Rp 0', $surat->kredit['suku_bunga'], null, null, null, $surat->kredit['jangka_waktu']);
+				$rincian 	= $rincian->pa();
+			}
+			elseif(str_is($surat->kredit['jenis_pinjaman'], 'pt'))
+			{
+				$rincian 	= new PerhitunganBunga($surat->kredit['plafon_pinjaman'], 'Rp 0', $surat->kredit['suku_bunga'], null, null, null, $surat->kredit['jangka_waktu']);
+				$rincian 	= $rincian->pt();
+			}
+
+			$after['pokok']	= 0;
+			$after['bunga']	= 0;
+
+			foreach ($hbp as $k => $v) {
+				$after['pokok'] 	= $after['pokok'] + $this->formatMoneyFrom($rincian['angsuran'][$v['nth']]['angsuran_pokok']);
+				$after['bunga'] 	= $after['bunga'] + $this->formatMoneyFrom($rincian['angsuran'][$v['nth']]['angsuran_bunga']);
+			}
 
 			$pimpinan 		= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('role', 'pimpinan')->where('tanggal_masuk', '>=', $tanggal_surat->format('Y-m-d H:i:s'))->where(function($q)use($tanggal_surat){$q->where('tanggal_keluar', '<=', $tanggal_surat->format('Y-m-d H:i:s'))->orwherenull('tanggal_keluar');})->first();
 

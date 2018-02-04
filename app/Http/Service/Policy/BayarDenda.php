@@ -3,9 +3,10 @@
 namespace App\Http\Service\Policy;
 
 use Thunderlabid\Kredit\Models\Aktif;
-use Thunderlabid\Kredit\Models\NotaBayar;
-use Thunderlabid\Kredit\Models\AngsuranDetail;
+use Thunderlabid\Kredit\Models\JadwalAngsuran;
 use Thunderlabid\Kredit\Models\PermintaanRestitusi;
+use Thunderlabid\Finance\Models\NotaBayar;
+use Thunderlabid\Finance\Models\DetailTransaksi;
 
 use App\Service\Traits\IDRTrait;
 
@@ -30,10 +31,10 @@ class BayarDenda
 
 		if(str_is('restitusi_3_hari', $jenis)){
 			$pr->jenis 		= $jenis;
-			$pr->amount 	= $this->formatMoneyTo($this->hitung_restitusi_3_hari($this->tanggal, $this->kredit['persentasi_denda']));
+			$pr->jumlah 	= $this->formatMoneyTo($this->hitung_restitusi_3_hari($this->tanggal, $this->kredit['persentasi_denda']));
 		}else{
 			$pr->jenis 		= 'restitusi_nominal';
-			$pr->amount 	= $nominal;
+			$pr->jumlah 	= $nominal;
 		}
 
 		$pr->nomor_kredit 	= $this->kredit['nomor_kredit'];
@@ -43,59 +44,40 @@ class BayarDenda
 	}
 
 	private function hitung_restitusi_3_hari($tanggal, $persentasi_denda){
-		$tunggakan 		= AngsuranDetail::HitungTunggakanBeberapaWaktuLalu(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->get();
+		$tunggakan 		= JadwalAngsuran::TunggakanBeberapaWaktuLalu(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->selectraw('sum(jumlah) as tunggakan')->first();
 
-		return ($tunggakan[0]['tunggakan'] * $persentasi_denda * 3)/100;
+		return ($tunggakan['tunggakan'] * $persentasi_denda * 3)/100;
 	}
 
 	public static function hitung_r3d($tanggal, $persentasi_denda){
-		$tunggakan 		= AngsuranDetail::HitungTunggakanBeberapaWaktuLalu(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->get();
+		$tunggakan 		= JadwalAngsuran::TunggakanBeberapaWaktuLalu(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->selectraw('sum(jumlah) as tunggakan')->first();
 
-		return ($tunggakan[0]['tunggakan'] * $persentasi_denda * 3)/100;
+		return ($tunggakan['tunggakan'] * $persentasi_denda * 3)/100;
 	}
 	
 	public function validasi_restitusi($is_approved){
-		$pr 			= PermintaanRestitusi::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('is_approved')->first();
-
-		if($pr && ($is_approved * 1)){
-			$denda 		= AngsuranDetail::whereIn('tag', ['denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->orderby('tanggal', 'desc')->first();
-		
-			$t_denda 	= AngsuranDetail::whereIn('tag', ['denda', 'restitusi_denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->sum('amount');
-			
-			$pad 	= new AngsuranDetail;
-			$pad->nomor_kredit 	= $this->kredit['nomor_kredit'];
-			$pad->tanggal 		= $this->tanggal;
-			$pad->nth 			= $denda['nth'];
-			$pad->tag 			= 'restitusi_denda';
-			$pad->amount 		= $this->formatMoneyTo(0 - $this->formatMoneyFrom($pr['amount']));
-			$pad->description 	= 'Persetujuan Restitusi';
-			$pad->save();
-		}
-
-		$pr->karyawan 				= $this->karyawan;
-		$pr->is_approved 			= $is_approved * 1;
+		$pr 				= PermintaanRestitusi::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('is_approved')->first();
+		$pr->karyawan		= $this->karyawan;
+		$pr->is_approved	= $is_approved * 1;
 		$pr->save();
 	}
 
-	public function bayar(){
-		$amount 	= AngsuranDetail::whereIn('tag', ['denda', 'restitusi_denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->sum('amount');
-
-		$first 		= AngsuranDetail::whereIn('tag', ['denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->orderby('nth', 'asc')->first();
-
-		$denda 		= AngsuranDetail::whereIn('tag', ['denda', 'restitusi_denda'])->where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nota_bayar_id')->get();
-
+	public function bayar($nominal){
 		$nb 	= new NotaBayar;
-		$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
-		$nb->nomor_kredit 	= $this->kredit['nomor_kredit'];
-		$nb->tanggal 		= $this->tanggal;
-		$nb->nip_karyawan 	= $this->karyawan['nip'];
-		$nb->nomor_perkiraan= $this->nomor_perkiraan;
-		$nb->jumlah 		= $this->formatMoneyTo($amount);
+		$nb->nomor_faktur 		 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
+		$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
+		$nb->morph_reference_tag 	= 'kredit';
+		$nb->tanggal 				= $this->tanggal;
+		$nb->karyawan 				= $this->karyawan;
+		$nb->jumlah 				= $nominal;
+		$nb->jenis 					= 'denda';
 		$nb->save();
 
-		foreach ($denda as $k => $v) {
-			$v->nota_bayar_id = $nb->id;
-			$v->save();
-		}
+		$angs 	= new DetailTransaksi;
+		$angs->nomor_faktur 	= $nb->nomor_faktur;
+		$angs->tag 				= 'denda';
+		$angs->jumlah 			= $nominal;
+		$angs->deskripsi 		= 'Bayar Denda';
+		$angs->save();
 	}
 }

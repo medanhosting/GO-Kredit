@@ -119,6 +119,9 @@ class JurnalController extends Controller
 			['nomor_perkiraan'	=> '260.110',
 			'akun'				=> 'PYD Bunga',
 			'parent'			=> '260.000'],
+			['nomor_perkiraan'	=> '260.120',
+			'akun'				=> 'PYD Denda',
+			'parent'			=> '260.000'],
 
 
 			['nomor_perkiraan'	=> '401.000',

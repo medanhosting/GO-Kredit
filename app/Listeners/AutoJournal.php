@@ -48,6 +48,9 @@ class AutoJournal
 		elseif(in_array($model->tag, ['restitusi_titipan_pokok', 'restitusi_titipan_bunga'])){
 			$this->journal_restitusi_titipan($model);
 		}
+		elseif(str_is($model->tag, 'denda')){
+			$this->journal_denda($model);
+		}
 	}
 
 	private function journal_pencairan($model){
@@ -250,6 +253,38 @@ class AutoJournal
 		$data->detail_transaksi_id 	= $model->id;
 		$data->tanggal 				= $model->notabayar->tanggal;
 		$data->coa_id 				= $coa_ttp->id;
+		$data->jumlah 				= $this->formatMoneyTo(0 - abs($jumlah));
+		$data->save();
+	}
+
+	private function journal_denda($model){
+		//check kredit
+		$kredit 	= Aktif::where('nomor_kredit', $model->notabayar->morph_reference_id)->first();
+		
+		$jumlah 	= $this->formatMoneyFrom($model->jumlah);
+		
+		$coa_piut 	= COA::where('nomor_perkiraan', '140.600')->where('kode_kantor', $kredit->kode_kantor)->first();
+		$coa_pyd 	= COA::where('nomor_perkiraan', '260.120')->where('kode_kantor', $kredit->kode_kantor)->first();
+
+		//tambah piutang
+		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_piut->id)->first();
+		if(!$data){
+			$data 	= new Jurnal;
+		}
+		$data->detail_transaksi_id 	= $model->id;
+		$data->tanggal 				= $model->notabayar->tanggal;
+		$data->coa_id 				= $coa_piut->id;
+		$data->jumlah 				= $this->formatMoneyTo(abs($jumlah));
+		$data->save();
+		
+		//kurang pyd
+		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_pyd->id)->first();
+		if(!$data){
+			$data 	= new Jurnal;
+		}
+		$data->detail_transaksi_id 	= $model->id;
+		$data->tanggal 				= $model->notabayar->tanggal;
+		$data->coa_id 				= $coa_pyd->id;
 		$data->jumlah 				= $this->formatMoneyTo(0 - abs($jumlah));
 		$data->save();
 	}

@@ -59,7 +59,7 @@
 					<td style="width: 12.5%">AC / SPK</td>
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{$angsuran['nomor_kredit']}}</p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{$angsuran['morph_reference_id']}}</p>
 					</td>
 					<td style="width: 12.5%">Nama</td>
 					<td style="width: 1%">:</td>
@@ -77,26 +77,22 @@
 							<thead>
 								<tr>
 									<th class="text-center" style="width: 5%;">#</th>
-									<th class="text-left" style="width: 22%;">Deskripsi</th>
-									<th class="text-right" style="width: 20%;">Denda</th>
-									<th class="text-right">Restitusi</th>
-									<th class="text-right">Subtotal</th>
+									<th class="text-left">Deskripsi</th>
+									<th class="text-right" style="width: 22%;">Subtotal</th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach ($angsuran['details'] as $k => $v)
 									<tr>
 										<td>{{ $loop->iteration }}</td>
-										<td>Denda ke- {{ $v['nth'] }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['denda']) }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['restitusi_denda']) }}</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($v['subtotal']) }}</td>
+										<td>{{ $v['deskripsi'] }}</td>
+										<td class="text-right">{{ $v['jumlah'] }}</td>
 									</tr>
 								@endforeach
 							</tbody>
 							<tfoot>
 								<tr>
-									<td class="text-right" colspan="4"><h5><strong>Total</strong></h5></td>
+									<td class="text-right" colspan="2"><h5><strong>Total</strong></h5></td>
 									<td class="text-right"><h5><strong>{{ $angsuran['jumlah'] }}</strong></h5></td>
 								</tr>
 							</tfoot>
