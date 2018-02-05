@@ -10943,6 +10943,12 @@ textarea::placeholder {
   box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.05) !important;
 }
 
+.box-shadow {
+  -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
+}
+
 a,
 button {
   cursor: pointer !important;
