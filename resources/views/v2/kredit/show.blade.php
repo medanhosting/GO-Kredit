@@ -56,10 +56,10 @@
 								</div>
 								<!-- tab angsuran -->
 								<div class="tab-pane {{$is_angsuran_tab}}" id="angsuran" role="tabpanel">
+									@if($stat['sisa_hutang'])
 									<div class="clearfix">&nbsp;</div>
 									<div class="clearfix">&nbsp;</div>
 									<div class="row">
-
 										<div class="col-4">
 											@component('bootstrap.card')
 												@slot('title') 
@@ -91,7 +91,8 @@
 											@endcomponent
 										</div>
 									</div>
-
+									@endif
+									@if($stat['sisa_hutang'])
 									<div class="clearfix">&nbsp;</div>
 									<div class="clearfix">&nbsp;</div>
 									<div class="row">
@@ -102,6 +103,8 @@
 											@include('v2.kredit.show.titipan_angsuran')
 										</div>
 									</div>
+									@endif
+									@if($stat['total_denda'])
 									<div class="clearfix">&nbsp;</div>
 									<div class="clearfix">&nbsp;</div>
 									<div class="row">
@@ -129,11 +132,17 @@
 											@include('v2.kredit.show.kas_kolektor')
 										</div>
 									</div>
+									@endif
 									<div class="row">
 										<div class="col-8">
 											@include('v2.kredit.show.angsuran')
 										</div>
 										<div class="col-4">
+											@if(count($titipan))
+												<div class="clearfix">&nbsp;</div>
+												<div class="clearfix">&nbsp;</div>
+												@include('v2.kredit.show.kas_kolektor')
+											@endif
 											@include('v2.kredit.show.denda')
 										</div>
 									</div>

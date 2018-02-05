@@ -32,53 +32,57 @@
 		});
 	});
 	Route::middleware(['auth', 'pilih_koperasi'])->prefix('v2')->group( function() {
-		Route::namespace('V2\Pengajuan')->group(function(){
-			Route::resource('simulasi', 		'SimulasiController'); 
-			Route::resource('pengajuan', 		'PengajuanController'); 
-			Route::resource('putusan', 			'PutusanController'); 
-			Route::get('putusan/{id}/print', 	['uses' => 'PutusanController@print', 'as' => 'putusan.print']);
+		Route::middleware(['limit_date'])->group( function() {
+			Route::namespace('V2\Pengajuan')->group(function(){
+				Route::resource('simulasi', 		'SimulasiController'); 
+				Route::resource('pengajuan', 		'PengajuanController'); 
+				Route::resource('putusan', 			'PutusanController'); 
+				Route::get('putusan/{id}/print', 	['uses' => 'PutusanController@print', 'as' => 'putusan.print']);
+				
+				Route::post('assign/{id}', 			['uses' => 'PengajuanController@assign', 'as' => 'pengajuan.assign']);
+			});
 			
-			Route::post('assign/{id}', 			['uses' => 'PengajuanController@assign', 'as' => 'pengajuan.assign']);
-		});
-		Route::namespace('V2\Kredit')->group(function(){
-			Route::resource('kredit', 			'KreditController'); 
-			Route::resource('jaminan',			'MutasiJaminanController'); 
-			Route::resource('tunggakan', 		'TunggakanController'); 
-			Route::resource('penagihan', 		'PenagihanController');
-			Route::resource('angsuran', 		'AngsuranController');
+			Route::namespace('V2\Kredit')->group(function(){
+				Route::resource('kredit', 			'KreditController'); 
+				Route::resource('jaminan',			'MutasiJaminanController'); 
+				Route::resource('tunggakan', 		'TunggakanController'); 
+				Route::resource('penagihan', 		'PenagihanController');
+				Route::resource('angsuran', 		'AngsuranController');
 
-			Route::get('angsuran/{id}/print', 		['uses' => 'AngsuranController@print', 		'as' => 'angsuran.print']);
-			Route::get('tunggakan/{id}/print',		['uses' => 'TunggakanController@print',		'as' => 'tunggakan.print']);
+				Route::get('angsuran/{id}/print', 		['uses' => 'AngsuranController@print', 		'as' => 'angsuran.print']);
+				Route::get('tunggakan/{id}/print',		['uses' => 'TunggakanController@print',		'as' => 'tunggakan.print']);
+			});
 
+			Route::namespace('V2\Finance')->group(function(){
+				Route::get('test/jurnal',			['uses' => 'JurnalController@test',	'as' => 'jurnal.test']);
+
+				Route::resource('akun', 			'AkunController'); 
+				// Route::resource('kasir', 			'KasirController'); 
+				Route::resource('jurnal', 			'JurnalController'); 
+
+				Route::get('jurnal/{type}/print',			['uses' => 'JurnalController@print',	'as' => 'jurnal.print']);
+
+				// KAS
+				Route::get('kas/penerimaan',	['uses' => 'KasController@penerimaan',		'as' => 'kas.penerimaan']);
+				Route::get('kas/pengeluaran',	['uses' => 'KasController@pengeluaran',		'as' => 'kas.pengeluaran']);
+				Route::get('kas/{type}/print',	['uses'	=> 'KasController@print',			'as' => 'kas.print']);
+
+				// BANK
+				Route::get('bank/penerimaan',		['uses' => 'BankController@penerimaan',	'as' => 'bank.penerimaan']);
+				Route::get('bank/pengeluaran',		['uses' => 'BankController@pengeluaran','as' => 'bank.pengeluaran']);
+
+				// KASIR
+				Route::get('kasir/lkh',			['uses' => 'KasirController@lkh',			'as' => 'kasir.lkh']);
+				Route::get('kasir/jurnalpagi',	['uses' => 'KasirController@jurnalpagi',	'as' => 'kasir.jurnalpagi']);
+				Route::get('kasir/print/lkh',	['uses' => 'KasirController@print',		'as' => 'kasir.print']);
+			});
 		});
+			
 		Route::namespace('V2\Kantor')->group(function(){
 			Route::resource('kantor', 			'KantorController'); 
 			Route::post('kantor/batch', 		['uses' => 'KantorController@batch', 	'as' => 'kantor.batch']);
 			Route::resource('karyawan', 		'KaryawanController'); 
 			Route::post('karyawan/batch', 		['uses' => 'KaryawanController@batch', 	'as' => 'karyawan.batch']);
-		});
-		Route::namespace('V2\Finance')->group(function(){
-			Route::get('test/jurnal',			['uses' => 'JurnalController@test',	'as' => 'jurnal.test']);
-
-			Route::resource('akun', 			'AkunController'); 
-			// Route::resource('kasir', 			'KasirController'); 
-			Route::resource('jurnal', 			'JurnalController'); 
-
-			Route::get('jurnal/{type}/print',			['uses' => 'JurnalController@print',	'as' => 'jurnal.print']);
-
-			// KAS
-			Route::get('kas/penerimaan',	['uses' => 'KasController@penerimaan',		'as' => 'kas.penerimaan']);
-			Route::get('kas/pengeluaran',	['uses' => 'KasController@pengeluaran',		'as' => 'kas.pengeluaran']);
-			Route::get('kas/{type}/print',	['uses'	=> 'KasController@print',			'as' => 'kas.print']);
-
-			// BANK
-			Route::get('bank/penerimaan',		['uses' => 'BankController@penerimaan',	'as' => 'bank.penerimaan']);
-			Route::get('bank/pengeluaran',		['uses' => 'BankController@pengeluaran','as' => 'bank.pengeluaran']);
-
-			// KASIR
-			Route::get('kasir/lkh',			['uses' => 'KasirController@lkh',			'as' => 'kasir.lkh']);
-			Route::get('kasir/jurnalpagi',	['uses' => 'KasirController@jurnalpagi',	'as' => 'kasir.jurnalpagi']);
-			Route::get('kasir/print/lkh',	['uses' => 'KasirController@print',		'as' => 'kasir.print']);
 		});
 		Route::namespace('V2\Otorisasi')->group(function(){
 			Route::resource('passcode', 		'PasscodeController');

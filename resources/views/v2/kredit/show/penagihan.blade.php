@@ -11,7 +11,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($suratperingatan as $k => $v)
+		@forelse($suratperingatan as $k => $v)
 		<tr>
 			<td>{{$v['tanggal']}}</td>
 			<td class="text-left">
@@ -114,6 +114,10 @@
 				@endif
 			</td>
 		</tr>
-		@endforeach
+		@empty
+		<tr>
+			<td colspan="3">Tidak ada data</td>
+		</tr>
+		@endforelse
 	</tbody>
 </table>

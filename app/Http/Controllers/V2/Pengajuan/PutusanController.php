@@ -28,6 +28,9 @@ use App\Http\Service\Policy\PerhitunganBunga;
 
 use Exception, Auth, DB, Carbon\Carbon;
 
+use App\Http\Middleware\ScopeMiddleware;
+use App\Http\Middleware\RequiredPasswordMiddleware;
+
 class PutusanController extends Controller
 {
 	use PengajuanTrait;
@@ -40,7 +43,25 @@ class PutusanController extends Controller
 		parent::__construct();
 
 		$this->middleware('scope:operasional.pengajuan')->only(['index', 'show']);
-		$this->middleware('scope:realisasi')->only(['store', 'print']);
+		$this->middleware('scope:realisasi')->only(['index', 'show', 'store', 'print']);
+	}
+
+
+	public function __call($name, $arguments)
+	{
+		if(str_is('*middleware_*', $name)){
+			if(in_array($name, ['middleware_store_checklists', 'middleware_validasi_checklists'])){
+				ScopeMiddleware::check('realisasi');
+			}
+			if(in_array($name, ['middleware_store_setoran_realisasi', 'middleware_store_realisasi'])){
+				ScopeMiddleware::check('pencairan');
+			}
+			if(in_array($name, ['middleware_validasi_checklists', 'middleware_store_setoran_realisasi', 'middleware_store_realisasi'])){
+				RequiredPasswordMiddleware::check();
+			}
+			
+			return call_user_func_array([$this, str_replace('middleware_', '', $name)], $arguments);
+		}
 	}
 
 	public function index () 
@@ -138,102 +159,16 @@ class PutusanController extends Controller
 			$putusan					= Putusan::where('pengajuan_id', $id)->wherehas('pengajuan', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->orderby('tanggal', 'desc')->first();
 
 			if(request()->has('checklists')){
-				$objek 		= request()->get('checklists')['objek'];
-				$pengikat 	= request()->get('checklists')['pengikat'];
-
-				foreach ($putusan['checklists']['objek'] as $k => $v) {
-					if($objek[$k]){
-						$data_input['checklists']['objek'][$k]	= 'ada';
-					}elseif(!str_is($v, 'cadangkan')){
-						$data_input['checklists']['objek'][$k]	= 'tidak_ada';
-					}else{
-						$data_input['checklists']['objek'][$k]	= 'cadangkan';
-					}
-				}
-
-				foreach ($putusan['checklists']['pengikat'] as $k => $v) {
-					if($pengikat[$k]){
-						$data_input['checklists']['pengikat'][$k]	= 'ada';
-					}elseif(!str_is($v, 'cadangkan')){
-						$data_input['checklists']['pengikat'][$k]	= 'tidak_ada';
-					}else{
-						$data_input['checklists']['pengikat'][$k]	= 'cadangkan';
-					}
-				}
-
-				$putusan->fill($data_input);
-				$putusan->save();
+				$this->middleware_store_checklists($putusan);
 			}
 			elseif(request()->has('status') && !str_is($putusan->pengajuan->status_terakhir, 'realisasi')){
-				$status 				= new Status;
-				$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-				$status->progress 		= 'sudah';
-				$status->status 		= 'realisasi';
-				$status->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
-				$status->pengajuan_id 	= $id;
-				$status->save();
+				$this->middleware_validasi_checklists($id);
 			}
 			elseif(request()->has('nomor_perkiraan')){
 				if(request()->has('setoran')){
-
-					//simpan nota bayar
-					$total 		= $this->formatMoneyFrom($putusan->provisi) + $this->formatMoneyFrom($putusan->administrasi) + $this->formatMoneyFrom($putusan->legal) + $this->formatMoneyFrom($putusan->biaya_notaris);
-
-					$nb 		= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'setoran_pencairan')->first();
-					if(!$nb){
-						$nb 				= new NotaBayar;
-						$nb->nomor_faktur  	= NotaBayar::generatenomorfaktur($putusan['nomor_kredit']);
-						$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-						$nb->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
-					}
-
-					$nb->morph_reference_id		= $putusan->nomor_kredit;
-					$nb->morph_reference_tag	= 'kredit';
-					$nb->jenis 					= 'setoran_pencairan';
-					$nb->jumlah 				= $this->formatMoneyTo($total);
-					$nb->save();
-
-					$idx 				= ['provisi', 'administrasi', 'legal', 'biaya_notaris'];
-
-					foreach ($idx as $k => $v) {
-						$ad 			= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->where('tag', $v)->first();
-						if(!$ad){
-							$ad 		= new DetailTransaksi;
-						}
-						$ad->nomor_faktur 	= $nb->nomor_faktur;
-						$ad->tag 			= $v;
-						$ad->jumlah 		= $putusan[$v];
-						$ad->deskripsi 		= ucwords(str_replace('_', ' ', $v)).' Kredit';
-						$ad->save();
-					}
+					$this->middleware_store_setoran_realisasi($putusan);
 				}else{
-					//simpan nota bayar
-					$total 		= $this->formatMoneyFrom($putusan->plafon_pinjaman);
-
-					$nb 		= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'pencairan')->first();
-					if(!$nb){
-						$nb 				= new NotaBayar;
-						$nb->nomor_faktur  	= NotaBayar::generatenomorfaktur($putusan['nomor_kredit']);
-						$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
-						$nb->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
-					}
-
-					$nb->morph_reference_id		= $putusan->nomor_kredit;
-					$nb->morph_reference_tag	= 'kredit';
-					$nb->jenis 					= 'pencairan';
-					$nb->jumlah 				= $this->formatMoneyTo(0 - $total);
-					$nb->save();
-
-					//angsuran detail
-					$ad			= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->where('tag', 'pencairan')->first();
-					if(!$ad){
-						$ad		= new DetailTransaksi;
-					}
-					$ad->nomor_faktur 	= $nb->nomor_faktur;
-					$ad->tag 			= 'pencairan';
-					$ad->jumlah 		= $this->formatMoneyTo(0 - $total);
-					$ad->deskripsi 		= 'Pencairan Kredit';
-					$ad->save();
+					$this->middleware_store_realisasi($putusan);
 				}
 			}
 

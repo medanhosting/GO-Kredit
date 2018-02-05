@@ -22,6 +22,9 @@ use App\Http\Controllers\V2\Traits\KreditTrait;
 
 use App\Http\Service\Policy\BayarDenda;
 
+use App\Http\Middleware\ScopeMiddleware;
+use App\Http\Middleware\RequiredPasswordMiddleware;
+
 class KreditController extends Controller
 {
 	use KreditTrait;
@@ -32,15 +35,90 @@ class KreditController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:operasional.kredit')->only(['index', 'show']);
+		$this->middleware('scope:operasional.kredit.angsuran.tagihan.restitusi.jaminan.mutasi_jaminan')->only(['index', 'show']);
+	}
 
-		$this->middleware('scope:tagihan')->only(['store_tagihan']);
-		$this->middleware('scope:angsuran')->only(['store_angsuran', 'store_denda']);
+	public function __call($name, $arguments)
+	{
+		if(str_is('*middleware_*', $name)){
+			if(in_array($name, ['middleware_store_angsuran', 'middleware_store_denda', 'middleware_store_bayar_sebagian'])){
+				ScopeMiddleware::check('angsuran');
+			}
+			if(in_array($name, ['middleware_store_tagihan', 'middleware_penerimaan_titipan_tagihan'])){
+				ScopeMiddleware::check('tagihan');
+			}
+			if(in_array($name, ['middleware_store_permintaan_restitusi', 'middleware_store_validasi_restitusi'])){
+				ScopeMiddleware::check('restitusi');
+			}
+			RequiredPasswordMiddleware::check();
+			
+			return call_user_func_array([$this, str_replace('middleware_', '', $name)], $arguments);
+		}
 	}
 
 	public function index () 
 	{
-		$aktif 		= Aktif::kantor(request()->get('kantor_aktif_id'))->PembayaranBerikut()->with(['jaminan' => function($q){$q->selectraw('max(id) as id, max(nomor_kredit) as nomor_kredit, max(tag) as tag, max(tanggal) as tanggal, max(dokumen) as dokumen')->groupby('nomor_jaminan');}])->paginate(15, ['*'], 'aktif');
+		$aktif 		= Aktif::kantor(request()->get('kantor_aktif_id'))->PembayaranBerikut()->with(['jaminan' => function($q){$q->selectraw('max(id) as id, max(nomor_kredit) as nomor_kredit, max(tag) as tag, max(tanggal) as tanggal, max(dokumen) as dokumen')->groupby('nomor_jaminan');}]);
+
+		if (request()->has('q'))
+		{
+			$cari	= request()->get('q');
+			$regexp = preg_replace("/-+/",'[^A-Za-z0-9_]+',$cari);
+			$aktif	= $aktif->where(function($q)use($regexp)
+			{				
+				$q
+				->whereRaw(DB::raw('nasabah REGEXP "'.$regexp.'"'));
+			});
+		}
+
+		if (request()->has('jaminan'))
+		{
+			$cari	= request()->get('jaminan');
+			switch (strtolower($cari)) {
+				case 'jaminan-bpkb':
+					$aktif 	= $aktif->wherehas('jaminan', function($q){$q->where('dokumen->jenis', 'bpkb');});
+					break;
+				case 'jaminan-sertifikat':
+					$aktif 	= $aktif->wherehas('jaminan', function($q){$q->where('dokumen->jenis', 'shgb')->orwhere('dokumen->jenis', 'shm');});
+					break;
+			}
+		}
+
+		if (request()->has('pinjaman'))
+		{
+			$cari	= request()->get('pinjaman');
+			switch (strtolower($cari)) {
+				case 'pinjaman-a':
+					$aktif 	= $aktif->where('jenis_pinjaman', 'pa');
+					break;
+				case 'pinjaman-t':
+					$aktif 	= $aktif->where('jenis_pinjaman', 'pt');
+					break;
+			}
+		}
+
+		if (request()->has('sort')){
+			$sort	= request()->get('sort');
+			switch (strtolower($sort)) {
+				case 'nama-desc':
+					$aktif 	= $aktif->orderby('nasabah->nama', 'desc');
+					break;
+				case 'pinjaman-asc':
+					$aktif 	= $aktif->orderby('plafon_pinjaman', 'asc');
+					break;
+				case 'pinjaman-desc':
+					$aktif 	= $aktif->orderby('plafon_pinjaman', 'desc');
+					break;
+				default :
+					$aktif 	= $aktif->orderby('nasabah->nama', 'asc');
+					break;
+			}
+		}else{
+			$aktif 	= $aktif->orderby('nasabah->nama', 'asc');
+		}
+
+
+		$aktif 		= $aktif->paginate(15, ['*'], 'aktif');
 
 		view()->share('is_aktif_tab', 'show active');
 
@@ -79,7 +157,7 @@ class KreditController extends Controller
 		foreach ($rd as $k => $v) {
 			$stat['total_denda'] 	= $stat['total_denda'] + ($v['tunggakan'] * abs($v['days'])); 
 		}
-		$stat['total_denda']		= $stat['total_denda'] - NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'denda')->sum('jumlah');
+		$stat['total_denda']		= ceil($stat['total_denda']) - ceil(NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'denda')->sum('jumlah'));
 
 		$r3d 						= BayarDenda::hitung_r3d(Carbon::now()->format('d/m/Y H:i'), $aktif['persentasi_denda']);
 
@@ -156,25 +234,25 @@ class KreditController extends Controller
 			DB::BeginTransaction();
 			switch (request()->get('current')) {
 				case 'tagihan':
-					$this->store_tagihan($aktif);
+					$this->middleware_store_tagihan($aktif);
 					break;
 				case 'penerimaan_titipan_tagihan':
-					$this->penerimaan_titipan_tagihan($aktif);
+					$this->middleware_penerimaan_titipan_tagihan($aktif);
 					break;
 				case 'bayar_sebagian':
-					$this->store_bayar_sebagian($aktif);
+					$this->middleware_store_bayar_sebagian($aktif);
 					break;
 				case 'permintaan_restitusi':
-					$this->store_permintaan_restitusi($aktif);
+					$this->middleware_store_permintaan_restitusi($aktif);
 					break;
 				case 'validasi_restitusi':
-					$this->store_validasi_restitusi($aktif);
+					$this->middleware_store_validasi_restitusi($aktif);
 					break;
 				case 'denda':
-					$this->store_denda($aktif);
+					$this->middleware_store_denda($aktif);
 					break;
 				default:
-					$this->store_angsuran($aktif);
+					$this->middleware_store_angsuran($aktif);
 					break;
 			}
 			DB::commit();

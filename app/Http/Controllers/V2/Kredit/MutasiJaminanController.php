@@ -14,7 +14,10 @@ class MutasiJaminanController extends Controller
 	{
 		parent::__construct();
 		
-		$this->middleware('scope:jaminan');
+		$this->middleware('scope:operasional.jaminan')->only(['index']);
+
+		$this->middleware('scope:mutasi_jaminan')->only(['update', 'store']);
+		$this->middleware('required_password')->only(['update', 'store']);
 	}
 
 	public function index () 

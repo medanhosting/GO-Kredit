@@ -43,4 +43,38 @@ class ScopeMiddleware
 		return redirect()->back()->withErrors('Anda tidak memiliki wewenang untuk data ini!');
 		throw new Exception("Anda tidak memiliki wewenang untuk data ini", 403);
 	}
+
+	public static function check($scope)
+	{
+		$hari_ini 	= Carbon::now();
+		
+		$active_u	= Auth::user();
+		$active_p 	= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('orang_id', $active_u['id'])->active($hari_ini)->first();
+
+		if(!$active_p)
+		{
+			throw new Exception("Anda tidak memiliki wewenang untuk data ini!", 1);
+		}
+
+		if(str_is($scope, 'setuju') || str_is($scope, 'tolak'))
+		{
+			$scope 	= 'keputusan';
+		}
+		if(in_array($scope, $active_p['scopes']))
+		{
+			return true;
+		}
+
+		if(str_is('*.*', $scope)){
+			$scopes 	= explode('.', $scope);
+			foreach ($scopes as $k => $v) {
+				if(in_array($v, $active_p['scopes']))
+				{
+					return true;
+				}
+			}
+		}
+
+		throw new Exception("Anda tidak memiliki wewenang untuk data ini!", 1);
+	}
 }

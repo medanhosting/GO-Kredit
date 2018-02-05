@@ -11,7 +11,8 @@ class AkunController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		// $this->middleware('scope:akun');
+		
+		$this->middleware('scope:akun');
 	}
 
 	public function index () 

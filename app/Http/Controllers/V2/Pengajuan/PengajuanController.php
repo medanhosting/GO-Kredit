@@ -23,6 +23,9 @@ use App\Service\Traits\IDRTrait;
 
 use Exception, Validator;
 
+use App\Http\Middleware\ScopeMiddleware;
+use App\Http\Middleware\RequiredPasswordMiddleware;
+
 class PengajuanController extends Controller
 {
 	use IDRTrait;
@@ -33,20 +36,47 @@ class PengajuanController extends Controller
 		parent::__construct();
 
 		$this->middleware('scope:operasional.pengajuan')->only(['index', 'show']);
+		$this->middleware('scope:permohonan')->only(['create']);
+	}
 
-		$this->middleware('scope:permohonan')->only(['create', 'store_permohonan', 'assign_surveyor']);
-		$this->middleware('scope:survei')->only(['store_survei', 'assign_analis']);
-		$this->middleware('scope:analisa')->only(['store_analisa', 'assign_komite_putusan']);
-		$this->middleware('scope:putusan')->only(['store_putusan', 'assign_realisasi']);
-		
+	public function __call($name, $arguments)
+	{
+		if(str_is('middleware_*', $name)){
+			if(in_array($name, ['middleware_store_permohonan', 'middleware_assign_surveyor'])){
+				ScopeMiddleware::check('permohonan');
+			}
+			if(in_array($name, ['middleware_store_survei', 'middleware_assign_analis'])){
+				ScopeMiddleware::check('survei');
+			}
+			if(in_array($name, ['middleware_store_analisa', 'middleware_assign_komite_putusan'])){
+				ScopeMiddleware::check('analisa');
+			}
+			if(in_array($name, ['middleware_store_putusan', 'middleware_assign_realisasi'])){
+				ScopeMiddleware::check('putusan');
+			}
+
+			if(str_is('middleware_assign*', $name)){
+				RequiredPasswordMiddleware::check();
+			}
+
+			if(str_is('middleware_get_pengajuan', $name)){
+				if(!in_array($arguments[0], $this->scopes['scopes'])){
+					$arguments[1]	= null;
+					$arguments[2]	= true;
+					return call_user_func_array([$this, str_replace('middleware_', '', $name)], $arguments);
+				}
+			}
+
+			return call_user_func_array([$this, str_replace('middleware_', '', $name)], $arguments);				
+		}
 	}
 
 	public function index () 
 	{
-		$permohonan 	= $this->get_pengajuan('permohonan');
-		$survei 		= $this->get_pengajuan('survei');
-		$analisa 		= $this->get_pengajuan('analisa');
-		$putusan 		= $this->get_pengajuan('putusan');
+		$permohonan 	= $this->middleware_get_pengajuan('permohonan');
+		$survei 		= $this->middleware_get_pengajuan('survei');
+		$analisa 		= $this->middleware_get_pengajuan('analisa');
+		$putusan 		= $this->middleware_get_pengajuan('putusan');
 
 		if(request()->has('current')){
 			switch (request()->get('current')) {
@@ -117,27 +147,32 @@ class PengajuanController extends Controller
 
 	public function store($id = null){
 		
-		\DB::begintransaction();
+		try {
+			\DB::begintransaction();
 
-		$permohonan 	= Pengajuan::findornew($id);
+			$permohonan 	= Pengajuan::findornew($id);
 
-		if(str_is($permohonan->status_terakhir->status, 'putusan')){
-			$returned 	= $this->store_putusan($permohonan);
-		}elseif(str_is($permohonan->status_terakhir->status, 'analisa')){
-			$returned 	= $this->store_analisa($permohonan);
-		}elseif(str_is($permohonan->status_terakhir->status, 'survei')){
-			$returned 	= $this->store_survei($permohonan);
-		}elseif(str_is($permohonan->status_terakhir->status, 'permohonan') || is_null($id)){
-			$returned 	= $this->store_permohonan($permohonan);
+			if(str_is($permohonan->status_terakhir->status, 'putusan')){
+				$returned 	= $this->middleware_store_putusan($permohonan);
+			}elseif(str_is($permohonan->status_terakhir->status, 'analisa')){
+				$returned 	= $this->middleware_store_analisa($permohonan);
+			}elseif(str_is($permohonan->status_terakhir->status, 'survei')){
+				$returned 	= $this->middleware_store_survei($permohonan);
+			}elseif(str_is($permohonan->status_terakhir->status, 'permohonan') || is_null($id)){
+				$returned 	= $this->middleware_store_permohonan($permohonan);
+			}
+
+			if($returned instanceof Pengajuan){
+				\DB::commit();
+				return redirect()->route('pengajuan.show', ['id' => $returned['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+			}
+		
+			\DB::rollback();
+			return redirect()->back()->withErrors($returned);
+		} catch (Exception $e) {
+			\DB::rollback();
+			return redirect()->back()->withErrors($e->getMessage());
 		}
-
-		if($returned instanceof Pengajuan){
-			\DB::commit();
-			return redirect()->route('pengajuan.show', ['id' => $returned['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
-		}
-	
-		\DB::rollback();
-		return redirect()->back()->withErrors($returned);
 	}
 
 	public function create(){
@@ -149,39 +184,43 @@ class PengajuanController extends Controller
 	}
 
 	public function assign($id = null){
+		try {
+			\DB::begintransaction();
 
-		\DB::begintransaction();
+			$permohonan 	= Pengajuan::findorfail($id);
 
-		$permohonan 	= Pengajuan::findorfail($id);
+			$returned 		= [];
+			if(str_is($permohonan->status_terakhir->status, 'permohonan')){
+				$returned 	= $this->middleware_assign_surveyor($permohonan);
+			}elseif(str_is($permohonan->status_terakhir->status, 'survei')){
+				$returned 	= $this->middleware_assign_analis($permohonan);
+			}elseif(str_is($permohonan->status_terakhir->status, 'analisa')){
+				$returned 	= $this->middleware_assign_komite_putusan($permohonan);
+			}elseif(str_is($permohonan->status_terakhir->status, 'putusan')){
+				$returned 	= $this->middleware_assign_realisasi($permohonan);
 
-		$returned 		= [];
-		if(str_is($permohonan->status_terakhir->status, 'permohonan')){
-			$returned 	= $this->assign_surveyor($permohonan);
-		}elseif(str_is($permohonan->status_terakhir->status, 'survei')){
-			$returned 	= $this->assign_analis($permohonan);
-		}elseif(str_is($permohonan->status_terakhir->status, 'analisa')){
-			$returned 	= $this->assign_komite_putusan($permohonan);
-		}elseif(str_is($permohonan->status_terakhir->status, 'putusan')){
-			$returned 	= $this->assign_realisasi($permohonan);
+				if($returned instanceof Model){
+					\DB::commit();
+
+					if(str_is($returned->status, 'setuju')){
+						return redirect()->route('putusan.show', ['id' => $returned['pengajuan_id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+					}
+
+					return redirect()->route('putusan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id'), 'current' => $returned->status]);
+				}
+			}
 
 			if($returned instanceof Model){
 				\DB::commit();
-
-				if(str_is($returned->status, 'setuju')){
-					return redirect()->route('putusan.show', ['id' => $returned['pengajuan_id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
-				}
-
-				return redirect()->route('putusan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id'), 'current' => $returned->status]);
+				return redirect()->route('pengajuan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
 			}
-		}
 
-		if($returned instanceof Model){
-			\DB::commit();
-			return redirect()->route('pengajuan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+			\DB::rollback();
+			return redirect()->back()->withErrors($returned);
+		} catch (Exception $e) {
+			\DB::rollback();
+			return redirect()->back()->withErrors($e->getMessage());
 		}
-
-		\DB::rollback();
-		return redirect()->back()->withErrors($returned);
 	}
 
 

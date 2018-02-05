@@ -31,10 +31,14 @@ use DB, Exception, Carbon\Carbon, Validator, Auth;
  */
 trait PengajuanTrait {
  	
-	private function get_pengajuan($status, $ids = null){
+	private function get_pengajuan($status, $ids = null, $unverified = false){
 
-		$result		= Pengajuan::status($status)->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'status_permohonan']);
-		
+		if($unverified){
+			$result		= Pengajuan::status('nothing')->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'status_permohonan']);
+		}else{
+			$result		= Pengajuan::status($status)->kantor(request()->get('kantor_aktif_id'))->with(['status_terakhir', 'jaminan_kendaraan', 'jaminan_tanah_bangunan', 'status_permohonan']);
+		}
+
 		if($ids){
 			$result = $result->whereIn('p_pengajuan.id', $ids);
 		}
@@ -104,8 +108,6 @@ trait PengajuanTrait {
 	private function store_permohonan(Pengajuan $permohonan){
 		try {
 			$flag = null;
-
-			DB::BeginTransaction();
 
 			$data_input['kode_kantor']	= request()->get('kantor_aktif_id');
 
@@ -223,12 +225,9 @@ trait PengajuanTrait {
 					}
 				}
 			}
-	
-			DB::commit();
 
 			return $permohonan;
 		} catch (Exception $e) {
-			DB::rollback();
 
 			foreach ($e->getMessage()->toarray() as $k => $v) {
 				$exp 	= explode('.', $k);

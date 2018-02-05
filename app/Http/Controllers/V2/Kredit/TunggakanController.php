@@ -25,7 +25,9 @@ class TunggakanController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->middleware('scope:angsuran');
+		$this->middleware('scope:operasional.kredit.angsuran.sp')->only(['index']);
+		$this->middleware('scope:sp')->only('show');
+		$this->middleware('required_password')->only('show');
 	}
 
 	public function index() 

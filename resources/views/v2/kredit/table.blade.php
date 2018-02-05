@@ -10,39 +10,39 @@
 		<div class="col-sm-3">
 			<label>Cari Nasabah</label>
 		 	@foreach(request()->all() as $k => $v)
-		 		@if(!in_array($k, ['q_'.$pre,'sort_'.$pre,'jaminan_'.$pre]))
+		 		@if(!in_array($k, ['q','sort','jaminan']))
 			 		<input type="hidden" name="{{$k}}" value="{{$v}}">
 		 		@endif
 		 	@endforeach
 	 		<input type="hidden" name="current" value="{{$s_pre}}">
-			<input type="text" name="q_{{$s_pre}}" class="form-control w-100" placeholder="cari nama nasabah" value="{{request()->get('q_'.$s_pre)}}">
+			<input type="text" name="q" class="form-control w-100" placeholder="cari nama nasabah" value="{{request()->get('q')}}">
 		</div>
 		<!-- FILTER BERDASARKAN JAMINAN -->
 		<div class="col-sm-2">
 			<label>Filter Jaminan</label>
-			<select class="form-control custom-select" name="jaminan_{{$s_pre}}">
+			<select class="form-control custom-select" name="jaminan">
 				<option value="semua">Semua Jaminan</option>
-				<option value="jaminan-bpkb" @if(str_is(request()->get('jaminan_'.$s_pre), 'jaminan-bpkb')) selected @endif>Jaminan BPKB</option>
-				<option value="jaminan-sertifikat" @if(str_is(request()->get('jaminan_'.$s_pre), 'jaminan-sertifikat')) selected @endif>Jaminan Sertifikat</option>
+				<option value="jaminan-bpkb" @if(str_is(request()->get('jaminan'), 'jaminan-bpkb')) selected @endif>Jaminan BPKB</option>
+				<option value="jaminan-sertifikat" @if(str_is(request()->get('jaminan'), 'jaminan-sertifikat')) selected @endif>Jaminan Sertifikat</option>
 			</select>
 		</div>
 		<!-- FILTER BERDASARKAN JAMINAN -->
 		<div class="col-sm-3">
 			<label>Filter Jenis Pinjaman</label>
-			<select class="form-control custom-select" name="pinjaman_{{$s_pre}}">
+			<select class="form-control custom-select" name="pinjaman">
 				<option value="semua">Semua Jenis Pinjaman</option>
-				<option value="pinjaman-a" @if(str_is(request()->get('pinjaman_'.$s_pre), 'pinjaman-a')) selected @endif>Pinjaman Angsuran</option>
-				<option value="pinjaman-t" @if(str_is(request()->get('pinjaman_'.$s_pre), 'pinjaman-t')) selected @endif>Pinjaman Musiman</option>
+				<option value="pinjaman-a" @if(str_is(request()->get('pinjaman'), 'pinjaman-a')) selected @endif>Pinjaman Angsuran</option>
+				<option value="pinjaman-t" @if(str_is(request()->get('pinjaman'), 'pinjaman-t')) selected @endif>Pinjaman Musiman</option>
 			</select>
 		</div>
 		<div class="col-sm-2">
 			<label>Urutkan</label>
 			<!-- URUTKAN BERDASARKAN NAMA/TANGGAL -->
-			<select class="form-control custom-select" name="sort_{{$s_pre}}">
-				<option value="nama-asc" @if(str_is(request()->get('sort_'.$s_pre), 'nama-asc')) selected @endif>Nama [A - Z]</option>
-				<option value="nama-desc" @if(str_is(request()->get('sort_'.$s_pre), 'nama-desc')) selected @endif>Nama [Z - A]</option>
-				<option value="pinjaman-asc" @if(str_is(request()->get('sort_'.$s_pre), 'pinjaman-asc')) selected @endif>Pinjaman [1 - 10]</option>
-				<option value="pinjaman-desc" @if(str_is(request()->get('sort_'.$s_pre), 'pinjaman-desc')) selected @endif>Pinjaman [10 - 1]</option>
+			<select class="form-control custom-select" name="sort">
+				<option value="nama-asc" @if(str_is(request()->get('sort'), 'nama-asc')) selected @endif>Nama [A - Z]</option>
+				<option value="nama-desc" @if(str_is(request()->get('sort'), 'nama-desc')) selected @endif>Nama [Z - A]</option>
+				<option value="pinjaman-asc" @if(str_is(request()->get('sort'), 'pinjaman-asc')) selected @endif>Pinjaman [1 - 10]</option>
+				<option value="pinjaman-desc" @if(str_is(request()->get('sort'), 'pinjaman-desc')) selected @endif>Pinjaman [10 - 1]</option>
 			</select>
 		</div>
 		<div class="col-sm-2 pl-1">
