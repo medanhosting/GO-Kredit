@@ -1,4 +1,6 @@
 @inject('carbon', 'Carbon\Carbon')
+@inject('idr', 'App\Service\UI\IDRTranslater')
+
 {!! Form::open(['url' => route('kredit.store', ['id' => $kredit_id]), 'method' => 'POST']) !!}
 	@foreach(request()->all() as $k => $v)
 		<input type="hidden" name="{{$k}}" value="{{$v}}">
@@ -11,14 +13,28 @@
 		@endslot
 		@slot('body')
 			<div class="row">
-				<div class="col-12 mb-1">
-					<input type="checkbox" class="check-all pb-0"> Bayar Semua
+				<div class="col-12 mb-2">
+					<div class="form-check px-3">
+						<input type="checkbox" class="check-all form-check-input" id="check-all"> 
+						<label for="check-all" class="form-check-label pl-1">
+							Bayar Semua
+						</label>
+					</div>
 				</div>
+			</div>
+			<div class="row">
 				@foreach($angsuran as $k => $v)
 					@if (is_null($v['nomor_faktur']))
+						@php
+							{{--  dd($v['jumlah']);  --}}
+						@endphp
 						<div class="col-3 mb-1">
-							<input type="checkbox" name="nth[]" value="{{$v['nth']}}">
-							Angsuran Ke - {{$v['nth']}}
+							<div class="form-check px-3">
+								<input type="checkbox" name="nth[]" value="{{$v['nth']}}" class="form-check-input check-bayar-angsuran" id="check-{{ $v['nth'] }}" data-value="{{ $idr->formatMoneyFrom($v['jumlah']) }}" data-id="{{ $v['nth'] }}">
+								<label class="form-check-label pl-1" for="check-{{ $v['nth'] }}">
+									Angsuran Ke - {{ $v['nth'] }}
+								</label>
+							</div>
 						</div>
 					@endif
 				@endforeach
@@ -26,7 +42,7 @@
 			<div class="row mt-3">
 				<div class="col-6">
 					<h6 class="text-uppercase mb-1">TOTAL</h6>
-					{!! Form::Label(null, 'Rp 0', []) !!}
+					{!! Form::Label(null, 'Rp 0', ['id' => 'totalAngsuran']) !!}
 				</div>
 				<div class="col-6">
 					<a href="#" class="btn btn-primary btn-bayar-semua invisible" 
@@ -35,7 +51,7 @@
 						data-url-angsuran="{{ route('angsuran.tagihan', ['id' => $aktif['nomor_kredit']]) }}"
 						data-url-potongan="{{ route('angsuran.potongan', ['id' => $aktif['nomor_kredit']]) }}" 
 						data-kantor-aktif-id="{{ $kantor_aktif_id }}"
-						data-url-terbilang="{[ route('terbilang') }}"
+						data-url-terbilang="{{ route('terbilang') }}"
 						data-url-titipan="{{ route('angsuran.titipan', ['id' => $aktif['nomor_kredit']]) }}">Bayar</a>
 				</div>
 			</div>
@@ -201,6 +217,12 @@
 			ajxTerbilang.get('{{ route("terbilang")  }}', data);
 		}
 
+		function totalInChecked()
+		{
+
+		}
+		
+
 
 		// place for event
 		//MODAL PARSE DATA ATTRIBUTE//
@@ -217,6 +239,20 @@
 		});
 
 		$('input[name="nth[]"]').on('change', function(){
+			var id = parseInt($(this).attr('data-id'));
+			var total = 0;
+			
+			$('input[name="nth[]"]').each(function(index, value) {
+				var dataID = parseInt($(value).attr('data-id'))
+				if ($(value).attr('data-id') <= id) {
+					$(value).prop('checked', true);
+					total = total + parseInt($(value).attr('data-value'));
+					console.log(total);
+				} else {
+					$(value).prop('checked', false);
+				}
+			});
+			$('#totalAngsuran').html('Rp ' + window.numberFormat.set(total));
 			checked_on_checked();
 		});
 
@@ -235,26 +271,24 @@
 			urlLinkTitipan = $(this).attr('data-url-titipan');
 	
 			ajxBuy.defineOnSuccess(function(resp){
-				parsingTitipan(urlLinkTitipan, {kantor_aktif_id: kantorAktifId});
+				// parsingTitipan(urlLinkTitipan, {kantor_aktif_id: kantorAktifId});
 				
-				// check potongan
-				if (checked_all() === true) {
-					parsingAngsuran(resp.data, true);
-					parsingPotongan(urlLinkPotongan, {kantor_aktif_id: kantorAktifId});
-				} else {
-					parsingAngsuran(resp.data);
-				}
+				// // check potongan
+				// if (checked_all() === true) {
+				// 	parsingAngsuran(resp.data, true);
+				// 	parsingPotongan(urlLinkPotongan, {kantor_aktif_id: kantorAktifId});
+				// } else {
+				// 	parsingAngsuran(resp.data);
+				// }
 
-
-
-				setTimeout(function(){
-					total_angsuran = subtotal - potongan - titipan;
+				// setTimeout(function(){
+				// 	total_angsuran = subtotal - potongan - titipan;
 	
-					$('#total-all-row').html('<td class="text-right text-info" colspan="2"><h5><strong>Total Bayar Angsuran</strong></h5></td> \
-										<td class="text-right text-info"><h5><strong>Rp ' + window.numberFormat.set(total_angsuran)  + '</strong></h5></td>');
+				// 	$('#total-all-row').html('<td class="text-right text-info" colspan="2"><h5><strong>Total Bayar Angsuran</strong></h5></td> \
+				// 						<td class="text-right text-info"><h5><strong>Rp ' + window.numberFormat.set(total_angsuran)  + '</strong></h5></td>');
 										
-					parsingTerbilang(resp.data, { money: total_angsuran});
-				}, 1500);
+				// 	parsingTerbilang(resp.data, { money: total_angsuran});
+				// }, 1500);
 			});
 	
 			ajxBuy.defineOnError(function(resp){
@@ -266,9 +300,9 @@
 					dataNth.push($(this).val());
 				}
 			});
-			dataAjax.nth = JSON.parse(JSON.stringify(dataNth));
+			// dataAjax.nth = dataNth;
 			dataAjax.kantor_aktif_id = kantorAktifId;
-
+			console.log(JSON.stringify(dataAjax));
 			ajxBuy.get(urlLinkAngsuran, dataAjax);
 		});
 
