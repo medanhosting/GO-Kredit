@@ -10,18 +10,25 @@
 				Print
 			</a>
 		@else
-		{!! Form::open(['url' => route('putusan.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 			<div class="row">
 				<div class="col">
-					{!! Form::bsSelect('Diambil Dari', 'nomor_perkiraan', $akun, '', ['class' => 'form-control text-info inline-edit'], true) !!}
+					{!! Form::bsSelect('Diambil Dari', 'nomor_perkiraan', array_merge([null => 'Pilih'], $akun), '', ['class' => 'form-control text-info inline-edit', 'id' => 'nomor_perkiraan_pencairan'], true) !!}
 				</div>
 			</div>
 			<div class="row">
 				<div class="col">
-					{!! Form::bsSubmit('Tandai Pencairan', ['class' => ' btn btn-primary btn-sm btn-block text-white']) !!}
+					<a data-toggle="modal" data-target="#konfirmasi_putusan" data-action="{{ route('putusan.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]) }}" data-content="Untuk menandai pencairan, silahkan isi password Anda untuk melanjutkan." data-parse-nomor-perkiraan="" class="modal_password btn btn-primary btn-sm btn-block text-white" id="tandai_pencairan">Tandai Pencairan</a>
 				</div>
 			</div>
-		{!! Form::close() !!}
 		@endif
 	</div>
 </div>
+
+@push('js')
+	<script type="text/javascript">
+		$('select[name="nomor_perkiraan"]').on('change', function(e) {
+			var actionLink = $(document.getElementById('tandai_pencairan')).attr('data-action');
+			$(document.getElementById('tandai_pencairan')).attr('data-action', actionLink + '&nomor_perkiraan=' + $(this).val());
+		});
+	</script>
+@endpush

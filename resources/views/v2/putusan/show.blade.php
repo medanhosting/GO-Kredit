@@ -99,9 +99,7 @@
 			@endcomponent
 		</div>
 	</div>
-
-	@include('v2.helper.password')
-
+	@include('v2.putusan.modal.konfirmasi_putusan')
 @endpush
 
 @push('submenu')

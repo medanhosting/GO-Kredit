@@ -45,8 +45,9 @@
 				</div>
 			</div>
 			{!! Form::hidden('current', 'permintaan_restitusi') !!}
-			{!! Form::bsSubmit('Ajukan', ['class' => 'btn btn-primary text-right']) !!}
+			<a href="#" data-toggle="modal" data-target="#konfirmasi_permohonan_restitusi" class="btn btn-primary text-right">Ajukan</a>
 		@endslot
+		@include('v2.kredit.modal.konfirmasi_permohonan_resitusi')
 	@endcomponent
 {!! Form::close() !!}	
 

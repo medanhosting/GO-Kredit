@@ -194,3 +194,9 @@
 @push('submenu')
 	@include('templates.submenu.submenu')
 @endpush
+
+@push('js')
+	<script type="text/javascript">
+		window.formInputMask.init();
+	</script>
+@endpush

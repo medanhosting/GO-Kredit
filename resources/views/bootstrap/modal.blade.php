@@ -1,4 +1,4 @@
-<div class="modal fade" id="{{ $id }}">
+<div class="modal fade {{ isset($form) ? 'modal-form' : '' }}" id="{{ $id }}">
 	<div class="modal-dialog {{ $size }}" role="document">
 		<div class="modal-content">
 			@isset ($form)
