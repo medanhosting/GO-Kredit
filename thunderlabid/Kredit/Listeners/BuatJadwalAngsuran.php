@@ -47,6 +47,8 @@ class BuatJadwalAngsuran
 			$p_d->nomor_kredit = $model->nomor_kredit;
 			$p_d->tanggal 		= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->addmonths($k)->format('d/m/Y H:i');
 			$p_d->nth 			= $k;
+			$p_d->bunga 		= $v['angsuran_bunga'];
+			$p_d->pokok 		= $v['angsuran_pokok'];
 			$p_d->jumlah 		= $v['total_angsuran'];
 			$p_d->deskripsi 	= 'Angsuran Bulan Ke - '.$k;
 			$p_d->save();

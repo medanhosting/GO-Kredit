@@ -19,6 +19,8 @@ class CreateFinanceJurnalTable extends Migration
 			$table->datetime('tanggal');
 			$table->string('coa_id');
 			$table->double('jumlah');
+			$table->string('morph_reference_id')->nullable();
+			$table->string('morph_reference_tag')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 

@@ -20,6 +20,8 @@ class CreateKreditJadwalAngsuranTable extends Migration
 			$table->datetime('tanggal');
 			$table->datetime('tanggal_bayar')->nullable();
 			$table->integer('nth')->nullable();
+			$table->double('pokok')->default(0);
+			$table->double('bunga')->default(0);
 			$table->double('jumlah');
 			$table->text('deskripsi')->nullable();
 			$table->timestamps();
