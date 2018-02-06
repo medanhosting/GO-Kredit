@@ -19,7 +19,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($denda as $k => $v)
+				@forelse($denda as $k => $v)
 					<tr>
 						<td class="text-center">{{ $loop->iteration }}</td>
 						<td class="text-center">{{$carbon::parse($v['tanggal'])->format('d/m/Y')}}</td>
@@ -37,7 +37,13 @@
 							@endif
 						</td>
 					</tr>
-				@endforeach
+				@empty
+					<tr>
+						<td colspan="4">
+							Tidak ada data
+						</td>
+					</tr>
+				@endforelse
 			</tbody>
 		</table>
 	@endslot

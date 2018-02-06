@@ -57,9 +57,10 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'scope' => \App\Http\Middleware\ScopeMiddleware::class,
-        'required_password' => \App\Http\Middleware\RequiredPasswordMiddleware::class,
         'device' => \App\Http\Middleware\API\ApiMiddleware::class,
         'pilih_koperasi' => \App\Http\Middleware\PilihKoperasiMiddleware::class,
         'required_passcode' => \App\Http\Middleware\RequiredPasscodeMiddleware::class,
+        'required_password' => \App\Http\Middleware\RequiredPasswordMiddleware::class,
+        'limit_date' => \App\Http\Middleware\LimitDateMiddleware::class,
     ];
 }

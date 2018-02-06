@@ -44,13 +44,13 @@ class BayarDenda
 	}
 
 	private function hitung_restitusi_3_hari($tanggal, $persentasi_denda){
-		$tunggakan 		= JadwalAngsuran::TunggakanBeberapaWaktuLalu(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->selectraw('sum(jumlah) as tunggakan')->first();
+		$tunggakan 		= JadwalAngsuran::HistoriTunggakan(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->selectraw('sum(jumlah) as tunggakan')->first();
 
 		return ($tunggakan['tunggakan'] * $persentasi_denda * 3)/100;
 	}
 
 	public static function hitung_r3d($tanggal, $persentasi_denda){
-		$tunggakan 		= JadwalAngsuran::TunggakanBeberapaWaktuLalu(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->selectraw('sum(jumlah) as tunggakan')->first();
+		$tunggakan 		= JadwalAngsuran::HistoriTunggakan(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->selectraw('sum(jumlah) as tunggakan')->first();
 
 		return ($tunggakan['tunggakan'] * $persentasi_denda * 3)/100;
 	}

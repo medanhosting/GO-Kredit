@@ -25,7 +25,9 @@ class TunggakanController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->middleware('scope:angsuran');
+		$this->middleware('scope:operasional.kredit.angsuran.sp')->only(['index']);
+		$this->middleware('scope:operasional')->only('show');
+		$this->middleware('required_password')->only('show');
 	}
 
 	public function index() 
@@ -49,14 +51,12 @@ class TunggakanController extends Controller
 		return $this->layout;
 	}
 
-	public function show($id) 
+	public function store($id = null) 
 	{
 		$today	= Carbon::now();
-		$nk 	= request()->get('nomor_kredit');
-		// $tanggal= request()->get('tanggal');
 		$tanggal= $today->format('d/m/Y H:i');
 
-		$tunggakan 	= JadwalAngsuran::where('nomor_kredit', $nk)->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->orderby('tanggal', 'asc')->first();
+		$tunggakan 	= JadwalAngsuran::where('nomor_kredit', $id)->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->orderby('tanggal', 'asc')->first();
 
 		try {
 			if(!$tunggakan){
@@ -74,6 +74,10 @@ class TunggakanController extends Controller
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());
 		}
+	}
+
+	public function update($id){
+		return $this->store($id);
 	}
 
 	public function print($id)

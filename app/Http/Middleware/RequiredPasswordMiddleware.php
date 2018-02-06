@@ -2,7 +2,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
-use Closure, Auth, Hash;
+use Closure, Auth, Hash, Exception;
 use Carbon\Carbon;
 
 use App\Exceptions\AppException;
@@ -19,5 +19,17 @@ class RequiredPasswordMiddleware
 		}
 
 		return $next($request);
+	}
+
+	public function check()
+	{
+		$active_u	= Auth::user();
+
+		if(!Hash::check(request()->get('password'), $active_u['password']))
+		{
+			throw new Exception("Password tidak cocok!", 1);
+		}
+
+		return true;
 	}
 }

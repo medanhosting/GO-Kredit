@@ -1,4 +1,4 @@
-@component ('bootstrap.modal', ['id' => 'konfirmasi_tunggakan', 'form' => true, 'method' => 'get'])
+@component ('bootstrap.modal', ['id' => 'konfirmasi_tunggakan', 'form' => true, 'method' => 'PATCH'])
 	@slot ('title')
 		KONFIRMASI PASSWORD
 	@endslot
