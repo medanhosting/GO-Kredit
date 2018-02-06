@@ -1,4 +1,5 @@
 <div class="clearfix">&nbsp;</div>
+<div class="clearfix">&nbsp;</div>
 <div class="row">
 	<div class="col-sm-12">
 		<table class="table table-hover table-bordered">
