@@ -11,7 +11,8 @@
 			{!! Form::bsText('Tanggal', 'tanggal', $carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control mask-date-time inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 			{!! Form::bsText('Nominal', 'nominal', null, ['class' => 'form-control mask-money inline-edit text-info pb-0 border-input', 'placeholder' => 'Rp 330.000'], true) !!}
 			{!! Form::hidden('current', 'denda') !!}
-			{!! Form::bsSubmit('Bayar', ['class' => 'btn btn-primary text-right']) !!}
+			<a href="#" data-toggle="modal" data-target="#konfirmasi_denda" class="btn btn-primary text-right">Bayar</a>
 		@endslot
 	@endcomponent
+	@include('v2.kredit.modal.konfirmasi_denda')
 {!! Form::close() !!}	

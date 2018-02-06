@@ -10,18 +10,25 @@
 				Print
 			</a>
 		@else
-		{!! Form::open(['url' => route('putusan.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif_id, 'setoran' => 'true']), 'method' => 'PATCH']) !!}
 			<div class="row">
 				<div class="col">
-					{!! Form::bsSelect('Disetor Ke', 'nomor_perkiraan', $akun, '', ['class' => 'form-control text-info inline-edit'], true) !!}
+					{!! Form::bsSelect('Disetor Ke', 'nomor_perkiraan', array_merge([null => 'Pilih'], $akun), '', ['class' => 'form-control text-info inline-edit'], true) !!}
 				</div>
 			</div>
 			<div class="row">
 				<div class="col">
-					{!! Form::bsSubmit('Tandai Setoran Awal', ['class' => ' btn btn-primary btn-sm btn-block text-white']) !!}
+					<a data-toggle="modal" data-target="#konfirmasi_putusan" data-action="{{ route('putusan.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif_id, 'setoran' => 'true']) }}" data-content="Untuk menandai setoran awal, silahkan isi password Anda untuk melanjutkan." data-parse-nomor-perkiraan="" class="modal_password btn btn-primary btn-sm btn-block text-white" id="tandai_setoran_awal">Tandai Setoran Awal</a>
 				</div>
 			</div>
-		{!! Form::close() !!}
 		@endif
 	</div>
 </div>
+
+@push('js')
+	<script type="text/javascript">
+		$('select[name="nomor_perkiraan"]').on('change', function(e) {
+			var actionLink = $(document.getElementById('tandai_setoran_awal')).attr('data-action');
+			$(document.getElementById('tandai_setoran_awal')).attr('data-action', actionLink + '&nomor_perkiraan=' + $(this).val());
+		});
+	</script>
+@endpush

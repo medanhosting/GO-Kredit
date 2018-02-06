@@ -15,7 +15,7 @@
 		@if ($percentage==100 && $putusan['pengajuan']['status_terakhir']['status']=='setuju')
 			<hr/>
 			<p>Ceklist Sudah Lengkap</p>
-			<a data-toggle="modal" data-target="#require_password" data-action="{{route('putusan.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'realisasi'])}}" class="modal_password btn btn-primary btn-sm btn-block text-white">Lanjutkan Pencairan</a>
+			<a data-toggle="modal" data-target="#konfirmasi_putusan" data-action="{{route('putusan.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif['id'], 'status' => 'realisasi'])}}" data-content="Untuk melanjutkan ke pencairan, silahkan isi password Anda." class="modal_password btn btn-primary btn-sm btn-block text-white">Lanjutkan Pencairan</a>
 		@endif
 	</div>
 </div>

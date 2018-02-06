@@ -50,9 +50,9 @@
 		<div class="clearfix">&nbsp;</div>
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
 		@if(is_null($permohonan['id']))
-			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id])]) !!}
+			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'class' => 'no-enter'])]) !!}
 		@else
-			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH', 'class' => 'no-enter']) !!}
 		@endif
 			{!!Form::hidden('kantor_aktif_id', $kantor_aktif_id)!!}
 			<div class="row">
@@ -74,9 +74,9 @@
 		<div class="clearfix">&nbsp;</div>
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
 		@if(is_null($permohonan['id']))
-			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true]) !!}
+			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'class' => 'no-enter']) !!}
 		@else
-			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH']) !!}
+			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH', 'class' => 'no-enter']) !!}
 		@endif
 			{!!Form::hidden('kantor_aktif_id', $kantor_aktif_id)!!}
 			<div class="row">
@@ -149,7 +149,7 @@
 					<div class="clearfix">&nbsp;</div>
 
 					<h6 class="text-secondary"><strong><u>Kontak</u></strong></h6>
-					{!! Form::vText('No. Telp', 'nasabah[telepon]', $permohonan['nasabah'][telepon], ['class' => 'ntelepon form-control inline-edit mask-no-telepon border-input w-50 text-info pb-1', 'placeholder' => '0123 4567 8910'], true) !!}
+					{!! Form::vText('No. Telp', 'nasabah[telepon]', $permohonan['nasabah'][telepon], ['class' => 'ntelepon form-control inline-edit mask-no-handphone border-input w-50 text-info pb-1', 'placeholder' => '0123 4567 8910'], true) !!}
 					{!! Form::vText('No. Whatsapp', 'nasabah[nomor_whatsapp]', $permohonan['nasabah']['nomor_whatsapp'], ['class' => 'nnomor_whatsapp form-control inline-edit mask-no-handphone border-input w-50 text-info pb-1', 'placeholder' => '0123 4567 8910'], true) !!}
 					{!! Form::vText('Email', 'nasabah[email]', $permohonan['nasabah'][email], ['class' => 'nemail form-control inline-edit border-input w-75 text-info pb-1', 'placeholder' => 'example@gmail.com'], true) !!}
 				</div>
@@ -168,9 +168,9 @@
 		@endif
 		
 		@if(is_null($permohonan['id']))
-			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true]) !!}
+			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'class' => 'no-enter']) !!}
 		@else
-			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH']) !!}
+			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'status' => 'permohonan']), 'files' => true, 'method' => 'PATCH', 'class' => 'no-enter']) !!}
 		@endif
 			{!!Form::hidden('kantor_aktif_id', $kantor_aktif_id)!!}
 			<table class="table table-bordered">
@@ -245,9 +245,9 @@
 		<p class="text-right text-secondary"><i>*klik untuk mengubah data</i></p>
 
 		@if(is_null($permohonan['id']))
-			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id])]) !!}
+			{!! Form::open(['url' => route('pengajuan.store', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'class' => 'no-enter']) !!}
 		@else
-			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+			{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH', 'class' => 'no-enter']) !!}
 		@endif
 
 			{!!Form::hidden('jaminan_kendaraan', 1)!!}
@@ -458,7 +458,6 @@
 
 @push ('js')
 	<script>
-
 		///CLONE FORM KELUARGA///
 		var regex = /^(.+?)(\d+)$/i;
 		var cloneIndexKeluarga = $(".clonedKeluarga").length;

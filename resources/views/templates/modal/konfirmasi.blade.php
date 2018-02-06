@@ -1,10 +1,11 @@
-@component ('bootstrap.modal', ['id' => 'konfirmasi_denda'])
+@component ('bootstrap.modal', ['id' => 'konfirmasi', 'form' => true, 'method' => 'post'])
 	@slot ('title')
 		KONFIRMASI PASSWORD
 	@endslot
 
 	@slot ('body')
-		<p>Untuk membayar denda, Silahkan isi password Anda.</p>
+		<p id="body-modal"></p>
+		{!! Form::hidden('kantor_aktif_id', request()->get('kantor_aktif_id')) !!}
 
 		{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password', 'class' => 'set-focus form-control']) !!}
 	@endslot

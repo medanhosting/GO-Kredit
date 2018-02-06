@@ -4,15 +4,16 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-// const flatpickr = require("flatpickr");
-// 
+// call plugin 
+// inputmask
+require('../thunderlab/js/inputmask/jquery.inputmask.bundle.min.js');
+// ajax
+require('../thunderlab/js/ajax/ajax.js');
+require('../thunderlab/js/ux/number_format.js');
 
+// call module
+// module inputmask
+require('../thunderlab/js/inputmask/module-inputmask.js');
 
-require ('./thunderlab/ajax.js');
-require ('./thunderlab/numberFormat.js');
-// require ('./thunderlab/dataBox.js');
-
-// call plugin
-require ('./plugins');
-// module UI for use plugin jquery.inputmask
-require ('./plugins/jquery.inputmask/form-inputmask')
+// UX
+require('../thunderlab/js/ux.js');

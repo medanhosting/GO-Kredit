@@ -85,9 +85,7 @@
 													<small>{{Carbon\Carbon::createfromformat('d/m/Y H:i', $v0['tanggal'])->diffForHumans()}}</small><br/>
 												@endforeach
 												@if(is_null($v['nomor_faktur']) && !$read_only)
-													<a href="{{route('tunggakan.show', ['id' => $v['nomor_kredit'], 'nomor_kredit' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id])}}" class="alert-link">
-													Keluarkan {{ucwords(str_replace('_', ' ', $v['kredit']['should_issue_surat_peringatan']['keluarkan']))}}
-													</a>
+													<a href="#" data-toggle="modal" data-target="#konfirmasi_tunggakan" data-action="{{ route('tunggakan.show', ['id' => $v['nomor_kredit'], 'nomor_kredit' => $v['nomor_kredit'], 'kantor_aktif_id' => $kantor_aktif_id]) }}" data-content="Untuk mengeluarkan Surat Peringatan, Silahkan isi password Anda." class="modal_password alert-link text-success">Keluarkan {{ ucwords(str_replace('_', ' ', $v['kredit']['should_issue_surat_peringatan']['keluarkan'])) }}</a>
 												@endif
 											</td>
 											<td>
@@ -106,8 +104,10 @@
 						</div>
 					</div>
 				</div>
-			@endcomponent
+				@endcomponent
+			</div>
 		</div>
+		@include('v2.kredit.modal.konfirmasi_tunggakan')
 	</div>
 @endpush
 

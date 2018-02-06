@@ -1,12 +1,12 @@
-@component ('bootstrap.modal', ['id' => 'konfirmasi_denda'])
+@component ('bootstrap.modal', ['id' => 'konfirmasi_bayar_angsuran_sebagian'])
 	@slot ('title')
 		KONFIRMASI PASSWORD
 	@endslot
 
 	@slot ('body')
-		<p>Untuk membayar denda, Silahkan isi password Anda.</p>
+		<p>Untuk membayar Angsuran Kredit Sebagian, harap mengisi password Anda!</p>
 
-		{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password', 'class' => 'set-focus form-control']) !!}
+		{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
 	@endslot
 
 	@slot ('footer')

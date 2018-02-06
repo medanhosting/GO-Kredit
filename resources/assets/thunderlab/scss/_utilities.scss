@@ -1,0 +1,6 @@
+// Border
+@for $brd from 1 through 5 {
+	.border-width-#{$brd} {
+		border-width: $brd + 0px !important;
+	}
+}

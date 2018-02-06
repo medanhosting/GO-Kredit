@@ -40,6 +40,8 @@
 
 @push('js')
 	<script type="text/javascript">
+		window.formInputMask.init();
+		
 		$("#permohonan-menu").click(function(){
 			$("#permohonan-panel").fadeIn('fast');
 			$("#survei-panel").fadeOut('fast');
