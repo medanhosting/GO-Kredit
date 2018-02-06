@@ -74,8 +74,9 @@
 
 	@slot ('footer')
 		<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
-		{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary']) !!}
+		<a href="#" data-toggle="modal" data-target="#konfirmasi_ubah_jaminan" class="btn btn-primary">Simpan</a>
 	@endslot
+	@include('v2.kredit.modal.konfirmasi_ubah_jaminan')
 @endcomponent
 
 @push ('js')	
@@ -86,6 +87,9 @@
 	function parsingDataAttributeJaminanKeluar(){
 		$('#update-jaminan').find('form').attr('action', $(this).attr("data-action"));
 	}
+	$('.modal#konfirmasi_ubah_jaminan').on('show.bs.modal', function(e){
+		//$('.modal#update-jaminan').modal('hide');
+	});
 	</script>
 
 @endpush
