@@ -36,7 +36,7 @@ class JadwalAngsuran extends Model
 	use WaktuTrait;
 	
 	protected $table 	= 'k_jadwal_angsuran';
-	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'tanggal_bayar', 'nth', 'jumlah', 'deskripsi'];
+	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'tanggal_bayar', 'nth', 'jumlah', 'deskripsi', 'pokok', 'bunga'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];
@@ -199,6 +199,15 @@ class JadwalAngsuran extends Model
 		$this->attributes['jumlah']		= $this->formatMoneyFrom($variable);
 	}
 
+	public function setBungaAttribute($variable)
+	{
+		$this->attributes['bunga']		= $this->formatMoneyFrom($variable);
+	}
+
+	public function setPokokAttribute($variable)
+	{
+		$this->attributes['pokok']		= $this->formatMoneyFrom($variable);
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// ACCESSOR
 	// ------------------------------------------------------------------------------------------------------------
@@ -260,6 +269,16 @@ class JadwalAngsuran extends Model
 			return true;
 		}
 		return false;
+	}
+
+	public function getPokokAttribute($variable)
+	{
+		return $this->formatMoneyTo($this->attributes['pokok']);
+	}
+
+	public function getBungaAttribute($variable)
+	{
+		return $this->formatMoneyTo($this->attributes['bunga']);
 	}
 
 }
