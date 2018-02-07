@@ -74,7 +74,7 @@ class AngsuranController extends Controller
 		view()->share('sisa_angsuran', $sisa_angsuran);
 		view()->share('id', $id);
 
-		view()->share('active_submenu', 'kredit');
+		view()->share('active_submenu', 'angsuran');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 		$this->layout->pages 	= view('v2.kredit.show.angsuran.bukti_pembayaran_'.$case);
@@ -129,6 +129,7 @@ class AngsuranController extends Controller
 
 	public function tagihan($id){
 		
+		return response()->json(request()->all());
 		$aktif		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
 
 		$nth 		= array_flatten(request()->get('nth'));
