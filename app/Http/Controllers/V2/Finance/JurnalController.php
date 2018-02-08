@@ -73,6 +73,12 @@ class JurnalController extends Controller
 			['nomor_perkiraan'	=> '100.100',
 			'akun'				=> 'Kas Besar',
 			'parent'			=> '100.000'],
+			['nomor_perkiraan'	=> '100.110',
+			'akun'				=> 'Teller A',
+			'parent'			=> '100.100'],
+			['nomor_perkiraan'	=> '100.120',
+			'akun'				=> 'Teller B',
+			'parent'			=> '100.100'],
 			['nomor_perkiraan'	=> '100.200',
 			'akun'				=> 'Kas Kecil',
 			'parent'			=> '100.000'],
@@ -116,6 +122,10 @@ class JurnalController extends Controller
 			'akun'				=> 'Titipan Angsuran',
 			'parent'			=> '200.200'],
 
+			['nomor_perkiraan'	=> '200.230',
+			'akun'				=> 'Titipan Biaya Notaris',
+			'parent'			=> '200.200'],
+
 			['nomor_perkiraan'	=> '260.110',
 			'akun'				=> 'PYD Bunga',
 			'parent'			=> '260.000'],
@@ -153,11 +163,14 @@ class JurnalController extends Controller
 			['nomor_perkiraan'	=> '401.204',
 			'akun'				=> 'Legalitas',
 			'parent'			=> '401.200'],
+			['nomor_perkiraan'	=> '401.303',
+			'akun'				=> 'Legal',
+			'parent'			=> '401.300'],
 			['nomor_perkiraan'	=> '401.205',
 			'akun'				=> 'Biaya Notaris',
 			'parent'			=> '401.200'],
 		];
-
+		
 		$model['id'] 	= request()->get('kantor_aktif_id');
 		
 		foreach ($pcodes as $k => $v) {

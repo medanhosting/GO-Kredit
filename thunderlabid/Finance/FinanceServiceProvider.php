@@ -31,6 +31,7 @@ class FinanceServiceProvider extends ServiceProvider
 
 	public function register()
 	{
+		Config::set('finance.nomor_rekening_aktif', ['100.110', '100.120', '110.000']);
 		Config::set('finance.nomor_perkiraan_denda', '140.600');
 		Config::set('finance.nomor_perkiraan_titipan', '100.300');
 		Config::set('finance.nomor_perkiraan_titipan_kolektor', '100.310');

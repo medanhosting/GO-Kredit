@@ -40,7 +40,7 @@ class NotaBayar extends Model
 	use FakturTrait;
 	
 	protected $table 	= 'f_nota_bayar';
-	protected $fillable = ['nomor_faktur', 'morph_reference_id', 'morph_reference_tag', 'tanggal', 'jenis', 'karyawan', 'jumlah'];
+	protected $fillable = ['nomor_faktur', 'tanggal', 'jenis', 'karyawan', 'jumlah', 'nomor_rekening', 'morph_reference_id', 'morph_reference_tag'];
 	protected $hidden 	= [];
 	protected $appends	= ['jatuh_tempo'];
 

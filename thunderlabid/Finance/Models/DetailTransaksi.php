@@ -34,7 +34,7 @@ class DetailTransaksi extends Model
 	use IDRTrait;
 	
 	protected $table 	= 'f_detail_transaksi';
-	protected $fillable = ['nomor_faktur', 'tag', 'jumlah', 'deskripsi'];
+	protected $fillable = ['nomor_faktur', 'tag', 'jumlah', 'deskripsi', 'morph_reference_id', 'morph_reference_tag'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];

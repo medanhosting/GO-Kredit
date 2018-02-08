@@ -35,14 +35,8 @@ class FeedBackPenagihan
 		//simpan titipan
 		if($this->nominal * 1 > 0){
 
-			if(str_is($this->kredit['jenis_pinjaman'], 'pa')){
-				$this->buat_faktur();
-				$this->hitung_pa();
-			}
-			elseif(str_is($this->kredit['jenis_pinjaman'], 'pt') && $sp['nth'] < 6){
-				$this->buat_faktur();
-				$this->hitung_pt();
-			}
+			$this->buat_faktur();
+			$this->buat_detail_faktur($sp);
 		}
 
 		$tagih 		= new Penagihan;
@@ -143,5 +137,17 @@ class FeedBackPenagihan
 		$nb->save();
 
 		$this->nomor_faktur 	= $nb->nomor_faktur;
+	}
+
+	private function buat_detail_faktur($sp){
+		$deskripsi 	= 'Titipan Penagihan Angsuran Ke-'.$sp['nth'];
+		$angs 		= new DetailTransaksi;
+		$angs->nomor_faktur 	= $this->nomor_faktur;
+		$angs->tag 				= 'titipan';
+		$angs->jumlah 			= $this->formatMoneyTo($this->nominal);
+		$angs->deskripsi 		= $deskripsi;
+		$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
+		$angs->morph_reference_tag 	= 'kredit';
+		$angs->save();
 	}
 }

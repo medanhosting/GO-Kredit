@@ -18,7 +18,11 @@ trait AkunTrait {
  	public function get_akun($kantor_id, $kode = null){
 		$acc	= COA::where('kode_kantor', $kantor_id)->wherenotnull('coa_id');
  		if(!is_null($kode)){
- 			$acc 	= $acc->where('nomor_perkiraan', $kode);
+ 			if(is_array($kode)){
+	 			$acc 	= $acc->whereIn('nomor_perkiraan', $kode);
+ 			}else{
+	 			$acc 	= $acc->where('nomor_perkiraan', $kode);
+ 			}
  		}
  		$acc 	= $acc->get();
 		$akun	= [];

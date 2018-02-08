@@ -102,6 +102,7 @@ trait PutusanTrait {
 		$nb->morph_reference_tag	= 'kredit';
 		$nb->jenis 					= 'setoran_pencairan';
 		$nb->jumlah 				= $this->formatMoneyTo($total);
+		$nb->nomor_rekening			= request()->get('nomor_perkiraan');
 		$nb->save();
 
 		$idx 				= ['provisi', 'administrasi', 'legal', 'biaya_notaris'];
@@ -114,6 +115,8 @@ trait PutusanTrait {
 			$ad->nomor_faktur 	= $nb->nomor_faktur;
 			$ad->tag 			= $v;
 			$ad->jumlah 		= $putusan[$v];
+			$ad->morph_reference_id 	= $nb->morph_reference_id;
+			$ad->morph_reference_tag 	= $nb->morph_reference_tag;
 			$ad->deskripsi 		= ucwords(str_replace('_', ' ', $v)).' Kredit';
 			$ad->save();
 		}
@@ -135,6 +138,7 @@ trait PutusanTrait {
 		$nb->morph_reference_tag	= 'kredit';
 		$nb->jenis 					= 'pencairan';
 		$nb->jumlah 				= $this->formatMoneyTo(0 - $total);
+		$nb->nomor_rekening			= request()->get('nomor_perkiraan');
 		$nb->save();
 
 		//angsuran detail
@@ -145,6 +149,8 @@ trait PutusanTrait {
 		$ad->nomor_faktur 	= $nb->nomor_faktur;
 		$ad->tag 			= 'pencairan';
 		$ad->jumlah 		= $this->formatMoneyTo(0 - $total);
+		$ad->morph_reference_id 	= $nb->morph_reference_id;
+		$ad->morph_reference_tag 	= $nb->morph_reference_tag;
 		$ad->deskripsi 		= 'Pencairan Kredit';
 		$ad->save();
 	}

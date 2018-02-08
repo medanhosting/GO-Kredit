@@ -26,7 +26,7 @@ use App\Service\Traits\IDRTrait;
 
 use App\Http\Service\Policy\PerhitunganBunga;
 
-use Exception, Auth, DB, Carbon\Carbon;
+use Exception, Auth, DB, Carbon\Carbon, Config;
 
 use App\Http\Middleware\ScopeMiddleware;
 use App\Http\Middleware\RequiredPasswordMiddleware;
@@ -54,7 +54,7 @@ class PutusanController extends Controller
 				ScopeMiddleware::check('realisasi');
 			}
 			if(in_array($name, ['middleware_store_setoran_realisasi', 'middleware_store_realisasi'])){
-				ScopeMiddleware::check('pencairan');
+				// ScopeMiddleware::check('pencairan');
 			}
 			if(in_array($name, ['middleware_validasi_checklists', 'middleware_store_setoran_realisasi', 'middleware_store_realisasi'])){
 				RequiredPasswordMiddleware::check();
@@ -100,7 +100,7 @@ class PutusanController extends Controller
 			$notabayar 	= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'pencairan')->first();
 			$setoran 	= NotaBayar::where('morph_reference_id', $putusan['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'setoran_pencairan')->first();
 
-			$angsuran 	= new PerhitunganBunga($putusan['plafon_pinjaman'], $putusan['pengajuan']['kemampuan_angsur'], $putusan['suku_bunga']);
+			$angsuran 	= new PerhitunganBunga($putusan['plafon_pinjaman'], 'Rp 0', $putusan['suku_bunga'], null, null, null, $putusan['jangka_waktu']);
 
 			if(str_is($putusan['pengajuan']['analisa']['jenis_pinjaman'], 'pa')){
 				$angsuran 		= $angsuran->pa();
@@ -122,7 +122,7 @@ class PutusanController extends Controller
 				$tanggal_s 	= Carbon::createFromFormat('d/m/Y H:i', $setoran['tanggal'])->format('d/m/Y');
 			}
 
-			$akun 				= $this->get_akun(request()->get('kantor_aktif_id'));
+			$akun 				= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_rekening_aktif'));
 
 			if(request()->has('current')){
 				switch (request()->get('current')) {

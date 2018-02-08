@@ -45,12 +45,12 @@ class KreditController extends Controller
 				ScopeMiddleware::check('angsuran');
 			}
 			if(in_array($name, ['middleware_store_tagihan', 'middleware_penerimaan_titipan_tagihan'])){
-				ScopeMiddleware::check('tagihan');
+				// ScopeMiddleware::check('tagihan');
 			}
 			if(in_array($name, ['middleware_store_permintaan_restitusi', 'middleware_store_validasi_restitusi'])){
 				ScopeMiddleware::check('restitusi');
 			}
-			RequiredPasswordMiddleware::check();
+			// RequiredPasswordMiddleware::check();
 			
 			return call_user_func_array([$this, str_replace('middleware_', '', $name)], $arguments);
 		}

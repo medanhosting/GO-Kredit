@@ -5,6 +5,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Artisan;
 
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+
 class Release extends Command
 {
 	/**
@@ -38,6 +41,8 @@ class Release extends Command
 	 */
 	public function handle()
 	{
+		$this->developing();
+
 		$this->info("--------------------------------------------------------");
 		$this->info('RELEASE V1');
 		$this->info("--------------------------------------------------------");
@@ -63,5 +68,9 @@ class Release extends Command
 	public function v2()
 	{
 		Artisan::call('migrate:refresh', ['--path' => 'database/migrations/2.0.0/']);
+	}
+
+	public function developing(){
+		exit;
 	}
 }

@@ -15,6 +15,8 @@ class CreateFinanceDetailTransaksiTable extends Migration
 	{
 		Schema::create('f_detail_transaksi', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('morph_reference_id')->nullable();
+			$table->string('morph_reference_tag')->nullable();
 			$table->string('nomor_faktur')->nullable();
 			$table->string('tag');
 			$table->double('jumlah');

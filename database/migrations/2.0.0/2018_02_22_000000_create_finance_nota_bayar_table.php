@@ -15,9 +15,10 @@ class CreateFinanceNotaBayarTable extends Migration
 	{
 		Schema::create('f_nota_bayar', function (Blueprint $table) {
 			$table->increments('id');
-			$table->string('nomor_faktur');
 			$table->string('morph_reference_id')->nullable();
 			$table->string('morph_reference_tag')->nullable();
+			$table->string('nomor_rekening')->nullable();
+			$table->string('nomor_faktur');
 			$table->datetime('tanggal');
 			$table->double('jumlah');
 			$table->string('jenis');

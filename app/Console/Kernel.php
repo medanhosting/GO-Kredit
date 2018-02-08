@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        \App\Console\Commands\KeluarkanMemorialUntukJurnalPagi::class,
         \App\Console\Commands\PengajuanExpiredChecker::class,
         \App\Console\Commands\HitungDendaAngsuran::class,
         \App\Console\Commands\KeluarkanSP::class,
@@ -28,7 +29,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command(Commands\KeluarkanSP::class)->dailyAt('11:00');
-        $schedule->command(Commands\HitungDendaAngsuran::class)->dailyAt('12:00');
+        $schedule->command(Commands\KeluarkanMemorialUntukJurnalPagi::class)->dailyAt('12:00');
         $schedule->command(Commands\PengajuanExpiredChecker::class)->dailyAt('01:00');
     }
 

@@ -124,6 +124,8 @@ class JadwalAngsuran extends Model
 			->selectraw('min(tanggal) as tanggal')
 			->selectraw('max(tanggal_bayar) as tanggal_bayar')
 			->selectraw("sum(jumlah) as tunggakan")
+			->selectraw("sum(pokok) as tunggakan_pokok")
+			->selectraw("sum(bunga) as tunggakan_bunga")
 			->tunggakanBeberapaWaktuLalu($value)
 			->selectraw("(select sum(kd2.jumlah) from k_jadwal_angsuran as kd2 where kd2.nomor_kredit = k_jadwal_angsuran.nomor_kredit and (kd2.tanggal_bayar is null or kd2.tanggal_bayar > '".$value->format('Y-m-d H:i:s')."') and kd2.deleted_at is null) as sisa_hutang")
 			->groupby('nomor_kredit');
