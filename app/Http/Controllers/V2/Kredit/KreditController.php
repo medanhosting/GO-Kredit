@@ -11,6 +11,7 @@ use Thunderlabid\Kredit\Models\PermintaanRestitusi;
 use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
+use Thunderlabid\Finance\Models\Jurnal;
 use Thunderlabid\Finance\Models\NotaBayar;
 use Thunderlabid\Finance\Models\DetailTransaksi;
 use Exception, DB, Auth, Carbon\Carbon, Config;
@@ -132,7 +133,7 @@ class KreditController extends Controller
 	public function show($id) 
 	{
 		$aktif	= Aktif::where('id', $id)->kantor(request()->get('kantor_aktif_id'))->PembayaranBerikut()->first();
-		$akun	= $this->get_akun(request()->get('kantor_aktif_id'));
+		$akun	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_rekening_aktif'));
 		$a_tt	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_titipan'));
 		$a_dd	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_denda'));
 		$today	= Carbon::now();
@@ -140,7 +141,8 @@ class KreditController extends Controller
 		//PANEL ANGSURAN. DATA STAT, DATA DENDA, DATA ANGSURAN
 		//DATA STAT
 		$stat['sisa_hutang']		= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->sum('jumlah');
-		$stat['total_titipan']		= DetailTransaksi::whereIn('tag', ['titipan_pokok', 'titipan_bunga', 'restitusi_titipan_pokok', 'restitusi_titipan_bunga'])->wherehas('notabayar', function($q)use($aktif){$q->where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit');})->sum('jumlah');
+
+		$stat['total_titipan']		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['200.210']);})->where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
 
 		$stat['angsuran_bulanan']	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('nth', 'asc')->where('nth', 1)->sum('jumlah');
 		$stat['jumlah_titipan']		= floor($stat['total_titipan']/$stat['angsuran_bulanan']);
@@ -239,7 +241,7 @@ class KreditController extends Controller
 				case 'penerimaan_titipan_tagihan':
 					$this->middleware_penerimaan_titipan_tagihan($aktif);
 					break;
-				case 'bayar_sebagian':
+				case 'part':
 					$this->middleware_store_bayar_sebagian($aktif);
 					break;
 				case 'permintaan_restitusi':

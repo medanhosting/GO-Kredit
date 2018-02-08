@@ -108,41 +108,55 @@ class AutoJournal
 		// $kode_kantor 	= explode('.', $model->notabayar->nomor_faktur);
 		// $kode_kantor 	= $kode_kantor[0].'.'.$kode_kantor[1];
 
-
 		if(str_is($model->tag, 'bunga')){
-			//1.a. do bunga
-			if(str_is($model->notabayar->jenis, 'memorial')){
-				//1.a.i. do memorial bunga jt
+			//1. jurnal bunga
+			$piut		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['140.100', '140.200']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
+			if($piut > 0){
+				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
+				//1.a. jurnal bunga JT
 				if(str_is($kredit->jenis_pinjaman, 'pa')){
-					//1.a.i.1. do memorial bunga jt PA
-					$coa_deb 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kode_kantor)->first();
-				}else{
-					//1.a.i.2. do memorial bunga jt PT
-					$coa_deb 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kode_kantor)->first();
+					//1.a.i. jurnal bunga JT PA
+					$coa_kre 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kode_kantor)->first();
+				}elseif(str_is($kredit->jenis_pinjaman, 'pt')){
+					//1.a.ii. jurnal bunga JT PT
+					$coa_kre 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kode_kantor)->first();
 				}
+			}else{
+				//1.b. jurnal bunga TJT
+				//1.b.i jurnal bunga TJT PA
+				//1.b.ii jurnal bunga TJT PT
+				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
 				$coa_kre 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kode_kantor)->first();
 			}
-			
-			//1.a.ii. do bayar bunga jt
-			//1.a.iii. do bayar bunga
-
 		}elseif(str_is($model->tag, 'pokok')){
-			//1.a. do pokok
-			if(str_is($model->notabayar->jenis, 'memorial')){
-				//1.a.i. do memorial pokok jt
+			//1. jurnal pokok
+			$piut		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300', '120.400']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
+				
+			if($piut > 0){
+				//1.a. jurnal pokok JT
+				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
+
 				if(str_is($kredit->jenis_pinjaman, 'pa')){
-					//1.a.i.1. do memorial pokok jt PA
-					$coa_deb 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kode_kantor)->first();
+					//1.a.i. jurnal pokok JT PA
+					$coa_kre 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kode_kantor)->first();
+
+				}elseif(str_is($kredit->jenis_pinjaman, 'pt')){
+					//1.a.ii. jurnal pokok JT PT
+					$coa_kre 	= COA::where('nomor_perkiraan', '120.400')->where('kode_kantor', $kode_kantor)->first();
+				}
+			}else{
+				//1.b. jurnal pokok TJT
+				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
+				
+				if(str_is($kredit->jenis_pinjaman, 'pa')){
+					//1.b.i. jurnal bunga TJT PA
 					$coa_kre 	= COA::where('nomor_perkiraan', '120.100')->where('kode_kantor', $kode_kantor)->first();
-				}else{
-					//1.a.i.2. do memorial pokok jt PT
-					$coa_deb 	= COA::where('nomor_perkiraan', '120.400')->where('kode_kantor', $kode_kantor)->first();
+
+				}elseif(str_is($kredit->jenis_pinjaman, 'pt')){
+					//1.b.ii. jurnal bunga TJT PT
 					$coa_kre 	= COA::where('nomor_perkiraan', '120.200')->where('kode_kantor', $kode_kantor)->first();
 				}
 			}
-
-			//1.a.ii. do bayar pokok jt
-			//1.a.iii. do bayar pokok
 		}
 
 		$jumlah 		= $this->formatMoneyFrom($model->jumlah);
@@ -179,18 +193,33 @@ class AutoJournal
 		if(str_is($model->tag, 'restitusi_titipan_pokok')){
 			//1.a. do restitusi pokok
 			if(str_is($kredit->jenis_pinjaman, 'pa')){
-				//1.a.i. do restitusi pokok jt PA
-				$coa_kre 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kode_kantor)->first();
+				//kalau piutang pokok tidak 0 masuk piutang pokok
+				$piut		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
+
+				if($piut > 0){
+					//1.a.i. do restitusi pokok jt PA
+					$coa_kre 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kode_kantor)->first();
+				}else{
+					//1.a.ii. do pada bukan JT
+					$coa_kre 	= COA::where('nomor_perkiraan', '120.100')->where('kode_kantor', $kode_kantor)->first();
+				}
+
 			}
 		}
 		elseif(str_is($model->tag, 'restitusi_titipan_bunga')){
-			//1.a. do restitusi pokok
-			if(str_is($kredit->jenis_pinjaman, 'pa')){
-				//1.a.i. do restitusi pokok jt PA
-				$coa_kre 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kode_kantor)->first();
-			}elseif(str_is($kredit->jenis_pinjaman, 'pt')){
-				//1.a.i. do restitusi pokok jt PA
-				$coa_kre 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kode_kantor)->first();
+			$piut		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['140.100', '140.200']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
+
+			if($piut > 0){
+				//1.a. do restitusi bunga
+				if(str_is($kredit->jenis_pinjaman, 'pa')){
+					$coa_kre 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kode_kantor)->first();
+					//1.a.i. do restitusi bunga jt PA
+				}elseif(str_is($kredit->jenis_pinjaman, 'pt')){
+					//1.a.i. do restitusi bunga jt PA
+					$coa_kre 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kode_kantor)->first();
+				}
+			}else{
+				$coa_kre 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kode_kantor)->first();
 			}
 		}
 

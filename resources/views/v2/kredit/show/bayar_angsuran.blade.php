@@ -15,26 +15,24 @@
 			<div class="row">
 				<div class="col-12 mb-2">
 					<div class="form-check form-check-inline">
-						<input class="form-check-input ml-0" type="radio" value="all" name="inlineRadioOptions" id="all" checked>
+						<input class="form-check-input ml-0" type="radio" value="all" name="current" id="all" checked>
 						<label class="form-check-label pl-4" for="all">Bayar Penuh</label>
 					</div>
 					<div class="form-check form-check-inline">
-						<input class="form-check-input ml-0" type="radio" value="part" name="inlineRadioOptions" id="part">
+						<input class="form-check-input ml-0" type="radio" value="part" name="current" id="part">
 						<label class="form-check-label pl-4" for="part">Bayar Sebagian</label>
 					</div>
 					<div class="clearfix">&nbsp;</div>
 					<div class="row">
 						<div class="col">
-								{!! Form::bsText('Tanggal', 'tanggal', $carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control mask-date-time inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+							{!! Form::bsText('Tanggal', 'tanggal', $carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control mask-date-time inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 						</div>
 					</div>
 					<div id="all-tab">
 						<div class="row">
 							<div class="col-12">
 								<p class="mb-1">BAYAR ANGSURAN</p>
-								@php
-									{{--  dd($angsuran);  --}}
-								@endphp
+
 								<select name="temp_nth" id="select-nth" class="form-control custom-select text-info text-left inline-edit border-input pl-2">
 									<option value="">Pilih</option>
 									@foreach ($angsuran as $k => $v)
@@ -44,12 +42,27 @@
 								<input type="hidden" name="nth[]" id="input-nth">
 							</div>
 						</div>
+						<div class="row mt-3">
+							<div class="col-12">
+								<label class="text-uppercase">Disetor Ke</label>
+							</div>
+							<div class="col-12">
+								{!! Form::select('nomor_perkiraan', $akun, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
+							</div>
+						</div>
 					</div>
 					<div id="part-tab" style="display: none;">
 						<div class="row">
 							<div class="col-12">
 								{!! Form::bsText('Nominal', 'nominal', null, ['class' => 'form-control mask-money inline-edit text-info pb-0 border-input', 'placeholder' => 'Rp 330.000', 'id' => 'input-nominal'], true) !!}
-								{!! Form::hidden('current', 'bayar_sebagian') !!}
+							</div>
+						</div>
+						<div class="row mt-3">
+							<div class="col-12">
+								<label class="text-uppercase">Disetor Ke</label>
+							</div>
+							<div class="col-12">
+								{!! Form::select('nomor_perkiraan', $a_tt, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
 							</div>
 						</div>
 					</div>
@@ -260,7 +273,7 @@
 			$('#summary-angsuran').modal('hide');
 		});
 
-		$('input[name="inlineRadioOptions"]').on('change', function(e) {
+		$('input[name="current"]').on('change', function(e) {
 			var value = $(this).val();
 
 			if (value == panel.ALL) {

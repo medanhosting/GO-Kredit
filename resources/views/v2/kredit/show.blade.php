@@ -106,7 +106,7 @@
 												@component('bootstrap.card')
 													@slot('title') 
 														<h4 class='text-center'>
-															{{ $idr->formatMoneyTo($stat['total_tunggakan'] - $stat['total_titipan']) }}
+															{{ $idr->formatMoneyTo(max(0, $stat['total_tunggakan'] - $stat['total_titipan'])) }}
 														</h4>
 														<hr/> 
 													@endslot

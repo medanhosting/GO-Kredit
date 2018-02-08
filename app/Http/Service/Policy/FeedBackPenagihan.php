@@ -140,7 +140,7 @@ class FeedBackPenagihan
 	}
 
 	private function buat_detail_faktur($sp){
-		$deskripsi 	= 'Titipan Penagihan Angsuran Ke-'.$sp['nth'];
+		$deskripsi 	= 'Titipan Pembayaran Tunggakan Angsuran';
 		$angs 		= new DetailTransaksi;
 		$angs->nomor_faktur 	= $this->nomor_faktur;
 		$angs->tag 				= 'titipan';
