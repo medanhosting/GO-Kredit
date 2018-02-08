@@ -198,11 +198,11 @@ class KreditController extends Controller
 					view()->share('is_jaminan_tab', 'show active');
 					break;
 				default:
-					view()->share('is_kredit_tab', 'show active');
+					view()->share('is_angsuran_tab', 'show active');
 					break;
 			}
 		}else{
-			view()->share('is_kredit_tab', 'show active');
+			view()->share('is_angsuran_tab', 'show active');
 		}
 
 		view()->share('active_submenu', 'kredit');

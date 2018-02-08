@@ -11,7 +11,7 @@
 window.ajax = new function () {
 
     // debug?
-    const debug =  false;
+    const debug =  true;
 
     // internal declare
     var on_success;
@@ -28,9 +28,14 @@ window.ajax = new function () {
 
     // interface ajax function
     this.get = function (url, data, token) {
+        console.log('yes');
+        console.log(data);
         if (data) {
+            console.log(1);
             send(url + "?" + jsonToQueryString(data), null, 'GET', token);
+            console.log(jsonToQueryString(data));
         } else {
+            console.log(2);
             send(url, null, 'GET', token);
         }
     }
