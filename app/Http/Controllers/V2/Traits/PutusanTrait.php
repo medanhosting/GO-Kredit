@@ -94,7 +94,7 @@ trait PutusanTrait {
 		if(!$nb){
 			$nb 				= new NotaBayar;
 			$nb->nomor_faktur  	= NotaBayar::generatenomorfaktur($putusan['nomor_kredit']);
-			$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$nb->tanggal 		= $putusan['tanggal'];
 			$nb->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 		}
 
@@ -130,7 +130,7 @@ trait PutusanTrait {
 		if(!$nb){
 			$nb 				= new NotaBayar;
 			$nb->nomor_faktur  	= NotaBayar::generatenomorfaktur($putusan['nomor_kredit']);
-			$nb->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$nb->tanggal 		= $putusan['tanggal'];
 			$nb->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 		}
 

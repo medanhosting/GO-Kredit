@@ -21,7 +21,7 @@ class HitungDendaAngsuran extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'gokredit:hitungdenda {--nomor=}';
+	protected $signature = 'gokredit:hitungdenda {--nomor=} {--tanggal=}';
 
 	/**
 	 * The console command description.
@@ -59,16 +59,22 @@ class HitungDendaAngsuran extends Command
 	public function hitung_denda()
 	{
 		$tanggal 	= Carbon::now();
-		
+		if(!is_null($this->option('tanggal'))){
+			$tanggal = Carbon::createfromformat('d/m/Y', $this->option('tanggal'));
+		}
+
 		//1. cari angsuran JT today
 		//BUG ==> CARI HANYA KREDIT AKTIF
 		$angsuran 	= JadwalAngsuran::HitungTunggakanBeberapaWaktuLalu($tanggal)->groupby('nth');
 		$angsuran 	= $angsuran->with(['kredit'])->get();
 
+		$nomor_faktur 	= null;
+
 		//checkdays
 		if(!is_null($this->option('nomor'))){
 			$angsuran 	= JadwalAngsuran::HitungTunggakanBeberapaWaktuLalu($tanggal)->where('nomor_kredit', $this->option('nomor'))->groupby('nth');
 			$angsuran 	= $angsuran->with(['kredit'])->get();
+			$nomor_faktur	= NotaBayar::generatenomorfaktur($angsuran[0]['kredit']['kode_kantor'].'.'.$tanggal->startofday()->format('ymd'));
 		}
 
 		DB::BeginTransaction();
@@ -77,8 +83,11 @@ class HitungDendaAngsuran extends Command
 			//2. setiap angsuran JT today
 			foreach ($angsuran as $k => $v) {
 				//generate nofaktur
-				$bm 						= new NotaBayar;
-				$bm->nomor_faktur			= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
+				$bm					= NotaBayar::where('nomor_faktur', $nomor_faktur)->first();
+				if(!$bm){
+					$bm 				= new NotaBayar;
+					$bm->nomor_faktur 	= NotaBayar::generatenomorfaktur($v['kredit']['kode_kantor'].'.'.$tanggal->startofday()->format('ymd'));
+				}
 				$bm->morph_reference_id 	= $v['nomor_kredit'];
 				$bm->morph_reference_tag 	= 'kredit';
 				$bm->tanggal		= $tanggal->startofday()->format('d/m/Y H:i');
@@ -121,7 +130,6 @@ class HitungDendaAngsuran extends Command
 					}
 				}
 			}
-
 			DB::commit();
 		} catch (Exception $e) {
 			DB::rollback();

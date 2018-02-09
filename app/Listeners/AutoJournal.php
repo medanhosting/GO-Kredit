@@ -191,7 +191,7 @@ class AutoJournal
 			//1.a. do restitusi pokok
 			if(str_is($kredit->jenis_pinjaman, 'pa')){
 				//kalau piutang pokok tidak 0 masuk piutang pokok
-				$piut		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
+				$piut		= Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah');
 
 				if($piut > 0){
 					//1.a.i. do restitusi pokok jt PA
@@ -204,7 +204,7 @@ class AutoJournal
 			}
 		}
 		elseif(str_is($model->tag, 'restitusi_titipan_bunga')){
-			$piut		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['140.100', '140.200']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
+			$piut		= Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['140.100', '140.200']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah');
 
 			if($piut > 0){
 				//1.a. do restitusi bunga

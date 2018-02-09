@@ -43,13 +43,13 @@ class KreditController extends Controller
 	{
 		if(str_is('*middleware_*', $name)){
 			if(in_array($name, ['middleware_store_angsuran', 'middleware_store_denda', 'middleware_store_bayar_sebagian'])){
-				ScopeMiddleware::check('angsuran');
+				// ScopeMiddleware::check('angsuran');
 			}
 			if(in_array($name, ['middleware_store_tagihan', 'middleware_penerimaan_titipan_tagihan'])){
-				ScopeMiddleware::check('tagihan');
+				// ScopeMiddleware::check('tagihan');
 			}
 			if(in_array($name, ['middleware_store_permintaan_restitusi', 'middleware_store_validasi_restitusi'])){
-				ScopeMiddleware::check('restitusi');
+				// ScopeMiddleware::check('restitusi');
 			}
 			// RequiredPasswordMiddleware::check();
 			
@@ -149,7 +149,7 @@ class KreditController extends Controller
 		$stat['jumlah_tunggakan']	= floor($stat['total_tunggakan']/$stat['angsuran_bulanan']);
 
 		//c. STAT TITIPAN
-		$stat['total_titipan']		= Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['100.300']);})->sum('jumlah');
+		$stat['total_titipan']		= abs(Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['200.210']);})->sum('jumlah'));
 		$stat['jumlah_titipan']		= floor($stat['total_titipan']/$stat['angsuran_bulanan']);
 
 		//d. Bukti Transaksi
