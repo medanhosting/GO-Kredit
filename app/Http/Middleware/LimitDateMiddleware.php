@@ -18,7 +18,7 @@ class LimitDateMiddleware
 			$diff 			= $tanggal_today->diffInDays($tanggal_baru);
 
 			if($diff > 0){
-				return redirect()->back()->withErrors('Tidak dapat entry data yang bukan hari ini');
+				// return redirect()->back()->withErrors('Tidak dapat entry data yang bukan hari ini');
 			}
 		}
 

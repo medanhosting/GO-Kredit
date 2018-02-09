@@ -70,6 +70,7 @@
 								<th class="text-left">Nasabah</th>
 								<th colspan="2">Catatan</th>
 								<th>Dokumen</th>
+								<th>Petugas</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -86,8 +87,8 @@
 								@endif
 								<tr class="text-center">
 									<td class="text-left">
-										{{$v['kredit']['nasabah']['nama']}}<br/>
-										{{$v['kredit']['nasabah']['telepon']}}
+										{{$v['jaminan']['kredit']['nasabah']['nama']}}<br/>
+										{{$v['jaminan']['kredit']['nasabah']['telepon']}}
 									</td>
 									<td>
 										@if(str_is($v['tag'], 'in'))
@@ -100,24 +101,27 @@
 										{{$v['deskripsi']}}
 									</td>
 									<td class="text-left w-50">
-										@if(str_is($v['dokumen']['jenis'], 'shm'))
-											<h6>SHM - {{strtoupper(str_replace('_',' ',$v['kategori']))}}</h6>
-											Nomor Sertifikat {{$v['dokumen']['shm']['nomor_sertifikat']}}<br/>
-											{{implode(', ', $v['dokumen']['shm']['alamat'])}}
-										@elseif(str_is($v['dokumen']['jenis'], 'shgb'))
-											<h6>SHGB - {{strtoupper(str_replace('_',' ',$v['kategori']))}}</h6>
-											Nomor Sertifikat {{$v['dokumen']['shgb']['nomor_sertifikat']}}<br/>
-											{{implode(', ', $v['dokumen']['shgb']['alamat'])}}
+										@if(str_is($v['jaminan']['dokumen']['jenis'], 'shm'))
+											<h6>SHM - {{strtoupper(str_replace('_',' ',$v['jaminan']['kategori']))}}</h6>
+											Nomor Sertifikat {{$v['jaminan']['dokumen']['shm']['nomor_sertifikat']}}<br/>
+											{{implode(', ', $v['jaminan']['dokumen']['shm']['alamat'])}}
+										@elseif(str_is($v['jaminan']['dokumen']['jenis'], 'shgb'))
+											<h6>SHGB - {{strtoupper(str_replace('_',' ',$v['jaminan']['kategori']))}}</h6>
+											Nomor Sertifikat {{$v['jaminan']['dokumen']['shgb']['nomor_sertifikat']}}<br/>
+											{{implode(', ', $v['jaminan']['dokumen']['shgb']['alamat'])}}
 										@else
-											<h6>BPKB - {{strtoupper(str_replace('_',' ',$v['kategori']))}}</h6>
-											Nomor BPKB {{$v['dokumen']['bpkb']['nomor_bpkb']}}<br/>
-											Kendaraan {{str_replace('_', ' ', $v['dokumen']['bpkb']['jenis'])}} - {{$v['dokumen']['bpkb']['merk']}} , {{$v['dokumen']['bpkb']['tipe']}} ({{$v['dokumen']['bpkb']['tahun']}})
+											<h6>BPKB - {{strtoupper(str_replace('_',' ',$v['jaminan']['kategori']))}}</h6>
+											Nomor BPKB {{$v['jaminan']['dokumen']['bpkb']['nomor_bpkb']}}<br/>
+											Kendaraan {{str_replace('_', ' ', $v['jaminan']['dokumen']['bpkb']['jenis'])}} - {{$v['jaminan']['dokumen']['bpkb']['merk']}} , {{$v['jaminan']['dokumen']['bpkb']['tipe']}} ({{$v['jaminan']['dokumen']['bpkb']['tahun']}})
 										@endif
+									</td>
+									<td>
+										{{$v['karyawan']['nama']}}
 									</td>
 								</tr>
 							@empty
 								<tr>
-									<td colspan="4">
+									<td colspan="5">
 										<p>Data tidak tersedia, silahkan pilih Koperasi/BPR lain</p>
 									</td>
 								</tr>

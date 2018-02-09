@@ -1,0 +1,32 @@
+MENU
+
+Dashboard
+	ALL
+Pengajuan
+SCOPES:
+	Permohonan
+	Survei
+	Analisa
+	Putusan
+	Operasional
+	Pencairan
+Kredit
+	Kredit
+	Angsuran
+	Restitusi
+	Penagihan
+	Tunggakan
+	Surat Peringatan
+	Mutasi Jaminan
+	Operasional
+Keuangan
+	Keuangan
+	COA
+Kantor
+	Kantor
+	Karyawan
+	Audit
+	Holding
+Passcode
+	Passcode
+Jurnal

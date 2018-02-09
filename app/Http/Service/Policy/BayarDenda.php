@@ -60,6 +60,30 @@ class BayarDenda
 		$pr->karyawan		= $this->karyawan;
 		$pr->is_approved	= $is_approved * 1;
 		$pr->save();
+
+		if($pr->is_approved){
+			$nominal 	= $this->formatMoneyTo(0 - $this->formatMoneyFrom($pr->jumlah));
+
+			//simpan restitusi
+			$nb 	= new NotaBayar;
+			$nb->nomor_faktur 		 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
+			$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
+			$nb->morph_reference_tag 	= 'kredit';
+			$nb->tanggal 				= $this->tanggal;
+			$nb->karyawan 				= $this->karyawan;
+			$nb->jumlah 				= $nominal;
+			$nb->jenis 					= 'restitusi_denda';
+			$nb->save();
+
+			$angs 	= new DetailTransaksi;
+			$angs->nomor_faktur 	= $nb->nomor_faktur;
+			$angs->tag 				= 'restitusi_denda';
+			$angs->jumlah 			= $nominal;
+			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
+			$angs->morph_reference_tag 	= 'kredit';
+			$angs->deskripsi 		= 'Restitusi Denda Denda';
+			$angs->save();
+		}
 	}
 
 	public function bayar($nominal){
@@ -67,6 +91,7 @@ class BayarDenda
 		$nb->nomor_faktur 		 	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
 		$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
 		$nb->morph_reference_tag 	= 'kredit';
+		$nb->nomor_rekening			= $this->nomor_perkiraan;
 		$nb->tanggal 				= $this->tanggal;
 		$nb->karyawan 				= $this->karyawan;
 		$nb->jumlah 				= $nominal;
@@ -77,6 +102,8 @@ class BayarDenda
 		$angs->nomor_faktur 	= $nb->nomor_faktur;
 		$angs->tag 				= 'denda';
 		$angs->jumlah 			= $nominal;
+		$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
+		$angs->morph_reference_tag 	= 'kredit';
 		$angs->deskripsi 		= 'Bayar Denda';
 		$angs->save();
 	}

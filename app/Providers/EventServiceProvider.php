@@ -126,5 +126,12 @@ class EventServiceProvider extends ServiceProvider
 		///////////////////////////////////////////
 		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusCreated', 'App\Listeners\CadangkanLegalitas');
 		Event::listen('Thunderlabid\Pengajuan\Events\Status\StatusUpdated', 'App\Listeners\CadangkanLegalitas');
+
+		///////////////////////////
+		// Tandai Jaminan Keluar //
+		///////////////////////////
+		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiCreated', 'App\Listeners\TandaiJaminanKeluar');
+		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiUpdated', 'App\Listeners\TandaiJaminanKeluar');
+
 	}
 }

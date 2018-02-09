@@ -20,7 +20,7 @@ trait FakturTrait {
 	 */
 	public function generatenomorfaktur($morph_reference_id)
 	{
-		$get_paid 		= NotaBayar::where('morph_reference_id', $morph_reference_id)->count();
+		$get_paid 		= NotaBayar::where('nomor_faktur', 'like', $morph_reference_id.'%')->count();
 
 		$last_letter	= str_pad(($get_paid + 1), 3, '0', STR_PAD_LEFT);
 

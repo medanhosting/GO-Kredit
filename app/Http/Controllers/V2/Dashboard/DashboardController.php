@@ -31,7 +31,8 @@ class DashboardController extends Controller
 
 		$data['list_angsuran']			= JadwalAngsuran::wherehas('kredit', function($q){$q->kantor(request()->get('kantor_aktif_id'));})->where('tanggal', '>=', $today->startofday()->format('Y-m-d H:i:s'))->where('tanggal', '<=', $today->endofday()->format('Y-m-d H:i:s'))->with(['kredit'])->skip(0)->take(5)->get();
 
-		$data['list_jaminan_keluar']	= MutasiJaminan::where('tag', 'out')->where('status', 'completed')->wheredoesnthave('kredit.angsuran', function($q){$q->wherenotnull('nomor_faktur');})->with(['kredit'])->skip(0)->take(5)->get();
+		$data['list_jaminan_keluar']	= [];
+		// $data['list_jaminan_keluar']	= MutasiJaminan::where('tag', 'out')->where('status', 'completed')->wheredoesnthave('kredit.angsuran', function($q){$q->wherenotnull('nomor_faktur');})->with(['kredit'])->skip(0)->take(5)->get();
 		$data['list_tunggakan'] 		= JadwalAngsuran::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->with(['kredit'])->orderby('tanggal', 'asc')->skip(0)->take(5)->get();
 
 		//atur menu scopes

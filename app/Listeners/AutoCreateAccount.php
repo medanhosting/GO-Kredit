@@ -103,6 +103,10 @@ class AutoCreateAccount
 			'akun'				=> 'Titipan Angsuran',
 			'parent'			=> '200.200'],
 
+			['nomor_perkiraan'	=> '200.230',
+			'akun'				=> 'Titipan Biaya Notaris',
+			'parent'			=> '200.200'],
+
 			['nomor_perkiraan'	=> '260.110',
 			'akun'				=> 'PYD Bunga',
 			'parent'			=> '260.000'],
@@ -140,6 +144,12 @@ class AutoCreateAccount
 			['nomor_perkiraan'	=> '401.204',
 			'akun'				=> 'Legalitas',
 			'parent'			=> '401.200'],
+			['nomor_perkiraan'	=> '401.303',
+			'akun'				=> 'Legal',
+			'parent'			=> '401.300'],
+			['nomor_perkiraan'	=> '401.305',
+			'akun'				=> 'Bunga & Denda yang Dihapusbukukan',
+			'parent'			=> '401.300'],
 			['nomor_perkiraan'	=> '401.205',
 			'akun'				=> 'Biaya Notaris',
 			'parent'			=> '401.200'],

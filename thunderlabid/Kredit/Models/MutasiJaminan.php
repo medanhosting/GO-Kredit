@@ -34,7 +34,7 @@ class MutasiJaminan extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_mutasi_jaminan';
-	protected $fillable = ['nomor_kredit', 'tanggal', 'tag', 'deskripsi', 'dokumen', 'nomor_jaminan', 'status', 'mutasi_jaminan_id', 'kategori', 'karyawan'];
+	protected $fillable = ['nomor_jaminan', 'tanggal', 'status', 'tag', 'progress', 'deskripsi', 'karyawan'];
 	protected $hidden 	= [];
 	protected $appends	= ['possible_action'];
 	protected $rules	= [];
@@ -61,8 +61,8 @@ class MutasiJaminan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// RELATION
 	// ------------------------------------------------------------------------------------------------------------
-	public function kredit(){
-		return $this->belongsto(Aktif::class, 'nomor_kredit', 'nomor_kredit');
+	public function jaminan(){
+		return $this->belongsto(Jaminan::class, 'nomor_jaminan', 'nomor_jaminan');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -79,11 +79,6 @@ class MutasiJaminan extends Model
 	public function setTanggalAttribute($variable)
 	{
 		$this->attributes['tanggal']	= $this->formatDateTimeFrom($variable);
-	}
-
-	public function setDokumenAttribute($variable)
-	{
-		$this->attributes['dokumen']	= json_encode($variable);
 	}
 
 	public function setKaryawanAttribute($variable)
@@ -104,9 +99,9 @@ class MutasiJaminan extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
-		$rules['nomor_kredit'] 		= ['required', 'string'];
+		$rules['nomor_jaminan']		= ['required', 'string'];
 		$rules['tanggal'] 			= ['required', 'date_format:"Y-m-d H:i:s"'];
-		$rules['tag'] 				= ['required', 'string'];
+		$rules['status'] 			= ['required', 'string'];
 
 		//////////////
 		// Validate //
@@ -131,27 +126,49 @@ class MutasiJaminan extends Model
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 
-	public function getDokumenAttribute($variable)
-	{
-		return json_decode($this->attributes['dokumen'], true);
-	}
-
 	public function getKaryawanAttribute($variable)
 	{
 		return json_decode($this->attributes['karyawan'], true);
 	}
 
 	public function getPossibleActionAttribute($value){
-		//boleh ajukan jaminan keluar
-		$next 	= MutasiJaminan::where('nomor_jaminan', $this->nomor_jaminan)->where('id', '<>', $this->id)->where('tanggal', '>', $this->formatDateTimeFrom($this->tanggal))->orderby('tanggal', 'desc')->first();
+		// Kalau Jaminan (Aktif/Titipan/HapusBuku) di Dalam
+		// 	=> Bermasalah di Dalam
+		// 	=> Jaminan Keluar & (Aktif/Titipan/HapusBuku)
+		// Kalau Jaminan (Aktif/Titipan/HapusBuku) di Luar
+		// 	=> Bermasalah di Luar
+		// 	=> Jaminan Masuk & (Aktif/Titipan/HapusBuku)
+		// Kalau Jaminan Bermasalah di Luar
+		// 	=> Bermasalah di Dalam
+		// 	=> Jaminan Luar & Hapus Buku
+		// Kalau Jaminan Bermasalah di Dalam
+		// 	=> Bermasalah di Luar
+		// 	=> Jaminan Dalam & Hapus Buku
 
-		if(is_null($next) && str_is($this->status, 'completed') && str_is($this->tag, 'in')){
-			return 'ajukan_jaminan_keluar';
-		}elseif(str_is($this->status, 'pending')  && str_is($this->tag, 'in')){
-			return 'otorisasi_jaminan_masuk';
-		}elseif(str_is($this->status, 'pending')  && str_is($this->tag, 'out')){
-			return 'otorisasi_jaminan_keluar';
+		switch ($this->tag) {
+			case 'in':
+				if(in_array($this->status, ['aktif', 'titipan', 'hapus_buku'])){
+					$next['Tandai Jaminan Bermasalah']	= 'bermasalah-in';
+					$next['Tandai Jaminan Keluar']		= $this->status.'-out';
+				}elseif(str_is($this->status, 'bermasalah')){
+					$next['Hapus Buku']	 				= 'hapus_buku-in';
+					$next['Tandai Jaminan Keluar']		= 'bermasalah-out';
+				}
+				break;
+			case 'out':
+				if(in_array($this->status, ['aktif', 'titipan', 'hapus_buku'])){
+					$next['Tandai Jaminan Bermasalah']	= 'bermasalah-out';
+					$next['Tandai Jaminan Masuk']		= $this->status.'-in';
+				}elseif(str_is($this->status, 'bermasalah')){
+					$next['Hapus Buku']	 				= 'hapus_buku-out';
+					$next['Tandai Jaminan Bermasalah']	= 'bermasalah-in';
+				}
+				break;
 		}
-		return null;
+		if(str_is($this->progress, 'menunggu_validasi')){
+			$next[] 	= 'validasi';
+		}
+
+		return $next;
 	}
 }

@@ -60,7 +60,7 @@ class PengajuanController extends Controller
 			}
 
 			if(str_is('middleware_get_pengajuan', $name)){
-				if(!in_array($arguments[0], $this->scopes['scopes'])){
+				if(!array_intersect([$arguments[0], 'operasional'], $this->scopes['scopes'])){
 					$arguments[1]	= null;
 					$arguments[2]	= true;
 					return call_user_func_array([$this, str_replace('middleware_', '', $name)], $arguments);

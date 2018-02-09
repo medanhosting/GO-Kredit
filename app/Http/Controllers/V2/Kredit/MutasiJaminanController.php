@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V2\Kredit;
 
 use App\Http\Controllers\Controller;
 
+use Thunderlabid\Kredit\Models\Jaminan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
 use Exception, Carbon\Carbon, DB, Auth;
@@ -22,7 +23,7 @@ class MutasiJaminanController extends Controller
 
 	public function index () 
 	{
-		$jaminan 	= MutasiJaminan::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
+		$jaminan 	= MutasiJaminan::wherehas('jaminan.kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));});
 
 		$start 		= Carbon::now()->startofday();
 		$end 		= Carbon::now()->endofday();
@@ -40,7 +41,7 @@ class MutasiJaminanController extends Controller
 		{
 			$cari		= request()->get('q_jaminan');
 			$regexp 	= preg_replace("/-+/",'[^A-Za-z0-9_]+',$cari);
-			$jaminan	= $jaminan->wherehas('kredit', function($q)use($regexp){
+			$jaminan	= $jaminan->wherehas('jaminan.kredit', function($q)use($regexp){
 				$q->whereRaw(DB::raw('nasabah REGEXP "'.$regexp.'"'));
 			});
 		}
@@ -49,7 +50,7 @@ class MutasiJaminanController extends Controller
 		{
 			$cari2		= request()->get('doc_jaminan');
 			$regexp2 	= preg_replace("/-+/",'[^A-Za-z0-9_]+',$cari2);
-			$jaminan	= $jaminan->whereRaw(DB::raw('dokumen REGEXP "'.$regexp2.'"'));
+			$jaminan	= $jaminan->wherehas('jaminan', function($q){$q->whereRaw(DB::raw('dokumen REGEXP "'.$regexp2.'"'));});
 		}
 
 		if (request()->has('mutasi_jaminan'))
@@ -88,28 +89,49 @@ class MutasiJaminanController extends Controller
 			$jaminan  	= MutasiJaminan::findorfail($id);
 			$data 		= request()->only('tanggal','stok','deskripsi');
 
-			$tag 		= 'in';
-			switch (strtolower($data['stok'])) {
-				case 'titipan':
-				case 'hapus_buku':
-				case 'bermasalah':
-				case 'keluar_bukan_pelunasan':
-					$tag = 'out';
-					break;
-			}
+			list($status, $tag)	= explode('-', $data['stok']);
 
 			//simpan jaminan 
 			$jj 		= new MutasiJaminan;
-			$jj->mutasi_jaminan_id	= $jaminan->id;
-			$jj->nomor_kredit 		= $jaminan->nomor_kredit;
-			$jj->kategori 			= $jaminan->kategori;
-			$jj->tanggal 			= $data['tanggal']. ' 00:00';
-			$jj->tag 				= $tag;
-			$jj->status 			= $data['stok'];
-			$jj->deskripsi 			= $data['deskripsi'];
-			$jj->dokumen 			= $jaminan->dokumen;
-			$jj->nomor_jaminan 		= $jaminan->nomor_jaminan;
-			$jj->karyawan 			= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
+			$jj->nomor_jaminan	= $jaminan->nomor_jaminan;
+			$jj->tanggal		= $data['tanggal']. ' '.Carbon::now()->format('H:i');
+			$jj->tag 			= $tag;
+			$jj->status			= $status;
+			$jj->deskripsi		= $data['deskripsi'];
+			$jj->progress		= 'menunggu_validasi';
+			$jj->karyawan		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
+			$jj->save();
+
+			DB::commit();
+			return redirect()->back();
+		} catch (Exception $e) {
+			dd($e);
+			DB::rollback();
+			return redirect()->back()->withErrors($e->getMessage());
+		}
+	}
+
+	public function update($id){
+		return $this->store($id);
+	}
+
+	public function validasi($id){
+		try {
+			DB::BeginTransaction();
+
+			//find jaminan
+			$jaminan  	= Jaminan::findorfail($id);
+			$data 		= request()->only('tanggal');
+
+			//simpan jaminan 
+			$jj 		= new MutasiJaminan;
+			$jj->nomor_jaminan	= $jaminan->nomor_jaminan;
+			$jj->tanggal		= $data['tanggal']. ' '.Carbon::now()->format('H:i');
+			$jj->tag 			= $jaminan->status_terakhir->tag;
+			$jj->status			= $jaminan->status_terakhir->status;
+			$jj->deskripsi		= $jaminan->status_terakhir->deskripsi;
+			$jj->progress		= 'valid';
+			$jj->karyawan		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 			$jj->save();
 
 			DB::commit();
@@ -118,9 +140,5 @@ class MutasiJaminanController extends Controller
 			DB::rollback();
 			return redirect()->back()->withErrors($e->getMessage());
 		}
-	}
-
-	public function update($id){
-		return $this->store($id);
 	}
 }

@@ -15,7 +15,7 @@ class JurnalController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->middleware('scope:kasir');
+		// $this->middleware('scope:kasir');
 	}
 
 	public function index () 
@@ -165,6 +165,9 @@ class JurnalController extends Controller
 			'parent'			=> '401.200'],
 			['nomor_perkiraan'	=> '401.303',
 			'akun'				=> 'Legal',
+			'parent'			=> '401.300'],
+			['nomor_perkiraan'	=> '401.305',
+			'akun'				=> 'Bunga & Denda yang Dihapusbukukan',
 			'parent'			=> '401.300'],
 			['nomor_perkiraan'	=> '401.205',
 			'akun'				=> 'Biaya Notaris',

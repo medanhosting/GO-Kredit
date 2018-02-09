@@ -72,176 +72,18 @@
 							<div class="tab-content">
 								<!-- tab angsuran -->
 								<div class="tab-pane p-4 {{$is_angsuran_tab}}" id="angsuran" role="tabpanel">
-									<div class="clearfix">&nbsp;</div>
-									<div class="clearfix">&nbsp;</div>
-									<div class="row align-items-stretch">
-										@if($stat['sisa_hutang'])
-											<div class="col-4">
-												@component('bootstrap.card')
-													@slot('title') 
-														<h4 class='text-center'>
-															{{ $idr->formatMoneyTo($stat['total_tunggakan']) }}
-														</h4>
-														<hr/> 
-													@endslot
-													@slot('body') 
-														<span class="text-center">ANGSURAN JATUH TEMPO ({{ $stat['jumlah_tunggakan'] }})</span>
-													@endslot
-												@endcomponent
-											</div>
-											<div class="col-4">
-												@component('bootstrap.card')
-													@slot('title') 
-														<h4 class='text-center'>
-															{{ $idr->formatMoneyTo($stat['total_titipan']) }}
-														</h4>
-														<hr/> 
-													@endslot
-													@slot('footer') 
-														<p class="text-center">TITIPAN CUKUP MEMBAYAR ANGSURAN ( {{ $stat['jumlah_titipan'] }} )</p>
-													@endslot
-												@endcomponent
-											</div>
-											<div class="col-4">
-												@component('bootstrap.card')
-													@slot('title') 
-														<h4 class='text-center'>
-															{{ $idr->formatMoneyTo(max(0, $stat['total_tunggakan'] - $stat['total_titipan'])) }}
-														</h4>
-														<hr/> 
-													@endslot
-													@slot('body') 
-														<p class='text-center'>TOTAL TUNGGAKAN YANG HARUS DIBAYAR</p> 
-													@endslot
-												@endcomponent
-											</div>
-										@endif
-										{{--  @if ($stat['total_denda'])
-											<div class="col-3">
-												@component('bootstrap.card')
-													@slot('title') 
-														<h4 class='text-center'>
-															{{ $idr->formatMoneyTo($stat['total_denda'] - $stat['total_restitusi']) }}
-														</h4>
-														<hr/> 
-													@endslot
-													@slot('body') 
-														<p class='text-center'>TOTAL DENDA YANG HARUS DIBAYAR</p> 
-													@endslot
-												@endcomponent
-											</div>
-										@endif  --}}
-									</div>
-									
-									@if($stat['sisa_hutang'])
-										<div class="clearfix">&nbsp;</div>
-										<div class="clearfix">&nbsp;</div>
-										<div class="row">
-											<div class="col-8">
-												@include('v2.kredit.show.angsuran')
-											</div>
-											<div class="col-4">
-												{{--  <div class="row">  --}}
-													{{--  <div class="col">  --}}
-														@include('v2.kredit.show.bayar_angsuran')
-													{{--  </div>  --}}
-													{{--  <div class="col">  --}}
-														{{--  @include('v2.kredit.show.titipan_angsuran')  --}}
-													{{--  </div>  --}}
-												</div>
-											</div>
-										</div>
-										<div class="clearfix">&nbsp;</div>
-										<div class="clearfix">&nbsp;</div>
-										<div class="row">
-											<div class="col-8">
-											</div>
-											<div class="col-4">
-											</div>
-										</div>
-									@endif
-									@if($stat['total_denda'])
-									<div class="clearfix">&nbsp;</div>
-									<div class="clearfix">&nbsp;</div>
-									<div class="row">
-										<div class="col-4">
-											
-											{{--  @include('v2.kredit.show.bayar_denda')  --}}
-										</div>
-										<div class="col-4">
-											@if($restitusi)
-												{{--  @include('v2.kredit.show.konfirmasi_restitusi')  --}}
-											@else
-												{{--  @include('v2.kredit.show.permohonan_restitusi')  --}}
-											@endif
-										</div>
-										<div class="col-4">
-											{{--  @include('v2.kredit.show.kas_kolektor')  --}}
-										</div>
-									</div>
-									@endif
-									<div class="row">
-										<div class="col-8">
-											{{--  @include('v2.kredit.show.angsuran')  --}}
-										</div>
-										<div class="col-4">
-											@if(count($titipan))
-												<div class="clearfix">&nbsp;</div>
-												<div class="clearfix">&nbsp;</div>
-												{{--  @include('v2.kredit.show.kas_kolektor')  --}}
-											@endif
-											{{--  @include('v2.kredit.show.denda')  --}}
-										</div>
-									</div>
+									@include('v2.kredit.show.angsuran')
 								</div>
-
 								<!-- tab denda -->
-								<div class="tab-pane {{ $is_denda_tab }}" id="denda" role="tabpanel">
-									<div class="clearfix">&nbsp;</div>
-									<div class="clearfix">&nbsp;</div>
+								<div class="tab-pane p-4 {{$is_denda_tab}}" id="denda" role="tabpanel">
+									@include('v2.kredit.show.denda')
 								</div>
-								
-								<div class="tab-pane {{$is_penagihan_tab}}" id="penagihan" role="tabpanel">
-									<div class="clearfix">&nbsp;</div>
-									<div class="clearfix">&nbsp;</div>
-									<div class="row">
-										<div class="col-4">
-											@component('bootstrap.card')
-												@slot('title') 
-													<h4 class='text-center'>
-														{{$idr->formatMoneyTo($stat['total_tunggakan'])}}
-													</h4><hr> 
-												@endslot
-												@slot('body') <p class='text-center'>TOTAL {{$stat['jumlah_tunggakan']}} ANGSURAN JATUH TEMPO</p> @endslot
-											@endcomponent
-										</div>
-										<div class="col-4">
-											@component('bootstrap.card')
-												@slot('title') 
-													<h4 class='text-center'>
-														{{$stat['last_pay']['tanggal']}}
-													</h4><hr> 
-												@endslot
-												@slot('body') <p class='text-center'>TANGGAL PEMBAYARAN TERAKHIR</p> @endslot
-											@endcomponent
-										</div>
-										<div class="col-4">
-											@component('bootstrap.card')
-												@slot('title') 
-													<h4 class='text-center'>
-														{{strtoupper(str_replace('_',' ',$stat['last_sp']['tag']))}}
-													</h4><hr> 
-												@endslot
-												@slot('body') <p class='text-center'>SP TERAKHIR DIKELUARKAN</p> @endslot
-											@endcomponent
-										</div>
-									</div>
-
+								<!-- tab penagihan -->
+								<div class="tab-pane p-4 {{$is_penagihan_tab}}" id="penagihan" role="tabpanel">
 									@include('v2.kredit.show.penagihan')
 								</div>
-								
 								<!-- tab jaminan -->
-								<div class="tab-pane {{$is_jaminan_tab}}" id="jaminan" role="tabpanel">
+								<div class="tab-pane p-4 {{$is_jaminan_tab}}" id="jaminan" role="tabpanel">
 									@include('v2.kredit.show.jaminan')
 								</div>
 							</div>

@@ -51,6 +51,8 @@
 
 				Route::get('angsuran/{id}/print', 		['uses' => 'AngsuranController@print', 		'as' => 'angsuran.print']);
 				Route::get('tunggakan/{id}/print',		['uses' => 'TunggakanController@print',		'as' => 'tunggakan.print']);
+
+				Route::any('angsuran/{id}/validasi', 	['uses' => 'MutasiJaminanController@validasi',	'as' => 'jaminan.validasi']);
 			});
 
 			Route::namespace('V2\Finance')->group(function(){

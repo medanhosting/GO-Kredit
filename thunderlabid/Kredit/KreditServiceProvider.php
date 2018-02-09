@@ -32,6 +32,10 @@ class KreditServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\MutasiJaminan\MutasiJaminanDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
 
+		Event::listen('Thunderlabid\Kredit\Events\Jaminan\JaminanCreating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\Jaminan\JaminanUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
+		Event::listen('Thunderlabid\Kredit\Events\Jaminan\JaminanDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
+
 		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanCreating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanUpdating', 'Thunderlabid\Kredit\Listeners\Saving');
 		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanDeleting', 'Thunderlabid\Kredit\Listeners\Deleting');
@@ -45,12 +49,6 @@ class KreditServiceProvider extends ServiceProvider
 		// Buat Jadwal Angsuran //
 		//////////////////////////
 		Event::listen('Thunderlabid\Kredit\Events\Aktif\AktifCreated', 'Thunderlabid\Kredit\Listeners\BuatJadwalAngsuran');
-
-		///////////////////////////
-		// Tandai Jaminan Keluar //
-		///////////////////////////
-		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailCreated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
-		Event::listen('Thunderlabid\Kredit\Events\AngsuranDetail\AngsuranDetailUpdated', 'Thunderlabid\Kredit\Listeners\TandaiJaminanKeluar');
 
 		////////////////////////////////////////////////////
 		// Tidak boleh melakukan pembayaran setelah jam 3 //

@@ -1,7 +1,10 @@
-<div class="clearfix">&nbsp;</div>
-<div class="clearfix">&nbsp;</div>
-<div class="row">
-	<div class="col-sm-12">
+@component('bootstrap.card')
+	@slot('title') 
+		<h5 class='text-left'>
+			<strong>STOK JAMINAN</strong>
+		</h5>
+	@endslot
+	@slot('body')
 		<table class="table table-hover table-bordered">
 			<thead>
 				<tr class="text-center">
@@ -12,15 +15,22 @@
 				</tr>
 			</thead>
 			<tbody>
-				@php $lua = null @endphp
-				@forelse($jaminan as $k => $v)
-					@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
+				@forelse($aktif['jaminan'] as $k => $v)
+					@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['status_terakhir']['tanggal'])->format('d/m/Y') @endphp
 					<tr class="text-center">
 						<td>
 							{{$pa}}
 						</td>
-						<td>
-							{{str_replace('_',' ',ucwords($v['status']))}}
+						<td class="text-left">
+							{{str_replace('_',' ',ucwords($v['status_terakhir']['status']))}}
+							<br/>
+							<small>
+								@if(str_is($v['status_terakhir']['tag'], 'in'))
+									[Brankas] {{$v['status_terakhir']['deskripsi']}}
+								@else
+									[Keluar] {{$v['status_terakhir']['deskripsi']}}
+								@endif
+							</small>
 						</td>
 						<td class="text-right w-50">
 							@if(str_is($v['dokumen']['jenis'], 'shm'))
@@ -38,7 +48,14 @@
 							@endif
 						</td>
 						<td>
-							<a class="update_jaminan text-success" data-toggle="modal" data-target="#update-jaminan" data-action="{{route('jaminan.update', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id])}}">Ubah Stok Jaminan</a>
+							@if(str_is($v['status_terakhir']['progress'], 'menunggu_validasi'))
+								<a class="update_jaminan text-success" data-toggle="modal" data-target="#validasi-jaminan" data-action="{{route('jaminan.validasi', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id])}}">Validasi</a>
+							@else
+								@foreach($v['status_terakhir']['possible_action'] as $k2 => $v2)
+								<a class="update_jaminan text-success" data-toggle="modal" data-target="#update-jaminan" data-action="{{route('jaminan.update', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'stok' => $v2])}}" data-title="{{$k2}}">{{str_replace('_', ' ', $k2)}}</a>
+								<br/>
+								@endforeach
+							@endif
 						</td>
 					</tr>
 				@empty
@@ -50,9 +67,28 @@
 				@endforelse
 			</tbody>
 		</table>
-	</div>
-</div>
+	@endslot
+@endcomponent('bootstrap.card')
 
+@component ('bootstrap.modal', ['id' => 'validasi-jaminan', 'form' => true, 'method' => 'patch', 'url' => '#'])
+	@slot ('title')
+		Validasi Stok Jaminan
+	@endslot
+
+	@slot ('body')
+		<p>Untuk validasi jaminan harap lengkapi data berikut!</p>
+
+		{!! Form::bsText('Tanggal', 'tanggal', null, ['placeholder' => '13/11/2017', 'class' => 'mask-date form-control w-50']) !!}
+
+		{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
+
+	@endslot
+
+	@slot ('footer')
+		<a href="#" data-dismiss="modal" class="btn btn-link text-secondary">Batal</a>
+		{!! Form::bsSubmit('Konfirmasi', ['class' => 'btn btn-primary']) !!}
+	@endslot
+@endcomponent
 
 @component ('bootstrap.modal', ['id' => 'update-jaminan', 'form' => true, 'method' => 'patch', 'url' => '#'])
 	@slot ('title')
@@ -64,10 +100,6 @@
 
 		<div class="form-group">
 			{!! Form::bsText('Tanggal', 'tanggal', null, ['placeholder' => '13/11/2017', 'class' => 'mask-date form-control w-50']) !!}
-
-			{!! Form::label('Stok Terkini', '', ['class' => 'text-uppercase mb-1']) !!}
-
-			{!! Form::bsSelect(null, 'stok', ['aktif' => 'Aktif', 'hapus_buku' => 'Hapus Buku', 'bermasalah' => 'Bermasalah', 'keluar_bukan_pelunasan' => 'Keluar Bukan Pelunasan'], ['placeholder' => '13/11/2017', 'class' => 'mask-date form-control']) !!}
 
 			{!! Form::bsTextarea('Catatan', 'deskripsi', null, ['placeholder' => 'Perpanjangan STNK']) !!}
 		</div>
@@ -87,10 +119,17 @@
 
 	function parsingDataAttributeJaminanKeluar(){
 		$('#update-jaminan').find('form').attr('action', $(this).attr("data-action"));
+		$('#update-jaminan').find('.modal-title').html($(this).attr("data-title"));
 	}
 	$('.modal#konfirmasi_ubah_jaminan').on('show.bs.modal', function(e){
 		//$('.modal#update-jaminan').modal('hide');
 	});
+
+	$("a.validasi_jaminan").on("click", parsingDataAttributeValidasiJaminan);
+
+	function parsingDataAttributeValidasiJaminan(){
+		$('#validasi-jaminan').find('form').attr('action', $(this).attr("data-action"));
+	}
 	</script>
 
 @endpush

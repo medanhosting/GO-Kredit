@@ -41,7 +41,7 @@ class Release extends Command
 	 */
 	public function handle()
 	{
-		$this->developing();
+		// $this->developing();
 
 		$this->info("--------------------------------------------------------");
 		$this->info('RELEASE V1');

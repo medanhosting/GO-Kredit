@@ -34,9 +34,23 @@ class TandaiJaminanKeluar
 		$model	= $event->data;
 
 		if(!is_null($model->nota_bayar_id)){
-			$not_yet_paid 	= AngsuranDetail::wherenull('nota_bayar_id')->where('nomor_kredit', $model->nomor_kredit)->count();
+			//check titipan
+			$titipan		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['200.210']);})->where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
+			
+			//check angsuran
+			$not_yet_paid 	= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $model->nomor_kredit)->count();
 
-			if(!$not_yet_paid){
+			//check denda
+			$rd			= JadwalAngsuran::historiTunggakan($today)->where('nomor_kredit', $aktif['nomor_kredit'])->groupby('nth')->selectraw('sum(jumlah * ('.$aktif['persentasi_denda'].'/100)) as tunggakan')->selectraw('DATEDIFF(min(tanggal),IFNULL(min(tanggal_bayar),"'.$today->format('Y-m-d H:i:s').'")) as days')->selectraw('nth')->get();
+
+			$denda 		= 0;
+			foreach ($rd as $k => $v) {
+				$denda 	= $denda + ($v['tunggakan'] * abs($v['days'])); 
+			}
+			$denda		= ceil($denda) - ceil(NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('jenis', 'denda')->sum('jumlah')) - ceil(PermintaanRestitusi::where('is_approved', true)->where('nomor_kredit', $aktif['nomor_kredit'])->sum('jumlah'));
+
+
+			if(!$not_yet_paid && !$titipan && !$denda){
 				$ids 		= MutasiJaminan::where('nomor_kredit', $model['nomor_kredit'])->selectraw('max(id) as id, max(tanggal) as tanggal')->groupby('nomor_jaminan')->orderby('tanggal', 'desc')->get()->toArray();
 
 				$jaminan 	= MutasiJaminan::wherein('id', array_column($ids, 'id'))->get();

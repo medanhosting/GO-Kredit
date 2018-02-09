@@ -42,7 +42,7 @@ class AutoJournal
 		elseif(in_array($model->tag, ['pokok', 'bunga'])){
 			$this->journal_setoran_angsuran($model);
 		}
-		elseif(str_is($model->tag, 'denda', 'restitusi_denda')){
+		elseif(in_array($model->tag, ['denda', 'restitusi_denda'])){
 			$this->journal_denda($model);
 		}
 		elseif(in_array($model->tag, ['titipan'])){
@@ -110,8 +110,7 @@ class AutoJournal
 
 		if(str_is($model->tag, 'bunga')){
 			//1. jurnal bunga
-			$piut		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['140.100', '140.200']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
-			if($piut > 0){
+			if(str_is($model->notabayar->jenis, 'angsuran')){
 				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
 				//1.a. jurnal bunga JT
 				if(str_is($kredit->jenis_pinjaman, 'pa')){
@@ -125,14 +124,12 @@ class AutoJournal
 				//1.b. jurnal bunga TJT
 				//1.b.i jurnal bunga TJT PA
 				//1.b.ii jurnal bunga TJT PT
-				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
+				$coa_deb 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kode_kantor)->first();
 				$coa_kre 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kode_kantor)->first();
 			}
 		}elseif(str_is($model->tag, 'pokok')){
 			//1. jurnal pokok
-			$piut		= abs(Jurnal::whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300', '120.400']);})->where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->sum('jumlah'));
-				
-			if($piut > 0){
+			if(str_is($model->notabayar->jenis, 'angsuran')){
 				//1.a. jurnal pokok JT
 				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
 
@@ -146,7 +143,7 @@ class AutoJournal
 				}
 			}else{
 				//1.b. jurnal pokok TJT
-				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
+				$coa_deb 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kode_kantor)->first();
 				
 				if(str_is($kredit->jenis_pinjaman, 'pa')){
 					//1.b.i. jurnal bunga TJT PA
@@ -242,11 +239,15 @@ class AutoJournal
 				//1.a.i. do memorial denda
 				$coa_deb 	= COA::where('nomor_perkiraan', '140.600')->where('kode_kantor', $kode_kantor)->first();
 				$coa_kre 	= COA::where('nomor_perkiraan', '260.120')->where('kode_kantor', $kode_kantor)->first();
+			}else{
+				//1.a.ii. do bayar piut denda
+				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
+				$coa_kre 	= COA::where('nomor_perkiraan', '140.600')->where('kode_kantor', $kode_kantor)->first();
 			}
-			//1.a.ii. do bayar piut denda
 
 		}elseif(str_is($model->tag, 'restitusi_denda')){
-
+			$coa_deb 	= COA::where('nomor_perkiraan', '401.305')->where('kode_kantor', $kode_kantor)->first();
+			$coa_kre 	= COA::where('nomor_perkiraan', '140.600')->where('kode_kantor', $kode_kantor)->first();
 		}
 
 		$jumlah 		= $this->formatMoneyFrom($model->jumlah);

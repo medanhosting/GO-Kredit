@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateKreditMutasiJaminanTable extends Migration
+class CreateKreditJaminanTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -13,19 +13,17 @@ class CreateKreditMutasiJaminanTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('k_mutasi_jaminan', function (Blueprint $table) {
+		Schema::create('k_jaminan', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('nomor_kredit');
 			$table->string('nomor_jaminan');
-			$table->datetime('tanggal');
-			$table->string('status');
-			$table->string('tag');
-			$table->string('progress');
-			$table->text('deskripsi')->nullable();
-			$table->text('karyawan');
+			$table->string('kategori');
+			$table->text('dokumen');
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'nomor_jaminan']);
+			$table->index(['deleted_at', 'nomor_kredit']);
+			$table->index(['deleted_at', 'nomor_jaminan']);
 		});
 	}
 
@@ -36,6 +34,6 @@ class CreateKreditMutasiJaminanTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('k_mutasi_jaminan');
+		Schema::dropIfExists('k_jaminan');
 	}
 }

@@ -78,7 +78,7 @@ class Aktif extends Model
 	}
 
 	public function jaminan(){
-		return $this->hasMany(MutasiJaminan::class, 'nomor_kredit', 'nomor_kredit')->where('tag', 'in')->orderby('tanggal', 'desc');
+		return $this->hasMany(Jaminan::class, 'nomor_kredit', 'nomor_kredit');
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------

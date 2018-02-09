@@ -9,6 +9,7 @@ use App\Exceptions\AppException;
 
 use Thunderlabid\Survei\Models\Survei;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
+use Thunderlabid\Kredit\Models\Jaminan;
 use Thunderlabid\Kredit\Models\MutasiJaminan;
 
 use Carbon\Carbon;
@@ -43,17 +44,22 @@ class TandaiJaminanMasuk
 				$ktgr 	= $v->dokumen_survei['collateral'][$v->dokumen_survei['collateral']['jenis']]['jenis'];
 			}
 
-			$m_jaminan 					= new MutasiJaminan;
-			$m_jaminan->nomor_kredit 	= $model->nomor_kredit;
-			$m_jaminan->nomor_jaminan 	= $m_jaminan->nomor_kredit.'-'.($k+1);
-			$m_jaminan->tanggal 		= $model->tanggal;
-			$m_jaminan->tag 			= 'in';
-			$m_jaminan->kategori 		= $ktgr;
-			$m_jaminan->status 			= 'aktif';
-			$m_jaminan->deskripsi 		= 'Jaminan Masuk';
-			$m_jaminan->dokumen 		= $v->dokumen_survei['collateral'];
-			$m_jaminan->karyawan 		= $pengajuan['status_realisasi']['karyawan'];
-			$m_jaminan->save();
+			$jaminan 					= new Jaminan;
+			$jaminan->nomor_kredit 	= $model->nomor_kredit;
+			$jaminan->nomor_jaminan = $jaminan->nomor_kredit.'-'.($k+1);
+			$jaminan->kategori 		= $ktgr;
+			$jaminan->dokumen 		= $v->dokumen_survei['collateral'];
+			$jaminan->save();
+
+			$mj				= new MutasiJaminan;
+			$mj->nomor_jaminan = $jaminan->nomor_jaminan;
+			$mj->tanggal 		= $model->tanggal;
+			$mj->tag 			= 'in';
+			$mj->status 		= 'aktif';
+			$mj->progress 		= 'menunggu_validasi';
+			$mj->deskripsi 		= 'Jaminan Masuk';
+			$mj->karyawan 		= $pengajuan['status_realisasi']['karyawan'];
+			$mj->save();
 		}
 	}
 }

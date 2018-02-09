@@ -1,0 +1,49 @@
+SUBMENU
+
+Pengajuan
+SCOPES
+	Permohonan	
+	Survei	
+	Analisa	
+	Putusan	
+	Operasional
+
+Putusan
+SCOPES
+	Pencairan
+	Realisasi
+	Operasional
+
+Simulasi
+SCOPES
+	ALL
+
+Permohonan Baru	
+SCOPES
+	Permohonan	
+
+
+
+Kredit
+SCOPES
+	Kredit
+	Angsuran
+	Restitusi
+	Penagihan
+	Mutasi Jaminan
+	Operasional
+
+Laporan Tunggakan
+SCOPES
+	Tunggakan
+	Surat Peringatan
+	Operasional
+
+Mutasi Jaminan
+SCOPES
+	Mutasi Jaminan
+
+
+
+Keuangan
+Kantor

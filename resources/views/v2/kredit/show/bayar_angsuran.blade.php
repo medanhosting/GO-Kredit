@@ -35,8 +35,8 @@
 
 								<select name="temp_nth" id="select-nth" class="form-control custom-select text-info text-left inline-edit border-input pl-2">
 									<option value="">Pilih</option>
-									@foreach ($angsuran as $k => $v)
-										<option value="{{ $v['nth'] }}" data-value="{{ $idr->formatMoneyFrom($v['jumlah']) }}">{{ $v['nth'] }} Angsur</option>
+									@foreach ($sisa_angsuran as $k => $v)
+										<option value="{{ $k+1 }}" data-value="{{$v['total']}}">{{ $k+1 }} Angsuran</option>
 									@endforeach
 								</select>
 								<input type="hidden" name="nth[]" id="input-nth">
