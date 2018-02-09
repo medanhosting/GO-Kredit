@@ -112,19 +112,34 @@ class AutoJournal
 			//1. jurnal bunga
 			if(str_is($model->notabayar->jenis, 'angsuran')){
 				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
+
+				$piut 		= Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300', '120.400', '140.100', '140.200']);})->sum('jumlah');
+
 				//1.a. jurnal bunga JT
 				if(str_is($kredit->jenis_pinjaman, 'pa')){
 					//1.a.i. jurnal bunga JT PA
-					$coa_kre 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kode_kantor)->first();
+					if($piut){
+						$coa_kre 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kode_kantor)->first();
+					}else{
+						$coa_kre 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kode_kantor)->first();
+					}
 				}elseif(str_is($kredit->jenis_pinjaman, 'pt')){
 					//1.a.ii. jurnal bunga JT PT
-					$coa_kre 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kode_kantor)->first();
+					if($piut){
+						$coa_kre 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kode_kantor)->first();
+					}else{
+						$coa_kre 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kode_kantor)->first();
+					}
 				}
 			}else{
 				//1.b. jurnal bunga TJT
 				//1.b.i jurnal bunga TJT PA
 				//1.b.ii jurnal bunga TJT PT
-				$coa_deb 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kode_kantor)->first();
+				if(str_is($kredit->jenis_pinjaman, 'pa')){
+					$coa_deb 	= COA::where('nomor_perkiraan', '140.100')->where('kode_kantor', $kode_kantor)->first();
+				}elseif(str_is($kredit->jenis_pinjaman, 'pt')){
+					$coa_deb 	= COA::where('nomor_perkiraan', '140.200')->where('kode_kantor', $kode_kantor)->first();
+				}
 				$coa_kre 	= COA::where('nomor_perkiraan', '260.110')->where('kode_kantor', $kode_kantor)->first();
 			}
 		}elseif(str_is($model->tag, 'pokok')){
@@ -133,24 +148,34 @@ class AutoJournal
 				//1.a. jurnal pokok JT
 				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
 
+				$piut 		= Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300', '120.400', '140.100', '140.200']);})->sum('jumlah');
+
 				if(str_is($kredit->jenis_pinjaman, 'pa')){
 					//1.a.i. jurnal pokok JT PA
-					$coa_kre 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kode_kantor)->first();
-
+					if($piut){
+						$coa_kre 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kode_kantor)->first();
+					}else{
+						$coa_kre 	= COA::where('nomor_perkiraan', '120.100')->where('kode_kantor', $kode_kantor)->first();
+					}
 				}elseif(str_is($kredit->jenis_pinjaman, 'pt')){
 					//1.a.ii. jurnal pokok JT PT
-					$coa_kre 	= COA::where('nomor_perkiraan', '120.400')->where('kode_kantor', $kode_kantor)->first();
+					if($piut){
+						$coa_kre 	= COA::where('nomor_perkiraan', '120.400')->where('kode_kantor', $kode_kantor)->first();
+					}else{
+						$coa_kre 	= COA::where('nomor_perkiraan', '120.200')->where('kode_kantor', $kode_kantor)->first();
+					}
+
 				}
 			}else{
 				//1.b. jurnal pokok TJT
-				$coa_deb 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kode_kantor)->first();
-				
 				if(str_is($kredit->jenis_pinjaman, 'pa')){
 					//1.b.i. jurnal bunga TJT PA
+					$coa_deb 	= COA::where('nomor_perkiraan', '120.300')->where('kode_kantor', $kode_kantor)->first();
 					$coa_kre 	= COA::where('nomor_perkiraan', '120.100')->where('kode_kantor', $kode_kantor)->first();
 
 				}elseif(str_is($kredit->jenis_pinjaman, 'pt')){
 					//1.b.ii. jurnal bunga TJT PT
+					$coa_deb 	= COA::where('nomor_perkiraan', '120.400')->where('kode_kantor', $kode_kantor)->first();
 					$coa_kre 	= COA::where('nomor_perkiraan', '120.200')->where('kode_kantor', $kode_kantor)->first();
 				}
 			}

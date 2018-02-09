@@ -44,7 +44,7 @@ trait KreditTrait {
  	}
 
  	public function store_angsuran($aktif){
- 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('nth'), request()->get('tanggal'), request()->get('nomor_perkiraan'));
+ 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('temp_nth'), request()->get('tanggal'), request()->get('nomor_perkiraan'));
 		$bayar->bayar();
  	}
 

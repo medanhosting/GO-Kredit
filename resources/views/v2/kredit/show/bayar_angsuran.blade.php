@@ -62,7 +62,7 @@
 								<label class="text-uppercase">Disetor Ke</label>
 							</div>
 							<div class="col-12">
-								{!! Form::select('nomor_perkiraan', $a_tt, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
+								{!! Form::select('nomor_perkiraan_titipan', $a_tt, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
 							</div>
 						</div>
 					</div>

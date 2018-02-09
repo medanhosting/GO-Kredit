@@ -42,9 +42,8 @@ class LiveTableSeeder extends Seeder
 		//BASIC KOMISARIS
 		PenempatanKaryawan::create(['kantor_id' => Kantor::orderby('created_at', 'asc')->first()['id'], 'orang_id' => Orang::orderby('created_at', 'asc')->first()['id'], 'role' => 'komisaris', 'scopes' => ['permohonan', 'survey', 'analisa', 'operasional', 'assign', 'putusan', 'validasi', 'restitusi', 'mutasi_jaminan', 'surat_peringatan', 'laporan', 'tunggakan', 'keuangan', 'realisasi', 'kredit', 'pencairan', 'angsuran', 'penagihan', 'nominatif_gt_10000000', 'nominatif_gt_1000000', 'hari_e_0', 'coa', 'passcode', 'karyawan', 'audit', 'holding'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
 
-		PenempatanKaryawan::create(['kantor_id' => Kantor::orderby('created_at', 'asc')->skip(1)->take(1)->first()['id'], 'orang_id' => Orang::orderby('created_at', 'asc')->first()['id'], 'role' => 'komisaris', 'scopes' => ['operasional', 'putusan', 'nominatif_gt_10000000', 'validasi', 'restitusi', 'nominatif_gt_10000000', 'hari_e_0', 'laporan', 'tunggakan', 'keuangan', 'mutasi_jaminan', 'coa', 'passcode', 'karyawan', 'audit', 'holding'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
-
-
+		PenempatanKaryawan::create(['kantor_id' => Kantor::orderby('created_at', 'asc')->skip(1)->take(1)->first()['id'], 'orang_id' => Orang::orderby('created_at', 'asc')->first()['id'], 'role' => 'komisaris', 'scopes' => ['permohonan', 'survey', 'analisa', 'operasional', 'assign', 'putusan', 'validasi', 'restitusi', 'mutasi_jaminan', 'surat_peringatan', 'laporan', 'tunggakan', 'keuangan', 'realisasi', 'kredit', 'pencairan', 'angsuran', 'penagihan', 'nominatif_gt_10000000', 'nominatif_gt_1000000', 'hari_e_0', 'coa', 'passcode', 'karyawan', 'audit', 'holding'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+		
 		$roles 	= [
 			[
 				'role' 		=> 'ao',

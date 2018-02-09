@@ -135,8 +135,8 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 					$flag_denda 	= false;
 				}
 
-
 				$tgl_jt = Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->endofday();
+
 				//2a. hitung piutang
 				if(is_null($v['nomor_faktur']) && str_is($tgl_jt->format('Y-m-d H:is'), $tanggal->format('Y-m-d H:is')) ){
 					

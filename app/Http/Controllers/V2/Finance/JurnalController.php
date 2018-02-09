@@ -176,33 +176,33 @@ class JurnalController extends Controller
 		
 		$model['id'] 	= request()->get('kantor_aktif_id');
 		
-		foreach ($pcodes as $k => $v) {
-			$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
+		// foreach ($pcodes as $k => $v) {
+		// 	$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
 
-			if(!$acc){
-				$acc	= new COA;
-			}
+		// 	if(!$acc){
+		// 		$acc	= new COA;
+		// 	}
 
-			$acc->kode_kantor 			= $model['id'];
-			$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
-			$acc->akun 					= $v['akun'];
-			$acc->save();
-		}
+		// 	$acc->kode_kantor 			= $model['id'];
+		// 	$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
+		// 	$acc->akun 					= $v['akun'];
+		// 	$acc->save();
+		// }
 
-		foreach ($codes as $k => $v) {
-			$parent 	= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['parent'])->first();
-			$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
+		// foreach ($codes as $k => $v) {
+		// 	$parent 	= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['parent'])->first();
+		// 	$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
 
-			if(!$acc){
-				$acc	= new COA;
-			}
+		// 	if(!$acc){
+		// 		$acc	= new COA;
+		// 	}
 
-			$acc->kode_kantor 			= $model['id'];
-			$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
-			$acc->akun 					= $v['akun'];
-			$acc->coa_id 				= $parent->id;
-			$acc->save();
-		}
+		// 	$acc->kode_kantor 			= $model['id'];
+		// 	$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
+		// 	$acc->akun 					= $v['akun'];
+		// 	$acc->coa_id 				= $parent->id;
+		// 	$acc->save();
+		// }
 
 		$jurnal 	= Jurnal::selectraw('sum(f_jurnal.jumlah) jumlah')
 		->selectraw('max(f_jurnal.tanggal) as tanggal')
@@ -211,7 +211,9 @@ class JurnalController extends Controller
 		->join('f_detail_transaksi', 'f_detail_transaksi.id', 'detail_transaksi_id')
 		->groupby('coa_id')
 		->groupby('nomor_faktur')
-		->orderby('nomor_faktur', 'asc')
+		->orderby('tanggal', 'desc')
+		->orderby('nomor_faktur', 'desc')
+		->with(['coa'])
 		->get()
 		;
 
