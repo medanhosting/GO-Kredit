@@ -6,6 +6,8 @@
 	@slot ('body')
 		<p>Untuk assign survei, harap melengkapi data berikut!</p>
 
+		{!! Form::bsText('Tanggal', 'tanggal', $today->format('d/m/Y'), ['class' => 'form-control mask-date', 'placeholder' => 'dd/mm/yyyy'], true) !!}
+		
 		<div class="form-group">
 			{!! Form::label('', 'SURVEYOR', ['class' => 'text-uppercase mb-1']) !!}
 			<select class="ajax-karyawan custom-select form-control required" name="surveyor[nip][]" multiple="multiple" style="width:100%">

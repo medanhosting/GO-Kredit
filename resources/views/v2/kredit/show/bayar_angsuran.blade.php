@@ -25,7 +25,7 @@
 					<div class="clearfix">&nbsp;</div>
 					<div class="row">
 						<div class="col">
-							{!! Form::bsText('Tanggal', 'tanggal', $carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control mask-date-time inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+							{!! Form::bsText('Tanggal', 'tanggal', $today->format('d/m/Y H:i'), ['class' => 'form-control mask-date inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 						</div>
 					</div>
 					<div id="all-tab">

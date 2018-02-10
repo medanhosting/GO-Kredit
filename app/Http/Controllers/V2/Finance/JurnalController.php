@@ -205,6 +205,7 @@ class JurnalController extends Controller
 		// }
 
 		$jurnal 	= Jurnal::selectraw('sum(f_jurnal.jumlah) jumlah')
+		->selectraw('min(f_jurnal.id) as id')
 		->selectraw('max(f_jurnal.tanggal) as tanggal')
 		->selectraw('coa_id')
 		->selectraw('f_detail_transaksi.nomor_faktur as nomor_faktur')
@@ -213,6 +214,8 @@ class JurnalController extends Controller
 		->groupby('nomor_faktur')
 		->orderby('tanggal', 'desc')
 		->orderby('nomor_faktur', 'desc')
+		->orderby('id', 'asc')
+		->orderby('jumlah', 'desc')
 		->with(['coa'])
 		->get()
 		;

@@ -61,7 +61,7 @@
 			<tr @if(str_is($s_pre, 'setuju')) href="{{route('putusan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id])}}" @endif>
 				<td>{{ $data->firstItem() + $k }} </td>
 				<td>{{$v['nasabah']['nama']}}</td>
-				<td class="text-right">{{$v['pokok_pinjaman']}}</td>
+				<td class="text-right">{{$v['putusan']['plafon_pinjaman']}}</td>
 				<td>
 					<p>
 						@php $flag_j = true; @endphp

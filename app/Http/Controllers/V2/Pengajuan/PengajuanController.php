@@ -37,6 +37,8 @@ class PengajuanController extends Controller
 
 		$this->middleware('scope:operasional.pengajuan')->only(['index', 'show']);
 		$this->middleware('scope:permohonan')->only(['create']);
+
+		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store', 'assign']);
 	}
 
 	public function __call($name, $arguments)

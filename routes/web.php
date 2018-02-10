@@ -32,7 +32,7 @@
 		});
 	});
 	Route::middleware(['auth', 'pilih_koperasi'])->prefix('v2')->group( function() {
-		Route::middleware(['limit_date'])->group( function() {
+		// Route::middleware(['limit_date'])->group( function() {
 			Route::namespace('V2\Pengajuan')->group(function(){
 				Route::resource('simulasi', 		'SimulasiController'); 
 				Route::resource('pengajuan', 		'PengajuanController'); 
@@ -78,7 +78,7 @@
 				Route::get('kasir/jurnalpagi',	['uses' => 'KasirController@jurnalpagi',	'as' => 'kasir.jurnalpagi']);
 				Route::get('kasir/print/lkh',	['uses' => 'KasirController@print',		'as' => 'kasir.print']);
 			});
-		});
+		// });
 			
 		Route::namespace('V2\Kantor')->group(function(){
 			Route::resource('kantor', 			'KantorController'); 
@@ -181,7 +181,6 @@
 	Route::any('log/bpkb', 			['as' => 'log.bpkb',		'uses' => 'LogController@bpkb']);
 	Route::any('log/sertifikat', 	['as' => 'log.sertifikat',	'uses' => 'LogController@sertifikat']);
 	
-
 	// privacy policy
 	Route::any('privacy/policy',	['as' => 'privacy.policy',	'uses' => 'PageController@privacy_policy']);
 #});

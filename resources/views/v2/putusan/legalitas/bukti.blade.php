@@ -21,7 +21,7 @@
 						<div class="col-2">Tanggal</div>
 						<div class="col-6">
 							@if(str_is($putusan['pengajuan']['status_terakhir']['progress'], 'sudah') &&  str_is($putusan['pengajuan']['status_terakhir']['status'], 'setuju'))
-								{!! Form::vText(null, 'tanggal_pencairan', $carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control inline-edit border-input text-info  mask-date-time w-50 ml-auto', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+								{!! Form::vText(null, 'tanggal_pencairan', $carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control inline-edit border-input text-info  mask-date w-50 ml-auto', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 							@else
 								{{$putusan['pengajuan']['status_terakhir']['tanggal']}}
 							@endif

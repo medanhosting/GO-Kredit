@@ -32,7 +32,7 @@ class PutusanTableSeeder extends Seeder
 		$stts_kptsn 	= ['setuju', 'tolak'];
 		$opsi 			= ['ada', 'tidak_ada', 'cadangkan'];
 
-		$pengajuan 	= Analisa::skip(0)->take(rand(ceil(Analisa::count()/2),ceil(Analisa::count()/1)))->get();
+		$pengajuan 	= Analisa::skip(0)->take(rand(ceil(Analisa::count()/1.5),ceil(Analisa::count()/1)))->get();
 
 		//BASIC PENGAJUAN
 		foreach ($pengajuan as $key => $value) 

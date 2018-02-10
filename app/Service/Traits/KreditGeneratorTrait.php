@@ -3,7 +3,7 @@
 namespace App\Service\Traits;
 
 use Carbon\Carbon;
-use Thunderlabid\Kredit\Models\Aktif;
+use Thunderlabid\Pengajuan\Models\Putusan;
 
 /**
  * Trait Link list
@@ -27,7 +27,7 @@ trait KreditGeneratorTrait {
 
 		$first_letter       = $first_letter.Carbon::now()->format('Y').'.';
 
-		$prev_data          = Aktif::where('nomor_kredit', 'like', $first_letter.'%')->orderby('nomor_kredit', 'desc')->first();
+		$prev_data          = Putusan::where('nomor_kredit', 'like', $first_letter.'%')->orderby('nomor_kredit', 'desc')->first();
 
 		if($prev_data)
 		{

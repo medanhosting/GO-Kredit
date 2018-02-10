@@ -304,9 +304,9 @@ trait PengajuanTrait {
 			{
 				throw new Exception("Dokumen ini tidak diijinkan untuk survei", 1);
 			}
-			if(request()->has('tanggal_survei'))
+			if(request()->has('tanggal'))
 			{
-				$survei->tanggal 	= request()->get('tanggal_survei');
+				$survei->tanggal 	= request()->get('tanggal');
 				$survei->save();
 			}
 
@@ -532,7 +532,7 @@ trait PengajuanTrait {
 
 			$survei 				= new Survei;
 			$survei->pengajuan_id 	= $permohonan['id'];
-			$survei->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$survei->tanggal 		= request()->get('tanggal');
 			$survei->kode_kantor 	= $permohonan['kode_kantor'];
 			$survei->save();
 			foreach (request()->get('surveyor')['nip'] as $k => $v) {
@@ -571,7 +571,7 @@ trait PengajuanTrait {
 			$status->status 		= 'analisa';
 			$status->progress 		= 'perlu';
 			$status->karyawan 		= $analis;
-			$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$status->tanggal 		= request()->get('tanggal');
 			$status->save();
 
 			DB::commit();
@@ -612,7 +612,7 @@ trait PengajuanTrait {
 			$status->status 		= 'putusan';
 			$status->progress 		= 'perlu';
 			$status->karyawan 		= $pk;
-			$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$status->tanggal 		= request()->get('tanggal');
 			$status->save();
 
 			DB::commit();
@@ -636,7 +636,7 @@ trait PengajuanTrait {
 			$status->status 		= $permohonan->putusan['putusan'];
 			$status->progress 		= 'sudah';
 			$status->karyawan 		= $pk;
-			$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$status->tanggal 		= request()->get('tanggal');
 			$status->save();
 
 			DB::commit();

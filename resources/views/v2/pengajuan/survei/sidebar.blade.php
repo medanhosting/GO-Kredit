@@ -21,10 +21,11 @@
 			<hr/>
 		@endif
 
+		@if ($percentage==100 && $permohonan->status_terakhir->status=='survei')
 		{!! Form::open(['url' => route('pengajuan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 			<div class="row">
 				<div class="col">
-					{!! Form::bsText('Tanggal Survei', 'tanggal_survei', $survei['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+					{!! Form::bsText('Tanggal Survei', 'tanggal', $survei['tanggal'], ['class' => 'form-control mask-date inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 				</div>
 			</div>
 			<div class="row">
@@ -34,6 +35,7 @@
 			</div>
 		{!! Form::close() !!}
 		<hr/>
+		@endif
 
 		<p class="text-secondary mb-1">NASABAH</p>
 		<ul class="fa-ul mt-1">

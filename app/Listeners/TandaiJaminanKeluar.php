@@ -45,17 +45,17 @@ class TandaiJaminanKeluar
 			//sisa hutang
 			$sisa		= Jurnal::where('morph_reference_id', $model->morph_reference_id)->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.100', '120.200', '120.300', '120.400', '140.100', '140.200']);})->sum('jumlah');
 
-			if(!$sisa){
+			if(!$sisa && $sisa){
 				$jaminan 	= Jaminan::where('nomor_kredit', $model->morph_reference_id)->get();
 				foreach ($jaminan as $k => $v) {
 					$m_jaminan 					= new MutasiJaminan;
 					$m_jaminan->nomor_jaminan 	= $v->nomor_jaminan;
-					$m_jaminan->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+					$m_jaminan->tanggal 		= $model->notabayar->tanggal;
 					$m_jaminan->status 			= 'titipan';
 					$m_jaminan->progress 		= 'valid';
-					$m_jaminan->tag 			= $v->tag;
+					$m_jaminan->tag 			= $v->status_terakhir->tag;
 					$m_jaminan->deskripsi 		= 'Angsuran Lunas';
-					$m_jaminan->karyawan 		= $v->karyawan;
+					$m_jaminan->karyawan 		= $v->status_terakhir->karyawan;
 					$m_jaminan->save();
 				}
 			}

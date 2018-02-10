@@ -78,7 +78,7 @@ trait PutusanTrait {
 
 	private function validasi_checklists($id){
 		$status 				= new Status;
-		$status->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+		$status->tanggal 		= request()->get('tanggal');
 		$status->progress 		= 'sudah';
 		$status->status 		= 'realisasi';
 		$status->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
@@ -94,7 +94,7 @@ trait PutusanTrait {
 		if(!$nb){
 			$nb 				= new NotaBayar;
 			$nb->nomor_faktur  	= NotaBayar::generatenomorfaktur($putusan['nomor_kredit']);
-			$nb->tanggal 		= $putusan['tanggal'];
+			$nb->tanggal 		= request()->get('tanggal');
 			$nb->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 		}
 
@@ -130,7 +130,7 @@ trait PutusanTrait {
 		if(!$nb){
 			$nb 				= new NotaBayar;
 			$nb->nomor_faktur  	= NotaBayar::generatenomorfaktur($putusan['nomor_kredit']);
-			$nb->tanggal 		= $putusan['tanggal'];
+			$nb->tanggal 		= request()->get('tanggal');
 			$nb->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 		}
 

@@ -36,20 +36,22 @@ class KreditController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:operasional.kredit.angsuran.tagihan.restitusi.jaminan.mutasi_jaminan')->only(['index', 'show']);
+		$this->middleware('scope:operasional|kredit|angsuran|penagihan|restitusi|jaminan|mutasi_jaminan')->only(['index', 'show']);
+		
+		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store']);
 	}
 
 	public function __call($name, $arguments)
 	{
 		if(str_is('*middleware_*', $name)){
 			if(in_array($name, ['middleware_store_angsuran', 'middleware_store_denda', 'middleware_store_bayar_sebagian'])){
-				// ScopeMiddleware::check('angsuran');
+				ScopeMiddleware::check('angsuran');
 			}
 			if(in_array($name, ['middleware_store_tagihan', 'middleware_penerimaan_titipan_tagihan'])){
-				// ScopeMiddleware::check('tagihan');
+				ScopeMiddleware::check('penagihan');
 			}
 			if(in_array($name, ['middleware_store_permintaan_restitusi', 'middleware_store_validasi_restitusi'])){
-				// ScopeMiddleware::check('restitusi');
+				ScopeMiddleware::check('restitusi');
 			}
 			// RequiredPasswordMiddleware::check();
 			
@@ -145,6 +147,7 @@ class KreditController extends Controller
 
 		//b. STAT ANGSURAN JT
 		$stat['total_tunggakan']	= Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300', '120.400', '140.100', '140.200']);})->sum('jumlah');
+
 		$stat['angsuran_bulanan']	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('nth', 'asc')->where('nth', 1)->sum('jumlah');
 		$stat['jumlah_tunggakan']	= floor($stat['total_tunggakan']/$stat['angsuran_bulanan']);
 

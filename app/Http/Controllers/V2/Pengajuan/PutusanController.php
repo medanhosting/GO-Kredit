@@ -43,7 +43,9 @@ class PutusanController extends Controller
 		parent::__construct();
 
 		$this->middleware('scope:operasional.pengajuan')->only(['index', 'show']);
-		// $this->middleware('scope:realisasi')->only(['store', 'print']);
+		$this->middleware('scope:realisasi')->only(['store', 'print']);
+		
+		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store']);
 	}
 
 
@@ -51,13 +53,13 @@ class PutusanController extends Controller
 	{
 		if(str_is('*middleware_*', $name)){
 			if(in_array($name, ['middleware_store_checklists', 'middleware_validasi_checklists'])){
-				// ScopeMiddleware::check('realisasi');
+				ScopeMiddleware::check('realisasi');
 			}
 			if(in_array($name, ['middleware_store_setoran_realisasi', 'middleware_store_realisasi'])){
-				// ScopeMiddleware::check('pencairan');
+				ScopeMiddleware::check('pencairan');
 			}
 			if(in_array($name, ['middleware_validasi_checklists', 'middleware_store_setoran_realisasi', 'middleware_store_realisasi'])){
-				// RequiredPasswordMiddleware::check();
+				RequiredPasswordMiddleware::check();
 			}
 			
 			return call_user_func_array([$this, str_replace('middleware_', '', $name)], $arguments);

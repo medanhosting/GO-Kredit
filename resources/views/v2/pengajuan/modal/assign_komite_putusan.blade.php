@@ -5,6 +5,8 @@
 
 	@slot ('body')
 		<p>Untuk mengajukan ke komite kredit, harap mengisi password Anda!</p>
+		
+		{!! Form::bsText('Tanggal', 'tanggal', $today->format('d/m/Y'), ['class' => 'form-control mask-date', 'placeholder' => 'dd/mm/yyyy'], true) !!}
 
 		{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
 	@endslot

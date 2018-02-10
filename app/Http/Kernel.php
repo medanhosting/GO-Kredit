@@ -62,5 +62,6 @@ class Kernel extends HttpKernel
         'required_passcode' => \App\Http\Middleware\RequiredPasscodeMiddleware::class,
         'required_password' => \App\Http\Middleware\RequiredPasswordMiddleware::class,
         'limit_date' => \App\Http\Middleware\LimitDateMiddleware::class,
+        'parse_logged_user' => \App\Http\Middleware\ModifyScopesMiddleware::class,
     ];
 }

@@ -25,9 +25,12 @@ class TunggakanController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->middleware('scope:operasional.kredit.angsuran.sp')->only(['index']);
-		$this->middleware('scope:operasional')->only('show');
-		$this->middleware('required_password')->only('show');
+		$this->middleware('scope:operasional.kredit.angsuran.surat_peringatan')->only(['index']);
+		
+		$this->middleware('scope:surat_peringatan')->only(['store', 'update']);
+		$this->middleware('required_password')->only(['store', 'update']);
+
+		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store']);
 	}
 
 	public function index() 
@@ -53,8 +56,7 @@ class TunggakanController extends Controller
 
 	public function store($id = null) 
 	{
-		$today	= Carbon::now();
-		$tanggal= $today->format('d/m/Y H:i');
+		$today	= Carbon::createfromformat('d/m/Y H:i', request()->get('tanggal'));
 
 		$tunggakan 	= JadwalAngsuran::where('nomor_kredit', $id)->wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->orderby('tanggal', 'asc')->first();
 
@@ -66,7 +68,7 @@ class TunggakanController extends Controller
 			$new_sp 				= new SuratPeringatan; 
 			$new_sp->nomor_kredit 	= $tunggakan['nomor_kredit'];
 			$new_sp->nth 			= $tunggakan['nth'];
-			$new_sp->tanggal 		= $tanggal;
+			$new_sp->tanggal 		= request()->get('tanggal');
 			$new_sp->tag 			= $tunggakan['kredit']['should_issue_surat_peringatan']['keluarkan'];
 			$new_sp->karyawan 		= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
 			$new_sp->save();

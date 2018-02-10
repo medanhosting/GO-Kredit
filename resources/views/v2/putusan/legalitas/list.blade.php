@@ -4,7 +4,7 @@
 			{!! Form::open(['url' => route('putusan.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 				<!-- <div class="row">
 					<div class="col">
-						{!! Form::vText('Tanggal Realisasi', 'tanggal_realisasi', $realisasi['tanggal'], ['class' => 'form-control inline-edit mask-date-time', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+						{!! Form::vText('Tanggal Realisasi', 'tanggal_realisasi', $realisasi['tanggal'], ['class' => 'form-control inline-edit mask-date', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 					</div>
 				</div> -->
 

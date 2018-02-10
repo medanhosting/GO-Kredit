@@ -113,7 +113,7 @@ class AutoJournal
 			if(str_is($model->notabayar->jenis, 'angsuran')){
 				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
 
-				$piut 		= Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300', '120.400', '140.100', '140.200']);})->sum('jumlah');
+				$piut 		= Jurnal::where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['140.100', '140.200']);})->sum('jumlah');
 
 				//1.a. jurnal bunga JT
 				if(str_is($kredit->jenis_pinjaman, 'pa')){
@@ -148,7 +148,7 @@ class AutoJournal
 				//1.a. jurnal pokok JT
 				$coa_deb 	= COA::where('nomor_perkiraan', $model->notabayar->nomor_rekening)->where('kode_kantor', $kode_kantor)->first();
 
-				$piut 		= Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300', '120.400', '140.100', '140.200']);})->sum('jumlah');
+				$piut 		= Jurnal::where('morph_reference_id', $kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300', '120.400']);})->sum('jumlah');
 
 				if(str_is($kredit->jenis_pinjaman, 'pa')){
 					//1.a.i. jurnal pokok JT PA
@@ -178,9 +178,16 @@ class AutoJournal
 					$coa_deb 	= COA::where('nomor_perkiraan', '120.400')->where('kode_kantor', $kode_kantor)->first();
 					$coa_kre 	= COA::where('nomor_perkiraan', '120.200')->where('kode_kantor', $kode_kantor)->first();
 				}
+
 			}
 		}
 
+		if(is_null($coa_deb)){
+			dd('deb');
+		}
+		if(is_null($coa_kre)){
+			dd('kre');
+		}
 		$jumlah 		= $this->formatMoneyFrom($model->jumlah);
 		
 		return $this->jurnal($model, $coa_deb, $coa_kre, $jumlah);
@@ -281,6 +288,11 @@ class AutoJournal
 	}
 
 	private function jurnal($model, $coa_deb, $coa_kre, $jumlah){
+		if(is_null($coa_deb)){
+			dD($model->tag);
+		}elseif(is_null($coa_deb)){
+			dD($model->tag.'kred');
+		}
 		//tambah debit
 		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_deb->id)->first();
 		if(!$data){

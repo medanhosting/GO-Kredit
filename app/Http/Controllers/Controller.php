@@ -53,6 +53,7 @@ class Controller extends BaseController
 		view()->share('kantor', $this->kantor);
 		view()->share('kantor_aktif', $this->kantor_aktif);
 		view()->share('scopes', $this->scopes);
+		view()->share('today', $hari_ini);
 
 		$this->layout 	= view('templates.html.layout');
 		$this->layout->html['title'] = 'GO-KREDIT.COM';

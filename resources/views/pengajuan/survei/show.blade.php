@@ -46,7 +46,7 @@
 						{!! Form::open(['url' => route('pengajuan.survei.update', ['id' => $survei['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'lokasi_id' => $lokasi['id']]), 'method' => 'PATCH']) !!}
 							<div class="row">
 								<div class="col">
-									{!! Form::bsText('Tanggal Survei', 'tanggal_survei', $survei['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+									{!! Form::bsText('Tanggal Survei', 'tanggal_survei', $survei['tanggal'], ['class' => 'form-control mask-date inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 								</div>
 							</div>
 							<div class="row">

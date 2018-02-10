@@ -68,16 +68,16 @@ window.formInputMask = {
 		date.mask(selector);
 	},
 	dateTime: function () {
-		var selector = $('.mask-datetime'), min, max;
+		var selector = $('.mask-date'), min, max;
 
-		if (selector.attr('mask-datetime-min')) {
-			min = selector.attr('mask-datetime-min');
+		if (selector.attr('mask-date-min')) {
+			min = selector.attr('mask-date-min');
 		} else {
 			min = '01/01/1800 00:00';
 		}
 
-		if (selector.attr('mask-datetime-max')) {
-			max = selector.attr('mask-datetime-max');
+		if (selector.attr('mask-date-max')) {
+			max = selector.attr('mask-date-max');
 		} else {
 			max = '31/12/9999 23:59';
 		}

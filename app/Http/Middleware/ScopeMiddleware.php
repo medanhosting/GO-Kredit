@@ -30,18 +30,28 @@ class ScopeMiddleware
 			return $next($request);
 		}
 
-		if(str_is('*.*', $scope)){
-			$scopes 	= explode('.', $scope);
-			foreach ($scopes as $k => $v) {
-				if(in_array($v, $active_p['scopes']))
-				{
+		$scopes 	= explode('|', $scope);
+		foreach ($scopes as $k => $v) {
+			if(str_is('*.*', $v)){
+
+				$flag 		= true;
+				$v_scope 	= explode('.', $v);
+				foreach ($v as $k2 => $v2) {
+					if(!in_array($v2, $active_p['scopes']))
+					{
+						$flag 	= false;
+					}
+				}
+
+				if($flag){
 					return $next($request);
 				}
+			}elseif(in_array($v, $active_p['scopes'])){
+				return $next($request);
 			}
 		}
 
 		return redirect()->back()->withErrors('Anda tidak memiliki wewenang untuk data ini!');
-		throw new Exception("Anda tidak memiliki wewenang untuk data ini", 403);
 	}
 
 	public static function check($scope)
@@ -65,13 +75,24 @@ class ScopeMiddleware
 			return true;
 		}
 
-		if(str_is('*.*', $scope)){
-			$scopes 	= explode('.', $scope);
-			foreach ($scopes as $k => $v) {
-				if(in_array($v, $active_p['scopes']))
-				{
+		$scopes 	= explode('|', $scope);
+		foreach ($scopes as $k => $v) {
+			if(str_is('*.*', $v)){
+
+				$flag 		= true;
+				$v_scope 	= explode('.', $v);
+				foreach ($v as $k2 => $v2) {
+					if(!in_array($v2, $active_p['scopes']))
+					{
+						$flag 	= false;
+					}
+				}
+
+				if($flag){
 					return true;
 				}
+			}elseif(in_array($v, $active_p['scopes'])){
+				return true;
 			}
 		}
 

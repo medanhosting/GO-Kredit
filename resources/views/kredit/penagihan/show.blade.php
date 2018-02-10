@@ -95,7 +95,7 @@
 		@slot ('body')
 			<p>Tanggal penagihan ditandai sesuai dengan pengisian tanggal berikut</p>
 
-			{!! Form::bsText('Tanggal Penagihan', 'tanggal', $today->format('d/m/Y H:i'), ['class' => 'form-control mask-date-time']) !!}
+			{!! Form::bsText('Tanggal Penagihan', 'tanggal', $today->format('d/m/Y H:i'), ['class' => 'form-control mask-date']) !!}
 			{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
 		@endslot
 

@@ -34,7 +34,7 @@
 <div class="row justify-content-center">
 	<div class="col-8">
 		{!! Form::open(['url' => route('realisasi.update', ['id' => $putusan['pengajuan_id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
-			{!! Form::vText('Tanggal Realisasi', 'tanggal_pencairan', $putusan['tanggal'], ['class' => 'form-control inline-edit border-input text-info  mask-date-time pb-1 w-50', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+			{!! Form::vText('Tanggal Realisasi', 'tanggal_pencairan', $putusan['tanggal'], ['class' => 'form-control inline-edit border-input text-info  mask-date pb-1 w-50', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 			<div class="clearfix">&nbsp;</div>
 			<div class="row form-group">
 				<div class="col offset-sm-4">

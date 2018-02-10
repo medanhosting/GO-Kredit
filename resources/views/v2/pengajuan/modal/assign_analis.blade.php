@@ -5,6 +5,8 @@
 
 	@slot ('body')
 		<p>Untuk melanjutkan analisa, harap melengkapi data berikut!</p>
+		
+		{!! Form::bsText('Tanggal', 'tanggal', $today->format('d/m/Y'), ['class' => 'form-control mask-date', 'placeholder' => 'dd/mm/yyyy'], true) !!}
 
 		<div class="form-group">
 			{!! Form::label('', 'ANALIS', ['class' => 'text-uppercase mb-1']) !!}

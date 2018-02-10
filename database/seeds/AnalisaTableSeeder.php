@@ -31,7 +31,7 @@ class AnalisaTableSeeder extends Seeder
 		$jk   		= ['pa', 'pt'];
 		$hsl_survei = ['sangat_baik', 'baik', 'cukup_baik', 'tidak_baik', 'buruk'];
 
-		$pengajuan 	= Pengajuan::status('survei')->skip(0)->take(rand(ceil(Pengajuan::status('survei')->count()/2),ceil(Pengajuan::status('survei')->count()/1)))->get();
+		$pengajuan 	= Pengajuan::status('survei')->skip(0)->take(rand(ceil(Pengajuan::status('survei')->count()/1.5),ceil(Pengajuan::status('survei')->count()/1)))->get();
 
 		//BASIC PENGAJUAN
 		foreach ($pengajuan as $key => $value) 

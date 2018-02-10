@@ -42,7 +42,7 @@
 						<label class="text-uppercase">Tanggal</label>
 					</div>
 					<div class="col">
-						{!! Form::text('tanggal', Carbon\Carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control inline-edit border-input w-25 text-info pb-1 mask-datetime', 'placeholder' => 'dd/mm/yyyy']) !!}
+						{!! Form::text('tanggal', Carbon\Carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control inline-edit border-input w-25 text-info pb-1 mask-date', 'placeholder' => 'dd/mm/yyyy']) !!}
 					</div>
 				</div>
 

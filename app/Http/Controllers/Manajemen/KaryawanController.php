@@ -19,7 +19,7 @@ class KaryawanController extends Controller
 	{
 		parent::__construct();
 		
-		$this->middleware('scope:karyawan');
+		// $this->middleware('scope:karyawan');
 		
 		$this->middleware('required_password')->only('destroy');
 	}
@@ -344,7 +344,7 @@ class KaryawanController extends Controller
 							$q->where('nama', 'like', '%'.$cari.'%');
 						});
 		}
-
+		
 		$gawe 	= $gawe->with(['orang'])->get();
 
 		return response()->json($gawe);

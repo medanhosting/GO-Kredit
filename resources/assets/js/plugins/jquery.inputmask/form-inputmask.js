@@ -56,7 +56,7 @@ window.formInputMask = {
 			placeholder: 'dd/mm/yyyy hh:mm',
 			separator: '/'
 		});
-		var selector = $('.mask-date-time');
+		var selector = $('.mask-date');
 		date.mask(selector);
 	},
 	year: function () {

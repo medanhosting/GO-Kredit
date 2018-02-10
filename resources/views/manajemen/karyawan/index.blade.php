@@ -253,7 +253,7 @@
 				<label class="text-sm">Tanggal Masuk Kerja</label>
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12">
-						{!! Form::text('kantor[tanggal_masuk]', null, ['class' => 'form-control required mask-date-time', 'placeholder' => 'Masukkan tanggal masuk']) !!}			
+						{!! Form::text('kantor[tanggal_masuk]', null, ['class' => 'form-control required mask-date', 'placeholder' => 'Masukkan tanggal masuk']) !!}			
 					</div>
 				</div>
 			</fieldset>

@@ -1,7 +1,7 @@
 {!! Form::open(['url' => route('pengajuan.putusan.update', ['id' => $permohonan['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
 	<div class="row">
 		<div class="col">
-			{!! Form::vText('Tanggal Putusan', 'tanggal', $putusan['tanggal'], ['class' => 'form-control mask-date-time inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+			{!! Form::vText('Tanggal Putusan', 'tanggal', $putusan['tanggal'], ['class' => 'form-control mask-date inline-edit text-info', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 		</div>
 	</div>
 	<div class="row">

@@ -183,7 +183,7 @@ class SurveiTableSeeder extends Seeder
 		$this->faker 		= \Faker\Factory::create();
 
 		//SIMPAN JAMINAN
-		$pengajuan 		= Pengajuan::skip(0)->take(rand(ceil(Pengajuan::count()/2),ceil(Pengajuan::count()/1)))->get();
+		$pengajuan 		= Pengajuan::skip(0)->take(rand(ceil(Pengajuan::count()/1.5),ceil(Pengajuan::count()/1)))->get();
 
 		foreach ($pengajuan as $key => $value) 
 		{

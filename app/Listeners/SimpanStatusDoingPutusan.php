@@ -47,18 +47,19 @@ class SimpanStatusDoingPutusan
 		$mulai_putusan 		= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->startofday()->format('Y-m-d H:i:s');
 		$selesai_putusan 	= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->endofday()->format('Y-m-d H:i:s');
 
-		$status_last 	= Status::where('status', 'putusan')->where('progress', 'sedang')->where('pengajuan_id', $model->putusan->pengajuan_id)->where('tanggal', '>=', $mulai_putusan)->where('tanggal', '<=', $selesai_putusan)->orderby('tanggal', 'desc')->first();
+		$status_last 	= Status::where('status', 'putusan')->where('progress', 'sedang')->where('pengajuan_id', $model->pengajuan_id)->where('karyawan->nip', $karyawan['nip'])->orderby('tanggal', 'desc')->first();
 
-		if(!($status_last && isset($karyawan['nip']) && $status_last->karyawan['nip'] == $karyawan['nip']))
-		{
-			$data 			= [
-				'tanggal'		=> $model->tanggal,
-				'status'		=> 'putusan',
-				'progress'		=> 'sedang',
-				'karyawan'		=> $karyawan,
-				'pengajuan_id'	=> $model->pengajuan_id,
-			];
+		$data 			= [
+			'tanggal'		=> $model->tanggal,
+			'status'		=> 'putusan',
+			'progress'		=> 'sedang',
+			'karyawan'		=> $karyawan,
+			'pengajuan_id'	=> $model->pengajuan_id,
+		];
 
+		if($status_last){
+			$status 		= $status_last->update($data);
+		}else{
 			$status 		= Status::create($data);
 		}
 	}

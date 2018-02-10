@@ -74,7 +74,7 @@ class PengajuanTableSeeder extends Seeder
 
 
 		//BASIC PENGAJUAN
-		foreach (range(0, 99) as $value) 
+		foreach (range(0, 50) as $value) 
 		{
 			$pokok_pinjaman 	= (rand(25,250)) * 100000;
 			$bunga 				= (rand(100,500))/1000;

@@ -11,7 +11,7 @@
 			</h5>
 		@endslot
 		@slot('body')
-			{!! Form::bsText('Tanggal', 'tanggal', $carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control mask-date-time inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+			{!! Form::bsText('Tanggal', 'tanggal', $carbon::now()->format('d/m/Y H:i'), ['class' => 'form-control mask-date inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 			{!! Form::bsText('Nominal', 'nominal', null, ['class' => 'form-control mask-money inline-edit text-info pb-0 border-input', 'placeholder' => 'Rp 330.000'], true) !!}
 			{!! Form::hidden('current', 'bayar_sebagian') !!}
 			<a href="#" data-toggle="modal" data-target="#konfirmasi_bayar_angsuran_sebagian" class="btn btn-primary text-right">Bayar</a>
