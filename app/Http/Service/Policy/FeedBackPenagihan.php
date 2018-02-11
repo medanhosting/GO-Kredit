@@ -12,6 +12,8 @@ use Thunderlabid\Kredit\Models\SuratPeringatan;
 use App\Service\Traits\IDRTrait;
 use App\Service\Traits\WaktuTrait;
 
+use App\Service\System\Calculator;
+
 use Carbon\Carbon;
 
 class FeedBackPenagihan
@@ -34,9 +36,15 @@ class FeedBackPenagihan
 		$jumlah 	= $this->nominal;
 		//simpan titipan
 		if($this->nominal * 1 > 0){
+			//check piutang;
+			$piutang 			= Calculator::piutangBefore($this->kredit['nomor_kredit'], Carbon::createFromFormat('d/m/Y H:i', $this->tanggal));
+			if($this->nominal <= $piutang){
+				$this->buat_faktur();
+				$this->buat_detail_faktur($sp);
+			}else{
+				throw new AppException(['nominal' => 'Pembayaran Yang Diterima Melebihi Tunggakan'], 1);
+			}
 
-			$this->buat_faktur();
-			$this->buat_detail_faktur($sp);
 		}
 
 		$tagih 		= new Penagihan;

@@ -26,6 +26,8 @@ use App\Http\Service\Policy\BayarDenda;
 use App\Http\Middleware\ScopeMiddleware;
 use App\Http\Middleware\RequiredPasswordMiddleware;
 
+use App\Service\System\Calculator;
+
 class KreditController extends Controller
 {
 	use KreditTrait;
@@ -139,20 +141,20 @@ class KreditController extends Controller
 		$a_tt	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_titipan'));
 		$a_dd	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_denda'));
 		$today	= Carbon::now();
+		$tomorrow		= Carbon::now()->adddays(1);
 
 		//1. PANEL ANGSURAN
 
 		//a. STAT SISA HUTANG
-		$stat['sisa_hutang']		= Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.100', '120.200', '120.300', '120.400', '140.100', '140.200']);})->sum('jumlah');
+		$stat['sisa_hutang']		= Calculator::hutangBefore($aktif['nomor_kredit'], $tomorrow);
 
 		//b. STAT ANGSURAN JT
-		$stat['total_tunggakan']	= Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['120.300', '120.400', '140.100', '140.200']);})->sum('jumlah');
-
 		$stat['angsuran_bulanan']	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('nth', 'asc')->where('nth', 1)->sum('jumlah');
+		$stat['total_tunggakan']	= Calculator::piutangBefore($aktif['nomor_kredit'], $tomorrow);
 		$stat['jumlah_tunggakan']	= floor($stat['total_tunggakan']/$stat['angsuran_bulanan']);
 
 		//c. STAT TITIPAN
-		$stat['total_titipan']		= abs(Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['200.210']);})->sum('jumlah'));
+		$stat['total_titipan']		= Calculator::titipanBefore($aktif['nomor_kredit'], $tomorrow);
 		$stat['jumlah_titipan']		= floor($stat['total_titipan']/$stat['angsuran_bulanan']);
 
 		//d. Bukti Transaksi

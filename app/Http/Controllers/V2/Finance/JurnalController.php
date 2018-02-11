@@ -203,7 +203,6 @@ class JurnalController extends Controller
 		// 	$acc->coa_id 				= $parent->id;
 		// 	$acc->save();
 		// }
-
 		$jurnal 	= Jurnal::selectraw('sum(f_jurnal.jumlah) jumlah')
 		->selectraw('min(f_jurnal.id) as id')
 		->selectraw('max(f_jurnal.tanggal) as tanggal')

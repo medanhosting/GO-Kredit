@@ -288,11 +288,6 @@ class AutoJournal
 	}
 
 	private function jurnal($model, $coa_deb, $coa_kre, $jumlah){
-		if(is_null($coa_deb)){
-			dD($model->tag);
-		}elseif(is_null($coa_deb)){
-			dD($model->tag.'kred');
-		}
 		//tambah debit
 		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_deb->id)->first();
 		if(!$data){

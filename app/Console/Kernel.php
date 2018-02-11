@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\KeluarkanMemorialUntukJurnalPagi::class,
         \App\Console\Commands\PengajuanExpiredChecker::class,
         \App\Console\Commands\HitungDendaAngsuran::class,
+        \App\Console\Commands\RollbackTransaction::class,
         \App\Console\Commands\KeluarkanSP::class,
         \App\Console\Commands\Release::class,
     ];

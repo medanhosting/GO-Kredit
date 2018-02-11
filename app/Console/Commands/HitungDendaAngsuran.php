@@ -63,6 +63,7 @@ class HitungDendaAngsuran extends Command
 			$tanggal = Carbon::createfromformat('d/m/Y', $this->option('tanggal'));
 		}
 
+
 		//1. cari angsuran JT today
 		//BUG ==> CARI HANYA KREDIT AKTIF
 		$angsuran 	= JadwalAngsuran::HitungTunggakanBeberapaWaktuLalu($tanggal)->groupby('nth');
@@ -72,10 +73,13 @@ class HitungDendaAngsuran extends Command
 
 		//checkdays
 		if(!is_null($this->option('nomor'))){
+			$tanggal 	= $tanggal->subdays(1);
 			$angsuran 	= JadwalAngsuran::HitungTunggakanBeberapaWaktuLalu($tanggal)->where('nomor_kredit', $this->option('nomor'))->groupby('nth');
 			$angsuran 	= $angsuran->with(['kredit'])->get();
+			$tanggal 	= $tanggal->adddays(1);
 			$nomor_faktur	= NotaBayar::generatenomorfaktur($angsuran[0]['kredit']['kode_kantor'].'.'.$tanggal->startofday()->format('ymd'));
 		}
+
 
 		DB::BeginTransaction();
 
@@ -95,39 +99,33 @@ class HitungDendaAngsuran extends Command
 				$bm->jumlah			= $this->formatMoneyTo(0);
 				$bm->jenis 			= 'memorial';
 				$bm->save();
-				$tanggal 	= $tanggal->endofday();
-
-				$tgl_jt = Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->endofday();
-				//2b. hitung denda
-				//total_denda
-				$tb 		= $tgl_jt;
+				
+				//2c. Hitung Denda
+				//cari selisih hari
+				$tgl_jt  	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->subdays(1);
+				$tgl_b 		= Carbon::parse($tanggal);
 				if(!is_null($v['tanggal_bayar'])){
-					$tb		= Carbon::createFromformat('d/m/Y H:i', $v['tanggal_bayar']);
+					$tgl_b 	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal_bayar']);
 				}
+				$days 		= $tgl_b->diffindays($tgl_jt);
+				$deskripsi 	= 'Piutang Denda Angsuran Ke-'.$v['nth'];
+				$prev_denda = DetailTransaksi::where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('nomor_faktur', '<>', $bm->nomor_faktur)->sum('jumlah');
 
-				$days 		= $tanggal->diffIndays($tb); 
+				//cari selisih hari
+				$denda 		= ceil($days * ($v['kredit']['persentasi_denda']/100) * $v['tunggakan']) - $prev_denda;
 
-				if($days > 0){
-					$deskripsi 	= 'Piutang Denda Angsuran Ke-'.$v['nth'];
-
-					//previous denda
-					$prev_d 	= DetailTransaksi::where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('nomor_faktur', '<>', $bm->nomor_faktur)->sum('jumlah');
-
-					$t_denda 	= ceil($days * ($v['kredit']['persentasi_denda']/100) * $v['tunggakan']) - $prev_d;
-
-					if($t_denda > 0){
-						$piut_denda	= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
-						if(!$piut_denda){
-							$piut_denda 	= new DetailTransaksi;
-						}
-						$piut_denda->nomor_faktur 	= $bm->nomor_faktur;
-						$piut_denda->tag 			= 'denda';
-						$piut_denda->morph_reference_id		= $v['nomor_kredit'];
-						$piut_denda->morph_reference_tag	= 'kredit';
-						$piut_denda->jumlah 		= $this->formatMoneyTo($t_denda);
-						$piut_denda->deskripsi 		= $deskripsi;
-						$piut_denda->save();
+				if($denda > 0){
+					$piut_denda	= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
+					if(!$piut_denda){
+						$piut_denda 			= new DetailTransaksi;
 					}
+					$piut_denda->nomor_faktur 	= $bm->nomor_faktur;
+					$piut_denda->tag 			= 'denda';
+					$piut_denda->morph_reference_id		= $v['nomor_kredit'];
+					$piut_denda->morph_reference_tag	= 'kredit';
+					$piut_denda->jumlah 		= $this->formatMoneyTo($denda);
+					$piut_denda->deskripsi 		= $deskripsi;
+					$piut_denda->save();
 				}
 			}
 			DB::commit();
