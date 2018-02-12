@@ -1,24 +1,24 @@
 @component('bootstrap.card')
-	@slot('title') 
-		<h5 class='text-left'>
+	<div class="card-header bg-light p-1">
+		<h5 class='text-left mb-0 p-2'>
 			<strong>STOK JAMINAN</strong>
 		</h5>
-	@endslot
-	@slot('body')
-		<table class="table table-hover table-bordered">
+	</div>
+	<div class="card-body p-0">
+		<table class="table table-hover table-bordered mb-0">
 			<thead>
 				<tr class="text-center">
-					<th>Update Terakhir</th>
-					<th>Stok Saat Ini</th>
-					<th>Dokumen</th>
-					<th>&nbsp;</th>
+					<th class="text-secondary">Update Terakhir</th>
+					<th class="text-secondary text-left">Stok Saat Ini</th>
+					<th class="text-secondary text-left">Dokumen</th>
+					<th class="text-secondary">&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
 				@forelse($aktif['jaminan'] as $k => $v)
 					@php $pa = \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['status_terakhir']['tanggal'])->format('d/m/Y') @endphp
-					<tr class="text-center">
-						<td>
+					<tr>
+						<td class="text-center">
 							{{$pa}}
 						</td>
 						<td class="text-left">
@@ -32,7 +32,7 @@
 								@endif
 							</small>
 						</td>
-						<td class="text-right w-50">
+						<td class="text-left w-50">
 							@if(str_is($v['dokumen']['jenis'], 'shm'))
 								<h6>SHM - {{strtoupper(str_replace('_',' ',$v['kategori']))}}</h6>
 								Nomor Sertifikat {{$v['dokumen']['shm']['nomor_sertifikat']}}<br/>
@@ -67,7 +67,7 @@
 				@endforelse
 			</tbody>
 		</table>
-	@endslot
+	</div>
 @endcomponent('bootstrap.card')
 
 @component ('bootstrap.modal', ['id' => 'validasi-jaminan', 'form' => true, 'method' => 'patch', 'url' => '#'])

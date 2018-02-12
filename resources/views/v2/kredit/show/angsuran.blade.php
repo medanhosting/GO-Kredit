@@ -3,7 +3,7 @@
 	<div class="col-4">
 		@component('bootstrap.card')
 			@slot('title') 
-				<h4 class='text-center'>
+				<h4 class='text-center text-style'>
 					{{ $idr->formatMoneyTo($stat['sisa_hutang']) }}
 				</h4>
 				<hr/> 
@@ -16,20 +16,20 @@
 	<div class="col-4">
 		@component('bootstrap.card')
 			@slot('title') 
-				<h4 class='text-center'>
+				<h4 class='text-center text-style'>
 					{{ $idr->formatMoneyTo($stat['total_tunggakan']) }}
 				</h4>
 				<hr/> 
 			@endslot
 			@slot('body') 
-				<p class="text-center">ANGSURAN JATUH TEMPO ({{ $stat['jumlah_tunggakan'] }})</p>
+				<p class="text-center">ANGSURAN JATUH TEMPO ( {{ $stat['jumlah_tunggakan'] }} )</p>
 			@endslot
 		@endcomponent
 	</div>
 	<div class="col-4">
 		@component('bootstrap.card')
 			@slot('title') 
-				<h4 class='text-center'>
+				<h4 class='text-center text-style'>
 					{{ $idr->formatMoneyTo($stat['total_titipan']) }}
 				</h4>
 				<hr/> 

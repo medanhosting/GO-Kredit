@@ -1,10 +1,10 @@
-@component ('bootstrap.modal', ['id' => 'konfirmasi_permohonan_restitusi'])
+@component ('bootstrap.modal', ['id' => 'konfirmasi_penagihan'])
 	@slot ('title')
-		KONFIRMASI PERMOHONAN RESITUSI
+		KONFIRMASI PENAGIHAN
 	@endslot
 
 	@slot ('body')
-		<p>Untuk melakukan permohonan Resitusi Denda, Silahkan isi password Anda.</p>
+		<p>Untuk menandai penagihan, Silahkan isi password Anda.</p>
 
 		{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password', 'class' => 'set-focus form-control']) !!}
 	@endslot

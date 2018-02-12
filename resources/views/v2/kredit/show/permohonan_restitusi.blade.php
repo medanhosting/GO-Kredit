@@ -11,12 +11,17 @@
 		<div class="col-12 pb-1">
 			JENIS RESTITUSI
 		</div>
-		<div class="col-6">
-			{!! Form::radio('jenis', 'restitusi_3_hari', true, ['class' => 'select-jenis-restitusi']) !!} Restitusi 3 Hari
+		<div class="col-12">
+			<div class="form-check form-check-inline">
+				{!! Form::radio('jenis', 'restitusi_3_hari', true, ['class' => 'form-check-input select-jenis-restitusi ml-0', 'id' => 'resitusi_3_hari']) !!}
+				<label for="resitusi_3_hari" class="form-check-label">Restitusi 3 Hari</label>
+			</div>
+			<div class="form-check form-check-inline">
+				{!! Form::radio('jenis', 'restitusi_nominal', true, ['class' => 'form-check-input select-jenis-restitusi ml-0', 'id' => 'restitusi_nominal']) !!}
+				<label for="restitusi_nominal" class="form-check-label">Restitusi Nominal</label>
+			</div>
 		</div>
-		<div class="col-6">
-			{!! Form::radio('jenis', 'restitusi_nominal', false, ['class' => 'select-jenis-restitusi']) !!} Restitusi Nominal
-		</div>
+
 	</div>
 
 	<div class="row pt-3" id="text-nominal-restitusi">

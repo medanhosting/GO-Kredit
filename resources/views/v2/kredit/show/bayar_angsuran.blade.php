@@ -6,8 +6,8 @@
 		<input type="hidden" name="{{$k}}" value="{{$v}}">
 	@endforeach
 	@component('bootstrap.card')
-		@slot('title') 
-			<h5 class='text-left'>
+		@slot('header') 
+			<h5 class='text-left p-2 mb-0'>
 				<strong>BAYAR ANGSURAN</strong>
 			</h5>
 		@endslot
@@ -16,38 +16,39 @@
 				<div class="col-12 mb-2">
 					<div class="form-check form-check-inline">
 						<input class="form-check-input ml-0" type="radio" value="all" name="current" id="all" checked>
-						<label class="form-check-label pl-4" for="all">Bayar Penuh</label>
+						<label class="form-check-label" for="all">Bayar Penuh</label>
 					</div>
 					<div class="form-check form-check-inline">
 						<input class="form-check-input ml-0" type="radio" value="part" name="current" id="part">
-						<label class="form-check-label pl-4" for="part">Bayar Sebagian</label>
+						<label class="form-check-label" for="part">Bayar Sebagian</label>
 					</div>
 					<div class="clearfix">&nbsp;</div>
 					<div class="row">
 						<div class="col">
-							{!! Form::bsText('Tanggal', 'tanggal', $today->format('d/m/Y H:i'), ['class' => 'form-control mask-date inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+							{!! Form::bsText('Tanggal', 'tanggal', $today->format('d/m/Y H:i'), ['class' => 'form-control mask-date inline-edit text-info py-1 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 						</div>
 					</div>
 					<div id="all-tab">
 						<div class="row">
 							<div class="col-12">
-								<p class="mb-1">BAYAR ANGSURAN</p>
-
-								<select name="temp_nth" id="select-nth" class="form-control custom-select text-info text-left inline-edit border-input pl-2">
-									<option value="">Pilih</option>
-									@foreach ($sisa_angsuran as $k => $v)
-										<option value="{{ $k+1 }}" data-value="{{$v['total']}}">{{ $k+1 }} Angsuran</option>
-									@endforeach
-								</select>
-								<input type="hidden" name="nth[]" id="input-nth">
+								<div class="form-group">
+									<label>BAYAR ANGSURAN</label>
+									<select name="temp_nth" id="select-nth" class="form-control custom-select text-info text-left inline-edit border-input pl-2">
+										<option value="">Pilih</option>
+										@foreach ($sisa_angsuran as $k => $v)
+											<option value="{{ $k+1 }}" data-value="{{$v['total']}}">{{ $k+1 }} Angsuran</option>
+										@endforeach
+									</select>
+									<input type="hidden" name="nth[]" id="input-nth">
+								</div>
 							</div>
 						</div>
-						<div class="row mt-3">
+						<div class="row">
 							<div class="col-12">
-								<label class="text-uppercase">Disetor Ke</label>
+								<p class="text-uppercase mb-1">Disetor Ke</p>
 							</div>
 							<div class="col-12">
-								{!! Form::select('nomor_perkiraan', $akun, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
+								{!! Form::select('nomor_perkiraan', $akun, null, ['class' => 'form-control custom-select inline-edit border-input text-info']) !!}
 							</div>
 						</div>
 					</div>
@@ -57,12 +58,12 @@
 								{!! Form::bsText('Nominal', 'nominal', null, ['class' => 'form-control mask-money inline-edit text-info pb-0 border-input', 'placeholder' => 'Rp 330.000', 'id' => 'input-nominal'], true) !!}
 							</div>
 						</div>
-						<div class="row mt-3">
+						<div class="row">
 							<div class="col-12">
 								<label class="text-uppercase">Disetor Ke</label>
 							</div>
 							<div class="col-12">
-								{!! Form::select('nomor_perkiraan_titipan', $a_tt, null, ['class' => 'form-control text-info inline-edit text-right']) !!}
+								{!! Form::select('nomor_perkiraan_titipan', $a_tt, null, ['class' => 'form-control custom-select inline-edit border-input text-info']) !!}
 							</div>
 						</div>
 					</div>
@@ -74,7 +75,7 @@
 					<p class="mb-2">TOTAL</p>
 				</div>
 				<div class="col-7 text-right">
-					<h5>{!! Form::Label(null, 'Rp 0', ['id' => 'totalAngsuran']) !!}</h5>
+					<h5 class="text-style">{!! Form::Label(null, 'Rp 0', ['id' => 'totalAngsuran']) !!}</h5>
 				</div>
 			</div>
 			<div class="clearfix">&nbsp;</div>

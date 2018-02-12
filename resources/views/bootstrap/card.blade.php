@@ -1,4 +1,4 @@
-<div class="card {{ $class }} border-0 box-shadow h-100">
+<div class="card {{ isset($class) ? $class : '' }} border-0 box-shadow">
 	@if ($image_url)
 		<img class="card-img-top" src="{{ $image_url }}">
 	@endif
@@ -15,15 +15,13 @@
 
 	@if ($title || $body || $footer)
 		<div class="card-body">
-			@if ($title)
+			@if (!is_null($title))
 				<div class="card-title">{{ $title }}</div>
 			@endif
-			@if ($body)
-				<p class="card-text">
+			@if (!is_null($body))
 					{!! $body !!}
-				</p>
 			@endif
-			@if ($footer)
+			@if (!is_null($footer))
 				{!! $footer !!}
 			@endif
 		</div>
