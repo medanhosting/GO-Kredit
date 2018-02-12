@@ -17,7 +17,7 @@ class KasirController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->middleware('scope:kasir');
+		$this->middleware('scope:'.implode('|', $this->acl_menu['keuangan.lkh']))->only(['lkh']);
 	}
 
 	public function lkh() 

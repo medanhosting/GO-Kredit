@@ -105,7 +105,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="2" class="text-right"><a href="{{route('pengajuan.index', ['current' => 'survei', 'kantor_aktif_id' => request()->get('kantor_aktif_id')])}}"><i class="fa fa-arrow-circle-o-right"></i> more </a></td>
+								<td colspan="2" class="text-right"><a href="{{route('putusan.index', ['current' => 'setuju', 'kantor_aktif_id' => request()->get('kantor_aktif_id')])}}"><i class="fa fa-arrow-circle-o-right"></i> more </a></td>
 							</tr>
 						</tfoot>
 					</table>

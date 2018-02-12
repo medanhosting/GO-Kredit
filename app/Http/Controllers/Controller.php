@@ -13,7 +13,7 @@ use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 use Thunderlabid\Log\Models\Kredit;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 
-use Auth, Validator;
+use Auth, Validator, Config;
 use Carbon\Carbon;
 use Illuminate\Support\MessageBag;
 
@@ -46,6 +46,8 @@ class Controller extends BaseController
 			view()->share('is_holder', true);
 		}
 
+		$this->acl_menu 	= Config::get('acl.menu');
+
 		//////////////////
 		// General Info //
 		//////////////////
@@ -54,6 +56,7 @@ class Controller extends BaseController
 		view()->share('kantor_aktif', $this->kantor_aktif);
 		view()->share('scopes', $this->scopes);
 		view()->share('today', $hari_ini);
+		view()->share('acl_menu', $this->acl_menu);
 
 		$this->layout 	= view('templates.html.layout');
 		$this->layout->html['title'] = 'GO-KREDIT.COM';

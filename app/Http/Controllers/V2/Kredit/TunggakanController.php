@@ -25,7 +25,7 @@ class TunggakanController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->middleware('scope:operasional.kredit.angsuran.surat_peringatan')->only(['index']);
+		$this->middleware('scope:'.implode('|', $this->acl_menu['kredit.tunggakan']))->only(['index']);
 		
 		$this->middleware('scope:surat_peringatan')->only(['store', 'update']);
 		$this->middleware('required_password')->only(['store', 'update']);

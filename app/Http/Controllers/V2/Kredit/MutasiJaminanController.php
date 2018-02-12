@@ -15,10 +15,11 @@ class MutasiJaminanController extends Controller
 	{
 		parent::__construct();
 		
-		$this->middleware('scope:operasional.jaminan')->only(['index']);
+		$this->middleware('scope:'.implode('|', $this->acl_menu['kredit.jaminan']))->only(['index']);
 
-		$this->middleware('scope:mutasi_jaminan')->only(['update', 'store']);
+		$this->middleware('scope:jaminan')->only(['update', 'store']);
 		$this->middleware('required_password')->only(['update', 'store']);
+		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store']);
 	}
 
 	public function index () 

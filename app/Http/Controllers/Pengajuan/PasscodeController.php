@@ -20,7 +20,7 @@ class PasscodeController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:passcode');
+		$this->middleware('scope:'.implode('|', $this->acl_menu['inspektor.passcode']));
 
 		$this->middleware('required_password')->only('store');
 	}

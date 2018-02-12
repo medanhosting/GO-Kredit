@@ -31,31 +31,65 @@
 						<div class="col-12 col-sm-12 col-md-12">
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs underline" role="tablist">
+								@if(array_intersect($acl_menu['pengajuan.pengajuan.*.permohonan'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link {{ $is_active_permohonan }}" data-toggle="tab" id="permohonan-menu" role="tab" href="#">
 										Permohonan
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Permohonan
+									</a>
+								</li>
+								@endif
+
+								@if(array_intersect($acl_menu['pengajuan.pengajuan.*.survei'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link {{ $is_active_survei }}" data-toggle="tab" id="survei-menu" role="tab" href="#">
 										Survei
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Survei
+									</a>
+								</li>
+								@endif
+								@if(array_intersect($acl_menu['pengajuan.pengajuan.*.analisa'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link {{ $is_active_analisa }}" data-toggle="tab" id="analisa-menu" role="tab" href="#">
 										Analisa
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Analisa
+									</a>
+								</li>
+								@endif
+								@if(array_intersect($acl_menu['pengajuan.pengajuan.*.putusan'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link {{ $is_active_putusan }}" data-toggle="tab" id="putusan-menu" role="tab" href="#">
 										Putusan
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Putusan
+									</a>
+								</li>
+								@endif
 							</ul>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-12">
+							@if(array_intersect($acl_menu['pengajuan.pengajuan.*.permohonan'], $scopes->scopes))
 							{{-- PERMOHONAN --}}
 							<div id="permohonan-panel" {!! ($is_active_permohonan) ? 'style=""' : 'style="display: none;"' !!}>
 								<div class="clearfix">&nbsp;</div>
@@ -73,6 +107,8 @@
 								</div>
 								<div class="clearfix">&nbsp;</div>
 							</div>
+							@endif
+							@if(array_intersect($acl_menu['pengajuan.pengajuan.*.survei'], $scopes->scopes))
 							{{-- SURVEI --}}
 							<div id="survei-panel" {!! ($is_active_survei) ? 'style=""' : 'style="display: none;"' !!}>
 								<div class="clearfix">&nbsp;</div>
@@ -98,6 +134,9 @@
 									@endif	
 								</div>
 							</div>
+							@else
+							@endif
+							@if(array_intersect($acl_menu['pengajuan.pengajuan.*.analisa'], $scopes->scopes))
 							<div id="analisa-panel" {!! ($is_active_analisa) ? 'style=""' : 'style="display: none;"' !!}>
 								<div class="clearfix">&nbsp;</div>
 								<div class="row">
@@ -122,6 +161,9 @@
 									@endif
 								</div>
 							</div>
+							@else
+							@endif
+							@if(array_intersect($acl_menu['pengajuan.pengajuan.*.putusan'], $scopes->scopes))
 							<div id="putusan-panel" {!! ($is_active_putusan) ? 'style=""' : 'style="display: none;"' !!}>
 								<div class="clearfix">&nbsp;</div>
 								<div class="row">
@@ -146,6 +188,8 @@
 									@endif
 								</div>
 							</div>
+							@else
+							@endif
 							<div class="clearfix">&nbsp;</div>
 						</div>
 					</div>

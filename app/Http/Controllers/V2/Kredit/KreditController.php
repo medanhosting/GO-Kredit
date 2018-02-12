@@ -38,7 +38,7 @@ class KreditController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:operasional|kredit|angsuran|penagihan|restitusi|jaminan|mutasi_jaminan')->only(['index', 'show']);
+		$this->middleware('scope:'.implode('|', $this->acl_menu['kredit.kredit']))->only(['index', 'show']);
 		
 		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store']);
 	}

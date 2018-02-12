@@ -12,7 +12,7 @@ class AkunController extends Controller
 	{
 		parent::__construct();
 		
-		$this->middleware('scope:akun');
+		$this->middleware('scope:'.implode('|', $this->acl_menu['keuangan.akun']))->only(['index', 'store']);
 	}
 
 	public function index () 

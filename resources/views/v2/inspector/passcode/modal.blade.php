@@ -1,4 +1,4 @@
-@component ('bootstrap.modal', ['id' => 'passcode_baru', 'form' => true, 'method' => 'post', 'url' => route('pengajuan.passcode.store', ['kantor_aktif_id' => $kantor_aktif['id']])])
+@component ('bootstrap.modal', ['id' => 'passcode_baru', 'form' => true, 'method' => 'post', 'url' => route('passcode.store', ['kantor_aktif_id' => $kantor_aktif['id']])])
 	@slot ('title')
 		Passcode Baru
 	@endslot
@@ -26,7 +26,7 @@
 		//ASSIGN SURVEYOR
 		$(".ajax-pengajuan").select2({
 			ajax: {
-				url: "{{route('pengajuan.pengajuan.ajax')}}",
+				url: "{{route('pengajuan.ajax')}}",
 				data: function (params) {
 						return {
 							q: params.term, // search term

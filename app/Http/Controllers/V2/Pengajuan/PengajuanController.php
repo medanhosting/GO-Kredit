@@ -12,6 +12,8 @@ use Thunderlabid\Pengajuan\Models\Analisa;
 use Thunderlabid\Pengajuan\Models\Putusan;
 use Thunderlabid\Pengajuan\Models\Jaminan;
 
+use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
+
 use Thunderlabid\Survei\Models\Survei;
 
 use Thunderlabid\Log\Models\Kredit;
@@ -21,9 +23,11 @@ use App\Http\Controllers\V2\Traits\PengajuanTrait;
 
 use App\Service\Traits\IDRTrait;
 
-use Exception, Validator;
+use Exception, Validator, Carbon\Carbon;
 
 use App\Http\Middleware\ScopeMiddleware;
+use App\Http\Middleware\LimitDateMiddleware;
+use App\Http\Middleware\LimitAmountMiddleware;
 use App\Http\Middleware\RequiredPasswordMiddleware;
 
 class PengajuanController extends Controller
@@ -35,26 +39,38 @@ class PengajuanController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:operasional.pengajuan')->only(['index', 'show']);
-		$this->middleware('scope:permohonan')->only(['create']);
-
-		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store', 'assign']);
+		$this->middleware('scope:'.implode('|', $this->acl_menu['pengajuan.pengajuan']))->only(['index', 'show']);
+		$this->middleware('scope:'.implode('|', $this->acl_menu['pengajuan.permohonan']))->only(['create']);
 	}
 
 	public function __call($name, $arguments)
 	{
 		if(str_is('middleware_*', $name)){
-			if(in_array($name, ['middleware_store_permohonan', 'middleware_assign_surveyor'])){
+			if(in_array($name, ['middleware_store_permohonan'])){
 				ScopeMiddleware::check('permohonan');
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']));
+			}
+			if(in_array($name, ['middleware_assign_surveyor'])){
+				ScopeMiddleware::check('assign');
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']));
 			}
 			if(in_array($name, ['middleware_store_survei', 'middleware_assign_analis'])){
 				ScopeMiddleware::check('survei');
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']), 'survei');
 			}
 			if(in_array($name, ['middleware_store_analisa', 'middleware_assign_komite_putusan'])){
 				ScopeMiddleware::check('analisa');
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']), 'analisa');
 			}
 			if(in_array($name, ['middleware_store_putusan', 'middleware_assign_realisasi'])){
 				ScopeMiddleware::check('putusan');
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']));
+				LimitAmountMiddleware::check(implode('|', $this->scopes['scopes']), 'putusan');
+			}
+
+			if(str_is('middleware_checker*', $name)){
+				$status 	= explode('_', $name);
+				ScopeMiddleware::check($status[2].'|operasional');
 			}
 
 			if(str_is('middleware_assign*', $name)){
@@ -127,23 +143,23 @@ class PengajuanController extends Controller
 
 			if ($permohonan['status_terakhir']['status'] == 'permohonan') {
 				view()->share('is_active_permohonan', 'active');
-				$this->checker_permohonan($permohonan);
+				$this->middleware_checker_permohonan($permohonan);
 			} elseif ($permohonan['status_terakhir']['status'] == 'survei') {
 				view()->share('is_active_survei', 'active');
-				$this->checker_survei($survei);
+				$this->middleware_checker_survei($survei);
 			} elseif ($permohonan['status_terakhir']['status'] == 'analisa') {
 				view()->share('is_active_analisa', 'active');
-				$this->checker_analisa($analisa);
+				$this->middleware_checker_analisa($analisa);
 			} elseif ($permohonan['status_terakhir']['status'] == 'putusan') {
 				view()->share('is_active_putusan', 'active');
-				$this->checker_putusan($putusan);
+				$this->middleware_checker_putusan($putusan);
 			}
 
 			$this->layout->pages 	= view('v2.pengajuan.show', compact('permohonan', 'survei', 'analisa', 'putusan', 'r_nasabah'));
 			return $this->layout;
 
 		} catch (Exception $e) {
-			return redirect()->back()->withErrors($e->getMessage());
+			return redirect()->route('pengajuan.index', request()->all())->withErrors($e->getMessage());
 		}
 	}
 
@@ -241,5 +257,50 @@ class PengajuanController extends Controller
 		$k_ids	= array_column(Kredit::where('nasabah_id', $nik)->where('pengajuan_id', '<>', $id)->get()->toArray(), 'pengajuan_id');
 
 		return Pengajuan::wherein('id', $k_ids)->get();
+	}
+	
+ 	public function ajax ()
+	{
+		$pengajuan 		= Pengajuan::status(request()->get('status'))->kantor(request()->get('kantor_aktif_id'));
+		if(request()->has('q'))
+		{
+			$pengajuan	= $pengajuan->where('p_pengajuan.id', 'like', '%'.request()->get('q').'%');
+		}
+		$pengajuan 		= $pengajuan->get();
+
+		return response()->json($pengajuan);
+	}
+
+	public function print($id, $mode)
+	{
+		$data['pengajuan']	= Pengajuan::where('id', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->first()->toArray();
+		
+		$data['survei']		=  Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_kendaraan.foto', 'jaminan_tanah_bangunan', 'jaminan_tanah_bangunan.foto', 'surveyor'])->first();
+		
+		$data['analisa']	= Analisa::where('pengajuan_id', $data['pengajuan']['id'])->first();
+
+		$data['putusan']	= Putusan::where('pengajuan_id', $data['pengajuan']['id'])->first();
+
+		if(!is_null($data['putusan']))
+		{
+			$tanggal 		= Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('Y-m-d H:i:s');
+		}
+		else
+		{
+			$tanggal 		= Carbon::now()->format('Y-m-d H:i:s');
+		}
+
+		$pimpinan 			= PenempatanKaryawan::where('kantor_id', request()->get('kantor_aktif_id'))->where('role', 'pimpinan')->where('tanggal_masuk', '>=', $tanggal)->where(function($q)use($tanggal){$q->where('tanggal_keluar', '<=', $tanggal)->orwherenull('tanggal_keluar');})->first();
+	
+		if($mode=='perjanjian_kredit' && $data['analisa']['jenis_pinjaman']=='pa')
+		{
+			$mode 	= 'perjanjian_kredit_angsuran';
+		}
+		elseif($mode=='perjanjian_kredit')
+		{
+			$mode 	= 'perjanjian_kredit_musiman';
+		}
+
+		return view('v2.pengajuan.print.'.$mode, compact('data', 'pimpinan'));
 	}
 }

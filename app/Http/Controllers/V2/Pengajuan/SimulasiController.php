@@ -12,6 +12,8 @@ class SimulasiController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->middleware('scope:'.implode('|', $this->acl_menu['pengajuan.simulasi']))->only(['index']);
 	}
 
 	public function index() 

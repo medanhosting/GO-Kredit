@@ -24,7 +24,7 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					{!! Form::vText('Plafon Pinjaman', 'plafon_pinjaman', $putusan['plafon_pinjaman'], ['class' => 'form-control inline-edit text-info mask-money border-input pb-1 w-50', 'placeholder' => 'Rp 6.000.000'], true) !!}
+					{!! Form::vText('Plafon Pinjaman', 'jumlah', $putusan['plafon_pinjaman'], ['class' => 'form-control inline-edit text-info mask-money border-input pb-1 w-50', 'placeholder' => 'Rp 6.000.000'], true) !!}
 				</div>
 			</div>
 			<div class="row">

@@ -46,46 +46,90 @@
 						<div class="col-12 col-sm-12 col-md-12">
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs underline" role="tablist">
+								@if(array_intersect($acl_menu['kredit.kredit.aktif.angsuran'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link px-4 {{$is_angsuran_tab}}" data-toggle="tab" href="#angsuran" role="tab">
 										Angsuran 
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Angsuran
+									</a>
+								</li>
+								@endif
+								@if(array_intersect($acl_menu['kredit.kredit.aktif.denda'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link px-4 {{ $is_denda_tab }}" href="#denda" role="tab" data-toggle="tab">
 										Denda
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Denda
+									</a>
+								</li>
+								@endif
+								@if(array_intersect($acl_menu['kredit.kredit.aktif.tagihan'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link px-4 {{$is_penagihan_tab}}" data-toggle="tab" href="#penagihan" role="tab">
 										Penagihan 
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Penagihan
+									</a>
+								</li>
+								@endif
+								@if(array_intersect($acl_menu['kredit.kredit.aktif.jaminan'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link px-4 {{$is_jaminan_tab}}" data-toggle="tab" href="#jaminan" role="tab">
 										Stok Jaminan 
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Stok Jaminan 
+									</a>
+								</li>
+								@endif
 							</ul>
 
 							<!-- Tab panes -->
 							<div class="tab-content">
+								@if(array_intersect($acl_menu['kredit.kredit.aktif.angsuran'], $scopes->scopes))
 								<!-- tab angsuran -->
 								<div class="tab-pane p-4 {{$is_angsuran_tab}}" id="angsuran" role="tabpanel">
 									@include('v2.kredit.show.angsuran')
 								</div>
+								@else
+								@endif
 								<!-- tab denda -->
+								@if(array_intersect($acl_menu['kredit.kredit.aktif.denda'], $scopes->scopes))
 								<div class="tab-pane p-4 {{$is_denda_tab}}" id="denda" role="tabpanel">
 									@include('v2.kredit.show.denda')
 								</div>
+								@else
+								@endif
 								<!-- tab penagihan -->
+								@if(array_intersect($acl_menu['kredit.kredit.aktif.tagihan'], $scopes->scopes))
 								<div class="tab-pane p-4 {{$is_penagihan_tab}}" id="penagihan" role="tabpanel">
 									@include('v2.kredit.show.penagihan')
 								</div>
+								@else
+								@endif
 								<!-- tab jaminan -->
+								@if(array_intersect($acl_menu['kredit.kredit.aktif.jaminan'], $scopes->scopes))
 								<div class="tab-pane p-4 {{$is_jaminan_tab}}" id="jaminan" role="tabpanel">
 									@include('v2.kredit.show.jaminan')
 								</div>
+								@else
+								@endif
 							</div>
 						</div>
 					</div>

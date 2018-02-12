@@ -46,7 +46,7 @@
 
 		<hr/>
 		<p>Form Survei</p>
-		<a href="{{route('pengajuan.pengajuan.print', ['id' => $survei['pengajuan_id'], 'mode' => 'survei_report', 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="btn btn-primary btn-sm btn-block">
+		<a href="{{route('pengajuan.print', ['id' => $survei['pengajuan_id'], 'mode' => 'survei_report', 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="btn btn-primary btn-sm btn-block">
 			Print
 		</a>
 		@if ($percentage==100 && $permohonan->status_terakhir->status=='survei')

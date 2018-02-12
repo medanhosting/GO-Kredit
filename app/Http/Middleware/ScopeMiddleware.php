@@ -18,7 +18,7 @@ class ScopeMiddleware
 
 		if(!$active_p)
 		{
-			return redirect()->back()->withErrors('Anda tidak memiliki wewenang untuk data ini!');
+			return redirect()->back()->withErrors('Anda tidak memiliki wewenang untuk data/proses ini!');
 		}
 
 		if(str_is($scope, 'setuju') || str_is($scope, 'tolak'))
@@ -31,12 +31,13 @@ class ScopeMiddleware
 		}
 
 		$scopes 	= explode('|', $scope);
+
 		foreach ($scopes as $k => $v) {
 			if(str_is('*.*', $v)){
 
 				$flag 		= true;
 				$v_scope 	= explode('.', $v);
-				foreach ($v as $k2 => $v2) {
+				foreach ($v_scope as $k2 => $v2) {
 					if(!in_array($v2, $active_p['scopes']))
 					{
 						$flag 	= false;
@@ -51,7 +52,7 @@ class ScopeMiddleware
 			}
 		}
 
-		return redirect()->back()->withErrors('Anda tidak memiliki wewenang untuk data ini!');
+		return redirect()->back()->withErrors('Anda tidak memiliki wewenang untuk data/proses ini!');
 	}
 
 	public static function check($scope)
@@ -63,7 +64,7 @@ class ScopeMiddleware
 
 		if(!$active_p)
 		{
-			throw new Exception("Anda tidak memiliki wewenang untuk data ini!", 1);
+			throw new Exception("Anda tidak memiliki wewenang untuk data/proses ini!", 1);
 		}
 
 		if(str_is($scope, 'setuju') || str_is($scope, 'tolak'))
@@ -81,7 +82,7 @@ class ScopeMiddleware
 
 				$flag 		= true;
 				$v_scope 	= explode('.', $v);
-				foreach ($v as $k2 => $v2) {
+				foreach ($v_scope as $k2 => $v2) {
 					if(!in_array($v2, $active_p['scopes']))
 					{
 						$flag 	= false;
@@ -96,6 +97,6 @@ class ScopeMiddleware
 			}
 		}
 
-		throw new Exception("Anda tidak memiliki wewenang untuk data ini!", 1);
+		throw new Exception("Anda tidak memiliki wewenang untuk data/proses ini!", 1);
 	}
 }

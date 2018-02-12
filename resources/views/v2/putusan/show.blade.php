@@ -26,21 +26,45 @@
 							<!-- Nav tabs -->
 
 							<ul class="nav nav-tabs underline" role="tablist">
+								@if(array_intersect($acl_menu['pengajuan.putusan.setuju.legalitas'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link {{ $is_active_realisasi }}" data-toggle="tab" id="realisasi-menu" role="tab" href="#realisasi-pane">
 										Legalitas Realisasi
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Legalitas Realisasi
+									</a>
+								</li>
+								@endif
+								@if(array_intersect($acl_menu['pengajuan.putusan.setuju.pencairan'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link {{ $is_active_pencairan }}" data-toggle="tab" id="pencairan-menu" role="tab" href="#pencairan-pane">
 										Bukti Realisasi
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Bukti Realisasi
+									</a>
+								</li>
+								@endif
+								@if(array_intersect($acl_menu['pengajuan.putusan.setuju.setoran'], $scopes->scopes))
 								<li class="nav-item">
 									<a class="nav-link {{ $is_active_setoran }}" data-toggle="tab" id="setoran-menu" role="tab" href="#setoran-pane">
 										Setoran Realisasi
 									</a>
 								</li>
+								@else
+								<li class="nav-item ">
+									<a class="nav-link disabled">
+										Setoran Realisasi
+									</a>
+								</li>
+								@endif
 							</ul>
 						</div>
 					</div>
@@ -48,6 +72,7 @@
 						<div class="col-sm-12">
 							<!-- Tab panes -->
 							<div class="tab-content">
+								@if(array_intersect($acl_menu['pengajuan.putusan.setuju.legalitas'], $scopes->scopes))
 								{{-- realisasi --}}
 								<div class="tab-pane {!! $is_active_realisasi !!}" id="realisasi-pane" role="tabpanel">
 									<div class="clearfix">&nbsp;</div>
@@ -62,7 +87,9 @@
 										</div>
 									</div>
 								</div>
+								@endif
 
+								@if(array_intersect($acl_menu['pengajuan.putusan.setuju.pencairan'], $scopes->scopes))
 								{{-- pencairan --}}
 								<div class="tab-pane {!! $is_active_pencairan !!}" id="pencairan-pane" role="tabpanel">
 									<div class="clearfix">&nbsp;</div>
@@ -77,7 +104,9 @@
 										</div>
 									</div>
 								</div>
+								@endif
 
+								@if(array_intersect($acl_menu['pengajuan.putusan.setuju.setoran'], $scopes->scopes))
 								{{-- setoran --}}
 								<div class="tab-pane {!! $is_active_setoran !!}" id="setoran-pane" role="tabpanel">
 									<div class="clearfix">&nbsp;</div>
@@ -92,6 +121,7 @@
 										</div>
 									</div>
 								</div>
+								@endif
 							</div>
 						</div>
 					</div>

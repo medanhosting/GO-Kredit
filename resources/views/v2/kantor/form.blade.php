@@ -45,7 +45,7 @@
 				<label class="text-sm">Kode Pusat</label>
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-10">
-						@include('manajemen.kantor.ajax-kode-pusat')
+						@include('v2.kantor.ajax-kode-pusat')
 					</div>
 				</div>
 			</fieldset>

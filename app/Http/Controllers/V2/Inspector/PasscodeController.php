@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\V2\Otorisasi;
+namespace App\Http\Controllers\V2\Inspector;
 
 use App\Http\Controllers\Controller;
 
@@ -14,6 +14,8 @@ class PasscodeController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
+		
+		$this->middleware('scope:'.implode('|', $this->acl_menu['inspektor.passcode']));
 	}
 
 	public function index () 
@@ -27,7 +29,7 @@ class PasscodeController extends Controller
 		view()->share('active_submenu', 'passcode');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
-		$this->layout->pages 	= view('v2.passcode.index', compact('passcode'));
+		$this->layout->pages 	= view('v2.inspector.passcode.index', compact('passcode'));
 		return $this->layout;
 	}
 	

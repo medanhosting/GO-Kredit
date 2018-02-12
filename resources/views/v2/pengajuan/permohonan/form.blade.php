@@ -738,7 +738,7 @@
 		//ASSIGN SURVEYOR
 		$(".ajax-karyawan").select2({
 			ajax: {
-				url: "{{route('manajemen.karyawan.ajax')}}",
+				url: "{{route('karyawan.ajax')}}",
 				data: function (params) {
 						return {
 							q: params.term, // search term

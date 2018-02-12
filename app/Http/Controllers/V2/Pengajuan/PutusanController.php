@@ -42,9 +42,8 @@ class PutusanController extends Controller
 	{
 		parent::__construct();
 
-		$this->middleware('scope:operasional.pengajuan')->only(['index', 'show']);
-		$this->middleware('scope:realisasi')->only(['store', 'print']);
-		
+		$this->middleware('scope:'.implode('|', $this->acl_menu['pengajuan.putusan']))->only(['index', 'show']);
+
 		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store']);
 	}
 

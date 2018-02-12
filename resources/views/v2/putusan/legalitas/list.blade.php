@@ -20,7 +20,7 @@
 							</div>
 							@if(str_is($kop, 'pengikat'))
 							<div class="col-3 text-right">
-								<a href="{{route('pengajuan.pengajuan.print', ['id' => $putusan['pengajuan_id'], 'mode' => $kch, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="text-success">
+								<a href="{{route('pengajuan.print', ['id' => $putusan['pengajuan_id'], 'mode' => $kch, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="text-success">
 									CETAK
 								</a>
 							</div>

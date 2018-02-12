@@ -79,7 +79,7 @@
 			<label class="text-sm">KODE KANTOR</label>
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-10">
-					@include('manajemen.kantor.ajax-kode-pusat', ['kantor' => ['pusat' => $kantor_aktif]])
+					@include('v2.kantor.ajax-kode-pusat', ['kantor' => ['pusat' => $kantor_aktif]])
 				</div>
 			</div>
 		</fieldset>

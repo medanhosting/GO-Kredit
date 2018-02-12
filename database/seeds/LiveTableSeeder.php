@@ -40,10 +40,10 @@ class LiveTableSeeder extends Seeder
 		Orang::create(['nama'   => 'KOMISARIS', 'email' => 'chelsy@go-kredit.com', 'password' => 'admin123']);
 
 		//BASIC KOMISARIS
-		PenempatanKaryawan::create(['kantor_id' => Kantor::orderby('created_at', 'asc')->first()['id'], 'orang_id' => Orang::orderby('created_at', 'asc')->first()['id'], 'role' => 'komisaris', 'scopes' => ['permohonan', 'survei', 'analisa', 'operasional', 'assign', 'putusan', 'validasi', 'restitusi', 'mutasi_jaminan', 'surat_peringatan', 'laporan', 'tunggakan', 'keuangan', 'realisasi', 'kredit', 'pencairan', 'angsuran', 'penagihan', 'nominatif__unlimitted', 'nominatif_unlimitted', 'hari_unlimitted', 'coa', 'passcode', 'karyawan', 'audit', 'holding'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+		PenempatanKaryawan::create(['kantor_id' => Kantor::orderby('created_at', 'asc')->first()['id'], 'orang_id' => Orang::orderby('created_at', 'asc')->first()['id'], 'role' => 'komisaris', 'scopes' => ['permohonan', 'survei', 'analisa', 'operasional', 'assign', 'putusan', 'validasi', 'restitusi', 'mutasi_jaminan', 'surat_peringatan', 'laporan', 'tunggakan', 'keuangan', 'realisasi', 'kredit', 'pencairan', 'angsuran', 'penagihan', '*.nominatif_gt_10000000', '*.hari_unlimitted', 'akun', 'passcode', 'karyawan', 'audit', 'holding'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
 
-		PenempatanKaryawan::create(['kantor_id' => Kantor::orderby('created_at', 'asc')->skip(1)->take(1)->first()['id'], 'orang_id' => Orang::orderby('created_at', 'asc')->first()['id'], 'role' => 'komisaris', 'scopes' => ['permohonan', 'survei', 'analisa', 'operasional', 'assign', 'putusan', 'validasi', 'restitusi', 'mutasi_jaminan', 'surat_peringatan', 'laporan', 'tunggakan', 'keuangan', 'realisasi', 'kredit', 'pencairan', 'angsuran', 'penagihan', 'nominatif__unlimitted', 'nominatif_unlimitted', 'hari_unlimitted', 'coa', 'passcode', 'karyawan', 'audit', 'holding'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
-		
+		PenempatanKaryawan::create(['kantor_id' => Kantor::orderby('created_at', 'asc')->skip(1)->take(1)->first()['id'], 'orang_id' => Orang::orderby('created_at', 'asc')->first()['id'], 'role' => 'komisaris', 'scopes' => ['operasional', 'keuangan', 'akun', 'putusan', 'holding', 'kantor', 'karyawan', 'audit', 'passcode', '*.nominatif_gt_10000000', '*.hari_unlimitted'], 'policies' => '', 'tanggal_masuk' => Carbon::now()->format('d/m/Y H:i')]);
+
 		$roles 	= [
 			[
 				'role' 		=> 'ao',
@@ -51,27 +51,28 @@ class LiveTableSeeder extends Seeder
 			],
 			[
 				'role' 		=> 'surveyor',
-				'scopes' 	=> ['survei', 'hari_gte_3', 'analisa', 'hari_e_0'],
+				'scopes' 	=> ['survei', 'survei.hari_gte_3', 'analisa', 'analisa.hari_e_0'],
 			],
 			[
 				'role' 		=> 'pimpinan',
-				'scopes' 	=> ['operasional', 'assign', 'permohonan', 'putusan', 'nominatif_lte_1000000', 'validasi', 'restitusi', 'nominatif_lte_10000000', 'hari_e_0', 'mutasi_jaminan', 'surat_peringatan', 'laporan', 'tunggakan', 'keuangan'],
+				'scopes' 	=> ['operasional', 'putusan', 'putusan.nominatif_lte_10000000', '*.hari_e_0', 'keuangan', 'assign', 'surat_peringatan'],
 			],
+
 			[
 				'role' 		=> 'kabag_operasional',
 				'scopes' 	=> ['operasional'],
 			],
 			[
 				'role' 		=> 'kabag_kredit',
-				'scopes' 	=> ['realisasi', 'mutasi_jaminan', 'hari_e_0', 'restitusi', 'laporan', 'tunggakan'],
+				'scopes' 	=> ['realisasi', 'tunggakan', '*.hari_e_0', 'jaminan', 'restitusi'],
 			],
 			[
 				'role' 		=> 'kasir',
-				'scopes' 	=> ['kredit', 'pencairan', 'angsuran', 'laporan', 'keuangan', 'hari_e_0'],
+				'scopes' 	=> ['pencairan', 'angsuran', 'denda', 'keuangan', '*.hari_e_0', 'kas'],
 			],
 			[
 				'role' 		=> 'kolektor',
-				'scopes' 	=> ['kredit', 'penagihan', 'hari_gte_3'],
+				'scopes' 	=> ['tagihan', 'tagihan.hari_gte_3'],
 			],
 		];
 

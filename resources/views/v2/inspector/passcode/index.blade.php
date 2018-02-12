@@ -1,13 +1,13 @@
 @push('main')
 	<div class="row justify-content-center">
 		<div class="col-auto px-5 pt-2">
-			<h5 class="h5 mx-5 px-5 d-flex text-center"><i class="fa fa-unlock-alt mr-2"></i> PASSCODE</h5>
+			<h5 class="h5 mx-5 px-5 d-flex text-center"><i class="fa fa-user-secret mr-2"></i> INSPECTOR</h5>
 			<hr>
 		</div>
 	</div>
 	<div class="row mt-3">
 		<div class="col-12 col-sm-auto text-center text-sm-right pt-sm-5 pb-3 sidebar-plain">
-			@include('v2.passcode.base')
+			@include('v2.inspector.base')
 		</div>
 		<div class="col">
 			@component('bootstrap.card')
@@ -59,7 +59,7 @@
 			@endcomponent
 		</div>
 	</div>
-	@include('v2.passcode.modal')
+	@include('v2.inspector.passcode.modal')
 @endpush
 
 @push('submenu')
