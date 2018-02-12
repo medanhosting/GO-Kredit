@@ -35,7 +35,7 @@
 						</div>
 						<div class="col-6">
 							<p class="text-gray-light mb-0">Nama ( Jenis Kelamin )</p>							
-							<h4>{{ $aktif['nasabah']['nama'] }} ( {{ $aktif['nasabah']['jenis_kelamin'] }} )</h4>
+							<h4 class="text-capitalize">{{ $aktif['nasabah']['nama'] }} ( {{ $aktif['nasabah']['jenis_kelamin'] }} )</h4>
 							<p class="text-gray-light mb-0">Telepon</p>
 							<h4>{{ $aktif['nasabah']['telepon'] }}</h4>
 							<p class="mb-0 text-gray-light">Alamat</p>
@@ -135,6 +135,30 @@
 					</div>
 				</div>
 			@endcomponent
+
+			{{--
+
+			<div class="clearfix">&nbsp;</div>
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<!-- tab angsuran -->
+				<div class="tab-pane py-4 {{$is_angsuran_tab}}" id="angsuran" role="tabpanel">
+					@include('v2.kredit.show.angsuran')
+				</div>
+				<!-- tab denda -->
+				<div class="tab-pane py-4 {{$is_denda_tab}}" id="denda" role="tabpanel">
+					@include('v2.kredit.show.denda')
+				</div>
+				<!-- tab penagihan -->
+				<div class="tab-pane py-4 {{$is_penagihan_tab}}" id="penagihan" role="tabpanel">
+					@include('v2.kredit.show.penagihan')
+				</div>
+				<!-- tab jaminan -->
+				<div class="tab-pane py-4 {{$is_jaminan_tab}}" id="jaminan" role="tabpanel">
+					@include('v2.kredit.show.jaminan')
+				</div>
+			</div>
+			--}}
 		</div>
 	</div>
 @endpush
@@ -146,5 +170,12 @@
 @push('js')
 	<script type="text/javascript">
 		window.formInputMask.init();
+		
+		$('#konfirmasi_permohonan_restitusi_acc').on('shown.bs.modal', function(e) {
+			var btnClick = $(e.relatedTarget);
+			var parsingData = btnClick.attr('data-parsing');
+
+			$(this).find('#konfirm_approved').val(parsingData);
+		});
 	</script>
 @endpush

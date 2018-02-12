@@ -126,6 +126,7 @@
 			border: none;
 			padding: 0;
 			margin: 0;
+			border-radius: 0;
 
 			/* Inherit the parent element's typography */
 			font: inherit;
@@ -388,6 +389,9 @@
 					window.location = $(this).attr('href');
 				}
 			});
+
+			// call plugin inputmask init
+			window.formInputMask.init();
 		</script>
 	</body>
 </html>

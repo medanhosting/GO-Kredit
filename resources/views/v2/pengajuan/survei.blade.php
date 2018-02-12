@@ -349,7 +349,7 @@
 						<ul class="nav flex-column nav-pills"  role="tablist">
 							@foreach($survei['jaminan_kendaraan'] as $k => $v)
 								<li class="nav-item">
-									<a class="nav-link" href="#jaminan{{$v['id']}}" role="tab" data-toggle="tab">
+									<a class="nav-link p-2" href="#jaminan{{$v['id']}}" role="tab" data-toggle="tab">
 										<small>
 										KENDARAAN {{strtoupper(str_replace('_',' ',$v['dokumen_survei']['collateral']['bpkb']['jenis']))}}
 										</small>
@@ -364,7 +364,7 @@
 							@foreach($survei['jaminan_tanah_bangunan'] as $k => $v)
 								<li class="nav-item">
 									@php similar_text(implode(' ', $v['dokumen_survei']['collateral'][$v['dokumen_survei']['collateral']['jenis']]['alamat']), $lokasi['alamat'], $perc[$k]) @endphp
-									<a class="nav-link @if($lokasi['agenda']=='jaminan' && $perc[$k]==100) active @endif " href="#jaminan{{$v['id']}}" role="tab" data-toggle="tab">
+									<a class="nav-link p-2 @if($lokasi['agenda']=='jaminan' && $perc[$k]==100) active @endif " href="#jaminan{{$v['id']}}" role="tab" data-toggle="tab">
 										{{strtoupper($v['dokumen_survei']['collateral']['jenis'])}}
 										@if(!$v['is_lengkap'])
 											<span class="text-danger">&nbsp;<i class="fa fa-exclamation"></i></span>
