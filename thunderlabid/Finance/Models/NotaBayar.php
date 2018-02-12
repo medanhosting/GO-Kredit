@@ -12,6 +12,7 @@ use Config;
 use Validator;
 use Carbon\Carbon;
 use App\Service\Traits\WaktuTrait;
+use App\Service\Traits\TanggalTrait;
 use App\Service\Traits\IDRTrait;
 
 ///////////////
@@ -36,13 +37,14 @@ use Thunderlabid\Finance\Models\Traits\FakturTrait;
 class NotaBayar extends Model
 {
 	use WaktuTrait;
+	use TanggalTrait;
 	use IDRTrait;
 	use FakturTrait;
 	
 	protected $table 	= 'f_nota_bayar';
 	protected $fillable = ['nomor_faktur', 'tanggal', 'jenis', 'karyawan', 'jumlah', 'nomor_rekening', 'morph_reference_id', 'morph_reference_tag'];
 	protected $hidden 	= [];
-	protected $appends	= ['jatuh_tempo'];
+	protected $appends	= ['jatuh_tempo', 'hari'];
 
 	protected $rules	= [];
 	protected $errors;
@@ -154,6 +156,11 @@ class NotaBayar extends Model
 		return $this->formatDateTimeTo($this->attributes['tanggal']);
 	}
 
+	public function getHariAttribute($variable)
+	{
+		return $this->formatDateTo($this->attributes['tanggal']);
+	}
+
 	public function getJumlahAttribute($variable)
 	{
 		return $this->formatMoneyTo($this->attributes['jumlah']);
@@ -182,6 +189,9 @@ class NotaBayar extends Model
 				break;	
 			case 'angsuran_sementara':
 				$deskripsi 	= 'Bukti Angsuran Sementara';
+				break;	
+			case 'restitusi_denda':
+				$deskripsi 	= 'Bukti Restitusi Denda';
 				break;	
 			case 'denda':
 				$deskripsi 	= 'Bukti Pembayaran Denda';

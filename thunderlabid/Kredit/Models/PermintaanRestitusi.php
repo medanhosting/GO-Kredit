@@ -36,7 +36,7 @@ class PermintaanRestitusi extends Model
 	use WaktuTrait;
 
 	protected $table 	= 'k_permintaan_restitusi';
-	protected $fillable = ['nomor_kredit', 'tanggal', 'is_approved', 'nota_bayar_id', 'jenis', 'jumlah', 'alasan', 'karyawan'];
+	protected $fillable = ['nomor_kredit', 'tanggal', 'is_approved', 'nomor_faktur', 'jenis', 'jumlah', 'alasan', 'karyawan'];
 	protected $hidden 	= [];
 	protected $appends	= [];
 	protected $rules	= [];

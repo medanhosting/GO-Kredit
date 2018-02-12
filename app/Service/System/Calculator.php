@@ -61,7 +61,7 @@ Class Calculator {
 		$aktif 		= Aktif::where('nomor_kredit', $nk)->first();
 
 		//find angsuran terdekat
-		$kredit 	= JadwalAngsuran::where('nomor_kredit', $nomor_kredit)->where('tanggal', '>', $tanggal->endofday()->format('Y-m-d H:i:s'))->orderby('tanggal', 'asc')->first();
+		$kredit 	= JadwalAngsuran::where('nomor_kredit', $nk)->where('tanggal', '>', $tanggal->endofday()->format('Y-m-d H:i:s'))->orderby('tanggal', 'asc')->first();
 
 		if(str_is($aktif['jenis_pinjaman'], 'pa') && $kredit['nth'] < $aktif['jangka_waktu'])
 		{
@@ -93,6 +93,14 @@ Class Calculator {
 	{
 		$total = Jurnal::where('morph_reference_id', $nk)->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', [Calculator::get_akun_table()['piutang_denda']['pa'], Calculator::get_akun_table()['piutang_denda']['pt']]);})->where('tanggal', '<', $tanggal->startofday()->format('Y-m-d H:i:s'))->sum('jumlah');
 
-		return $total * -1;
+		return $total;
+	}
+
+	public function restitusi3DBefore($nk, Carbon $tanggal)
+	{
+		$aktif 		= Aktif::where('nomor_kredit', $nk)->first();
+		$piutang 	= Calculator::piutangBefore($nk, $tanggal);
+
+		return $piutang * ($aktif['persentasi_denda']/100) * 3;
 	}
 }

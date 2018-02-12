@@ -8,6 +8,8 @@ use Thunderlabid\Kredit\Models\PermintaanRestitusi;
 use Thunderlabid\Finance\Models\NotaBayar;
 use Thunderlabid\Finance\Models\DetailTransaksi;
 
+use App\Service\System\Calculator;
+
 use App\Service\Traits\IDRTrait;
 
 use Carbon\Carbon, Exception;
@@ -31,7 +33,7 @@ class BayarDenda
 
 		if(str_is('restitusi_3_hari', $jenis)){
 			$pr->jenis 		= $jenis;
-			$pr->jumlah 	= $this->formatMoneyTo($this->hitung_restitusi_3_hari($this->tanggal, $this->kredit['persentasi_denda']));
+			$pr->jumlah 	= $this->formatMoneyTo(Calculator::restitusi3DBefore($this->kredit['nomor_kredit'], Carbon::createfromformat('d/m/Y H:i', $this->tanggal)->adddays(1)));
 		}else{
 			$pr->jenis 		= 'restitusi_nominal';
 			$pr->jumlah 	= $nominal;
@@ -40,28 +42,14 @@ class BayarDenda
 		$pr->nomor_kredit 	= $this->kredit['nomor_kredit'];
 		$pr->tanggal 		= $this->tanggal;
 		$pr->alasan 		= $alasan;
+		$pr->karyawan		= $this->karyawan;
 		$pr->save();
 	}
 
-	private function hitung_restitusi_3_hari($tanggal, $persentasi_denda){
-		$tunggakan 		= JadwalAngsuran::HistoriTunggakan(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->selectraw('sum(jumlah) as tunggakan')->first();
-
-		return ($tunggakan['tunggakan'] * $persentasi_denda * 3)/100;
-	}
-
-	public static function hitung_r3d($tanggal, $persentasi_denda){
-		$tunggakan 		= JadwalAngsuran::HistoriTunggakan(Carbon::createfromformat('d/m/Y H:i', $tanggal))->groupby('nth')->orderby('nth', 'asc')->selectraw('sum(jumlah) as tunggakan')->first();
-
-		return ($tunggakan['tunggakan'] * $persentasi_denda * 3)/100;
-	}
-	
 	public function validasi_restitusi($is_approved){
 		$pr 				= PermintaanRestitusi::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('is_approved')->first();
-		$pr->karyawan		= $this->karyawan;
-		$pr->is_approved	= $is_approved * 1;
-		$pr->save();
 
-		if($pr->is_approved){
+		if($is_approved * 1){
 			$nominal 	= $this->formatMoneyTo(0 - $this->formatMoneyFrom($pr->jumlah));
 
 			//simpan restitusi
@@ -81,9 +69,14 @@ class BayarDenda
 			$angs->jumlah 			= $nominal;
 			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
 			$angs->morph_reference_tag 	= 'kredit';
-			$angs->deskripsi 		= 'Restitusi Denda Denda';
+			$angs->deskripsi 		= ucwords(str_replace('_', ' ', str_replace('restitusi', 'restitusi_denda', $pr->jenis)));
 			$angs->save();
+			
+			$pr->nomor_faktur	= $nb->nomor_faktur;
 		}
+
+		$pr->is_approved	= $is_approved * 1;
+		$pr->save();
 	}
 
 	public function bayar($nominal){

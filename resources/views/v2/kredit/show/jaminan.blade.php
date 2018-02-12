@@ -51,10 +51,14 @@
 							@if(str_is($v['status_terakhir']['progress'], 'menunggu_validasi'))
 								<a class="update_jaminan text-success" data-toggle="modal" data-target="#validasi-jaminan" data-action="{{route('jaminan.validasi', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id])}}">Validasi</a>
 							@else
-								@foreach($v['status_terakhir']['possible_action'] as $k2 => $v2)
+								@forelse($v['status_terakhir']['possible_action'] as $k2 => $v2)
 								<a class="update_jaminan text-success" data-toggle="modal" data-target="#update-jaminan" data-action="{{route('jaminan.update', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id, 'stok' => $v2])}}" data-title="{{$k2}}">{{str_replace('_', ' ', $k2)}}</a>
 								<br/>
-								@endforeach
+								@empty
+									&emsp;
+									&emsp;
+									&emsp;
+								@endforelse
 							@endif
 						</td>
 					</tr>

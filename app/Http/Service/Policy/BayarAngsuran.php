@@ -106,7 +106,7 @@ class BayarAngsuran
 					$angs->save();
 				}
 
-				if($v['pokok'] != 'Rp 0'){
+				if($v['bunga'] != 'Rp 0'){
 					$deskripsi 	= 'Bunga Angsuran';
 					$angs 		= new DetailTransaksi;
 					$angs->nomor_faktur 	= $nb->nomor_faktur;

@@ -160,9 +160,9 @@ class JurnalController extends Controller
 			['nomor_perkiraan'	=> '401.202',
 			'akun'				=> 'Administrasi Pinjaman',
 			'parent'			=> '401.200'],
-			['nomor_perkiraan'	=> '401.204',
-			'akun'				=> 'Legalitas',
-			'parent'			=> '401.200'],
+			['nomor_perkiraan'	=> '401.300',
+			'akun'				=> 'Pendapatan Operasional Lainnya',
+			'parent'			=> '401.000'],
 			['nomor_perkiraan'	=> '401.303',
 			'akun'				=> 'Legal',
 			'parent'			=> '401.300'],
@@ -176,33 +176,33 @@ class JurnalController extends Controller
 		
 		$model['id'] 	= request()->get('kantor_aktif_id');
 		
-		// foreach ($pcodes as $k => $v) {
-		// 	$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
+		foreach ($pcodes as $k => $v) {
+			$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
 
-		// 	if(!$acc){
-		// 		$acc	= new COA;
-		// 	}
+			if(!$acc){
+				$acc	= new COA;
+			}
 
-		// 	$acc->kode_kantor 			= $model['id'];
-		// 	$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
-		// 	$acc->akun 					= $v['akun'];
-		// 	$acc->save();
-		// }
+			$acc->kode_kantor 			= $model['id'];
+			$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
+			$acc->akun 					= $v['akun'];
+			$acc->save();
+		}
 
-		// foreach ($codes as $k => $v) {
-		// 	$parent 	= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['parent'])->first();
-		// 	$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
+		foreach ($codes as $k => $v) {
+			$parent 	= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['parent'])->first();
+			$acc 		= COA::where('kode_kantor', $model['id'])->where('nomor_perkiraan', $v['nomor_perkiraan'])->first();
 
-		// 	if(!$acc){
-		// 		$acc	= new COA;
-		// 	}
+			if(!$acc){
+				$acc	= new COA;
+			}
 
-		// 	$acc->kode_kantor 			= $model['id'];
-		// 	$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
-		// 	$acc->akun 					= $v['akun'];
-		// 	$acc->coa_id 				= $parent->id;
-		// 	$acc->save();
-		// }
+			$acc->kode_kantor 			= $model['id'];
+			$acc->nomor_perkiraan 		= $v['nomor_perkiraan'];
+			$acc->akun 					= $v['akun'];
+			$acc->coa_id 				= $parent->id;
+			$acc->save();
+		}
 		$jurnal 	= Jurnal::selectraw('sum(f_jurnal.jumlah) jumlah')
 		->selectraw('min(f_jurnal.id) as id')
 		->selectraw('max(f_jurnal.tanggal) as tanggal')

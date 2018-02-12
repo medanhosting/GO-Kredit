@@ -47,6 +47,16 @@
 		@include('v2.kredit.show.bukti_angsuran')
 	</div>
 	<div class="col-4">
-		@include('v2.kredit.show.bayar_angsuran')
+		@if($stat['sisa_hutang'] > 0)
+			@include('v2.kredit.show.bayar_angsuran')
+		@else
+			@component('bootstrap.card')
+				@slot('title') 
+					<h4 class='text-center text-success pt-5'>
+						KREDIT SUDAH LUNAS
+					</h4>
+				@endslot
+			@endcomponent
+		@endif
 	</div>
 </div>

@@ -102,8 +102,8 @@ class HitungDendaAngsuran extends Command
 				
 				//2c. Hitung Denda
 				//cari selisih hari
-				$tgl_jt  	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->subdays(1);
-				$tgl_b 		= Carbon::parse($tanggal);
+				$tgl_jt  	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal']);
+				$tgl_b 		= Carbon::parse($tanggal)->adddays(1);
 				if(!is_null($v['tanggal_bayar'])){
 					$tgl_b 	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal_bayar']);
 				}

@@ -46,28 +46,31 @@
 						<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
-							<th class="text-center align-middle">NO</th>
-							<th class="text-center align-middle">TANGGAL</th>
-							<th class="text-center align-middle">RESTITUSI</th>
-							<th class="text-center align-middle">STATUS</th>
+							<th class="text-left align-middle">TANGGAL</th>
+							<th class="text-left align-middle">KETERANGAN</th>
+							<th class="text-right align-middle">JUMLAH</th>
+							<th class="text-center align-middle">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
 						@forelse($denda as $k => $v)
 							<tr>
-								<td class="text-center">{{ $loop->iteration }}</td>
-								<td class="text-center">{{$carbon::parse($v['tanggal'])->format('d/m/Y')}}</td>
+								<td class="text-left">{{$v['hari']}}</td>
+								<td class="text-left">{{$v['deskripsi']}}</td>
 								<td class="text-right">
-									{{$v['jumlah']}}<br/>
-									<small><i>{{str_replace('_', ' ', $v['jenis'])}}</i></small>
+									{{$v['jumlah']}}
 								</td>
 								<td class="text-center">
-									@if(is_null($v['is_approved']))
-										<span class="badge badge-warning">Menunggu<br/>Konfirmasi</span>
-									@elseif($v['is_approved'])
-										<span class="badge badge-success">Disetujui</span>
+									@if(str_is($v['jenis'], 'restitusi_denda'))
+										<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'restitusi_denda']) }}" target="__blank" class="text-success">
+											<i class="fa fa-print"></i>
+										</a>
+									@elseif(str_is($v['jenis'], 'denda'))
+										<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'denda']) }}" target="__blank" class="text-success">
+											<i class="fa fa-print"></i>
+										</a>
 									@else
-										<span class="badge badge-danger">Ditolak</span>
+										<a href="#"></a>
 									@endif
 								</td>
 							</tr>
@@ -88,7 +91,7 @@
 			@slot('title')
 				<ul class="nav nav-tabs underline" role="tablist">
 					<li class="nav-item">
-						<a class="nav-link px-4 {{$is_denda_tab}}" data-toggle="tab" href="#bayar_d" role="tab">
+						<a class="nav-link px-4 {{$is_bayar_denda_tab}}" data-toggle="tab" href="#bayar_d" role="tab">
 							BAYAR
 						</a>
 					</li>
@@ -103,7 +106,7 @@
 				<!-- Tab panes -->
 				<div class="tab-content">
 					<!-- tab bayar_d -->
-					<div class="tab-pane p-2 {{$is_denda_tab}}" id="bayar_d" role="tabpanel">
+					<div class="tab-pane p-2 {{$is_bayar_denda_tab}}" id="bayar_d" role="tabpanel">
 						@include('v2.kredit.show.bayar_denda')
 					</div>
 					<!-- tab restitusi -->

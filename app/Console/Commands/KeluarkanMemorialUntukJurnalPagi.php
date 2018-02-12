@@ -74,6 +74,7 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 
 		try {
 			foreach ($angsuran as $k => $v) {
+				$flag_bayar 		= false;
 				//2. Untuk setiap angsuran JT, buatkan memorial
 				$nomor_faktur 		= $v['kredit']['kode_kantor'].'.'.$tanggal->startofday()->format('ymd').'-001';
 
@@ -139,6 +140,7 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 					$angs_lunas->nomor_faktur 	= $nota_titipan->nomor_faktur;
 					$angs_lunas->tanggal_bayar	= $tanggal->format('d/m/Y H:i');
 					$angs_lunas->save();
+					$flag_bayar 	= true;
 				}
 
 				$tgl_jt  	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal']);
@@ -187,12 +189,14 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 					$tgl_b 	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal_bayar']);
 				}
 				$days 		= $tgl_b->diffindays($tgl_jtt);
+
 				$deskripsi 	= 'Piutang Denda Angsuran Ke-'.$v['nth'];
 				$prev_denda = DetailTransaksi::where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('nomor_faktur', '<>', $bm->nomor_faktur)->sum('jumlah');
 
 				//cari selisih hari
 				$denda 		= ceil($days * ($v['kredit']['persentasi_denda']/100) * $v['tunggakan']) - $prev_denda;
-				if($denda > 0){
+
+				if($denda > 0 && !$flag_bayar){
 					$piut_denda	= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
 					if(!$piut_denda){
 						$piut_denda 			= new DetailTransaksi;

@@ -79,7 +79,7 @@
 								@php $tgl =  \Carbon\Carbon::createFromFormat('d/m/Y H:i', $v['tanggal'])->format('d/m/Y') @endphp
 								@if($lua != $tgl)
 									<tr>
-										<td colspan="4" class="bg-light">
+										<td colspan="5" class="bg-light">
 											{{$tgl}}
 										</td>
 									</tr>

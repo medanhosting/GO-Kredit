@@ -3,10 +3,11 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Thunderlabid\Kredit\Models\PermintaanRestitusi;
 use Thunderlabid\Kredit\Models\Penagihan;
+use Thunderlabid\Kredit\Models\MutasiJaminan;
 use Thunderlabid\Kredit\Models\JadwalAngsuran;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
+use Thunderlabid\Kredit\Models\PermintaanRestitusi;
 use Thunderlabid\Finance\Models\Jurnal;
 use Thunderlabid\Finance\Models\NotaBayar;
 use Thunderlabid\Finance\Models\DetailTransaksi;
@@ -88,6 +89,9 @@ class RollbackTransaction extends Command
 
 		//hapus restitusi
 		$restitusi 	= PermintaanRestitusi::where('tanggal', '>=', $tanggal->startofday()->format('Y-m-d H:i:s'))->delete();
+
+		//hapus mutasi
+		$mutasi 	= MutasiJaminan::where('tanggal', '>=', $tanggal->startofday()->format('Y-m-d H:i:s'))->delete();
 	}
 }
 			

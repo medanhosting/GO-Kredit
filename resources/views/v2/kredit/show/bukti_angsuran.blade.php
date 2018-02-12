@@ -20,20 +20,24 @@
 				<tbody>
 					@forelse($notabayar as $k => $v)
 						<tr>
+							<td class="text-left">{{$v['hari']}}</td>
 							<td class="text-left">{{$v['deskripsi']}}</td>
 							<td class="text-right">{{$v['jumlah']}}</td>
 							<td class="text-center">
 								@if(str_is($v['jenis'], 'angsuran'))
 									<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success">
-										<i class="fa fa-external-link"></i>
+										<i class="fa fa-print"></i>
 									</a>
 								@elseif(str_is($v['jenis'], 'angsuran_sementara'))
 									<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'sementara']) }}" target="__blank" class="text-success">
-										<i class="fa fa-external-link"></i>
+										<i class="fa fa-print"></i>
+									</a>&emsp;
+									<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'tukar_sementara']) }}" target="__blank" class="text-success">
+										<i class="fa fa-exchange"></i>
 									</a>
 								@elseif(str_is($v['jenis'], 'denda'))
 									<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'denda']) }}" target="__blank" class="text-success">
-										<i class="fa fa-external-link"></i>
+										<i class="fa fa-print"></i>
 									</a>
 								@else
 									<a href="#"></a>

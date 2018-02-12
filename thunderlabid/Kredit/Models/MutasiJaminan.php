@@ -147,22 +147,27 @@ class MutasiJaminan extends Model
 
 		switch ($this->tag) {
 			case 'in':
-				if(in_array($this->status, ['aktif', 'titipan', 'hapus_buku'])){
+				if(in_array($this->status, ['aktif'])){
 					$next['Tandai Jaminan Bermasalah']	= 'bermasalah-in';
 					$next['Tandai Jaminan Keluar']		= $this->status.'-out';
 				}elseif(str_is($this->status, 'bermasalah')){
-					$next['Hapus Buku']	 				= 'hapus_buku-in';
+					$next['Hapus Buku']	 				= 'hapus_buku-out';
 					$next['Tandai Jaminan Keluar']		= 'bermasalah-out';
+				}elseif(str_is($this->status, 'titipan')){
+					$next['Hapus Buku']	 				= 'hapus_buku-out';
 				}
 				break;
 			case 'out':
-				if(in_array($this->status, ['aktif', 'titipan', 'hapus_buku'])){
+				if(in_array($this->status, ['aktif'])){
 					$next['Tandai Jaminan Bermasalah']	= 'bermasalah-out';
 					$next['Tandai Jaminan Masuk']		= $this->status.'-in';
 				}elseif(str_is($this->status, 'bermasalah')){
 					$next['Hapus Buku']	 				= 'hapus_buku-out';
 					$next['Tandai Jaminan Bermasalah']	= 'bermasalah-in';
+				}elseif(str_is($this->status, 'titipan')){
+					$next['Hapus Buku']	 				= 'hapus_buku-out';
 				}
+
 				break;
 		}
 		if(str_is($this->progress, 'menunggu_validasi')){

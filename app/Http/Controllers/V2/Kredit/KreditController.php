@@ -140,8 +140,8 @@ class KreditController extends Controller
 		$akun	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_rekening_aktif'));
 		$a_tt	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_titipan'));
 		$a_dd	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_denda'));
-		$today	= Carbon::now();
-		$tomorrow		= Carbon::now()->adddays(1);
+		$today		= Carbon::now();
+		$tomorrow	= Carbon::now()->adddays(1);
 
 		//1. PANEL ANGSURAN
 
@@ -161,30 +161,37 @@ class KreditController extends Controller
 		$notabayar 	= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['angsuran', 'angsuran_sementara'])->get();
 		
 		//e. NTH Angsuran
-		$sisa_angsuran 	= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->selectraw('jumlah as total')->get();
+		$sisa_angsuran 	= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->selectraw('jumlah as total')->orderby('nth', 'asc')->get();
 
 
 		//2. PANEL DENDA
 		//a. stat denda
-		$stat['total_denda']		= Jurnal::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', ['140.600']);})->sum('jumlah');
+		$stat['total_denda']	= Calculator::dendaBefore($aktif['nomor_kredit'], $tomorrow);
 
-		$angsuran 	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->get();
-		$titipan 	= Penagihan::where('nomor_kredit', $aktif['nomor_kredit'])->where('tag', 'completing')->get();
-
-		//DATA DENDA, PERMINTAAN RESTITUSI
+		//b. total permintaan restitusi
 		$restitusi 	= PermintaanRestitusi::where('nomor_kredit', $aktif['nomor_kredit'])->wherenull('is_approved')->first();
-		$denda		= PermintaanRestitusi::where('nomor_kredit', $aktif['nomor_kredit'])->get();
 
-		// //PANEL TUNGGAKAN/PENAGIHAN
-		$stat['last_pay'] 			= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->orderby('tanggal', 'desc')->first();
+		if($restitusi){
+			view()->share('is_restitusi_tab', 'show active');
+		}else{
+			view()->share('is_bayar_denda_tab', 'show active');
+		}
+
+		//c. restitusi 3d 
+		$r3d 		= Calculator::restitusi3DBefore($aktif['nomor_kredit'], $tomorrow);
+
+		//d. bukti denda
+		$denda 	= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['denda', 'restitusi_denda'])->selectraw('*')->selectraw('abs(jumlah) as jumlah')->get();
+
+		//2. PANEL PENAGIHAN
+		//a. stat last pay
+		$stat['last_pay']	= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->where('tanggal', '<', $today->format('Y-m-d H:i:s'))->orderby('tanggal', 'desc')->first();
 		
+		//b. stat last SP
+		$stat['last_sp']	= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->where('tanggal', '<', $today->format('Y-m-d H:i:s'))->orderby('created_at', 'desc')->first();
 
-		$stat['last_sp']	= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('tanggal', 'desc')->orderby('created_at', 'desc')->first();
-
-		// //DATA SP
+		//c. riwayat SP
 		$suratperingatan 	= SuratPeringatan::where('nomor_kredit', $aktif['nomor_kredit'])->with(['penagihan'])->get();
-
-		// //PANEL JAMINAN
 
 		if(request()->get('current')){
 			switch (strtolower(request()->get('current'))) {
