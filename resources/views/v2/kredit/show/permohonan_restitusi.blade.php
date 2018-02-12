@@ -43,6 +43,7 @@
 		</div>
 	</div>
 	{!! Form::hidden('current', 'permintaan_restitusi') !!}
+	<div class="clearfix">&nbsp;</div>
 	<a href="#" data-toggle="modal" data-target="#konfirmasi_permohonan_restitusi" class="btn btn-primary text-right">Ajukan</a>
 	@include('v2.kredit.modal.konfirmasi_permohonan_resitusi')
 {!! Form::close() !!}	
