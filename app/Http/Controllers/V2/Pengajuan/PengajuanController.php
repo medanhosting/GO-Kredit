@@ -81,7 +81,12 @@ class PengajuanController extends Controller
 				if(!array_intersect([$arguments[0], 'operasional'], $this->scopes['scopes'])){
 					$arguments[1]	= null;
 					$arguments[2]	= true;
+
 					return call_user_func_array([$this, str_replace('middleware_', '', $name)], $arguments);
+				}
+				
+				if(in_array($arguments[0], ['survei', 'analisa']) && !in_array('operasional', $this->scopes['scopes'])){
+					request()->merge(['karyawan_'.$arguments[0] => $this->me['nip']]);
 				}
 			}
 
@@ -111,6 +116,10 @@ class PengajuanController extends Controller
 					view()->share('is_permohonan_tab', 'active show');
 					break;
 			}			
+		}elseif(in_array('survei', $this->scopes['scopes'])){
+			view()->share('is_survei_tab', 'active show');
+		}elseif(in_array('analisa', $this->scopes['scopes'])){
+			view()->share('is_analisa_tab', 'active show');
 		}else{
 			view()->share('is_permohonan_tab', 'active show');
 		}
@@ -217,21 +226,11 @@ class PengajuanController extends Controller
 				$returned 	= $this->middleware_assign_komite_putusan($permohonan);
 			}elseif(str_is($permohonan->status_terakhir->status, 'putusan')){
 				$returned 	= $this->middleware_assign_realisasi($permohonan);
-
-				if($returned instanceof Model){
-					\DB::commit();
-
-					if(str_is($returned->status, 'setuju')){
-						return redirect()->route('putusan.show', ['id' => $returned['pengajuan_id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
-					}
-
-					return redirect()->route('putusan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id'), 'current' => $returned->status]);
-				}
 			}
 
 			if($returned instanceof Model){
 				\DB::commit();
-				return redirect()->route('pengajuan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+				return redirect()->route('pengajuan.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id'), 'current' => $permohonan->status_terakhir->status]);
 			}
 
 			\DB::rollback();

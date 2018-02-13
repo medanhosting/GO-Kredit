@@ -12,6 +12,8 @@ use Thunderlabid\Kredit\Models\SuratPeringatan;
 use App\Service\Traits\IDRTrait;
 use App\Service\Traits\WaktuTrait;
 
+use App\Exceptions\AppException;
+
 use App\Service\System\Calculator;
 
 use Carbon\Carbon;

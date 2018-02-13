@@ -47,77 +47,79 @@
 			</div>
 			<div class="row">
 				@foreach ($akun as $k => $v)
-					@if (strtolower($v['akun']) == strtolower($type))
-						<div class="col-6">
-							<p class="mb-1"><strong>JURNAL {{ strtoupper($v['akun']) }} MASUK</strong></p>
-							<table class="table table-bordered">
-								<thead class="thead-light">
+					<div class="col-6">
+						<p class="mb-1"><strong>JURNAL {{ strtoupper($v['akun']) }} MASUK</strong></p>
+						<table class="table table-bordered">
+							<thead class="thead-light">
+								<tr>
+									<th>Perkiraan</th>
+									<th>Uraian</th>
+									<th class="text-right">Jumlah</th>
+								</tr>
+							</thead>
+							<tbody>
+								@php $total = 0 @endphp
+								@foreach ($v['subakun'] as $k2 => $v2)
 									<tr>
-										<th>Perkiraan</th>
-										<th>Uraian</th>
-										<th class="text-right">Jumlah</th>
+										<td>{{ $v2['nomor_perkiraan'] }}</td>
+										<td>{{ $v2['akun'] }}</td>
+										@php 
+											$subtotal 	= array_sum(array_column($v2['detailsin']->toArray(), 'amount'));
+											$total 		= $total + $subtotal
+										@endphp
+										<td class="text-right">{{ $idr->formatMoneyTo($subtotal) }}</td>
 									</tr>
-								</thead>
-								<tbody>
-									@foreach ($v['subakun'] as $k2 => $v2)
-										<tr>
-											<td>{{ $v2['nomor_perkiraan'] }}</td>
-											<td>{{ $v2['akun'] }}</td>
-											@php 
-												$total 	= array_sum(array_column($v2['detailsin']->toArray(), 'jumlah'));
-											@endphp
-											<td class="text-right">{{ $idr->formatMoneyTo($total) }}</td>
-										</tr>
-									@endforeach
+								@endforeach
+								<tr>
+									<td colspan="2">Total</td>
+									<td class="text-right" style="background-color: #ddd;">{{ $idr->formatMoneyTo($total) }}</td>
+								</tr>
+								<tr>
+									<td colspan="3">{{ ucwords($idr->terbilang($total)) }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-6">
+						<p class="mb-1"><strong>JURNAL {{ strtoupper($v['akun']) }} KELUAR</strong></p>
+						<table class="table table-bordered">
+							<thead class="thead-light">
+								<tr>
+									<th>Perkiraan</th>
+									<th>Uraian</th>
+									<th class="text-right">Jumlah</th>
+								</tr>
+							</thead>
+							<tbody>
+								@php $total = 0 @endphp
+								@foreach ($v['subakun'] as $k2 => $v2)
 									<tr>
-										<td colspan="2">Total</td>
-										<td class="text-right" style="background-color: #ddd;">{{ $idr->formatMoneyTo($total) }}</td>
+										<td>{{ $v2['nomor_perkiraan'] }}</td>
+										<td>{{ $v2['akun'] }}</td>
+										@php 
+											$subtotal 	= abs(array_sum(array_column($v2['detailsout']->toArray(), 'amount')));
+											$total 		= $total + $subtotal
+										@endphp
+										<td class="text-right">{{ $idr->formatMoneyTo($subtotal) }}</td>
 									</tr>
-									<tr>
-										<td colspan="3">{{ $idr->terbilang($total) }}</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col-6">
-							<p class="mb-1"><strong>JURNAL {{ strtoupper($v['akun']) }} KELUAR</strong></p>
-							<table class="table table-bordered">
-								<thead class="thead-light">
-									<tr>
-										<th>Perkiraan</th>
-										<th>Uraian</th>
-										<th class="text-right">Jumlah</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach ($v['subakun'] as $k2 => $v2)
-										<tr>
-											<td>{{ $v2['nomor_perkiraan'] }}</td>
-											<td>{{ $v2['akun'] }}</td>
-											@php 
-												$total 	= array_sum(array_column($v2['detailsin']->toArray(), 'jumlah'));
-											@endphp
-											<td class="text-right">{{ $idr->formatMoneyTo($total) }}</td>
-										</tr>
-									@endforeach
-									<tr>
-										<td colspan="2">Total</td>
-										<td class="text-right" style="background-color: #ddd;">{{ $idr->formatMoneyTo($total) }}</td>
-									</tr>
-									<tr>
-										<td colspan="3">{{ $idr->terbilang($total) }}</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					@endif
+								@endforeach
+								<tr>
+									<td colspan="2">Total</td>
+									<td class="text-right" style="background-color: #ddd;">{{ $idr->formatMoneyTo($total) }}</td>
+								</tr>
+								<tr>
+									<td colspan="3">{{ ucwords($idr->terbilang($total)) }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				@endforeach
 			</div>
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-6">
-					<p class="mb-1"><strong>Nama Bank - gak tau variablenya</strong></p>
-					<p>alamat bank - gak tau variablenya</p>
+					<p class="mb-1"><strong>{{$kantor_aktif['nama']}}</strong></p>
+					<p>{{implode(' ', $kantor_aktif['alamat'])}}</p>
 				</div>
 				<div class="col-6 text-right">
 					<ul class="list-inline">

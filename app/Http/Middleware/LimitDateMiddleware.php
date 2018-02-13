@@ -70,7 +70,7 @@ class LimitDateMiddleware
 			}
 			elseif($diff > 0 && $diff <= 3){
 				if(!array_intersect($wewenang_3d, $scopes)){
-					throw new Exception("Tidak dapat entry data lebih dari 3 hari lalu!", 1);
+					throw new Exception("Tidak dapat entry data lebih dari ".$diff." hari lalu!", 1);
 				}
 			}
 			elseif($diff > 3){

@@ -34,33 +34,36 @@ class SimpanStatusDoingPutusan
 	public function handle($event)
 	{
 		$model = $event->data;
-		
-		if(Auth::check())
-		{
-			$karyawan 	= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
+
+		if(str_is($model->pengajuan->status_terakhir->status, 'putusan')){
+			if(Auth::check())
+			{
+				$karyawan 	= ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']];
+			}
+			else
+			{
+				$karyawan 	= $model->pembuat_keputusan;
+			}
+
+			$mulai_putusan 		= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->startofday()->format('Y-m-d H:i:s');
+			$selesai_putusan 	= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->endofday()->format('Y-m-d H:i:s');
+
+			$status_last 	= Status::where('status', 'putusan')->where('progress', 'sedang')->where('pengajuan_id', $model->pengajuan_id)->where('karyawan->nip', $karyawan['nip'])->orderby('tanggal', 'desc')->first();
+			
+			$data 			= [
+				'tanggal'		=> $model->tanggal,
+				'status'		=> 'putusan',
+				'progress'		=> 'sedang',
+				'karyawan'		=> $karyawan,
+				'pengajuan_id'	=> $model->pengajuan_id,
+			];
+
+			if($status_last){
+				$status 		= $status_last->update($data);
+			}else{
+				$status 		= Status::create($data);
+			}
 		}
-		else
-		{
-			$karyawan 	= $model->pembuat_keputusan;
-		}
 
-		$mulai_putusan 		= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->startofday()->format('Y-m-d H:i:s');
-		$selesai_putusan 	= Carbon::createFromFormat('d/m/Y H:i', $model->tanggal)->endofday()->format('Y-m-d H:i:s');
-
-		$status_last 	= Status::where('status', 'putusan')->where('progress', 'sedang')->where('pengajuan_id', $model->pengajuan_id)->where('karyawan->nip', $karyawan['nip'])->orderby('tanggal', 'desc')->first();
-
-		$data 			= [
-			'tanggal'		=> $model->tanggal,
-			'status'		=> 'putusan',
-			'progress'		=> 'sedang',
-			'karyawan'		=> $karyawan,
-			'pengajuan_id'	=> $model->pengajuan_id,
-		];
-
-		if($status_last){
-			$status 		= $status_last->update($data);
-		}else{
-			$status 		= Status::create($data);
-		}
 	}
 }

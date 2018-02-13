@@ -2,7 +2,7 @@
 @push('main')
 	<div class="row justify-content-center">
 		<div class="col-auto px-5 pt-2">
-			<h5 class="h5 mx-5 px-5 d-flex text-center"><i class="fa fa-line-chart mr-2"></i> Keuangan</h5>
+			<h5 class="h5 mx-5 px-5 d-flex text-center"><i class="fa fa-line-chart mr-2"></i> KEUANGAN</h5>
 			<hr>
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 										<div class="col-12">
 											<ul class="nav justify-content-end">
 												<li class="nav-item">
-													<a href="{{ route('jurnal.print', ['type' => strtolower($v['akun']), 'kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success nav-link text-uppercase">
+													<a href="{{ route('jurnal.print', ['id' => strtolower($v['id']), 'kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success nav-link text-uppercase">
 														<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK JURNAL {{ $v['akun'] }}
 													</a>
 												</li>

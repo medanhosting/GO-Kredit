@@ -14,6 +14,8 @@ use App\Service\Traits\IDRTrait;
 
 use Carbon\Carbon, Exception;
 
+use App\Http\Middleware\LimitOneMillionMiddleware;
+
 class BayarDenda
 {
 	use IDRTrait;
@@ -48,6 +50,10 @@ class BayarDenda
 
 	public function validasi_restitusi($is_approved){
 		$pr 				= PermintaanRestitusi::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('is_approved')->first();
+
+		request()->merge(['jumlah' => $pr->jumlah]);
+
+		LimitOneMillionMiddleware::check(implode('|', $this->scopes['scopes']), 'restitusi');
 
 		if($is_approved * 1){
 			$nominal 	= $this->formatMoneyTo(0 - $this->formatMoneyFrom($pr->jumlah));

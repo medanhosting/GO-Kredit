@@ -30,9 +30,9 @@ class JurnalController extends Controller
 		return $this->layout;
 	}
 
-	public function print ($type)
+	public function print ($id)
 	{
-		$akun 		= COA::wherenull('akun_id')->where('kode_kantor', request()->get('kantor_aktif_id'))->with(['subakun', 'subakun.detailsin', 'subakun.detailsout'])->get();
+		$akun 		= COA::wherenull('coa_id')->where('id', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->with(['subakun', 'subakun.detailsin', 'subakun.detailsout'])->get();
 
 		view()->share('akun', $akun);
 		view()->share('type', $type);

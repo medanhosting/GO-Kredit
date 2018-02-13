@@ -98,9 +98,10 @@ Class Calculator {
 
 	public function restitusi3DBefore($nk, Carbon $tanggal)
 	{
-		$aktif 		= Aktif::where('nomor_kredit', $nk)->first();
-		$piutang 	= Calculator::piutangBefore($nk, $tanggal);
+		$aktif		= Aktif::where('nomor_kredit', $nk)->first();
+		// $denda 		= Calculator::dendaBefore($nk, $tanggal);
+		$angs_r 	= JadwalAngsuran::where('nomor_kredit', $nk)->where('nth', '<', 2)->sum('jumlah');
 
-		return $piutang * ($aktif['persentasi_denda']/100) * 3;
+		return $angs_r * ($aktif['persentasi_denda']/100) * 3;
 	}
 }

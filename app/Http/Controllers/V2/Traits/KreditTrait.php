@@ -30,6 +30,7 @@ trait KreditTrait {
 
  	public function store_validasi_restitusi($aktif){
 		$denda 		= new BayarDenda($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'));
+		$denda->scopes 	= $this->scopes;
 		$denda->validasi_restitusi(request()->get('is_approved'));
  	}
 

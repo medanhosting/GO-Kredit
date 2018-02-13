@@ -71,7 +71,6 @@ trait PutusanTrait {
 				$data_input['checklists']['pengikat'][$k]	= 'cadangkan';
 			}
 		}
-
 		$putusan->fill($data_input);
 		$putusan->save();
 	}

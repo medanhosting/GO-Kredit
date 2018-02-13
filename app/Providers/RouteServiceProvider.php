@@ -87,7 +87,9 @@ class RouteServiceProvider extends ServiceProvider
 			'pengajuan.putusan.setuju.setoran'		=> ['operasional', 'pencairan'], 
 
 			'kredit.kredit.aktif.angsuran'		=> ['operasional', 'angsuran'], 
-			'kredit.kredit.aktif.denda'			=> ['operasional', 'denda'], 
+			'kredit.kredit.aktif.denda'			=> ['operasional', 'denda', 'restitusi', 'validasi'], 
+			'kredit.kredit.aktif.denda.bayar'		=> ['denda'], 
+			'kredit.kredit.aktif.denda.restitusi'	=> ['restitusi', 'validasi'], 
 			'kredit.kredit.aktif.tagihan'		=> ['operasional', 'tagihan'], 
 			'kredit.kredit.aktif.jaminan'		=> ['operasional', 'jaminan'], 
 		];

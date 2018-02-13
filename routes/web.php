@@ -63,7 +63,7 @@
 				Route::resource('jurnal',		'JurnalController'); 
 				Route::get('kasir/lkh',			['uses' => 'KasirController@lkh',			'as' => 'kasir.lkh']);
 
-				Route::get('jurnal/{type}/print',	['uses' => 'JurnalController@print',	'as' => 'jurnal.print']);
+				Route::get('jurnal/{id}/print',	['uses' => 'JurnalController@print',	'as' => 'jurnal.print']);
 				Route::get('kasir/print/lkh',		['uses' => 'KasirController@print',		'as' => 'kasir.print']);
 			});
 			

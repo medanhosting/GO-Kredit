@@ -1,7 +1,7 @@
 @inject('carbon', 'Carbon\Carbon')
 
 <div class="row">
-	<div class="col-6">
+	<div class="col-4">
 		@component('bootstrap.card')
 			@slot('title') 
 				<h4 class='text-center text-style'>
@@ -14,7 +14,8 @@
 			@endslot
 		@endcomponent
 	</div>
-	<div class="col-6">
+	@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.restitusi'], $scopes->scopes))
+	<div class="col-4">
 		@component('bootstrap.card')
 			@slot('title') 
 				<h4 class='text-center text-style'>
@@ -31,6 +32,7 @@
 			@endslot
 		@endcomponent
 	</div>
+	@endif
 </div>
 <div class="clearfix">&nbsp;</div>
 <div class="clearfix">&nbsp;</div>
@@ -90,25 +92,52 @@
 		@component('bootstrap.card')
 			<div class="card-header bg-light p-0">
 				<ul class="nav nav-tabs underline" role="tablist">
+					@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.bayar'], $scopes->scopes))
 					<li class="nav-item">
 						<a class="nav-link px-4 {{$is_bayar_denda_tab}}" data-toggle="tab" href="#bayar_d" role="tab">
-							BAYAR
+							<h7 class="text-left p-2 mb-0">
+								<strong>BAYAR</strong>
+							</h7>
 						</a>
 					</li>
+					@else
 					<li class="nav-item">
-						<a class="nav-link px-4 py-2 {{ $is_restitusi_tab }}" href="#restitusi" role="tab" data-toggle="tab">
-							<h5 class="my-1">RESTITUSI</h5>
+						<a class="nav-link disabled">
+							<h7 class="text-left p-2 mb-0">
+								<strong>BAYAR</strong>
+							</h7>
 						</a>
 					</li>
+					@endif
+					@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.restitusi'], $scopes->scopes))
+					<li class="nav-item">
+						<a class="nav-link px-4 {{ $is_restitusi_tab }}" href="#restitusi" role="tab" data-toggle="tab">
+							<h7 class="text-left p-2 mb-0">
+								<strong>RESTITUSI</strong>
+							</h7>
+						</a>
+					</li>
+					@else
+					<li class="nav-item">
+						<a class="nav-link disabled">
+							<h7 class="text-left p-2 mb-0">
+								<strong>RESTITUSI</strong>
+							</h7>
+						</a>
+					</li>
+					@endif
 				</ul>
 			</div>
 			<div class='card-body'>
 				<!-- Tab panes -->
 				<div class="tab-content">
 					<!-- tab bayar_d -->
+					@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.bayar'], $scopes->scopes))
 					<div class="tab-pane p-2 {{$is_bayar_denda_tab}}" id="bayar_d" role="tabpanel">
 						@include('v2.kredit.show.bayar_denda')
 					</div>
+					@endif
+					@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.restitusi'], $scopes->scopes))
 					<!-- tab restitusi -->
 					<div class="tab-pane p-2 {{$is_restitusi_tab}}" id="restitusi" role="tabpanel">
 						@if($restitusi)
@@ -117,6 +146,7 @@
 							 @include('v2.kredit.show.permohonan_restitusi')  
 						@endif
 					</div>
+					@endif
 				</div>
 			</div>
 		@endcomponent

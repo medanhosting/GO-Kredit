@@ -154,10 +154,10 @@ class Pengajuan extends Model
 			 ->leftJoin(DB::raw('p_status as p_status_now'), function ($join) use($variable) 
 			 {
 									$join->on ( 'p_status_now.pengajuan_id', '=', 'p_pengajuan.id' )
-									->on ( 'p_status.tanggal', '<', 'p_status_now.tanggal' )
+									->on ( 'p_status.created_at', '<', 'p_status_now.created_at' )
 									->wherenull('p_status_now.deleted_at')
 									;
-			})->wherenull('p_status_now.tanggal')->groupby('p_pengajuan.id');
+			})->wherenull('p_status_now.created_at')->groupby('p_pengajuan.id');
 		}
 
 		return $query
@@ -171,10 +171,10 @@ class Pengajuan extends Model
 		 ->leftJoin(DB::raw('p_status as p_status_now'), function ($join) use($variable) 
 		 {
 								$join->on ( 'p_status_now.pengajuan_id', '=', 'p_pengajuan.id' )
-								->on ( 'p_status.tanggal', '<', 'p_status_now.tanggal' )
+								->on ( 'p_status.created_at', '<', 'p_status_now.created_at' )
 								->wherenull('p_status_now.deleted_at')
 								;
-		})->wherenull('p_status_now.tanggal')->groupby('p_pengajuan.id');
+		})->wherenull('p_status_now.created_at')->groupby('p_pengajuan.id');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

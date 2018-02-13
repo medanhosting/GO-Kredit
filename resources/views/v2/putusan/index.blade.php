@@ -37,7 +37,7 @@
 								@else
 								<li class="nav-item ">
 									<a class="nav-link disabled">
-										Setuju
+										Tolak
 									</a>
 								</li>
 								@endif

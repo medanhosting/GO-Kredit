@@ -25,6 +25,15 @@ class KasController extends Controller
 		parent::__construct();
 	}
 
+	public function index() 
+	{
+		view()->share('active_submenu', 'kas');
+		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+
+		$this->layout->pages 	= view('v2.finance.kas.index');
+		return $this->layout;
+	}
+
 	public function penerimaan() 
 	{
 		$angsuran 	= NotaBayar::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('nomor_perkiraan', 'like', '100.%');

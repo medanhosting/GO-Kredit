@@ -24,7 +24,7 @@ use Thunderlabid\Survei\Events\SurveiDetail\SurveiDetailUpdated;
 
 use Thunderlabid\Survei\Traits\TanggalTrait;
 use Thunderlabid\Survei\Traits\WaktuTrait;
-use Thunderlabid\Survei\Traits\IDRTrait;
+use App\Service\Traits\IDRTrait;
 
 class SurveiDetail extends Model
 {

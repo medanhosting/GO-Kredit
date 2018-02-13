@@ -17,7 +17,7 @@
 				<label for="resitusi_3_hari" class="form-check-label">Restitusi 3 Hari</label>
 			</div>
 			<div class="form-check form-check-inline">
-				{!! Form::radio('jenis', 'restitusi_nominal', true, ['class' => 'form-check-input select-jenis-restitusi ml-0', 'id' => 'restitusi_nominal']) !!}
+				{!! Form::radio('jenis', 'restitusi_nominal', false, ['class' => 'form-check-input select-jenis-restitusi ml-0', 'id' => 'restitusi_nominal']) !!}
 				<label for="restitusi_nominal" class="form-check-label">Restitusi Nominal</label>
 			</div>
 		</div>

@@ -24,6 +24,8 @@ use App\Http\Controllers\V2\Traits\KreditTrait;
 use App\Http\Service\Policy\BayarDenda;
 
 use App\Http\Middleware\ScopeMiddleware;
+use App\Http\Middleware\LimitDateMiddleware;
+use App\Http\Middleware\LimitOneMillionMiddleware;
 use App\Http\Middleware\RequiredPasswordMiddleware;
 
 use App\Service\System\Calculator;
@@ -39,8 +41,6 @@ class KreditController extends Controller
 		parent::__construct();
 
 		$this->middleware('scope:'.implode('|', $this->acl_menu['kredit.kredit']))->only(['index', 'show']);
-		
-		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store']);
 	}
 
 	public function __call($name, $arguments)
@@ -48,14 +48,22 @@ class KreditController extends Controller
 		if(str_is('*middleware_*', $name)){
 			if(in_array($name, ['middleware_store_angsuran', 'middleware_store_denda', 'middleware_store_bayar_sebagian'])){
 				ScopeMiddleware::check('angsuran');
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']), 'angsuran');
 			}
 			if(in_array($name, ['middleware_store_tagihan', 'middleware_penerimaan_titipan_tagihan'])){
-				ScopeMiddleware::check('penagihan');
+				ScopeMiddleware::check('tagihan');
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']), 'tagihan');
 			}
-			if(in_array($name, ['middleware_store_permintaan_restitusi', 'middleware_store_validasi_restitusi'])){
+			if(in_array($name, ['middleware_store_permintaan_restitusi'])){
 				ScopeMiddleware::check('restitusi');
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']), 'restitusi');
 			}
-			// RequiredPasswordMiddleware::check();
+			if(in_array($name, ['middleware_store_validasi_restitusi'])){
+				ScopeMiddleware::check('validasi');
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']));
+				LimitOneMillionMiddleware::check(implode('|', $this->scopes['scopes']), 'restitusi');
+			}
+			RequiredPasswordMiddleware::check();
 			
 			return call_user_func_array([$this, str_replace('middleware_', '', $name)], $arguments);
 		}
@@ -178,7 +186,7 @@ class KreditController extends Controller
 		}
 
 		//c. restitusi 3d 
-		$r3d 		= Calculator::restitusi3DBefore($aktif['nomor_kredit'], $tomorrow);
+		$r3d 		= Calculator::restitusi3DBefore($aktif['nomor_kredit'], $today);
 
 		//d. bukti denda
 		$denda 	= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['denda', 'restitusi_denda'])->selectraw('*')->selectraw('abs(jumlah) as jumlah')->get();
@@ -214,6 +222,11 @@ class KreditController extends Controller
 					view()->share('is_angsuran_tab', 'show active');
 					break;
 			}
+		}elseif(in_array('tagihan', $this->scopes['scopes'])){
+			view()->share('is_penagihan_tab', 'show active');
+		}elseif(in_array('restitusi', $this->scopes['scopes'])){
+			view()->share('is_denda_tab', 'show active');
+			view()->share('is_restitusi_tab', 'show active');
 		}else{
 			view()->share('is_angsuran_tab', 'show active');
 		}
@@ -248,32 +261,39 @@ class KreditController extends Controller
 			DB::BeginTransaction();
 			switch (request()->get('current')) {
 				case 'tagihan':
+					$current = 'tagihan';
 					$this->middleware_store_tagihan($aktif);
 					break;
 				case 'penerimaan_titipan_tagihan':
+					$current = 'tagihan';
 					$this->middleware_penerimaan_titipan_tagihan($aktif);
 					break;
 				case 'part':
+					$current = 'angsuran';
 					$this->middleware_store_bayar_sebagian($aktif);
 					break;
 				case 'permintaan_restitusi':
+					$current = 'denda';
 					$this->middleware_store_permintaan_restitusi($aktif);
 					break;
 				case 'validasi_restitusi':
+					$current = 'denda';
 					$this->middleware_store_validasi_restitusi($aktif);
 					break;
 				case 'denda':
+					$current = 'denda';
 					$this->middleware_store_denda($aktif);
 					break;
 				default:
+					$current = 'angsuran';
 					$this->middleware_store_angsuran($aktif);
 					break;
 			}
 			DB::commit();
-			return redirect()->back();
+			return redirect()->route('kredit.show', ['id' => $id, 'current' => $current, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]);
 		} catch (Exception $e) {
 			DB::rollback();
-			return redirect()->back()->withErrors($e->getMessage());
+			return redirect()->route('kredit.show', ['id' => $id, 'current' => $current, 'kantor_aktif_id' => request()->get('kantor_aktif_id')])->withErrors($e->getMessage());
 		}
 	}
 

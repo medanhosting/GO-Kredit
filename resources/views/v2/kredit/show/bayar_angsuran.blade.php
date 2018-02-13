@@ -95,13 +95,6 @@
 			</div>
 		@endslot
 	@endcomponent
-
-	@include('v2.kredit.modal.nota_angsuran', [
-				'kredit_aktif' 	=> $aktif,
-				'kantor_aktif'	=> $kantor_aktif,
-				'angsuran'		=> $angsuran,
-				'tanggal_now'	=> $carbon->now()->format('d/m/Y H:i'),
-			])
 			
 	@include('v2.kredit.modal.konfirmasi_angsuran')
 

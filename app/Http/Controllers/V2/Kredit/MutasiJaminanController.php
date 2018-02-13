@@ -18,8 +18,9 @@ class MutasiJaminanController extends Controller
 		$this->middleware('scope:'.implode('|', $this->acl_menu['kredit.jaminan']))->only(['index']);
 
 		$this->middleware('scope:jaminan')->only(['update', 'store']);
-		$this->middleware('required_password')->only(['update', 'store']);
-		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store']);
+		$this->middleware('scope:validasi')->only(['validasi']);
+		$this->middleware('required_password')->only(['update', 'store', 'validasi']);
+		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store', 'validasi']);
 	}
 
 	public function index () 
@@ -95,7 +96,7 @@ class MutasiJaminanController extends Controller
 			//simpan jaminan 
 			$jj 		= new MutasiJaminan;
 			$jj->nomor_jaminan	= $jaminan->nomor_jaminan;
-			$jj->tanggal		= $data['tanggal']. ' '.Carbon::now()->format('H:i');
+			$jj->tanggal		= $data['tanggal'];
 			$jj->tag 			= $tag;
 			$jj->status			= $status;
 			$jj->deskripsi		= $data['deskripsi'];
@@ -106,7 +107,6 @@ class MutasiJaminanController extends Controller
 			DB::commit();
 			return redirect()->back();
 		} catch (Exception $e) {
-			dd($e);
 			DB::rollback();
 			return redirect()->back()->withErrors($e->getMessage());
 		}

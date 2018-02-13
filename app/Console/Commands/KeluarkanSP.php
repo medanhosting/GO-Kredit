@@ -18,7 +18,7 @@ class KeluarkanSP extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'gokredit:terbitkansp {--nomor=}';
+	protected $signature = 'gokredit:terbitkansp {--nomor=} {--tanggal=}';
 
 	/**
 	 * The console command description.
@@ -56,7 +56,12 @@ class KeluarkanSP extends Command
 	public function terbitkan_sp()
 	{
 		//checkdays
-		$limit 		= Carbon::now()->subDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->endofday();
+		$limit 		= Carbon::now()->startOfDay();
+
+		if(!is_null($this->option('tanggal'))){
+			$limit 	= Carbon::createFromFormat('d/m/Y', $this->option('tanggal'))->startOfDay();
+		}
+
 		$angsuran 	= JadwalAngsuran::HitungTunggakanBeberapaWaktuLalu($limit)->selectraw('count(nth) as total_tunggakan');
 
 		if(!is_null($this->option('nomor'))){

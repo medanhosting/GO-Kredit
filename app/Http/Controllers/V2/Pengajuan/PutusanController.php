@@ -29,6 +29,7 @@ use App\Http\Service\Policy\PerhitunganBunga;
 use Exception, Auth, DB, Carbon\Carbon, Config;
 
 use App\Http\Middleware\ScopeMiddleware;
+use App\Http\Middleware\LimitDateMiddleware;
 use App\Http\Middleware\RequiredPasswordMiddleware;
 
 class PutusanController extends Controller
@@ -43,8 +44,6 @@ class PutusanController extends Controller
 		parent::__construct();
 
 		$this->middleware('scope:'.implode('|', $this->acl_menu['pengajuan.putusan']))->only(['index', 'show']);
-
-		$this->middleware('limit_date:'.implode('|', $this->scopes['scopes']))->only(['update', 'store']);
 	}
 
 
@@ -58,6 +57,7 @@ class PutusanController extends Controller
 				ScopeMiddleware::check('pencairan');
 			}
 			if(in_array($name, ['middleware_validasi_checklists', 'middleware_store_setoran_realisasi', 'middleware_store_realisasi'])){
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']));
 				RequiredPasswordMiddleware::check();
 			}
 			
@@ -138,6 +138,8 @@ class PutusanController extends Controller
 						view()->share('is_active_realisasi', 'active show');
 						break;
 				}			
+			}elseif(!in_array('realisasi', $this->scopes['scopes'])){
+				view()->share('is_active_pencairan', 'active show');
 			}else{
 				$this->checker_realisasi($putusan['checklists']);
 				view()->share('is_active_realisasi', 'active show');
@@ -158,7 +160,6 @@ class PutusanController extends Controller
 		try {
 			DB::beginTransaction();
 			$putusan					= Putusan::where('pengajuan_id', $id)->wherehas('pengajuan', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->orderby('tanggal', 'desc')->first();
-
 			if(request()->has('checklists')){
 				$this->middleware_store_checklists($putusan);
 			}

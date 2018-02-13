@@ -82,7 +82,7 @@
 	@slot ('body')
 		<p>Untuk validasi jaminan harap lengkapi data berikut!</p>
 
-		{!! Form::bsText('Tanggal', 'tanggal', null, ['placeholder' => '13/11/2017', 'class' => 'mask-date form-control w-50']) !!}
+		{!! Form::bsText('Tanggal', 'tanggal', $today->format('d/m/Y'), ['placeholder' => '13/11/2017', 'class' => 'mask-date form-control w-50']) !!}
 
 		{!! Form::bsPassword('password', 'password', ['placeholder' => 'Password']) !!}
 
@@ -103,7 +103,7 @@
 		<p>Untuk update jaminan harap lengkapi data berikut!</p>
 
 		<div class="form-group">
-			{!! Form::bsText('Tanggal', 'tanggal', null, ['placeholder' => '13/11/2017', 'class' => 'mask-date form-control w-50']) !!}
+			{!! Form::bsText('Tanggal', 'tanggal', $today->format('d/m/Y'), ['placeholder' => '13/11/2017', 'class' => 'mask-date form-control w-50']) !!}
 
 			{!! Form::bsTextarea('Catatan', 'deskripsi', null, ['placeholder' => 'Perpanjangan STNK']) !!}
 		</div>
@@ -126,7 +126,7 @@
 		$('#update-jaminan').find('.modal-title').html($(this).attr("data-title"));
 	}
 	$('.modal#konfirmasi_ubah_jaminan').on('show.bs.modal', function(e){
-		//$('.modal#update-jaminan').modal('hide');
+		$('.modal#update-jaminan').modal('hide');
 	});
 
 	$("a.validasi_jaminan").on("click", parsingDataAttributeValidasiJaminan);

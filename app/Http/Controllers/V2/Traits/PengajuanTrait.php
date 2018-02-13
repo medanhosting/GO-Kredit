@@ -80,6 +80,11 @@ trait PengajuanTrait {
 			}
 		}
 
+		if (request()->has('karyawan_'.$status))
+		{
+			$result	= $result->where('p_status.karyawan->nip', request()->get('karyawan_'.$status));
+		}
+
 		if (request()->has('sort_'.$status)){
 			$sort	= request()->get('sort_'.$status);
 			switch (strtolower($sort)) {
@@ -228,7 +233,6 @@ trait PengajuanTrait {
 
 			return $permohonan;
 		} catch (Exception $e) {
-
 			foreach ($e->getMessage()->toarray() as $k => $v) {
 				$exp 	= explode('.', $k);
 

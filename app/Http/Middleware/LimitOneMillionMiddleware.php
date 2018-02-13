@@ -7,7 +7,7 @@ use Carbon\Carbon, Exception;
 
 use App\Service\Traits\IDRTrait;
 
-class LimitAmountMiddleware
+class LimitOneMillionMiddleware
 {
 	use IDRTrait;
 
@@ -19,12 +19,12 @@ class LimitAmountMiddleware
 
 			$jumlah = $this->formatMoneyFrom(request()->get('jumlah'));
 
-			$wewenang_min 	= [$scope.'.nominatif_lte_10000000', '*.nominatif_lte_10000000', '*.nominatif_lte_1000000', $scope.'.nominatif_unlimitted', '*.nominatif_unlimitted'];
-			$wewenang_max 	= [$scope.'.nominatif_gt_10000000', '*.nominatif_gt_10000000', '*.nominatif_lte_1000000', $scope.'.nominatif_unlimitted', '*.nominatif_unlimitted'];
+			$wewenang_min 	= [$scope.'.nominatif_lte_1000000', '*.nominatif_lte_1000000', $scope.'.nominatif_unlimitted', '*.nominatif_unlimitted'];
+			$wewenang_max 	= [$scope.'.nominatif_gt_1000000', '*.nominatif_gt_1000000', $scope.'.nominatif_unlimitted', '*.nominatif_unlimitted'];
 
 			//kalau jumlah hari ini
 			//1. Jika punya wewenang, lanjut
-			if($jumlah <= 10000000){
+			if($jumlah <= 1000000){
 				if(!array_intersect($wewenang_min, $scopes)){
 					return redirect()->back()->withErrors('Tidak memiliki wewenang untuk kredit kurang dari sama dengan '.request()->get('jumlah'));
 				}
@@ -47,12 +47,12 @@ class LimitAmountMiddleware
 
 			$jumlah = self::formatMoneyFrom(request()->get('jumlah'));
 
-			$wewenang_min 	= [$scope.'.nominatif_lte_10000000', '*.nominatif_lte_10000000', '*.nominatif_lte_1000000', $scope.'.nominatif_unlimitted', '*.nominatif_unlimitted'];
-			$wewenang_max 	= [$scope.'.nominatif_gt_10000000', '*.nominatif_gt_10000000', '*.nominatif_lte_1000000', $scope.'.nominatif_unlimitted', '*.nominatif_unlimitted'];
+			$wewenang_min 	= [$scope.'.nominatif_lte_1000000', '*.nominatif_lte_1000000', $scope.'.nominatif_unlimitted', '*.nominatif_unlimitted'];
+			$wewenang_max 	= [$scope.'.nominatif_gt_1000000', '*.nominatif_gt_1000000', $scope.'.nominatif_unlimitted', '*.nominatif_unlimitted'];
 
 			//kalau jumlah hari ini
 			//1. Jika punya wewenang, lanjut
-			if($jumlah <= 10000000){
+			if($jumlah <= 1000000){
 				if(!array_intersect($wewenang_min, $scopes)){
 					throw new Exception('Tidak memiliki wewenang untuk kredit kurang dari sama dengan '.request()->get('jumlah'), 1);
 				}
