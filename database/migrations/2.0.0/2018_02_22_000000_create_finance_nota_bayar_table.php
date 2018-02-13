@@ -26,7 +26,7 @@ class CreateFinanceNotaBayarTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'morph_reference_id', 'morph_reference_tag']);
+            $table->index(['deleted_at', 'morph_reference_id']);
             $table->index(['deleted_at', 'nomor_faktur', 'morph_reference_id']);
 		});
 	}
