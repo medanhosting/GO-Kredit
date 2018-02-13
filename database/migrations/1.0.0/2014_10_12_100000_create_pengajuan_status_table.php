@@ -24,7 +24,7 @@ class CreatePengajuanStatusTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 
-            $table->index(['deleted_at', 'pengajuan_id', 'status']);
+            $table->index(['deleted_at', 'pengajuan_id', 'tanggal', 'status']);
 		});
 	}
 

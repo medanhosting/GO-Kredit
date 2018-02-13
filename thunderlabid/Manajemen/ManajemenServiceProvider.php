@@ -33,6 +33,10 @@ class ManajemenServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Manajemen\Events\MobileApi\MobileApiCreating', 'Thunderlabid\Manajemen\Listeners\SavingMobileApi');
 		Event::listen('Thunderlabid\Manajemen\Events\MobileApi\MobileApiUpdating', 'Thunderlabid\Manajemen\Listeners\SavingMobileApi');
 		
+		Event::listen('Thunderlabid\Manajemen\Events\Audit\AuditCreating', 'Thunderlabid\Manajemen\Listeners\Saving');
+		Event::listen('Thunderlabid\Manajemen\Events\Audit\AuditUpdating', 'Thunderlabid\Manajemen\Listeners\Saving');
+		Event::listen('Thunderlabid\Manajemen\Events\Audit\AuditDeleting', 'Thunderlabid\Manajemen\Listeners\Deleting');
+		
 		//////////////////////
 		// Encrypt Password //
 		//////////////////////
@@ -52,6 +56,7 @@ class ManajemenServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Manajemen\Events\PenempatanKaryawan\PenempatanKaryawanUpdating', 'Thunderlabid\Manajemen\Listeners\AutoAssignNIP');
 
 		Event::listen('Thunderlabid\Manajemen\Events\Kantor\KantorCreated', 'Thunderlabid\Manajemen\Listeners\AutoAssignLoggedUser');
+
 	}
 
 	public function register()

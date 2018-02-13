@@ -33,8 +33,8 @@ class CreateKreditAktifTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'nomor_pengajuan']);
-            $table->index(['deleted_at', 'nomor_kredit']);
+            $table->index(['deleted_at', 'kode_kantor', 'nomor_pengajuan']);
+            $table->index(['deleted_at', 'kode_kantor', 'nomor_kredit']);
 		});
 	}
 

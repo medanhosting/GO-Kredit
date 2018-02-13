@@ -32,7 +32,7 @@ class CreatePutusanTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'pengajuan_id']);
+            $table->index(['deleted_at', 'pengajuan_id', 'tanggal']);
 		});
 	}
 

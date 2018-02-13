@@ -133,5 +133,6 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiCreated', 'App\Listeners\TandaiJaminanKeluar');
 		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiUpdated', 'App\Listeners\TandaiJaminanKeluar');
 
+		Event::listen(['eloquent.creating: *', 'eloquent.updating: *'], 'App\Listeners\Auditor');
 	}
 }

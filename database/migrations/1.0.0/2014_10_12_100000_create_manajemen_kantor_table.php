@@ -27,7 +27,7 @@ class CreateManajemenKantorTable extends Migration
 		
 			$table->primary('id');
 
-			$table->index(['deleted_at', 'nama']);
+			$table->index(['deleted_at', 'id', 'nama']);
 		});
 	}
 

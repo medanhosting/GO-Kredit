@@ -27,7 +27,7 @@ class CreatePengajuanTable extends Migration
 			
 			$table->primary('id');
 
-            $table->index(['deleted_at', 'kode_kantor']);
+            $table->index(['deleted_at', 'kode_kantor', 'pokok_pinjaman']);
 		});
 	}
 

@@ -4,7 +4,7 @@
 		<div class="col-auto px-5 pt-2">
 			<h1 class='h5 mx-5 px-5 d-flex text-center'>	
 				<h1 class="text-center m-0 p-0">Welcome</h1>
-				<h4 class="text-center mt-0 pt-0">GOKREDIT - ITERASI KREDIT [BETA-1.0.1]</h4>
+				<h4 class="text-center mt-0 pt-0">GOKREDIT - ITERASI KREDIT [BETA-2.0.0]</h4>
 			</h1>
 			<hr>
 		</div>

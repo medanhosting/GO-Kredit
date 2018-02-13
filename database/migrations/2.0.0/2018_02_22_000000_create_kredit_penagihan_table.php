@@ -26,7 +26,8 @@ class CreateKreditPenagihanTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'nomor_kredit']);
+            $table->index(['deleted_at', 'nomor_kredit', 'tanggal']);
+            $table->index(['deleted_at', 'nomor_kredit', 'nomor_faktur']);
 		});
 	}
 

@@ -24,7 +24,9 @@ class CreateFinanceJurnalTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 
-			$table->index(['deleted_at', 'detail_transaksi_id']);
+			$table->index(['deleted_at', 'tanggal', 'morph_reference_id']);
+			$table->index(['deleted_at', 'tanggal', 'coa_id']);
+			$table->index(['deleted_at', 'tanggal', 'detail_transaksi_id']);
 		});
 	}
 

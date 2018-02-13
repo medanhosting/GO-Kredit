@@ -25,7 +25,7 @@ class CreateKreditMutasiJaminanTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 			
-            $table->index(['deleted_at', 'nomor_jaminan']);
+            $table->index(['deleted_at', 'nomor_jaminan', 'tanggal']);
 		});
 	}
 

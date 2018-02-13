@@ -24,8 +24,8 @@ class CreateFinanceDetailTransaksiTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 
-			$table->index(['deleted_at', 'nomor_faktur']);
-			$table->index(['deleted_at', 'tag']);
+			$table->index(['deleted_at', 'nomor_faktur', 'tag']);
+			$table->index(['deleted_at', 'morph_reference_id', 'tag']);
 		});
 	}
 

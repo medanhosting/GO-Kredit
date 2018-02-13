@@ -118,7 +118,7 @@ trait PengajuanTrait {
 
 			if (is_null($permohonan['id']))
 			{
-				$data_input['is_mobile'] 						= false;
+				$data_input['is_mobile'] 						= 0;
 				$data_input['nasabah']['is_lama'] 				= false;
 				$data_input['dokumen_pelengkap']['permohonan'] 	= true;
 			}
@@ -131,7 +131,7 @@ trait PengajuanTrait {
 			{
 				$data_input['pokok_pinjaman'] 		= request()->get('pokok_pinjaman');
 				$data_input['kemampuan_angsur'] 	= request()->get('kemampuan_angsur');
-				$data_input['is_mobile'] 			= true;
+				$data_input['is_mobile'] 			= 1;
 			}
 
 			if(request()->has('nasabah'))

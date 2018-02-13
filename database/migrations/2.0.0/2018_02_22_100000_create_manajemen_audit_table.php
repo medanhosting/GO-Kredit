@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFinanceCOATable extends Migration
+class CreateManajemenAuditTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -13,18 +13,19 @@ class CreateFinanceCOATable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('f_coa', function (Blueprint $table) {
+		Schema::create('m_audit', function (Blueprint $table) {
 			$table->increments('id');
+			$table->datetime('tanggal');
 			$table->string('kode_kantor')->nullable();
-			$table->string('coa_id')->nullable();
-			$table->string('akun')->nullable();
-			$table->string('nomor_perkiraan')->nullable();
-			$table->string('mata_uang')->default('IDR');
+			$table->string('domain');
+			$table->text('data_lama');
+			$table->text('data_perubahan');
+			$table->text('data_baru');
+			$table->text('karyawan');
 			$table->timestamps();
 			$table->softDeletes();
-
-			$table->index(['deleted_at', 'kode_kantor', 'nomor_perkiraan']);
-			$table->index(['deleted_at', 'kode_kantor', 'coa_id']);
+			
+            $table->index(['deleted_at', 'tanggal', 'domain']);
 		});
 	}
 
@@ -35,6 +36,6 @@ class CreateFinanceCOATable extends Migration
 	 */
 	public function down()
 	{
-		Schema::dropIfExists('f_coa');
+		Schema::dropIfExists('m_audit');
 	}
 }
