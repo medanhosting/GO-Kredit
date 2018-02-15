@@ -31,8 +31,8 @@ class FinanceServiceProvider extends ServiceProvider
 		////////////////////////////////////////////////////
 		// Tidak boleh melakukan pembayaran setelah jam 3 //
 		////////////////////////////////////////////////////
-		Event::listen('Thunderlabid\Finance\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Finance\Listeners\NoPaymentAfter3PM');
-		Event::listen('Thunderlabid\Finance\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Finance\Listeners\NoPaymentAfter3PM');
+		// Event::listen('Thunderlabid\Finance\Events\NotaBayar\NotaBayarCreating', 'Thunderlabid\Finance\Listeners\NoPaymentAfter3PM');
+		// Event::listen('Thunderlabid\Finance\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Finance\Listeners\NoPaymentAfter3PM');
 	}
 
 	public function register()
