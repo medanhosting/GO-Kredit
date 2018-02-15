@@ -193,7 +193,7 @@ class SurveiTableSeeder extends Seeder
 			$survei['pengajuan_id'] = $value['id'];
 
 			$surveyor[0] 			= ['nip' => Orang::first()['nip'], 'nama' => Orang::first()['nama']];
-			$surveyor[1] 			= ['nip' => Orang::skip(1)->first()['nip'], 'nama' => Orang::skip(1)->first()['nama']];
+			$surveyor[1] 			= ['nip' => Orang::skip(2)->first()['nip'], 'nama' => Orang::skip(2)->first()['nama']];
 
 			$s_survei_c1['jenis']	= 'character';
 			$s_survei_c1['dokumen_survei']['character']['lingkungan_tinggal']	= $char_kenal[rand(0,2)];
