@@ -37,8 +37,8 @@ class AnalisaTableSeeder extends Seeder
 		foreach ($pengajuan as $key => $value) 
 		{
 			$data['pengajuan_id']	= $value['id'];
-			$data['analis']['nip']	= Orang::first()['nip'];
-			$data['analis']['nama']	= Orang::first()['nama'];
+			$data['analis']['nip']	= Orang::skip(2)->first()['nip'];
+			$data['analis']['nama']	= Orang::skip(2)->first()['nama'];
 			$data['tanggal']		= Carbon::now()->subdays(rand(110,119))->format('d/m/Y H:i');
 			$data['character']		= $hsl_survei[rand(0,4)];
 			$data['capacity']		= $hsl_survei[rand(0,4)];
