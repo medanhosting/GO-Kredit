@@ -115,6 +115,10 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiCreated', 'App\Listeners\AutoJurnal');
 		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiUpdated', 'App\Listeners\AutoJurnal');
 
+		//PENGAKUAN PENDAPATAN
+		Event::listen('Thunderlabid\Finance\Events\Jurnal\JurnalCreated', 'App\Listeners\JurnalPengakuanPendapatan');
+		Event::listen('Thunderlabid\Finance\Events\Jurnal\JurnalUpdated', 'App\Listeners\JurnalPengakuanPendapatan');
+
 		////////////////////////////////
 		// Otomatis Isi Tanggal Bayar //
 		////////////////////////////////

@@ -37,7 +37,7 @@ class Audit extends Model
 	protected $rules	= [];
 	protected $errors;
 
-	protected $dispatchesEvents = [
+	protected $events = [
         'created' 	=> AuditCreated::class,
         'creating' 	=> AuditCreating::class,
         'updated' 	=> AuditUpdated::class,

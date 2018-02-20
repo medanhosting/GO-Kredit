@@ -46,11 +46,11 @@ class KreditController extends Controller
 	public function __call($name, $arguments)
 	{
 		if(str_is('*middleware_*', $name)){
-			if(in_array($name, ['middleware_store_angsuran', 'middleware_store_denda', 'middleware_store_bayar_sebagian'])){
+			if(in_array($name, ['middleware_store_angsuran', 'middleware_store_denda', 'middleware_store_bayar_sebagian', 'middleware_penerimaan_kas_kolektor'])){
 				ScopeMiddleware::check('angsuran');
 				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']), 'angsuran');
 			}
-			if(in_array($name, ['middleware_store_tagihan', 'middleware_penerimaan_titipan_tagihan'])){
+			if(in_array($name, ['middleware_store_tagihan'])){
 				ScopeMiddleware::check('tagihan');
 				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']), 'tagihan');
 			}
@@ -166,11 +166,13 @@ class KreditController extends Controller
 		$stat['jumlah_titipan']		= floor($stat['total_titipan']/$stat['angsuran_bulanan']);
 
 		//d. Bukti Transaksi
-		$notabayar 	= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['angsuran', 'angsuran_sementara'])->get();
+		$notabayar 		= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['angsuran', 'angsuran_sementara'])->get();
 		
 		//e. NTH Angsuran
 		$sisa_angsuran 	= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->selectraw('jumlah as total')->orderby('nth', 'asc')->get();
 
+		//f. Bukti Transaksi kolektor
+		$kas_kolektor 	= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['kolektor'])->wheredoesnthave('child', function($q){$q;})->get();
 
 		//2. PANEL DENDA
 		//a. stat denda
@@ -239,6 +241,7 @@ class KreditController extends Controller
 		view()->share('angsuran', $angsuran);
 		view()->share('sisa_angsuran', $sisa_angsuran);
 		view()->share('notabayar', $notabayar);
+		view()->share('kas_kolektor', $kas_kolektor);
 		view()->share('titipan', $titipan);
 		view()->share('jaminan', $jaminan);
 		view()->share('suratperingatan', $suratperingatan);
@@ -261,12 +264,13 @@ class KreditController extends Controller
 			DB::BeginTransaction();
 			switch (request()->get('current')) {
 				case 'tagihan':
+				case 'kolektor':
 					$current = 'tagihan';
 					$this->middleware_store_tagihan($aktif);
 					break;
-				case 'penerimaan_titipan_tagihan':
-					$current = 'tagihan';
-					$this->middleware_penerimaan_titipan_tagihan($aktif);
+				case 'penerimaan_kas_kolektor':
+					$current = 'angsuran';
+					$this->middleware_penerimaan_kas_kolektor($aktif);
 					break;
 				case 'part':
 					$current = 'angsuran';

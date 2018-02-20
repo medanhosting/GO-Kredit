@@ -39,9 +39,9 @@ trait KreditTrait {
 		$feedback->bayar();
  	}
 
- 	public function penerimaan_titipan_tagihan($aktif){
- 		$feedback 	= new FeedBackPenagihan($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, null, null, Config::get('finance.nomor_perkiraan_titipan'), null);
-		$feedback->penerimaan_titipan_tagihan(request()->get('penagihan_id'));
+ 	public function penerimaan_kas_kolektor($aktif){
+ 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, request()->get('tanggal'), request()->get('nomor_perkiraan'));
+		$bayar->penerimaan_kas_kolektor(request()->get('nomor_faktur'));
  	}
 
  	public function store_angsuran($aktif){

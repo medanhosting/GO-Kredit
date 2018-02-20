@@ -50,7 +50,7 @@ class AutoJurnal
 			$this->setoran_pencairan($model, $kredit);
 		}
 		//memorial jurnal pagi
-		elseif(str_is($model->notabayar->jenis, 'memorial') && in_array($model->tag, ['pokok', 'bunga', 'denda'])){
+		elseif((str_is($model->notabayar->jenis, 'memorial_jurnal_pagi') || str_is($model->notabayar->jenis, 'memorial')) && in_array($model->tag, ['pokok', 'bunga', 'denda', 'restitusi_pokok', 'restitusi_bunga'])){
 			$this->memorial_jurnal_pagi($model, $kredit);
 		}
 		//angsuran sementara or memorial titipan
@@ -58,7 +58,7 @@ class AutoJurnal
 			$this->angsuran_sementara($model, $kredit);
 		}
 		//angsuran
-		elseif(str_is($model->notabayar->jenis, 'angsuran') && in_array($model->tag, ['pokok', 'bunga'])){
+		elseif(in_array($model->notabayar->jenis, ['angsuran', 'memorial_kolektor']) && in_array($model->tag, ['pokok', 'bunga'])){
 			$this->angsuran($model, $kredit);
 		}
 		//denda
@@ -85,10 +85,16 @@ class AutoJurnal
 		//2. check mode
 		if(in_array($model->tag, ['pokok', 'bunga'])){
 			return $this->angsuran($model, $kredit);
+		}elseif(in_array($model->tag, ['restitusi_pokok'])){
+			$deb 	= $this->table['titipan'][$kredit->jenis_pinjaman];
+			$kre 	= $this->table['piutang_pokok'][$kredit->jenis_pinjaman];
+		}elseif(in_array($model->tag, ['restitusi_bunga'])){
+			$deb 	= $this->table['titipan'][$kredit->jenis_pinjaman];
+			$kre 	= $this->table['piutang_bunga'][$kredit->jenis_pinjaman];
 		}else{
 			//denda
 			$deb 	= $this->table['piutang_denda'][$kredit->jenis_pinjaman];
-			$kre 	= $this->table['denda'][$kredit->jenis_pinjaman];
+			$kre 	= $this->table['pyd_denda'][$kredit->jenis_pinjaman];
 		}
 
 		return $this->jurnal($model, $deb, $kre, $kredit);
@@ -105,7 +111,7 @@ class AutoJurnal
 		//2. check mode
 		$titipan 		= Calculator::titipanBefore($model->morph_reference_id, Carbon::createFromFormat('d/m/Y H:i', $model->notabayar->tanggal)->adddays(1));
 
-		if($titipan > 0){
+		if($titipan > 0 && !str_is($model->notabayar->jenis, 'memorial_jurnal_pagi')){
 			// 2a. Jika ada titipan
 			$deb 		= $this->table['titipan'][$kredit->jenis_pinjaman];
 
@@ -123,18 +129,18 @@ class AutoJurnal
 				if($piut_b > 0){
 					$kre 	= $this->table['piutang_bunga'][$kredit->jenis_pinjaman];
 				}else{
-					$kre 	= $this->table['bunga'][$kredit->jenis_pinjaman];
+					$kre 	= $this->table['pyd_bunga'][$kredit->jenis_pinjaman];
 				}
 			}
 		}else{
 			if(str_is($model->tag, 'pokok')){
 				//2ai. pokok
-				if(str_is($model->notabayar->jenis, 'memorial')){
+				if(str_is($model->notabayar->jenis, 'memorial_jurnal_pagi')){
 					$deb 	= $this->table['piutang_pokok'][$kredit->jenis_pinjaman];
 					$kre 	= $this->table['pokok'][$kredit->jenis_pinjaman];
 				}else{
 					$deb 	= $model->notabayar->nomor_rekening;
-					$piut_p 	= Calculator::piutangPokokBefore($model->morph_reference_id, Carbon::createFromFormat('d/m/Y H:i', $model->notabayar->tanggal)->adddays(1));
+					$piut_p = Calculator::piutangPokokBefore($model->morph_reference_id, Carbon::createFromFormat('d/m/Y H:i', $model->notabayar->tanggal)->adddays(1));
 					if($piut_p > 0){
 						$kre 	= $this->table['piutang_pokok'][$kredit->jenis_pinjaman];
 					}else{
@@ -142,9 +148,9 @@ class AutoJurnal
 					}
 				}
 			}else{
-				if(str_is($model->notabayar->jenis, 'memorial')){
+				if(str_is($model->notabayar->jenis, 'memorial_jurnal_pagi')){
 					$deb 	= $this->table['piutang_bunga'][$kredit->jenis_pinjaman];
-					$kre 	= $this->table['bunga'][$kredit->jenis_pinjaman];
+					$kre 	= $this->table['pyd_bunga'][$kredit->jenis_pinjaman];
 				}else{
 					$deb 	= $model->notabayar->nomor_rekening;
 					//2aii. bunga
@@ -165,7 +171,7 @@ class AutoJurnal
 		if(str_is($model->tag, 'denda')){
 			$deb 	= $model->notabayar->nomor_rekening;
 		}else{
-			$deb 	= $this->table['denda_hapus_buku'][$kredit->jenis_pinjaman];
+			$deb 	= $this->table['pyd_denda'][$kredit->jenis_pinjaman];
 		}
 
 		$kre 		= $this->table['piutang_denda'][$kredit->jenis_pinjaman];
@@ -176,10 +182,10 @@ class AutoJurnal
 	private function jurnal($model, $deb, $kre, $kredit){
 		
 		$jumlah		= $this->formatMoneyFrom($model->jumlah);
-		
+
 		//tambah debit
 		$coa_deb 	= COA::where('nomor_perkiraan', $deb)->where('kode_kantor', $kredit->kode_kantor)->first();
-
+		
 		$data 		= Jurnal::where('detail_transaksi_id', $model->id)->where('coa_id', $coa_deb->id)->first();
 		if(!$data){
 			$data 	= new Jurnal;
@@ -198,6 +204,7 @@ class AutoJurnal
 		if(!$data){
 			$data 	= new Jurnal;
 		}
+		
 		$data->detail_transaksi_id 	= $model->id;
 		$data->morph_reference_id 	= $model->morph_reference_id;
 		$data->morph_reference_tag 	= $model->morph_reference_tag;

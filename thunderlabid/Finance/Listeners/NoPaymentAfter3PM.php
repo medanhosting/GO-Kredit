@@ -32,8 +32,11 @@ class NoPaymentAfter3PM
 
 		$now 	= Carbon::now();
 
-		if(($now->format('G') * 1) > 14 || ($now->format('G') * 1) < 7){
-			throw new AppException(['tanggal' => 'Tidak bisa memproses antara jam 3 sore hingga jam 7 pagi'], AppException::DATA_VALIDATION);
+		if((($now->format('G') * 1) > 14 || ($now->format('G') * 1) < 8) && !str_is($model->jenis, 'kolektor')){
+			throw new AppException(['tanggal' => 'Tidak bisa memproses antara jam 3 sore hingga jam 8 pagi'], AppException::DATA_VALIDATION);
+		}
+		elseif((($now->format('G') * 1) > 15 || ($now->format('G') * 1) < 8) && str_is($model->jenis, 'kolektor')){
+			throw new AppException(['tanggal' => 'Tidak bisa memproses antara jam 4 sore hingga jam 8 pagi'], AppException::DATA_VALIDATION);
 		}
 	}
 }

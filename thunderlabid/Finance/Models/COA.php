@@ -32,7 +32,7 @@ class COA extends Model
 	protected $rules	= [];
 	protected $errors;
 
-	protected $dispatchesEvents = [
+	protected $events = [
         'created' 	=> COACreated::class,
         'creating' 	=> COACreating::class,
         'updated' 	=> COAUpdated::class,

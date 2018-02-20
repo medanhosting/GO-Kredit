@@ -75,6 +75,10 @@ class NotaBayar extends Model
 		return $this->hasMany(DetailTransaksi::class, 'nomor_faktur', 'nomor_faktur');
 	}
 
+	public function child(){
+		return $this->hasMany(NotaBayar::class, 'morph_reference_id', 'nomor_faktur')->where('morph_reference_tag', 'finance');
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------

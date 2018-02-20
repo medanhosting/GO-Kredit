@@ -1,5 +1,3 @@
-@inject('carbon', 'Carbon\Carbon')
-
 @component('bootstrap.card')
 	<div class="card-header bg-light p-1">
 		<h5 class="font-weight-bold mb-0 p-2">BUKTI TRANSAKSI</h5>
@@ -16,9 +14,6 @@
 					</tr>
 				</thead>
 				<tbody>
-					@php
-						$date_temp = null;
-					@endphp
 					@forelse($notabayar as $k => $v)
 						<tr>
 							<td class="text-left">{{$v['hari']}}</td>

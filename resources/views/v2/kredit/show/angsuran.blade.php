@@ -44,6 +44,9 @@
 <div class="clearfix">&nbsp;</div>
 <div class="row">
 	<div class="col-8">
+		@include('v2.kredit.show.kas_kolektor')
+		<div class="clearfix">&nbsp;</div>
+		<div class="clearfix">&nbsp;</div>
 		@include('v2.kredit.show.bukti_angsuran')
 	</div>
 	<div class="col-4">

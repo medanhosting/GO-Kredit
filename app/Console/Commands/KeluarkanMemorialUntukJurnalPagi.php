@@ -89,65 +89,17 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 				$bm->tanggal				= $tanggal->startofday()->format('d/m/Y H:i');
 				$bm->karyawan 		= ['nip' => 'GOKREDIT', 'nama' => 'GOKREDIT'];
 				$bm->jumlah			= $this->formatMoneyTo(0);
-				$bm->jenis 			= 'memorial';
+				$bm->jenis 			= 'memorial_jurnal_pagi';
 				$bm->save();
 
 				$tomorrow 			= Carbon::parse($tanggal);
-				//2a. Pakai titipan untuk bayar angsuran JT
-				//hitung titipan
-				$titipan 	= Calculator::titipanBefore($v['nomor_kredit'], $tomorrow->adddays(1)->startofday());
 
-				if($titipan > $v['tunggakan']){
-
-					if($v['tunggakan_pokok'] > 0){
-						//bayar pokok
-						$deskripsi 	= 'Pokok Angsuran Ke-'.$v['nth'];
-						$pokok		= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
-						if(!$pokok){
-							$pokok 	= new DetailTransaksi;
-						}
-
-						$pokok->nomor_faktur			= $bm->nomor_faktur;
-						$pokok->tag 					= 'pokok';
-						$pokok->morph_reference_id	= $v['nomor_kredit'];
-						$pokok->morph_reference_tag	= 'kredit';
-						$pokok->jumlah 				= $this->formatMoneyTo($v['tunggakan_pokok']);
-						$pokok->deskripsi 			= $deskripsi;
-						$pokok->save();
-					}
-
-					if($v['tunggakan_bunga'] > 0){
-						//bayar bunga
-						$deskripsi 	= 'Bunga Angsuran Ke-'.$v['nth'];
-						$bunga		= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
-						if(!$bunga){
-							$bunga 	= new DetailTransaksi;
-						}
-
-						$bunga->nomor_faktur			= $bm->nomor_faktur;
-						$bunga->tag 					= 'bunga';
-						$bunga->morph_reference_id	= $v['nomor_kredit'];
-						$bunga->morph_reference_tag	= 'kredit';
-						$bunga->jumlah 				= $this->formatMoneyTo($v['tunggakan_bunga']);
-						$bunga->deskripsi 			= $deskripsi;
-						$bunga->save();
-					}
-
-					//UPDATE PELUNASAN
-					$nota_titipan 	= NotaBayar::where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->Where('tanggal', '<', $tanggal->format('Y-m-d H:i:s'))->where('jenis', 'angsuran_sementara')->orderby('tanggal', 'desc')->first();
-
-					$angs_lunas 	= JadwalAngsuran::where('nomor_kredit', $v['nomor_kredit'])->where('nth', $v['nth'])->first();
-					$angs_lunas->nomor_faktur 	= $nota_titipan->nomor_faktur;
-					$angs_lunas->tanggal_bayar	= $tanggal->format('d/m/Y H:i');
-					$angs_lunas->save();
-					$flag_bayar 	= true;
-				}
 
 				$tgl_jt  	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal']);
 
 				//2b. Timbulkan Piutang
 				if(is_null($v['nomor_faktur']) && str_is($tgl_jt->format('Y-m-d'), $tanggal->format('Y-m-d')) ){
-					
+
 					if($v['tunggakan_pokok'] > 0){
 						$deskripsi 	= 'Piutang Pokok '.strtoupper($v['kredit']['jenis_pinjaman']).' Jatuh Tempo';
 
@@ -179,6 +131,55 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 						$piut_bunga->deskripsi 		= $deskripsi;
 						$piut_bunga->save();
 					}
+				}
+
+				//2a. Pakai titipan untuk bayar angsuran JT
+				//hitung titipan
+				$titipan 	= Calculator::titipanBefore($v['nomor_kredit'], $tomorrow->startofday());
+
+				if($titipan >= $v['tunggakan']){
+					if($v['tunggakan_pokok'] > 0){
+						//bayar pokok
+						$deskripsi 	= 'Pokok Angsuran Ke-'.$v['nth'];
+						$pokok		= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
+						if(!$pokok){
+							$pokok 	= new DetailTransaksi;
+						}
+
+						$pokok->nomor_faktur			= $bm->nomor_faktur;
+						$pokok->tag 					= 'restitusi_pokok';
+						$pokok->morph_reference_id	= $v['nomor_kredit'];
+						$pokok->morph_reference_tag	= 'kredit';
+						$pokok->jumlah 				= $this->formatMoneyTo($v['tunggakan_pokok']);
+						$pokok->deskripsi 			= $deskripsi;
+						$pokok->save();
+					}
+
+					if($v['tunggakan_bunga'] > 0){
+						//bayar bunga
+						$deskripsi 	= 'Bunga Angsuran Ke-'.$v['nth'];
+						$bunga		= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
+						if(!$bunga){
+							$bunga 	= new DetailTransaksi;
+						}
+
+						$bunga->nomor_faktur			= $bm->nomor_faktur;
+						$bunga->tag 					= 'restitusi_bunga';
+						$bunga->morph_reference_id	= $v['nomor_kredit'];
+						$bunga->morph_reference_tag	= 'kredit';
+						$bunga->jumlah 				= $this->formatMoneyTo($v['tunggakan_bunga']);
+						$bunga->deskripsi 			= $deskripsi;
+						$bunga->save();
+					}
+
+					//UPDATE PELUNASAN
+					$nota_titipan 	= NotaBayar::where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->Where('tanggal', '<', $tanggal->format('Y-m-d H:i:s'))->where('jenis', 'angsuran_sementara')->orderby('tanggal', 'desc')->first();
+
+					$angs_lunas 	= JadwalAngsuran::where('nomor_kredit', $v['nomor_kredit'])->where('nth', $v['nth'])->first();
+					$angs_lunas->nomor_faktur 	= $nota_titipan->nomor_faktur;
+					$angs_lunas->tanggal_bayar	= $tanggal->format('d/m/Y H:i');
+					$angs_lunas->save();
+					$flag_bayar 	= true;
 				}
 
 				//2c. Hitung Denda

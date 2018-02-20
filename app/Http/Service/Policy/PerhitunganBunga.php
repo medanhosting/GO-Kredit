@@ -59,23 +59,23 @@ class PerhitunganBunga
 
 			if($p_pinjaman < 25000000)
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.70); 
+				$rincian['bunga_per_bulan']	= ((round($est_bulan/6) * 0.05) + 1.70); 
 			}
 			elseif($p_pinjaman < 50000000)
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.60); 
+				$rincian['bunga_per_bulan']	= ((round($est_bulan/6) * 0.05) + 1.60); 
 			}
 			elseif($p_pinjaman < 100000000)
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.50); 
+				$rincian['bunga_per_bulan']	= ((round($est_bulan/6) * 0.05) + 1.50); 
 			}
 			elseif($p_pinjaman < 200000000)
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.40); 
+				$rincian['bunga_per_bulan']	= ((round($est_bulan/6) * 0.05) + 1.40); 
 			}
 			else
 			{
-				$rincian['bunga_per_bulan']	= ((ceil($est_bulan/6) * 0.05) + 1.30); 
+				$rincian['bunga_per_bulan']	= ((round($est_bulan/6) * 0.05) + 1.30); 
 			}
 
 			if(!is_null($this->bunga_per_bulan) && $this->bunga_per_bulan > 0)
@@ -87,12 +87,12 @@ class PerhitunganBunga
 
 
 			//bunga tahunan
-			$bulan 			= ceil($est_bulan);
-			// $tahun 		 	= ceil($bulan/12);
+			$bulan 			= round($est_bulan);
+			// $tahun 		 	= round($bulan/12);
 
 			// $total_bunga  	= $p_pinjaman * (($rincian['bunga_per_tahun'] * $tahun)/100);
 			$total_bunga  	= $p_pinjaman * (($rincian['bunga_per_bulan'] * $bulan)/100);
-			// $bulan 			= ceil(($p_pinjaman + $total_bunga)/$k_angs);
+			// $bulan 			= round(($p_pinjaman + $total_bunga)/$k_angs);
 
 			//kredit diusulkan
 			$kredit_update 	= $bulan * $k_angs;
@@ -108,9 +108,8 @@ class PerhitunganBunga
 
 			foreach (range(1, $bulan) as $k) 
 			{
-				$angsuran_bulanan 	= min(ceil(($p_pinjaman/$bulan)/100) * 100, $sisa_pinjaman);
-				$angsuran_bunga 	= ceil(($total_bunga/$bulan)/100) * 100;
-
+				$angsuran_bulanan 	= min(round(($p_pinjaman/$bulan)/100) * 100, $sisa_pinjaman);
+				$angsuran_bunga 	= round(($total_bunga/$bulan)/100) * 100;
 				$sisa_pinjaman 		= $sisa_pinjaman - $angsuran_bulanan;
 
 				$rincian['angsuran'][$k]['bulan']			= Carbon::now()->addmonths($k)->format('M/Y');
@@ -182,7 +181,7 @@ class PerhitunganBunga
 			foreach (range(1, $bulan-1) as $k) 
 			{
 				$angsuran_bulanan 	= 0;
-				$angsuran_bunga  	= ceil((($p_pinjaman * ($rincian['bunga_per_tahun']/100))/6)/100) * 100;
+				$angsuran_bunga  	= round((($p_pinjaman * ($rincian['bunga_per_tahun']/100))/6)/100) * 100;
 
 				$sisa_pinjaman 		= $sisa_pinjaman - $angsuran_bulanan;
 

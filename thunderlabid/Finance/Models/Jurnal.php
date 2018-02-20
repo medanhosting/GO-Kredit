@@ -36,7 +36,7 @@ class Jurnal extends Model
 	protected $rules	= [];
 	protected $errors;
 
-	protected $dispatchesEvents = [
+	protected $events = [
         'created' 	=> JurnalCreated::class,
         'creating' 	=> JurnalCreating::class,
         'updated' 	=> JurnalUpdated::class,
@@ -98,6 +98,8 @@ class Jurnal extends Model
 		//////////////////
 		// Create Rules //
 		//////////////////
+		$rules['coa_id']				= ['required', 'exists:f_coa,id'];
+		$rules['detail_transaksi_id']	= ['required', 'exists:f_detail_transaksi,id'];
 
 		//////////////
 		// Validate //
