@@ -86,7 +86,7 @@
 								@if(array_intersect($acl_menu['pengajuan.pengajuan.putusan'], $scopes->scopes))
 								<div class="tab-pane fade {{$is_putusan_tab}}" id="nav-putusan" role="tabpanel" aria-labelledby="nav-putusan-tab">
 									@include('v2.pengajuan.table', ['data' => $putusan, 's_pre' => 'putusan'])
-								</div>.
+								</div>
 								@else
 								@endif
 							</div>

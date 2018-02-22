@@ -99,7 +99,7 @@ class HitungDendaAngsuran extends Command
 				$bm->jumlah			= $this->formatMoneyTo(0);
 				$bm->jenis 			= 'memorial';
 				$bm->save();
-				
+
 				//2c. Hitung Denda
 				//cari selisih hari
 				$tgl_jt  	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal']);

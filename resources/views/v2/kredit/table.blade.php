@@ -74,7 +74,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($data as $k => $v)
+		@forelse($data as $k => $v)
 			<tr href="{{route('kredit.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id])}}">
 				<td>{{ $data->firstItem() + $k }} </td>
 				<td>{{$v['nasabah']['nama']}}</td>
@@ -97,6 +97,10 @@
 					{{$idr->formatMoneyTo($v['jumlah_pembayaran_berikut'])}}
 				</td>
 			</tr>
-		@endforeach
+		@empty
+			<tr>
+				<td colspan="7">Tidak ada data</td>
+			</tr>
+		@endforelse
 	</tbody>
 </table>

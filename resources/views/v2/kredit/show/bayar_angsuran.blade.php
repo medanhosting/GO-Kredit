@@ -43,14 +43,6 @@
 								</div>
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-12">
-								<p class="text-uppercase mb-1">Disetor Ke</p>
-							</div>
-							<div class="col-12">
-								{!! Form::select('nomor_perkiraan', $akun, null, ['class' => 'form-control custom-select inline-edit border-input text-info']) !!}
-							</div>
-						</div>
 					</div>
 					<div id="part-tab" style="display: none;">
 						<div class="row">
@@ -58,13 +50,20 @@
 								{!! Form::bsText('Nominal', 'nominal', null, ['class' => 'form-control mask-money inline-edit text-info pb-0 border-input', 'placeholder' => 'Rp 330.000', 'id' => 'input-nominal'], true) !!}
 							</div>
 						</div>
+					</div>
+					@if(str_is($aktif['jenis_pinjaman'], 'pt'))
 						<div class="row">
 							<div class="col-12">
-								<label class="text-uppercase">Disetor Ke</label>
+								{!! Form::bsText('Penurunan Pokok', 'turun_pokok', 'Rp 0', ['class' => 'form-control mask-money inline-edit text-info pb-0 border-input', 'placeholder' => 'Rp 330.000'], true, 'kosongkan jika nasabah tidak membayar pokok') !!}
 							</div>
-							<div class="col-12">
-								{!! Form::select('nomor_perkiraan_titipan', $a_tt, null, ['class' => 'form-control custom-select inline-edit border-input text-info']) !!}
-							</div>
+						</div>
+					@endif
+					<div class="row">
+						<div class="col-12">
+							<p class="text-uppercase mb-1">Disetor Ke</p>
+						</div>
+						<div class="col-12">
+							{!! Form::select('nomor_perkiraan', $akun, null, ['class' => 'form-control custom-select inline-edit border-input text-info']) !!}
 						</div>
 					</div>
 				</div>

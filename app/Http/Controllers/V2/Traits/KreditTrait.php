@@ -46,11 +46,11 @@ trait KreditTrait {
 
  	public function store_angsuran($aktif){
  		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('temp_nth'), request()->get('tanggal'), request()->get('nomor_perkiraan'));
-		$bayar->bayar();
+		$bayar->bayar(request()->get('turun_pokok'));
  	}
 
  	public function store_bayar_sebagian($aktif){
- 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, request()->get('tanggal'), Config::get('finance.nomor_perkiraan_titipan'));
+ 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, request()->get('tanggal'), request()->get('nomor_perkiraan'));
 		$bayar->bayar_sebagian(request()->get('nominal'));
  	}
 }

@@ -30,10 +30,39 @@ class BayarAngsuran
 		$this->nomor_perkiraan 	= $nomor_perkiraan;
 	}
 
-	public function bayar(){
+	public function bayar($turun_pokok = 'Rp 0'){
+		$turun_pokok 	= $this->formatMoneyFrom($turun_pokok);
+
+		//turun pokok dlu
+		if(str_is($this->kredit['jenis_pinjaman'], 'pt') && $turun_pokok > 0){
+			//simpan tanda terima
+			$nb 				= new NotaBayar;
+			$nb->nomor_faktur	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
+			$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
+			$nb->morph_reference_tag 	= 'kredit';
+			$nb->tanggal 				= $this->tanggal;
+			$nb->karyawan 				= $this->karyawan;
+			$nb->nomor_rekening 		= $this->nomor_perkiraan;
+			$nb->jumlah 				= $this->formatMoneyTo($turun_pokok);
+			$nb->jenis 					= 'angsuran';
+			$nb->save();
+			
+			$deskripsi 	= 'Penurunan Pokok Angsuran';
+			$angs 		= new DetailTransaksi;
+			$angs->nomor_faktur 	= $nb->nomor_faktur;
+			$angs->tag 				= 'pokok';
+			$angs->jumlah 			= $this->formatMoneyTo($turun_pokok);
+			$angs->deskripsi 		= $deskripsi;
+			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
+			$angs->morph_reference_tag 	= 'kredit';
+			$angs->save();
+		}
+
 		$today 		= Carbon::createFromFormat('d/m/Y H:i', $this->tanggal);
 		$tomorrow 	= Carbon::createFromFormat('d/m/Y H:i', $this->tanggal)->adddays(1);
 		
+		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->skip(0)->take($this->nth)->orderby('nth', 'asc')->get();
+
 		//1. check titipan
 		$titipan	= Calculator::titipanBefore($this->kredit['nomor_kredit'], $tomorrow);
 		$piut		= Calculator::piutangBefore($this->kredit['nomor_kredit'], $tomorrow);
@@ -53,6 +82,7 @@ class BayarAngsuran
 			$nb->nomor_faktur	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
 			$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
 			$nb->morph_reference_tag 	= 'kredit';
+			$nb->nomor_rekening			= $this->nomor_perkiraan;
 			$nb->tanggal 				= $this->tanggal;
 			$nb->karyawan 				= $this->karyawan;
 			$nb->jumlah 				= $this->formatMoneyTo($total_bayar);
@@ -82,6 +112,7 @@ class BayarAngsuran
 				$bm->nomor_faktur	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
 				$bm->morph_reference_id 	= $this->kredit['nomor_kredit'];
 				$bm->morph_reference_tag 	= 'kredit';
+				$bm->nomor_rekening			= $this->nomor_perkiraan;
 				$bm->tanggal 				= $this->tanggal;
 				$bm->karyawan 				= $this->karyawan;
 				$bm->jumlah 				= $this->formatMoneyTo(0);
@@ -114,7 +145,7 @@ class BayarAngsuran
 
 		$ptjt 		= 0;
 		$btjt 		= 0;
-		
+
 		foreach ($nth_akan_d as $k => $v) {
 			//jika jatuh tempo bayar, jika tidak sum
 			$tgl 	= Carbon::createFromFormat('d/m/Y H:i', $v['tanggal']);

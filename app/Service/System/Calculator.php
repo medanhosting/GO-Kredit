@@ -75,14 +75,17 @@ Class Calculator {
 		}
 
 		//check pelunasan > 1/2 masa nth
-		$max_jw 	= ceil($aktif['jangka_waktu']/2);
+		$max_jw 	= round($aktif['jangka_waktu']/2);
 
-		if($kredit['nth'] <= 3){
+		if($kredit['nth'] <= 4){
+			//a. kalau angsuran berikut sebelum JT4
 			$potongan 	= 0.7 * $tb;
 		}
 		elseif($max_jw >= $kredit['nth']){
+			//b. kalau angsuran berikut sebelum JT separuh angsuran
 			$potongan 	= 0.5 * $tb;
 		}else{
+			//c. else
 			$potongan 	= 0.2 * $tb;
 		}
 

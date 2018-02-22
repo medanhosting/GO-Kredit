@@ -202,6 +202,7 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 					if(!$piut_denda){
 						$piut_denda 			= new DetailTransaksi;
 					}
+					\Log::info(1);
 					$piut_denda->nomor_faktur 	= $bm->nomor_faktur;
 					$piut_denda->tag 			= 'denda';
 					$piut_denda->morph_reference_id		= $v['nomor_kredit'];

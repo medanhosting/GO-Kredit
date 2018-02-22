@@ -27,7 +27,7 @@ class AutoJurnal
 	 */
 	public function __construct()
 	{
-		$this->table 	= $this->get_akun_table();
+		// $this->table 	= $this->get_akun_table();
 	}
 
 	/**
@@ -38,6 +38,8 @@ class AutoJurnal
 	public function handle($event)
 	{
 		$model 	= $event->data;
+
+		$this->table 	= $this->get_akun_table($model->notabayar);
 
 		$kredit = Aktif::where('nomor_kredit', $model->morph_reference_id)->first();
 
@@ -108,6 +110,7 @@ class AutoJurnal
 	}
 
 	private function angsuran($model, $kredit){
+
 		//2. check mode
 		$titipan 		= Calculator::titipanBefore($model->morph_reference_id, Carbon::createFromFormat('d/m/Y H:i', $model->notabayar->tanggal)->adddays(1));
 
@@ -122,6 +125,11 @@ class AutoJurnal
 					$kre 	= $this->table['piutang_pokok'][$kredit->jenis_pinjaman];
 				}else{
 					$kre 	= $this->table['pokok'][$kredit->jenis_pinjaman];
+				}
+
+				//modify deb coa
+				if(str_is($kredit->jenis_pinjaman, 'pt')){
+					$deb 	= $model->notabayar->nomor_rekening;
 				}
 			}else{
 				//2aii. bunga
@@ -180,9 +188,12 @@ class AutoJurnal
 	}
 
 	private function jurnal($model, $deb, $kre, $kredit){
-		
 		$jumlah		= $this->formatMoneyFrom($model->jumlah);
-
+echo "<br/>";
+var_dump($deb);
+var_dump($kre);
+var_dump($jumlah);
+echo "<br/>";
 		//tambah debit
 		$coa_deb 	= COA::where('nomor_perkiraan', $deb)->where('kode_kantor', $kredit->kode_kantor)->first();
 		

@@ -57,7 +57,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach($data as $k => $v)
+		@forelse($data as $k => $v)
 			<tr @if(str_is($s_pre, 'setuju')) href="{{route('putusan.show', ['id' => $v['id'], 'kantor_aktif_id' => $kantor_aktif_id])}}" @endif>
 				<td>{{ $data->firstItem() + $k }} </td>
 				<td>{{$v['nasabah']['nama']}}</td>
@@ -86,6 +86,10 @@
 					{{$v['status_terakhir']['progress']}} dikerjakan
 				</td>
 			</tr>
-		@endforeach
+		@empty
+			<tr>
+				<td colspan="6">Tidak ada data</td>
+			</tr>
+		@endforelse
 	</tbody>
 </table>

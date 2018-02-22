@@ -148,16 +148,15 @@ class KreditController extends Controller
 		$akun	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_rekening_aktif'));
 		$a_tt	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_titipan'));
 		$a_dd	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_denda'));
-		$today		= Carbon::now();
-		$tomorrow	= Carbon::now()->adddays(1);
-
+		$today		= Carbon::now()->addmonths(2);
+		$tomorrow	= Carbon::now()->addmonths(2)->adddays(1);
 		//1. PANEL ANGSURAN
 
 		//a. STAT SISA HUTANG
 		$stat['sisa_hutang']		= Calculator::hutangBefore($aktif['nomor_kredit'], $tomorrow);
 
 		//b. STAT ANGSURAN JT
-		$stat['angsuran_bulanan']	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('nth', 'asc')->where('nth', 1)->sum('jumlah');
+		$stat['angsuran_bulanan']	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('nth', 'asc')->wherenull('nomor_faktur')->select('jumlah as total')->first()['total'];
 		$stat['total_tunggakan']	= Calculator::piutangBefore($aktif['nomor_kredit'], $tomorrow);
 		$stat['jumlah_tunggakan']	= floor($stat['total_tunggakan']/$stat['angsuran_bulanan']);
 

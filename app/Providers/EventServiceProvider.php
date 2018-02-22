@@ -119,6 +119,12 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Finance\Events\Jurnal\JurnalCreated', 'App\Listeners\JurnalPengakuanPendapatan');
 		Event::listen('Thunderlabid\Finance\Events\Jurnal\JurnalUpdated', 'App\Listeners\JurnalPengakuanPendapatan');
 
+		/////////////////////////
+		// PENURUNAN POKOK PT  //
+		/////////////////////////
+		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiCreated', 'App\Listeners\TurunPokokPT');
+		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiUpdated', 'App\Listeners\TurunPokokPT');
+
 		////////////////////////////////
 		// Otomatis Isi Tanggal Bayar //
 		////////////////////////////////

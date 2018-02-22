@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Thunderlabid\Kredit\Models\Rekening;
+use Thunderlabid\Pengajuan\Models\Status;
 
 class KreditAktifTableSeeder extends Seeder
 {
@@ -19,5 +19,8 @@ class KreditAktifTableSeeder extends Seeder
 		DB::table('k_mutasi_jaminan')->truncate();
 		DB::table('k_surat_peringatan')->truncate();
 		DB::table('k_permintaan_restitusi')->truncate();
+
+		//hapus prev kredit
+		$status 	= Status::where('status', 'realisasi')->delete();
 	}
 }

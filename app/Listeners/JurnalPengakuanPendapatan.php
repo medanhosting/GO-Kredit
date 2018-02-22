@@ -27,7 +27,7 @@ class JurnalPengakuanPendapatan
 	 */
 	public function __construct()
 	{
-		$this->table 	= $this->get_akun_table();
+		// $this->table 	= $this->get_akun_table();
 	}
 
 	/**
@@ -37,7 +37,9 @@ class JurnalPengakuanPendapatan
 	 */
 	public function handle($event)
 	{
-		$model 	= $event->data;
+		$model 			= $event->data;
+
+		$this->table 	= $this->get_akun_table($model->detail->notabayar);
 
 		$kredit = Aktif::where('nomor_kredit', $model->morph_reference_id)->first();
 

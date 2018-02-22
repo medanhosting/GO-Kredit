@@ -34,6 +34,7 @@ class JadwalAngsuran extends Model
 {
 	use IDRTrait;
 	use WaktuTrait;
+	use SoftDeletes;
 	
 	protected $table 	= 'k_jadwal_angsuran';
 	protected $fillable = ['nomor_kredit', 'nomor_faktur', 'tanggal', 'tanggal_bayar', 'nth', 'jumlah', 'deskripsi', 'pokok', 'bunga'];

@@ -12,7 +12,7 @@ namespace App\Service\Traits;
  */
 trait JurnalTrait {
 
-	public function get_akun_table(){
+	public function get_akun_table($nb = null){
 		$table_akun 	= [
 			'piutang_pokok'		=> 	[ 
 										'pa' => '120.300', 
@@ -47,8 +47,8 @@ trait JurnalTrait {
 										'pt' => '401.301' 
 									],
 			'kas_titipan'		=> 	[ 
-										'pa' => '100.300', 
-										'pt' => '100.300' 
+										'pa' => $nb['nomor_rekening'], 
+										'pt' => $nb['nomor_rekening'] 
 									],
 			'provisi'			=> 	[ 
 										'pa' => '401.201', 
