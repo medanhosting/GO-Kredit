@@ -99,7 +99,6 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 
 				//2b. Timbulkan Piutang
 				if(is_null($v['nomor_faktur']) && str_is($tgl_jt->format('Y-m-d'), $tanggal->format('Y-m-d')) ){
-
 					if($v['tunggakan_pokok'] > 0){
 						$deskripsi 	= 'Piutang Pokok '.strtoupper($v['kredit']['jenis_pinjaman']).' Jatuh Tempo';
 
@@ -108,7 +107,7 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 							$piut_pokok 	= new DetailTransaksi;
 						}
 						$piut_pokok->nomor_faktur 	= $bm->nomor_faktur;
-						$piut_pokok->tag 			= 'pokok';
+						$piut_pokok->tag 			= 'piutang_pokok';
 						$piut_pokok->morph_reference_id		= $v['nomor_kredit'];
 						$piut_pokok->morph_reference_tag	= 'kredit';
 						$piut_pokok->jumlah 		= $this->formatMoneyTo($v['tunggakan_pokok']);
@@ -118,13 +117,12 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 
 					if($v['tunggakan_bunga'] > 0){
 						$deskripsi 	= 'Piutang Bunga '.strtoupper($v['kredit']['jenis_pinjaman']).' Jatuh Tempo';
-
 						$piut_bunga	= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
 						if(!$piut_bunga){
 							$piut_bunga 	= new DetailTransaksi;
 						}
 						$piut_bunga->nomor_faktur 	= $bm->nomor_faktur;
-						$piut_bunga->tag 			= 'bunga';
+						$piut_bunga->tag 			= 'piutang_bunga';
 						$piut_bunga->morph_reference_id		= $v['nomor_kredit'];
 						$piut_bunga->morph_reference_tag	= 'kredit';
 						$piut_bunga->jumlah 		= $this->formatMoneyTo($v['tunggakan_bunga']);
@@ -147,7 +145,7 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 						}
 
 						$pokok->nomor_faktur			= $bm->nomor_faktur;
-						$pokok->tag 					= 'restitusi_pokok';
+						$pokok->tag 					= 'pokok';
 						$pokok->morph_reference_id	= $v['nomor_kredit'];
 						$pokok->morph_reference_tag	= 'kredit';
 						$pokok->jumlah 				= $this->formatMoneyTo($v['tunggakan_pokok']);
@@ -164,7 +162,7 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 						}
 
 						$bunga->nomor_faktur			= $bm->nomor_faktur;
-						$bunga->tag 					= 'restitusi_bunga';
+						$bunga->tag 					= 'bunga';
 						$bunga->morph_reference_id	= $v['nomor_kredit'];
 						$bunga->morph_reference_tag	= 'kredit';
 						$bunga->jumlah 				= $this->formatMoneyTo($v['tunggakan_bunga']);
@@ -202,9 +200,9 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 					if(!$piut_denda){
 						$piut_denda 			= new DetailTransaksi;
 					}
-					\Log::info(1);
+
 					$piut_denda->nomor_faktur 	= $bm->nomor_faktur;
-					$piut_denda->tag 			= 'denda';
+					$piut_denda->tag 			= 'piutang_denda';
 					$piut_denda->morph_reference_id		= $v['nomor_kredit'];
 					$piut_denda->morph_reference_tag	= 'kredit';
 					$piut_denda->jumlah 		= $this->formatMoneyTo($denda);

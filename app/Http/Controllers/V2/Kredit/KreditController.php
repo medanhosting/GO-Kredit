@@ -157,7 +157,7 @@ class KreditController extends Controller
 
 		//b. STAT ANGSURAN JT
 		$stat['angsuran_bulanan']	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('nth', 'asc')->wherenull('nomor_faktur')->select('jumlah as total')->first()['total'];
-		$stat['total_tunggakan']	= Calculator::piutangBefore($aktif['nomor_kredit'], $tomorrow);
+		$stat['total_tunggakan']	= Calculator::piutangBefore($aktif['nomor_kredit'], $tomorrow, true);
 		$stat['jumlah_tunggakan']	= floor($stat['total_tunggakan']/$stat['angsuran_bulanan']);
 
 		//c. STAT TITIPAN

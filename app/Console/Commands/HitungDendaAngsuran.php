@@ -120,7 +120,7 @@ class HitungDendaAngsuran extends Command
 						$piut_denda 			= new DetailTransaksi;
 					}
 					$piut_denda->nomor_faktur 	= $bm->nomor_faktur;
-					$piut_denda->tag 			= 'denda';
+					$piut_denda->tag 			= 'piutang_denda';
 					$piut_denda->morph_reference_id		= $v['nomor_kredit'];
 					$piut_denda->morph_reference_tag	= 'kredit';
 					$piut_denda->jumlah 		= $this->formatMoneyTo($denda);

@@ -107,4 +107,22 @@ Class Calculator {
 
 		return $angs_r * ($aktif['persentasi_denda']/100) * 3;
 	}
+
+	public function totalBungaBefore($nk, Carbon $tanggal)
+	{
+		$total 		= JadwalAngsuran::where('nomor_kredit', $nk)->where('tanggal', '>=', $tanggal->format('Y-m-d H:i:s'))->sum('bunga');
+
+		return $total;
+	}
+
+
+	public function pelunasanBefore($nk, Carbon $tanggal)
+	{
+		$hutang 	= Calculator::hutangBefore($nk, $tanggal);
+		$piutang 	= Calculator::piutangBefore($nk, $tanggal);
+		$bunga 		= Calculator::totalBungaBefore($nk, $tanggal);
+		$potongan 	= Calculator::potonganBefore($nk, $tanggal);
+
+		return ($hutang - $piutang) + ($bunga - $potongan);
+	}
 }
