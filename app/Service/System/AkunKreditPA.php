@@ -66,6 +66,15 @@ class AkunKreditPA implements AkunKreditInterface {
 		return ['kre' => $kre, 'deb' => $deb, 'jumlah' => $jumlah];
 	}
 
+	public function bayar_titipan(DetailTransaksi $model, Aktif $kredit){
+		$jumlah[0]	= abs($this->formatMoneyFrom($model->jumlah));
+
+		$deb[0] 	= $model->notabayar->nomor_rekening;
+		$kre[0] 	= $this->table['titipan'][$kredit->jenis_pinjaman];
+	
+		return ['kre' => $kre, 'deb' => $deb, 'jumlah' => $jumlah];
+	}
+
 	public function bayar_pokok(DetailTransaksi $model, Aktif $kredit){
 
 		$jumlah		= abs($this->formatMoneyFrom($model->jumlah));

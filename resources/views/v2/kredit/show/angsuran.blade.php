@@ -51,11 +51,12 @@
 	</div>
 	<div class="col-4">
 		@if($stat['sisa_hutang'] > 0)
-			@include('v2.kredit.show.bayar_angsuran')
+			@include('v2.kredit.show.simulasi_bayar')
+			<!-- @include('v2.kredit.show.bayar_angsuran') -->
 		@else
 			@component('bootstrap.card')
 				@slot('title') 
-					<h4 class='text-center text-success pt-5'>
+					<h4 class='text-center text-success pt-5 pb-5'>
 						KREDIT SUDAH LUNAS
 					</h4>
 				@endslot

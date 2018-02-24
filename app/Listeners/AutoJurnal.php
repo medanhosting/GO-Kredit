@@ -64,7 +64,10 @@ class AutoJurnal
 			$akun 	= $calc->piutang_denda($model, $kredit);
 		}
 		
-		elseif(in_array($model->tag, ['pokok'])){
+		elseif(in_array($model->tag, ['titipan'])){
+			//menimbukan pembayaran titipan
+			$akun 	= $calc->bayar_titipan($model, $kredit);
+		}elseif(in_array($model->tag, ['pokok'])){
 			//menimbukan pembayaran pokok
 			$akun 	= $calc->bayar_pokok($model, $kredit);
 		}elseif(in_array($model->tag, ['bunga'])){

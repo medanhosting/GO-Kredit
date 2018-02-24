@@ -67,7 +67,7 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 
 		//1. cari angsuran JT today
 		//BUG ==> CARI HANYA KREDIT AKTIF
-		$angsuran 	= JadwalAngsuran::HitungTunggakanBeberapaWaktuLalu($tanggal)->groupby('nth');
+		$angsuran 	= JadwalAngsuran::HitungTunggakanBeberapaWaktuLalu($tanggal->endofday())->groupby('nth');
 		$angsuran 	= $angsuran->with(['kredit'])->get();
 
 		DB::BeginTransaction();

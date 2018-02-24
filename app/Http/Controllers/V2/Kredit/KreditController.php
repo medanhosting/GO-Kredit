@@ -29,6 +29,7 @@ use App\Http\Middleware\LimitOneMillionMiddleware;
 use App\Http\Middleware\RequiredPasswordMiddleware;
 
 use App\Service\System\Calculator;
+use App\Service\System\PerhitunganBayar;
 
 class KreditController extends Controller
 {
@@ -157,7 +158,7 @@ class KreditController extends Controller
 
 		//b. STAT ANGSURAN JT
 		$stat['angsuran_bulanan']	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('nth', 'asc')->wherenull('nomor_faktur')->select('jumlah as total')->first()['total'];
-		$stat['total_tunggakan']	= Calculator::piutangBefore($aktif['nomor_kredit'], $tomorrow, true);
+		$stat['total_tunggakan']	= Calculator::piutangBefore($aktif['nomor_kredit'], $tomorrow);
 		$stat['jumlah_tunggakan']	= floor($stat['total_tunggakan']/$stat['angsuran_bulanan']);
 
 		//c. STAT TITIPAN
@@ -232,6 +233,17 @@ class KreditController extends Controller
 			view()->share('is_angsuran_tab', 'show active');
 		}
 
+		$bayar 		= null;
+		if(request()->has('bayar')){
+			$bayar 	= new PerhitunganBayar($aktif['nomor_kredit'], request()->get('tanggal'), request()->get('jumlah_angsuran'), request()->get('nominal'));
+
+			if(str_is($aktif['jenis_pinjaman'], 'pa')){
+				$bayar 	= $bayar->pa();
+			}elseif(str_is($aktif['jenis_pinjaman'], 'pt')){
+				$bayar 	= $bayar->pt();
+			}
+		}
+
 		view()->share('active_submenu', 'kredit');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
@@ -248,6 +260,7 @@ class KreditController extends Controller
 		view()->share('restitusi', $restitusi);
 		view()->share('stat', $stat);
 		view()->share('r3d', $r3d);
+		view()->share('bayar', $bayar);
 
 		view()->share('kredit_id', $id);
 

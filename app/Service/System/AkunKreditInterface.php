@@ -12,6 +12,7 @@ interface AkunKreditInterface {
 	public function piutang_pokok(DetailTransaksi $model, Aktif $kredit);
 	public function piutang_bunga(DetailTransaksi $model, Aktif $kredit);
 	public function piutang_denda(DetailTransaksi $model, Aktif $kredit);
+	public function bayar_titipan(DetailTransaksi $model, Aktif $kredit);
 	public function bayar_pokok(DetailTransaksi $model, Aktif $kredit);
 	public function bayar_bunga(DetailTransaksi $model, Aktif $kredit);
 	public function bayar_denda(DetailTransaksi $model, Aktif $kredit);

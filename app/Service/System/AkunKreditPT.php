@@ -52,7 +52,7 @@ class AkunKreditPT implements AkunKreditInterface {
 
 		$deb[0] 	= $this->table['piutang_bunga'][$kredit->jenis_pinjaman];
 		$kre[0] 	= $this->table['pyd_bunga'][$kredit->jenis_pinjaman];
-	
+
 		return ['kre' => $kre, 'deb' => $deb, 'jumlah' => $jumlah];
 	}
 
@@ -61,6 +61,15 @@ class AkunKreditPT implements AkunKreditInterface {
 
 		$deb[0] 	= $this->table['piutang_denda'][$kredit->jenis_pinjaman];
 		$kre[0] 	= $this->table['pyd_denda'][$kredit->jenis_pinjaman];
+	
+		return ['kre' => $kre, 'deb' => $deb, 'jumlah' => $jumlah];
+	}
+
+	public function bayar_titipan(DetailTransaksi $model, Aktif $kredit){
+		$jumlah[0]	= abs($this->formatMoneyFrom($model->jumlah));
+
+		$deb[0] 	= $model->notabayar->nomor_rekening;
+		$kre[0] 	= $this->table['titipan'][$kredit->jenis_pinjaman];
 	
 		return ['kre' => $kre, 'deb' => $deb, 'jumlah' => $jumlah];
 	}

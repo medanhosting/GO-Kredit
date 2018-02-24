@@ -28,10 +28,20 @@
 						<div class="col-6">
 							<p class="text-gray-light mb-0">Nomor Kredit ( Jenis Kredit )</p>
 							<h4>{{ $aktif['nomor_kredit'] }} ( {{ strtoupper($aktif['jenis_pinjaman']) }} )</h4>
-							<p class="text-gray-light mb-0">Pinjaman ( Bunga )</p>
-							<h4>{{ strtoupper($aktif['plafon_pinjaman']) }} ( {{ strtoupper($aktif['suku_bunga']) }} % )</h4>
-							<p class="text-gray-light mb-0">Tanggal</p>							
-							<h5>{{ strtoupper($aktif['tanggal']) }}</h5>
+							
+							<p class="text-gray-light mb-0">Sisa Hutang</p>
+							<h4>{{ $idr->formatMoneyTo($stat['sisa_hutang']) }}</h4>
+							
+							<p class="text-gray-light mb-0">Angsuran Jatuh Tempo ({{ $stat['jumlah_tunggakan'] }})</p>
+							<h4>{{ $idr->formatMoneyTo($stat['total_tunggakan']) }}</h4>
+							
+							<!-- <p class="text-gray-light mb-0">Pinjaman ( Bunga )</p>
+							<h4>
+								{{ strtoupper($aktif['plafon_pinjaman']) }} ( {{ strtoupper($aktif['suku_bunga']) }} % )
+							</h4>
+							
+							<p class="text-gray-light mb-0">Tanggal</p>
+							<h5>{{ strtoupper($aktif['tanggal']) }}</h5> -->
 						</div>
 						<div class="col-6">
 							<p class="text-gray-light mb-0">Nama ( Jenis Kelamin )</p>							
