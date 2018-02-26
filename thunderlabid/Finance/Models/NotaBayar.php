@@ -79,6 +79,10 @@ class NotaBayar extends Model
 		return $this->hasMany(NotaBayar::class, 'morph_reference_id', 'nomor_faktur')->where('morph_reference_tag', 'finance');
 	}
 
+	public function parent(){
+		return $this->belongsto(NotaBayar::class, 'morph_reference_id', 'nomor_faktur')->where('morph_reference_tag', 'kredit');
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------

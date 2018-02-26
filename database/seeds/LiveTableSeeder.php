@@ -51,7 +51,11 @@ class LiveTableSeeder extends Seeder
 			],
 			[
 				'role' 		=> 'surveyor',
-				'scopes' 	=> ['survei', 'survei.hari_gte_3', 'analisa', 'analisa.hari_e_0'],
+				'scopes' 	=> ['survei', 'survei.hari_gte_3'],
+			],
+			[
+				'role' 		=> 'analis',
+				'scopes' 	=> ['analisa', 'analisa.hari_e_0'],
 			],
 			[
 				'role' 		=> 'pimpinan',
@@ -59,11 +63,11 @@ class LiveTableSeeder extends Seeder
 			],
 			[
 				'role' 		=> 'kabag_operasional',
-				'scopes' 	=> ['operasional'],
+				'scopes' 	=> ['operasional', 'jaminan',  '*.hari_e_0'],
 			],
 			[
 				'role' 		=> 'kabag_kredit',
-				'scopes' 	=> ['realisasi', 'tunggakan', '*.hari_e_0', 'jaminan', 'restitusi'],
+				'scopes' 	=> ['realisasi', 'tunggakan', '*.hari_e_0', 'restitusi'],
 			],
 			[
 				'role' 		=> 'komisaris',

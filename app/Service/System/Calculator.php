@@ -20,6 +20,13 @@ Class Calculator {
         return new Calculator();
     }
 
+	public function hutangExactlyBefore($nk, Carbon $tanggal)
+	{
+		$total = Jurnal::where('morph_reference_id', $nk)->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', [Calculator::get_akun_table()['pokok']['pa'], Calculator::get_akun_table()['pokok']['pt'], Calculator::get_akun_table()['piutang_pokok']['pa'], Calculator::get_akun_table()['piutang_pokok']['pt'], Calculator::get_akun_table()['piutang_bunga']['pa'], Calculator::get_akun_table()['piutang_bunga']['pt']]);})->where('tanggal', '<=', $tanggal->format('Y-m-d H:i:s'))->sum('jumlah');
+
+		return $total;
+	}
+ 	 	
 	public function hutangBefore($nk, Carbon $tanggal)
 	{
 		$total = Jurnal::where('morph_reference_id', $nk)->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', [Calculator::get_akun_table()['pokok']['pa'], Calculator::get_akun_table()['pokok']['pt'], Calculator::get_akun_table()['piutang_pokok']['pa'], Calculator::get_akun_table()['piutang_pokok']['pt'], Calculator::get_akun_table()['piutang_bunga']['pa'], Calculator::get_akun_table()['piutang_bunga']['pt']]);})->where('tanggal', '<', $tanggal->startofday()->format('Y-m-d H:i:s'))->sum('jumlah');
@@ -51,6 +58,13 @@ Class Calculator {
 	public function piutangBungaBefore($nk, Carbon $tanggal)
 	{
 		$total = Jurnal::where('morph_reference_id', $nk)->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', [Calculator::get_akun_table()['piutang_bunga']['pa'], Calculator::get_akun_table()['piutang_bunga']['pt']]);})->where('tanggal', '<', $tanggal->startofday()->format('Y-m-d H:i:s'))->sum('jumlah');
+
+		return $total;
+	}
+
+	public function piutangDendaBefore($nk, Carbon $tanggal)
+	{
+		$total = Jurnal::where('morph_reference_id', $nk)->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', [Calculator::get_akun_table()['piutang_denda']['pa'], Calculator::get_akun_table()['piutang_denda']['pt']]);})->where('tanggal', '<', $tanggal->startofday()->format('Y-m-d H:i:s'))->sum('jumlah');
 
 		return $total;
 	}
@@ -124,5 +138,14 @@ Class Calculator {
 		$potongan 	= Calculator::potonganBefore($nk, $tanggal);
 
 		return ($hutang - $piutang) + ($bunga - $potongan);
+	}
+
+
+	public function pelunasanBungaBefore($nk, Carbon $tanggal)
+	{
+		$bunga 		= Calculator::totalBungaBefore($nk, $tanggal);
+		$potongan 	= Calculator::potonganBefore($nk, $tanggal);
+
+		return $bunga - $potongan;
 	}
 }

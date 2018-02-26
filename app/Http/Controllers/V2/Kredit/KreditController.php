@@ -149,8 +149,8 @@ class KreditController extends Controller
 		$akun	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_rekening_aktif'));
 		$a_tt	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_titipan'));
 		$a_dd	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_denda'));
-		$today		= Carbon::now()->addmonths(2);
-		$tomorrow	= Carbon::now()->addmonths(2)->adddays(1);
+		$today		= Carbon::now();
+		$tomorrow	= Carbon::now()->adddays(1);
 		//1. PANEL ANGSURAN
 
 		//a. STAT SISA HUTANG
@@ -159,15 +159,15 @@ class KreditController extends Controller
 		//b. STAT ANGSURAN JT
 		$stat['angsuran_bulanan']	= JadwalAngsuran::where('nomor_kredit', $aktif['nomor_kredit'])->orderby('nth', 'asc')->wherenull('nomor_faktur')->select('jumlah as total')->first()['total'];
 		$stat['total_tunggakan']	= Calculator::piutangBefore($aktif['nomor_kredit'], $tomorrow);
-		$stat['jumlah_tunggakan']	= floor($stat['total_tunggakan']/$stat['angsuran_bulanan']);
+		$stat['jumlah_tunggakan']	= floor($stat['total_tunggakan']/max(1, $stat['angsuran_bulanan']));
 
 		//c. STAT TITIPAN
 		$stat['total_titipan']		= Calculator::titipanBefore($aktif['nomor_kredit'], $tomorrow);
-		$stat['jumlah_titipan']		= floor($stat['total_titipan']/$stat['angsuran_bulanan']);
+		$stat['jumlah_titipan']		= floor($stat['total_titipan']/max(1, $stat['angsuran_bulanan']));
 
 		//d. Bukti Transaksi
-		$notabayar 		= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['angsuran', 'angsuran_sementara'])->get();
-		
+		$notabayar 		= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['angsuran', 'kolektor'])->get();
+
 		//e. NTH Angsuran
 		$sisa_angsuran 	= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->selectraw('jumlah as total')->orderby('nth', 'asc')->get();
 
@@ -235,13 +235,17 @@ class KreditController extends Controller
 
 		$bayar 		= null;
 		if(request()->has('bayar')){
-			$bayar 	= new PerhitunganBayar($aktif['nomor_kredit'], request()->get('tanggal'), request()->get('jumlah_angsuran'), request()->get('nominal'));
+
+			$tanggal 	= Carbon::createfromformat('d/m/Y', request()->get('tanggal'));
+			$bayar 	= new PerhitunganBayar($aktif['nomor_kredit'], $tanggal, request()->get('jumlah_angsuran'), request()->get('nominal'));
 
 			if(str_is($aktif['jenis_pinjaman'], 'pa')){
 				$bayar 	= $bayar->pa();
 			}elseif(str_is($aktif['jenis_pinjaman'], 'pt')){
 				$bayar 	= $bayar->pt();
 			}
+
+			$faktur	= PerhitunganBayar::generateFaktur($aktif['nomor_kredit'], $bayar, $tanggal);
 		}
 
 		view()->share('active_submenu', 'kredit');
@@ -261,6 +265,7 @@ class KreditController extends Controller
 		view()->share('stat', $stat);
 		view()->share('r3d', $r3d);
 		view()->share('bayar', $bayar);
+		view()->share('faktur', $faktur);
 
 		view()->share('kredit_id', $id);
 
@@ -284,9 +289,9 @@ class KreditController extends Controller
 					$current = 'angsuran';
 					$this->middleware_penerimaan_kas_kolektor($aktif);
 					break;
-				case 'part':
+				case 'angsuran':
 					$current = 'angsuran';
-					$this->middleware_store_bayar_sebagian($aktif);
+					$this->middleware_store_angsuran($aktif);
 					break;
 				case 'permintaan_restitusi':
 					$current = 'denda';
@@ -299,10 +304,6 @@ class KreditController extends Controller
 				case 'denda':
 					$current = 'denda';
 					$this->middleware_store_denda($aktif);
-					break;
-				default:
-					$current = 'angsuran';
-					$this->middleware_store_angsuran($aktif);
 					break;
 			}
 			DB::commit();

@@ -81,7 +81,7 @@
 						-----------------------------------------------------------------------------------------------
 					</p>
 					<p>
-						Dengan hak subtitusi untuk membebankan jaminan fiducia atas obyek jaminan fiducia yang akan disebut dibawah ini, guna menjamin pelunasan hutang kredit atas nama  {{$data['pengajuan']['nasabah']['nama']}} selaku debitur, sejumlah {{$data['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($data['putusan']['plafon_pinjaman'])}}). Sejumlah uang yang dapat ditentukan dikemudian hari berdasarkan Perjanjian Kredit yang ditandatangani oleh debitur Pemberi Kuasa dengan {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}} {{implode(' ',$pimpinan['kantor']['alamat'])}} selaku kreditur dan dibuktikan dengn Perjanjian Kredit No. {{$data['pengajuan']['id']}} tertanggal {{$data['pengajuan']['putusan']['tanggal']}} berikut penambahan, perubahan, perpanjangan serta pembaharuannya yang mungkin diadakan kemudian, sampai nilai penjaminan sebesar {{$data['putusan']['plafon_pinjaman']}}  atas obyek fiducia berupa kendaraan dengan spesifikasi sebagai berikut :
+						Dengan hak subtitusi untuk membebankan jaminan fiducia atas obyek jaminan fiducia yang akan disebut dibawah ini, guna menjamin pelunasan hutang kredit atas nama  {{$data['pengajuan']['nasabah']['nama']}} selaku debitur, sejumlah {{$data['putusan']['plafon_pinjaman']}} ({{\App\Http\Service\UI\Terbilang::dariRupiah($data['putusan']['plafon_pinjaman'])}}). Sejumlah uang yang dapat ditentukan dikemudian hari berdasarkan Perjanjian Kredit yang ditandatangani oleh debitur Pemberi Kuasa dengan {{strtoupper($pimpinan['kantor']['jenis'])}} {{$pimpinan['kantor']['nama']}} {{implode(' ',$pimpinan['kantor']['alamat'])}} selaku kreditur dan dibuktikan dengn Perjanjian Kredit No. {{$data['pengajuan']['id']}} tertanggal {{$data['pengajuan']['status_realisasi']['tanggal']}} berikut penambahan, perubahan, perpanjangan serta pembaharuannya yang mungkin diadakan kemudian, sampai nilai penjaminan sebesar {{$data['putusan']['plafon_pinjaman']}}  atas obyek fiducia berupa kendaraan dengan spesifikasi sebagai berikut :
 					</p>
 
 					@php $nilai = 0; @endphp
@@ -132,7 +132,7 @@
 
 			<div class="row text-center" style="font-size:11px;">
 				<div class="col-xs-6">
-					{{$pimpinan['kantor']['alamat']['kota']}}, {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}}
+					{{$pimpinan['kantor']['alamat']['kota']}}, {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d/m/Y')}}
 					<br/>Pemberi Kuasa
 				</div>
 				<div class="col-xs-6">

@@ -56,7 +56,7 @@
 		@else
 			@component('bootstrap.card')
 				@slot('title') 
-					<h4 class='text-center text-success pt-5 pb-5'>
+					<h4 class='text-center text-success pt-4 pb-4'>
 						KREDIT SUDAH LUNAS
 					</h4>
 				@endslot

@@ -43,7 +43,7 @@
 			<div class="row text-justify">
 				<div class="col-xs-12">
 					<p>
-						Pada hari ini {{$hari[strtolower(Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}}
+						Pada hari ini {{$hari[strtolower(Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d/m/Y')}}
 					</p>
 
 					<p>
@@ -68,7 +68,7 @@
 						Menerangkan :
 						<ul>
 							<li>
-								Bahwa {{$data['pengajuan']['nasabah']['nama']}} (selanjutnya disebut Debitur) telah memperoleh fasilitas kredit dari Pihak Kedua, sejumlah {{$data['putusan']['plafon_pinjaman']}} ( {{\App\Http\Service\UI\Terbilang::dariRupiah($data['putusan']['plafon_pinjaman'])}}) sebagaimana tersebut dalam Perjanjian Kredit Nomer {{$data['putusan']['nomor_kredit']}}, tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}} ;
+								Bahwa {{$data['pengajuan']['nasabah']['nama']}} (selanjutnya disebut Debitur) telah memperoleh fasilitas kredit dari Pihak Kedua, sejumlah {{$data['putusan']['plafon_pinjaman']}} ( {{\App\Http\Service\UI\Terbilang::dariRupiah($data['putusan']['plafon_pinjaman'])}}) sebagaimana tersebut dalam Perjanjian Kredit Nomer {{$data['putusan']['nomor_kredit']}}, tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d/m/Y')}} ;
 							</li>
 							<li>
 								Bahwa dalam memberikan kredit/pinjaman tersebut, Pihak Kedua membutuhkan jaminan pribadi Pihak Pertama untuk pelunasan hutang Debitur tersebut;
@@ -82,7 +82,7 @@
 						Selanjutnya sehubungan dengan hal – hal yang diuraikan diatas, maka Pihak Pertama menerangkan bahwa terhadap pelunasan hutang Debitur, baik berupa pokok kredit, bunga, provisi, denda dan ongkos – ongkos penagihan maupun beban – beban lainnya yang timbul, maka Pihak Pertama dengan ini mengikat diri sebagai Penjamin (borg), untuk secara pribadi turut bertanggung jawab sepenuhnya dan sanggup untuk menyelesaikan seluruh pinjaman Debitur termaksuddengan melepaskan hak – hak yang diberikan oleh Undang – Undang kepada Penjamin, yaitu hak – hak dalam pasal – pasal 1430, 1831, 1837, 1847, 1848, 1849, 1830 dan 1832 Kitab Undang – Undang Hukum Perdata dan dengan sukarela menyerahkan Jaminan berupa :
 					</p>
 					<p>
-						Surat Pernyataan Sebagai Penjamin ini merupakan bagian yang penting dan tidak terpisahkan dari Perjanjian Kredit Nomer {{$data['putusan']['nomor_kredit']}}, tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}} dan karenanya selama Perjanjian Kredit sebagaimana dimaksud masih berlaku, maka surat pernyataan ini tidak dapat dicabut dan atau tidak dapat dibatalkan oleh karena sebab apapun.
+						Surat Pernyataan Sebagai Penjamin ini merupakan bagian yang penting dan tidak terpisahkan dari Perjanjian Kredit Nomer {{$data['putusan']['nomor_kredit']}}, tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d/m/Y')}} dan karenanya selama Perjanjian Kredit sebagaimana dimaksud masih berlaku, maka surat pernyataan ini tidak dapat dicabut dan atau tidak dapat dibatalkan oleh karena sebab apapun.
 						Demikian Surat Pernyataan Sebagai Penjamin ini dibuat untuk dapat dipergunakan sebagaimana mestinya.
 					</p>
 				</div> 

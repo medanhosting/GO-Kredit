@@ -86,12 +86,16 @@ class AngsuranController extends Controller
 	public function print ($id)
 	{
 		try {
-			$angsuran 				= NotaBayar::where('nomor_faktur', request()->get('nomor_faktur'))->where('morph_reference_id', $id)->where('morph_reference_tag', 'kredit')->selectraw('*')->selectraw('jumlah as total')->selectraw('abs(jumlah) as abstotal')->firstorfail();
+			$angsuran 				= NotaBayar::where('nomor_faktur', request()->get('nomor_faktur'))->where('morph_reference_id', $id)->whereIn('morph_reference_tag', ['kredit', 'finance'])->selectraw('*')->selectraw('jumlah as total')->selectraw('abs(jumlah) as abstotal')->firstorfail();
+
 			$tanggal_bayar 			= Carbon::createFromFormat('d/m/Y H:i', $angsuran->tanggal);
 			$tanggal_bayar_besok 	= Carbon::createFromFormat('d/m/Y H:i', $angsuran->tanggal)->adddays(1);
 
-			$angsuran['kredit']		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
-
+			if(str_is($angsuran['morph_reference_tag'], 'kredit')){
+				$angsuran['kredit']		= Aktif::where('nomor_kredit', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
+			}else{
+				$angsuran['kredit']		= Aktif::where('nomor_kredit', $angsuran['parent']['morph_reference_id'])->where('kode_kantor', request()->get('kantor_aktif_id'))->firstorfail();
+			}
 			$case = 'angsuran';
 			if(request()->has('case')){
 				$case = request()->get('case');
@@ -103,8 +107,7 @@ class AngsuranController extends Controller
 				$angsuran['details']= DetailTransaksi::where('nomor_faktur', $angsuran['nomor_faktur']);
 			}elseif(str_is($case, 'tukar_sementara')){
 				$case = 'angsuran';
-				$nomor_faktur 		= request()->get('kantor_aktif_id').'.'.$tanggal_bayar_besok->startofday()->format('ymd').'-001';
-				$angsuran['details']= DetailTransaksi::where('nomor_faktur', $nomor_faktur)->where('morph_reference_tag', 'kredit')->where('morph_reference_id', $angsuran['morph_reference_id'])->whereIn('tag', ['pokok', 'bunga']);
+				$angsuran['details']= DetailTransaksi::where('nomor_faktur', $angsuran['nomor_faktur']);
 			}elseif(str_is($case, 'restitusi_denda')){
 				$angsuran['restitusi']	= PermintaanRestitusi::where('nomor_faktur', $angsuran['nomor_faktur'])->first();
 				$angsuran['denda'] 	= Calculator::dendaBefore($id, $tanggal_bayar_besok->startofday());
@@ -117,7 +120,7 @@ class AngsuranController extends Controller
 			$nth 		= implode(', ', array_column(JadwalAngsuran::where('nomor_faktur', $angsuran['nomor_faktur'])->get(['nth'])->toArray(), 'nth'));
 			$potongan 	= array_sum(array_column($angsuran['details'], 'total')) - $angsuran['total'];
 
-			$sisa_angsuran			= JadwalAngsuran::where('nomor_kredit', $id)->HitungTunggakanBeberapaWaktuLalu($tanggal_bayar)->first()['sisa_hutang'];
+			$sisa_angsuran	= Calculator::hutangExactlyBefore($angsuran['kredit']['nomor_kredit'], $tanggal_bayar);
 
 			view()->share('angsuran', $angsuran);
 			view()->share('tanggal_bayar', $tanggal_bayar);

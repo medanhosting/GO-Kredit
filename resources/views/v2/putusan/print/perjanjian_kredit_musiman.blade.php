@@ -42,7 +42,7 @@
 			<div class="row text-justify">
 				<div class="col-xs-12">
 					<p>
-						Pada hari ini {{$hari[strtolower(Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}}, telah dibuat dan ditandatangani perjanjian antara :
+						Pada hari ini {{$hari[strtolower(Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d/m/Y')}}, telah dibuat dan ditandatangani perjanjian antara :
 					</p>
 
 					<p>
@@ -69,7 +69,7 @@
 								Atas fasilitas pinjaman tersebut PEMINJAM berkewajiban untuk membayar provisi kredit sebesar {{$data['putusan']['perc_provisi']}} ( {{\App\Http\Service\UI\Terbilang::terbilang($data['putusan']['perc_provisi'])}}) % dari pinjaman pokok, yang dipungut sekali dalam masa perjanjian kredit ini dan harus dibayar segera setelah perjanjian ini ditandatangani;
 							</li>
 							<li>
-								Pengembalian pinjaman atau kredit wajib dilakukan oleh PEMINJAM dengan cara mengangsur bunga dan/atau pokok pinjaman tiap bulan  dan dilakukan secara berturut-turut tanpa adanya suatu tunggakan atau penangguhan dengan jumlah angsuran bulan ke 1 - 5 sebesar {{$angsuran['angsuran'][1]['total_angsuran']}} ( {{\App\Http\Service\UI\Terbilang::dariRupiah($angsuran['angsuran'][1]['total_angsuran'])}}), dan bulan ke - 6 sebesar {{$angsuran['angsuran'][6]['total_angsuran']}} ( {{\App\Http\Service\UI\Terbilang::dariRupiah($angsuran['angsuran'][6]['total_angsuran'])}}) dengan jangka waktu pinjaman 6 (enam) bulan sejak tanggal PERJANJIAN ini ditandatangani, dibayar dalam 6 (enam) kali angsuran, pada tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d')}} ( {{\App\Http\Service\UI\Terbilang::terbilang(Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d'))}} ) setiap bulannya, pengembalian pinjaman atau kredit berlaku mulai {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->addmonthsnooverflow(1)->format('d/m/Y')}} dan berakhir pada {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->addmonthsnooverflow(6)->format('d/m/Y')}}, hingga seluruh pinjaman baik berupa pokok, bunga maupun biaya-biaya lainnya telah lunas;
+								Pengembalian pinjaman atau kredit wajib dilakukan oleh PEMINJAM dengan cara mengangsur bunga dan/atau pokok pinjaman tiap bulan  dan dilakukan secara berturut-turut tanpa adanya suatu tunggakan atau penangguhan dengan jumlah angsuran bulan ke 1 - 5 sebesar {{$angsuran['angsuran'][1]['total_angsuran']}} ( {{\App\Http\Service\UI\Terbilang::dariRupiah($angsuran['angsuran'][1]['total_angsuran'])}}), dan bulan ke - 6 sebesar {{$angsuran['angsuran'][6]['total_angsuran']}} ( {{\App\Http\Service\UI\Terbilang::dariRupiah($angsuran['angsuran'][6]['total_angsuran'])}}) dengan jangka waktu pinjaman 6 (enam) bulan sejak tanggal PERJANJIAN ini ditandatangani, dibayar dalam 6 (enam) kali angsuran, pada tanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d')}} ( {{\App\Http\Service\UI\Terbilang::terbilang(Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d'))}} ) setiap bulannya, pengembalian pinjaman atau kredit berlaku mulai {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->addmonthsnooverflow(1)->format('d/m/Y')}} dan berakhir pada {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->addmonthsnooverflow(6)->format('d/m/Y')}}, hingga seluruh pinjaman baik berupa pokok, bunga maupun biaya-biaya lainnya telah lunas;
 							</li>
 							<li>
 								Sesuai keterangan dan pengakuan yang disampaikan PEMINJAM kepada {{strtoupper($pimpinan['kantor']['jenis'])}}, uang yang dipinjam dari {{strtoupper($pimpinan['kantor']['jenis'])}} hanya akan dipergunakan untuk keperluan __________________________; Atas tujuan penggunaan fasilitas pinjaman tersebut, {{strtoupper($pimpinan['kantor']['jenis'])}} mempercayakan sepenuhnya kepada PEMINJAM dan tidak bertanggung jawab atas penggunaan uang hasil pinjaman tersebut dan {{strtoupper($pimpinan['kantor']['jenis'])}} sewaktu–waktu dapat meminta pelunasan pinjaman secara seketika apabila penggunaan uang hasil pinjaman diluar keperluan diatas;
@@ -272,7 +272,7 @@
 						</ol>
 					</p>
 					<p>
-						Demikian syarat-syarat tersebut diatas merupakan satu kesatuan yang tidak terpisahkan dari SURAT PERJANJIAN KREDIT. No. {{$putusan['nomor_kredit']}} tertanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}} yang telah dimengerti dan disepakati oleh kedua belah pihak.
+						Demikian syarat-syarat tersebut diatas merupakan satu kesatuan yang tidak terpisahkan dari SURAT PERJANJIAN KREDIT. No. {{$putusan['nomor_kredit']}} tertanggal {{Carbon\Carbon::createfromformat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d/m/Y')}} yang telah dimengerti dan disepakati oleh kedua belah pihak.
 					</p>
 				</div> 
 			</div> 

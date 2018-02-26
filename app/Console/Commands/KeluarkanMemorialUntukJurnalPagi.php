@@ -10,6 +10,7 @@ use Carbon\Carbon, Config, DB;
 
 use App\Service\Traits\IDRTrait;
 use App\Service\System\Calculator;
+use App\Service\System\PerhitunganBayar;
 
 class KeluarkanMemorialUntukJurnalPagi extends Command
 {
@@ -92,7 +93,7 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 				$bm->jenis 			= 'memorial_jurnal_pagi';
 				$bm->save();
 
-				$tomorrow 			= Carbon::parse($tanggal);
+				$tomorrow	= Carbon::parse($tanggal)->adddays(1);
 
 
 				$tgl_jt  	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal']);
@@ -133,50 +134,33 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 
 				//2a. Pakai titipan untuk bayar angsuran JT
 				//hitung titipan
+				$piut 		= Calculator::PiutangBefore($v['nomor_kredit'], $tomorrow->startofday());
 				$titipan 	= Calculator::titipanBefore($v['nomor_kredit'], $tomorrow->startofday());
+				if(($titipan - $piut) >= 0){
+					$bayar 		= new PerhitunganBayar($v['nomor_kredit'], $tomorrow, 1, $this->formatMoneyTo(0));
 
-				if($titipan >= $v['tunggakan']){
-					if($v['tunggakan_pokok'] > 0){
-						//bayar pokok
-						$deskripsi 	= 'Pokok Angsuran Ke-'.$v['nth'];
-						$pokok		= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
-						if(!$pokok){
-							$pokok 	= new DetailTransaksi;
-						}
-
-						$pokok->nomor_faktur			= $bm->nomor_faktur;
-						$pokok->tag 					= 'pokok';
-						$pokok->morph_reference_id	= $v['nomor_kredit'];
-						$pokok->morph_reference_tag	= 'kredit';
-						$pokok->jumlah 				= $this->formatMoneyTo($v['tunggakan_pokok']);
-						$pokok->deskripsi 			= $deskripsi;
-						$pokok->save();
+					if(str_is($v['kredit']['jenis_pinjaman'], 'pa')){
+						$bayar 	= $bayar->pa();
+					}elseif(str_is($v['kredit']['jenis_pinjaman'], 'pt')){
+						$bayar 	= $bayar->pt();
 					}
 
-					if($v['tunggakan_bunga'] > 0){
-						//bayar bunga
-						$deskripsi 	= 'Bunga Angsuran Ke-'.$v['nth'];
-						$bunga		= DetailTransaksi::where('nomor_faktur', $bm->nomor_faktur)->where('deskripsi', $deskripsi)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
-						if(!$bunga){
-							$bunga 	= new DetailTransaksi;
-						}
+					$faktur 	= PerhitunganBayar::generateFaktur($v['kredit']['nomor_kredit'], $bayar, $tomorrow);
 
-						$bunga->nomor_faktur			= $bm->nomor_faktur;
-						$bunga->tag 					= 'bunga';
-						$bunga->morph_reference_id	= $v['nomor_kredit'];
-						$bunga->morph_reference_tag	= 'kredit';
-						$bunga->jumlah 				= $this->formatMoneyTo($v['tunggakan_bunga']);
-						$bunga->deskripsi 			= $deskripsi;
-						$bunga->save();
+					foreach ($faktur['isi'] as $k2 => $v2) {
+						$angs 		= DetailTransaksi::where('deskripsi', $v2['deskripsi'])->where('nomor_faktur', $bm->nomor_faktur)->where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->first();
+						if(!$angs){
+							$angs	= new DetailTransaksi;
+						}
+						$angs->fill($v2);
+						$angs->nomor_faktur 		= $bm->nomor_faktur;
+						$angs->morph_reference_id 	= $v['nomor_kredit'];
+						$angs->morph_reference_tag 	= 'kredit';
+						$angs->save();
 					}
 
-					//UPDATE PELUNASAN
-					$nota_titipan 	= NotaBayar::where('morph_reference_id', $v['nomor_kredit'])->where('morph_reference_tag', 'kredit')->Where('tanggal', '<', $tanggal->format('Y-m-d H:i:s'))->where('jenis', 'angsuran_sementara')->orderby('tanggal', 'desc')->first();
+					$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $v['nomor_kredit'])->wherenull('tanggal_bayar')->orderby('nth', 'asc')->wherein('nth', $faktur['nth_jt'])->update(['tanggal_bayar' => $tanggal->format('Y-m-d H:i:s')]);
 
-					$angs_lunas 	= JadwalAngsuran::where('nomor_kredit', $v['nomor_kredit'])->where('nth', $v['nth'])->first();
-					$angs_lunas->nomor_faktur 	= $nota_titipan->nomor_faktur;
-					$angs_lunas->tanggal_bayar	= $tanggal->format('d/m/Y H:i');
-					$angs_lunas->save();
 					$flag_bayar 	= true;
 				}
 

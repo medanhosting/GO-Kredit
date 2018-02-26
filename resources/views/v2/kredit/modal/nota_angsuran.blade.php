@@ -1,6 +1,6 @@
-@component('bootstrap.modal', ['id' => 'summary-angsuran', 'size' => 'modal-lg']) 
+@component('bootstrap.modal', ['id' => 'nota_angsuran', 'size' => 'modal-lg']) 
 	@slot ('title') 
-		Detail Angsuran
+		Bayar Angsuran
 	@endslot 
 
 	@slot ('body')
@@ -22,7 +22,7 @@
 				<div class="row justify-content-end">
 					<div class="col-3">Tanggal</div>
 					<div class="col-6">
-						{!! Form::vText(null, 'tanggal', isset($angsuran['tanggal']) ? $angsuran['tanggal'] : $tanggal_now, ['class' => 'form-control mask-date inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
+						{!! Form::vText(null, 'tanggal', request()->get('tanggal'), ['class' => 'form-control mask-date inline-edit text-info pb-0 border-input', 'placeholder' => 'dd/mm/yyyy hh:mm'], true) !!}
 					</div>
 				</div>
 			</div>
@@ -36,50 +36,50 @@
 
 		<table>
 			<tr class="align-top">
-				<td style="width: 12.5%">AC / SPK</td>
+				<td style="width: 12.5%" class="text-left">AC / SPK</td>
 				<td style="width: 1%">:</td>
-				<td class="w-25 pl-2 pr-2">
-					<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{$kredit_aktif['nomor_kredit']}}</p>
+				<td class="w-25 pl-2 pr-2 text-left">
+					<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{$kredit['nomor_kredit']}}</p>
 				</td>
-				<td style="width: 12.5%">AO</td>
+				<td style="width: 12.5%" class="text-left">AO</td>
 				<td style="width: 1%">:</td>
-				<td class="w-25 pl-2 pr-2">
-					<p class="mb-2" style="border-bottom: 1px dotted #ccc">&nbsp;{{$kredit_aktif['ao']['nama']}}</p>
+				<td class="w-25 pl-2 pr-2 text-left">
+					<p class="mb-2" style="border-bottom: 1px dotted #ccc">&nbsp;{{$kredit['ao']['nama']}}</p>
 				</td>
 			</tr>
 			<tr class="align-top">
-				<td style="width: 12.5%">Nama</td>
+				<td style="width: 12.5%" class="text-left">Nama</td>
 				<td style="width: 1%">:</td>
-				<td class="w-25 pl-2 pr-2">
+				<td class="w-25 pl-2 pr-2 text-left">
 					<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-						{{ $kredit_aktif['nasabah']['nama'] }}
+						{{ $kredit['nasabah']['nama'] }}
 					</p>
 				</td>
-				<td style="width: 12.5%">Angsuran Ke-</td>
+				<td style="width: 12.5%" class="text-left">Angsuran Ke-</td>
 				<td style="width: 1%">:</td>
-				<td class="w-25 pl-2 pr-2 text-capitalize">
-					<p class="mb-2 periode_bln" style="border-bottom: 1px dotted #ccc"></p>
+				<td class="w-25 pl-2 pr-2 text-capitalize text-left">
+					<p class="mb-2 periode_bln" style="border-bottom: 1px dotted #ccc">{{implode(', ', $faktur['nth'])}}&nbsp;</p>
 				</td>
 			</tr>
 			<tr class="align-top">
-				<td style="width: 12.5%">Alamat</td>
+				<td style="width: 12.5%" class="text-left">Alamat</td>
 				<td style="width: 1%">:</td>
-				<td class="w-25 pl-2 pr-2 text-capitalize">
+				<td class="w-25 pl-2 pr-2 text-capitalize text-left">
 					<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-						{!! ucfirst(strtolower(implode(', ', $kredit_aktif['nasabah']['alamat']))) !!}
+						{!! ucfirst(strtolower(implode(', ', $kredit['nasabah']['alamat']))) !!}
 					</p>
 				</td>
-				<td style="width: 12.5%">Sisa Angsuran</td>
+				<td style="width: 12.5%" class="text-left">Sisa Angsuran</td>
 				<td style="width: 1%">:</td>
-				<td class="w-25 pl-2 pr-2 text-capitalize">
-					<p class="mb-2 sisa_angsuran" style="border-bottom: 1px dotted #ccc">&nbsp;</p>
+				<td class="w-25 pl-2 pr-2 text-capitalize text-left">
+					<p class="mb-2 sisa_angsuran" style="border-bottom: 1px dotted #ccc">{{$idr->formatMoneyTo($stat['sisa_hutang'] - $faktur['bayar_hutang'])}}</p>
 				</td>
 			</tr>
 			<tr class="align-top">
-				<td style="width: 12.5%">Telp.</td>
+				<td style="width: 12.5%" class="text-left">Telp.</td>
 				<td style="width: 1%">:</td>
-				<td class="w-25 pl-2 pr-2">
-					<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{ $kredit_aktif['nasabah']['telepon'] }}</p>
+				<td class="w-25 pl-2 pr-2 text-left">
+					<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{ $kredit['nasabah']['telepon'] }}</p>
 				</td>
 			</tr>
 		</table>
@@ -89,21 +89,40 @@
 				<thead>
 					<tr>
 						<th class="text-center" style="width: 5%;">#</th>
-						<th class="text-left" style="width: 22%;">Deskripsi</th>
+						<th class="text-left">Deskripsi</th>
 						<th class="text-right">Subtotal</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr id="angsuran-row" style="display: none;">
-						<td class="angs-iteration text-center"></td>
-						<td class="angs-title"></td>
-						<td class="angs-subtotal text-right"></td>
+					@foreach($faktur['isi'] as $k => $v)
+					<tr>
+						<td>{{($k+1)}}</td>
+						<td class="text-left">{{$v['deskripsi']}}</td>
+						<td class="text-right">{{$v['jumlah']}}</td>
 					</tr>
-					<tr id="titipan-row"></tr>
-					<tr id="potongan-row"></tr>
-					<tr id="total-all-row"></tr>
+					@endforeach
+					@if($faktur['potongan_titipan'] > 0)
+					<tr class="text-danger">
+						<td colspan="2">Saldo Titipan</td>
+						<td class="text-right">{{$idr->formatMoneyTo($faktur['potongan_titipan'])}}</td>
+					</tr>
+					@endif
 				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="2" class="text-right">Total</td>
+						<td class="text-right">{{$idr->formatMoneyTo($faktur['total'])}}</td>
+					</tr>
+				</tfoot>
 			</table>
+		</div>
+		<div class="row">
+			<div class="col-8">
+			</div>
+			<div class="col-4">
+				<p class="text-left text-uppercase mb-1">Disetor Ke</p>
+				{!! Form::select('nomor_perkiraan', $akun, null, ['class' => 'form-control custom-select inline-edit border-input text-info']) !!}
+			</div>
 		</div>
 	@endslot 
 	

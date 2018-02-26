@@ -58,7 +58,7 @@ class AktivasiKreditDisetujui
 			$aktif->legal 			= $putusan->legal;
 			$aktif->biaya_notaris 	= $putusan->biaya_notaris;
 			$aktif->persentasi_denda= $putusan->persentasi_denda;
-			$aktif->tanggal 		= $putusan->tanggal;
+			$aktif->tanggal 		= $putusan->pengajuan->status_realisasi->tanggal;
 			$aktif->kode_kantor 	= $putusan->pengajuan->kode_kantor;
 			$aktif->ao 				= $putusan->pengajuan->ao;
 			$aktif->save();

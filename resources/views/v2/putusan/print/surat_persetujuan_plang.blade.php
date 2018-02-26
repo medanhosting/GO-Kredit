@@ -83,7 +83,7 @@
 
 			<div class="row text-left">
 				<div class="col-xs-6">
-					<p>{{$pimpinan['kantor']['alamat']['kota']}}, {{\Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d/m/Y')}}</p>
+					<p>{{$pimpinan['kantor']['alamat']['kota']}}, {{\Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d/m/Y')}}</p>
 					<p>Hormat Kami,</p>
 				</div>
 				<div class="col-xs-6">

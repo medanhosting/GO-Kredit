@@ -6,7 +6,8 @@ use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Kredit\Models\JadwalAngsuran;
 
 use Thunderlabid\Finance\Models\DetailTransaksi;
-use App\Service\System\Calculator;
+
+use Carbon\Carbon;
 
 use App\Service\Traits\IDRTrait;
 use App\Service\Traits\JurnalTrait;
@@ -104,7 +105,7 @@ class AkunKreditPT implements AkunKreditInterface {
 
 			$i 		= $i+1;
 		}
-		
+
 		return ['kre' => $kre, 'deb' => $deb, 'jumlah' => $ttl];
 	}
 
@@ -112,89 +113,30 @@ class AkunKreditPT implements AkunKreditInterface {
 		$jumlah		= abs($this->formatMoneyFrom($model->jumlah));
 		$tanggal 	= Carbon::createFromFormat('d/m/Y H:i', $model->notabayar->tanggal)->adddays(1);
 		$titipan 	= Calculator::titipanBefore($model->morph_reference_id, $tanggal);
+	
+		$piut_b 	= Calculator::piutangBungaBefore($model->morph_reference_id, $tanggal);
 
-		$i 			= 0;
-		while ($jumlah > 0) {
-			if($titipan > 0){
-				//kalau ada titipan
-				$angs_1 	= JadwalAngsuran::where('nomor_kredit', $model->morph_reference_id)
-				->orderby('nth', 'asc')
-				->wherenull('nomor_faktur')
-				->where('tanggal', '<', $tanggal->format('Y-m-d H:i:s'))
-				->selectraw('pokok as piut_p')
-				->selectraw('bunga as piut_b')
-				->selectraw('jumlah as piut_t')
-				->skip($i)
-				->take(1)
-				->first();
+		$sisa_b 	= Calculator::pelunasanBungaBefore($nomor_kredit, $tanggal);
 
-				if($titipan >= $angs_1['piut_b'] && $angs_1['piut_t'] > 0){
-					//kalau ada angs JT
-					$deb[] 	= $this->table['titipan'][$kredit->jenis_pinjaman];
-					$kre[] 	= $this->table['piutang_bunga'][$kredit->jenis_pinjaman];
-					$ttl[] 	= abs($angs_1['piut_b']);
+		$kre 		= [];
+		$deb 		= [];
+		$ttl 		= [];
 
-					$titipan 	= $titipan - $angs_1['piut_b'];
-				}elseif($angs_1['piut_b'] > 0){
-					//get them balance
-					$deb[] 		= $model->notabayar->nomor_rekening;
-					$kre[] 		= $this->table['titipan'][$kredit->jenis_pinjaman];
-					$ttl[] 		= abs($angs_1['piut_b'] - $titipan);
-					
-					//bayar angsuran
-					$deb[] 	= $this->table['titipan'][$kredit->jenis_pinjaman];
-					$kre[] 	= $this->table['piutang_bunga'][$kredit->jenis_pinjaman];
-					$ttl[] 	= abs($angs_1['piut_b']);
-
-					$jumlah 	= $jumlah - (abs($angs_1['piut_b'] - $titipan));
-					$titipan 	= 0;
-				}else{
-					//bayar angsuran
-					$deb[] 		= $model->notabayar->nomor_rekening;
-					$kre[] 		= $this->table['titipan'][$kredit->jenis_pinjaman];
-					$ttl[] 		= $jumlah;
-					$titipan 	= 0;
-				}
-			}else{
-				//kalau tidak ada titipan
-				$angs_1 	= JadwalAngsuran::where('nomor_kredit', $model->morph_reference_id)
-				->orderby('nth', 'asc')
-				->wherenull('nomor_faktur')
-				->where('tanggal', '<', $tanggal->format('Y-m-d H:i:s'))
-				->selectraw('pokok as piut_p')
-				->selectraw('bunga as piut_b')
-				->selectraw('jumlah as piut_t')
-				->skip($i)
-				->take(1)
-				->first();
-			
-				$hutang 	= Calculator::hutangBefore($model->morph_reference_id, $tanggal);
-
-				if($angs_1['piut_b'] > 0){
-					//kalau ada piutang
-					$deb[] 	= $model->notabayar->nomor_rekening;
-					$kre[] 	= $this->table['piutang_bunga'][$kredit->jenis_pinjaman];
-					$ttl[] 	= abs($angs_1['piut_b']);
-
-					$jumlah 	= $jumlah - abs($angs_1['piut_b']);
-				}
-				elseif($hutang <= 0){
-					//kalau pelunasan
-					$deb[] 	= $model->notabayar->nomor_rekening;
-					$kre[] 	= $this->table['bunga'][$kredit->jenis_pinjaman];
-					$ttl[] 	= $jumlah;
-					
-					$jumlah	= 0;
-				}else{
-					//bayar angsuran
-					$deb[] 		= $model->notabayar->nomor_rekening;
-					$kre[] 		= $this->table['titipan'][$kredit->jenis_pinjaman];
-					$ttl[] 		= $jumlah;
-				}
-			}
-			$i 		= $i+1;
+		//bayar pokok jt
+		if($titipan >= $jumlah && $piut_b > 0){
+			$deb[] 	= $this->table['titipan'][$kredit->jenis_pinjaman];
+			$kre[] 	= $this->table['piutang_bunga'][$kredit->jenis_pinjaman];
+			$ttl[] 	= abs($jumlah);
+		}elseif($piut_b > 0){
+			$deb[] 	= $model->notabayar->nomor_rekening;
+			$kre[] 	= $this->table['piutang_bunga'][$kredit->jenis_pinjaman];
+			$ttl[] 	= abs($jumlah);
+		}elseif($jumlah >= $sisa_b){
+			$deb[] 	= $model->notabayar->nomor_rekening;
+			$kre[] 	= $this->table['bunga'][$kredit->jenis_pinjaman];
+			$ttl[] 	= abs($jumlah);
 		}
-		
+
 		return ['kre' => $kre, 'deb' => $deb, 'jumlah' => $ttl];
 	}
 

@@ -178,6 +178,7 @@ class PutusanController extends Controller
 			return redirect(route('putusan.show', ['id' => $id, 'kantor_aktif_id' => request()->get('kantor_aktif_id')]));
 
 		} catch (Exception $e) {
+			dd($e);
 			DB::rollback();
 			return redirect()->back()->withErrors($e->getMessage());
 		}
@@ -235,7 +236,7 @@ class PutusanController extends Controller
 					return view('v2.putusan.print.bukti_setoran_realisasi');
 					break;
 				default:
-					$data['pengajuan']	= Pengajuan::where('id', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->first()->toArray();
+					$data['pengajuan']	= Pengajuan::where('id', $id)->where('kode_kantor', request()->get('kantor_aktif_id'))->first();
 					
 					$data['survei']		=  Survei::where('pengajuan_id', $id)->orderby('tanggal', 'desc')->with(['character', 'condition', 'capacity', 'capital', 'jaminan_kendaraan', 'jaminan_kendaraan.foto', 'jaminan_tanah_bangunan', 'jaminan_tanah_bangunan.foto', 'surveyor'])->first();
 					

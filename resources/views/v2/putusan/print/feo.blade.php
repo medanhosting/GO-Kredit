@@ -44,7 +44,7 @@
 			<div class="row text-justify" style="font-size:11px;">
 				<div class="col-xs-12">
 					<p>
-						Surat Penyerahan Hak Milik Secara FIDUSIA ini dibuat pada hari {{$hari[strtolower(Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['putusan']['tanggal'])->format('d-m-Y')}} oleh dan antara :	
+						Surat Penyerahan Hak Milik Secara FIDUSIA ini dibuat pada hari {{$hari[strtolower(Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('l'))]}} tanggal {{Carbon\Carbon::createFromFormat('d/m/Y H:i', $data['pengajuan']['status_realisasi']['tanggal'])->format('d-m-Y')}} oleh dan antara :	
 					</p>
 
 					<p>

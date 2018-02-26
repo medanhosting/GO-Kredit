@@ -89,67 +89,77 @@
 		@endcomponent
 	</div>
 	<div class="col-4">
-		@component('bootstrap.card')
-			<div class="card-header bg-light p-0">
-				<ul class="nav nav-tabs underline" role="tablist">
-					@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.bayar'], $scopes->scopes))
-					<li class="nav-item">
-						<a class="nav-link px-4 {{$is_bayar_denda_tab}}" data-toggle="tab" href="#bayar_d" role="tab">
-							<h7 class="text-left p-2 mb-0">
-								<strong>BAYAR</strong>
-							</h7>
-						</a>
-					</li>
-					@else
-					<li class="nav-item">
-						<a class="nav-link disabled">
-							<h7 class="text-left p-2 mb-0">
-								<strong>BAYAR</strong>
-							</h7>
-						</a>
-					</li>
-					@endif
-					@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.restitusi'], $scopes->scopes))
-					<li class="nav-item">
-						<a class="nav-link px-4 {{ $is_restitusi_tab }}" href="#restitusi" role="tab" data-toggle="tab">
-							<h7 class="text-left p-2 mb-0">
-								<strong>RESTITUSI</strong>
-							</h7>
-						</a>
-					</li>
-					@else
-					<li class="nav-item">
-						<a class="nav-link disabled">
-							<h7 class="text-left p-2 mb-0">
-								<strong>RESTITUSI</strong>
-							</h7>
-						</a>
-					</li>
-					@endif
-				</ul>
-			</div>
-			<div class='card-body'>
-				<!-- Tab panes -->
-				<div class="tab-content">
-					<!-- tab bayar_d -->
-					@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.bayar'], $scopes->scopes))
-					<div class="tab-pane p-2 {{$is_bayar_denda_tab}}" id="bayar_d" role="tabpanel">
-						@include('v2.kredit.show.bayar_denda')
-					</div>
-					@endif
-					@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.restitusi'], $scopes->scopes))
-					<!-- tab restitusi -->
-					<div class="tab-pane p-2 {{$is_restitusi_tab}}" id="restitusi" role="tabpanel">
-						@if($restitusi)
-							 @include('v2.kredit.show.konfirmasi_restitusi')  
+		@if($stat['total_denda'] > 0)
+			@component('bootstrap.card')
+				<div class="card-header bg-light p-0">
+					<ul class="nav nav-tabs underline" role="tablist">
+						@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.bayar'], $scopes->scopes))
+						<li class="nav-item">
+							<a class="nav-link px-4 {{$is_bayar_denda_tab}}" data-toggle="tab" href="#bayar_d" role="tab">
+								<h7 class="text-left p-2 mb-0">
+									<strong>BAYAR</strong>
+								</h7>
+							</a>
+						</li>
 						@else
-							 @include('v2.kredit.show.permohonan_restitusi')  
+						<li class="nav-item">
+							<a class="nav-link disabled">
+								<h7 class="text-left p-2 mb-0">
+									<strong>BAYAR</strong>
+								</h7>
+							</a>
+						</li>
+						@endif
+						@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.restitusi'], $scopes->scopes))
+						<li class="nav-item">
+							<a class="nav-link px-4 {{ $is_restitusi_tab }}" href="#restitusi" role="tab" data-toggle="tab">
+								<h7 class="text-left p-2 mb-0">
+									<strong>RESTITUSI</strong>
+								</h7>
+							</a>
+						</li>
+						@else
+						<li class="nav-item">
+							<a class="nav-link disabled">
+								<h7 class="text-left p-2 mb-0">
+									<strong>RESTITUSI</strong>
+								</h7>
+							</a>
+						</li>
+						@endif
+					</ul>
+				</div>
+				<div class='card-body'>
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<!-- tab bayar_d -->
+						@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.bayar'], $scopes->scopes))
+						<div class="tab-pane p-2 {{$is_bayar_denda_tab}}" id="bayar_d" role="tabpanel">
+							@include('v2.kredit.show.bayar_denda')
+						</div>
+						@endif
+						@if(array_intersect($acl_menu['kredit.kredit.aktif.denda.restitusi'], $scopes->scopes))
+						<!-- tab restitusi -->
+						<div class="tab-pane p-2 {{$is_restitusi_tab}}" id="restitusi" role="tabpanel">
+							@if($restitusi)
+								 @include('v2.kredit.show.konfirmasi_restitusi')  
+							@else
+								 @include('v2.kredit.show.permohonan_restitusi')  
+							@endif
+						</div>
 						@endif
 					</div>
-					@endif
 				</div>
-			</div>
-		@endcomponent
+			@endcomponent
+		@else
+			@component('bootstrap.card')
+				@slot('title') 
+					<h4 class='text-center text-success pt-4 pb-4'>
+						TIDAK ADA DENDA
+					</h4>
+				@endslot
+			@endcomponent
+		@endif
 	</div>
 </div>
 <div class="clearfix">&nbsp;</div>

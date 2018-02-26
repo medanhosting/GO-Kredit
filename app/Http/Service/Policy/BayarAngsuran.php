@@ -24,317 +24,32 @@ class BayarAngsuran
 	use IDRTrait;
 	use WaktuTrait;
 
-	public function __construct(Aktif $aktif, $karyawan, $nth, $tanggal, $nomor_perkiraan = null){
+	public function __construct(Aktif $aktif, $karyawan, $jumlah, $nth, $tanggal, $nomor_perkiraan = null){
 		$this->kredit 			= $aktif;
 		$this->karyawan 		= $karyawan;
+		$this->jumlah 			= $jumlah;
 		$this->nth 				= $nth;
-		$this->tanggal 			= $tanggal;
+		$this->tanggal 			= Carbon::createFromFormat('d/m/Y H:i', $tanggal);
 		$this->nomor_perkiraan 	= $nomor_perkiraan;
 	}
 
 	public function bayar(){
-		$turun_pokok 	= $this->formatMoneyFrom($turun_pokok);
+		$tanggal 	= Carbon::parse($this->tanggal);
+		$bayar 		= new PerhitunganBayar($this->kredit['nomor_kredit'], $tanggal, $this->nth, $this->jumlah);
 
-		//turun pokok dlu
-		if(str_is($this->kredit['jenis_pinjaman'], 'pt') && $turun_pokok > 0){
-			//simpan tanda terima
-			$nb 				= new NotaBayar;
-			$nb->nomor_faktur	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
-			$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
-			$nb->morph_reference_tag 	= 'kredit';
-			$nb->tanggal 				= $this->tanggal;
-			$nb->karyawan 				= $this->karyawan;
-			$nb->nomor_rekening 		= $this->nomor_perkiraan;
-			$nb->jumlah 				= $this->formatMoneyTo($turun_pokok);
-			$nb->jenis 					= 'angsuran';
-			$nb->save();
-			
-			$deskripsi 	= 'Penurunan Pokok Angsuran';
-			$angs 		= new DetailTransaksi;
-			$angs->nomor_faktur 	= $nb->nomor_faktur;
-			$angs->tag 				= 'pokok';
-			$angs->jumlah 			= $this->formatMoneyTo($turun_pokok);
-			$angs->deskripsi 		= $deskripsi;
-			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
-			$angs->morph_reference_tag 	= 'kredit';
-			$angs->save();
-		}
+		$this->buat_faktur($this->kredit['nomor_kredit'], 'kredit', 'angsuran');
+		$this->buat_detail_faktur($bayar, $this->notabayar);
 
-		$today 		= Carbon::createFromFormat('d/m/Y H:i', $this->tanggal);
-		$tomorrow 	= Carbon::createFromFormat('d/m/Y H:i', $this->tanggal)->adddays(1);
-		
-		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->skip(0)->take($this->nth)->orderby('nth', 'asc')->get();
+		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->wherein('nth', $this->add_nth)->update(['nomor_faktur' => $this->notabayar->nomor_faktur]);
 
-		//1. check titipan
-		$titipan	= Calculator::titipanBefore($this->kredit['nomor_kredit'], $tomorrow);
-		$piut		= Calculator::piutangBefore($this->kredit['nomor_kredit'], $tomorrow);
-		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->skip(0)->take($this->nth)->orderby('nth', 'asc')->get();
-		$total_bayar 	= JadwalAngsuran::whereIn('id', array_column($nth_akan_d->toarray(), 'id'))->sum('jumlah');
-
-		$is_t_lunas 	= JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->skip($this->nth)->take(1)->first();
-
-		$potongan 		= 0;
-		if(!$is_t_lunas){
-			$potongan 	= Calculator::potonganBefore($this->kredit['nomor_kredit'], $tomorrow);
-		}
-
-		if($piut <= 0 && $is_t_lunas){
-			//simpan tanda terima
-			$nb 				= new NotaBayar;
-			$nb->nomor_faktur	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
-			$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
-			$nb->morph_reference_tag 	= 'kredit';
-			$nb->nomor_rekening			= $this->nomor_perkiraan;
-			$nb->tanggal 				= $this->tanggal;
-			$nb->karyawan 				= $this->karyawan;
-			$nb->jumlah 				= $this->formatMoneyTo($total_bayar);
-			$nb->jenis 					= 'angsuran_sementara';
-			$nb->save();
-
-			$deskripsi 	= 'Titipan Pembayaran Angsuran';
-			$angs 		= new DetailTransaksi;
-			$angs->nomor_faktur 	= $nb->nomor_faktur;
-			$angs->tag 				= 'titipan';
-			$angs->jumlah 			= $this->formatMoneyTo($total_bayar);
-			$angs->deskripsi 		= $deskripsi;
-			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
-			$angs->morph_reference_tag 	= 'kredit';
-			$angs->save();
-
-			return true;
-		}
-
-		//balance titipan
-		if($titipan > 0){
-			$satu_angs 	= $this->formatMoneyFrom($nth_akan_d[0]['jumlah']);
-
-			if($titipan%$satu_angs!=0 && $titipan < $satu_angs){
-				//simpan balance angsuran
-				$bm 				= new NotaBayar;
-				$bm->nomor_faktur	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
-				$bm->morph_reference_id 	= $this->kredit['nomor_kredit'];
-				$bm->morph_reference_tag 	= 'kredit';
-				$bm->nomor_rekening			= $this->nomor_perkiraan;
-				$bm->tanggal 				= $this->tanggal;
-				$bm->karyawan 				= $this->karyawan;
-				$bm->jumlah 				= $this->formatMoneyTo(0);
-				$bm->jenis 					= 'memorial';
-				$bm->save();
-
-				$deskripsi 	= 'Titipan Pembayaran Angsuran';
-				$angs 		= new DetailTransaksi;
-				$angs->nomor_faktur 	= $bm->nomor_faktur;
-				$angs->tag 				= 'titipan';
-				$angs->jumlah 			= $this->formatMoneyTo($satu_angs - ($titipan % $satu_angs));
-				$angs->deskripsi 		= $deskripsi;
-				$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
-				$angs->morph_reference_tag 	= 'kredit';
-				$angs->save();
-			}
-		}
-
-		//simpan tanda terima
-		$nb 				= new NotaBayar;
-		$nb->nomor_faktur	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
-		$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
-		$nb->morph_reference_tag 	= 'kredit';
-		$nb->tanggal 				= $this->tanggal;
-		$nb->karyawan 				= $this->karyawan;
-		$nb->nomor_rekening 		= $this->nomor_perkiraan;
-		$nb->jumlah 				= $this->formatMoneyTo($total_bayar-$potongan-$titipan);
-		$nb->jenis 					= 'angsuran';
-		$nb->save();
-
-		$ptjt 		= 0;
-		$btjt 		= 0;
-
-		foreach ($nth_akan_d as $k => $v) {
-			//jika jatuh tempo bayar, jika tidak sum
-			$tgl 	= Carbon::createFromFormat('d/m/Y H:i', $v['tanggal']);
-
-			if($today->startofday()->format('Y-m-d H:i:s') > $tgl->startofday()->format('Y-m-d H:i:s')){
-				//bayar bunga dan pokok
-				if($v['pokok'] != 'Rp 0'){
-					$deskripsi 	= 'Pokok Angsuran';
-					$angs 		= new DetailTransaksi;
-					$angs->nomor_faktur 	= $nb->nomor_faktur;
-					$angs->tag 				= 'pokok';
-					$angs->jumlah 			= $v['pokok'];
-					$angs->deskripsi 		= $deskripsi;
-					$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
-					$angs->morph_reference_tag 	= 'kredit';
-					$angs->save();
-				}
-
-				if($v['bunga'] != 'Rp 0'){
-					$deskripsi 	= 'Bunga Angsuran';
-					$angs 		= new DetailTransaksi;
-					$angs->nomor_faktur 	= $nb->nomor_faktur;
-					$angs->tag 				= 'bunga';
-					$angs->jumlah 			= $v['bunga'];
-					$angs->deskripsi 		= $deskripsi;
-					$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
-					$angs->morph_reference_tag 	= 'kredit';
-					$angs->save();
-				}
-
-			}else{
-				$ptjt 	= $ptjt + $this->formatMoneyFrom($v['pokok']);
-				$btjt 	= $btjt + $this->formatMoneyFrom($v['bunga']);
-			}
-		}
-
-		if($ptjt > 0){
-			$deskripsi 	= 'Pokok Angsuran';
-			$angs 		= new DetailTransaksi;
-			$angs->nomor_faktur 	= $nb->nomor_faktur;
-			$angs->tag 				= 'pokok';
-			$angs->jumlah 			= $this->formatMoneyTo($ptjt);
-			$angs->deskripsi 		= $deskripsi;
-			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
-			$angs->morph_reference_tag 	= 'kredit';
-			$angs->save();
-		}
-
-		if($btjt > 0){
-			$deskripsi 	= 'Bunga Angsuran';
-			$angs 		= new DetailTransaksi;
-			$angs->nomor_faktur 	= $nb->nomor_faktur;
-			$angs->tag 				= 'bunga';
-			$angs->jumlah 			= $this->formatMoneyTo($btjt - $potongan);
-			$angs->deskripsi 		= $deskripsi;
-			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
-			$angs->morph_reference_tag 	= 'kredit';
-			$angs->save();
-		}
-
-		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->skip(0)->take($this->nth)->update(['nomor_faktur' => $nb->nomor_faktur, 'tanggal_bayar' => $this->formatDateTimeFrom($this->tanggal)]);
+		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->orderby('nth', 'asc')->wherein('nth', $this->nth)->update(['tanggal_bayar' => $this->tanggal->format('Y-m-d H:i:s')]);
 
 		return true;
 	}
 
 	public function bayar_sebagian($nominal){
-		$tunggakan 	= JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->first();
-		$jumlah_t 	= $this->formatMoneyFrom($tunggakan->jumlah);
 
-		$titipan	= Calculator::titipanBefore($this->kredit['nomor_kredit'], Carbon::createFromFormat('d/m/Y H:i', $this->tanggal));
-
-		$piut		= Calculator::piutangBefore($this->kredit['nomor_kredit'], Carbon::createFromFormat('d/m/Y H:i', $this->tanggal));
-
-		$bayar 		= $titipan + $this->formatMoneyFrom($nominal);
-
-		if($bayar <= $jumlah_t || $piut == 0){
-			//simpan tanda terima
-			$nb 				= new NotaBayar;
-			$nb->nomor_faktur	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
-			$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
-			$nb->morph_reference_tag 	= 'kredit';
-			$nb->tanggal 				= $this->tanggal;
-			$nb->karyawan 				= $this->karyawan;
-			$nb->jumlah 				= $nominal;
-			$nb->jenis 					= 'angsuran_sementara';
-			$nb->save();
-
-			$deskripsi 	= 'Titipan Pembayaran Tunggakan Angsuran';
-			$angs 		= new DetailTransaksi;
-			$angs->nomor_faktur 	= $nb->nomor_faktur;
-			$angs->tag 				= 'titipan';
-			$angs->jumlah 			= $nominal;
-			$angs->deskripsi 		= $deskripsi;
-			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
-			$angs->morph_reference_tag 	= 'kredit';
-			$angs->save();
-		}else{
-			throw new AppException(['nominal' => 'Pembayaran Cukup Untuk Melunasi 1 Angsuran'], 1);
-		}
-	}
-
-	private function hitung_pelunasan($nth_dibayar){
-		$today 	= Carbon::createFromFormat('d/m/Y H:i', $this->tanggal);
-		//cek semua tunggakan
-		$tgk	= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $this->kredit['nomor_kredit'])->where('tanggal', '<', $today->format('Y-m-d H:i:s'))->sum('jumlah');
-
-		if($tgk){
-			throw new AppException(['nth' => 'Harap Lunasi Tunggakan Terlebih Dahulu!'], 1);
-		}
-
-		//cek titipan
-		$ttpn	= DetailTransaksi::whereIn('tag', ['titipan_bunga', 'restitusi_titipan_bunga', 'titipan_pokok', 'restitusi_titipan_pokok'])->wherehas('notabayar', function($q){$q->where('morph_reference_id', $this->kredit['nomor_kredit'])->where('morph_reference_tag', 'kredit');})->sum('jumlah');
-
-		if($ttpn){
-			throw new AppException(['nth' => 'Harap Keluarkan Titipan Terlebih Dahulu!'], 1);
-		}
-
-		//hitung bunga
-		$pot_b 	= abs($this->formatMoneyFrom(PelunasanAngsuran::potongan($this->kredit['nomor_kredit'])));
-		$total 	= 0;
-
-		//pokok
-		if(str_is($this->kredit['jenis_pinjaman'], 'pa')){
-			$rincian 	= new PerhitunganBunga($this->kredit['plafon_pinjaman'], 'Rp 0', $this->kredit['suku_bunga'], null, null, null, $this->kredit['jangka_waktu']);
-			$rincian 	= $rincian->pa();
-			
-			$angs_p 	= $this->formatMoneyFrom($rincian['angsuran'][$nth_dibayar]['angsuran_pokok']);
-			$pokok 		= $angs_p * ($this->kredit['jangka_waktu'] - $nth_dibayar);
-
-			$angs_b 	= $this->formatMoneyFrom($rincian['angsuran'][$nth_dibayar]['angsuran_bunga']);
-			$bunga 		= $angs_b * ($this->kredit['jangka_waktu'] - $nth_dibayar);
-
-			$total 		= $pokok + $bunga - $pot_b;
-		}elseif(str_is($this->kredit['jenis_pinjaman'], 'pt')){
-			$rincian 	= new PerhitunganBunga($this->kredit['plafon_pinjaman'], 'Rp 0', $this->kredit['suku_bunga'], null, null, null, $this->kredit['jangka_waktu']);
-			$rincian 	= $rincian->pt();
-
-			$angs_p 	= $this->formatMoneyFrom($rincian['angsuran'][6]['angsuran_pokok']);
-			$pokok 		= $angs_p;
-
-			$angs_b 	= $this->formatMoneyFrom($rincian['angsuran'][$nth_dibayar]['angsuran_bunga']);
-			$bunga 		= $angs_b * ($this->kredit['jangka_waktu'] - 1 - $nth_dibayar);
-
-			$total 		= $pokok + $bunga - $pot_b;
-		}
-
-		//simpan nota bayar
-		$nb 				= new NotaBayar;
-		$nb->nomor_faktur	= NotaBayar::generatenomorfaktur($this->kredit['nomor_kredit']);
-		$nb->morph_reference_id 	= $this->kredit['nomor_kredit'];
-		$nb->morph_reference_tag 	= 'kredit';
-		$nb->tanggal 				= $this->tanggal;
-		$nb->karyawan 				= $this->karyawan;
-		$nb->jumlah 				= $this->formatMoneyTo($total);
-		$nb->jenis 					= 'angsuran';
-		$nb->save();
-
-		//simpan pokok
-		$deskripsi 	= 'Pelunasan Pokok Angsuran Ke-'.$nth_dibayar.' s/d '.$this->kredit['jangka_waktu'];
-		$angs 		= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->where('deskripsi', $deskripsi)->first();
-		if(!$angs){
-			$angs 	= new DetailTransaksi;
-		}
-		$angs->nomor_faktur 	= $nb->nomor_faktur;
-		$angs->tag 				= 'pokok';
-		$angs->jumlah 			= $this->formatMoneyTo($pokok);
-		$angs->deskripsi 		= $deskripsi;
-		$angs->save();
-
-		//simpan bunga
-		$deskripsi 	= 'Pelunasan Bunga Angsuran Ke-'.$nth_dibayar.' s/d '.$this->kredit['jangka_waktu'];
-		$angs 		= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->where('deskripsi', $deskripsi)->first();
-		if(!$angs){
-			$angs 	= new DetailTransaksi;
-		}
-		$angs->nomor_faktur 	= $nb->nomor_faktur;
-		$angs->tag 				= 'bunga';
-		$angs->jumlah 			= $this->formatMoneyTo($bunga - $pot_b);
-		$angs->deskripsi 		= $deskripsi;
-		$angs->save();
-
-		$angsurans 		= JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->whereIn('nth', $this->nth)->get();
-
-		foreach ($angsurans as $k => $v) {
-			$v->nomor_faktur 	= $nb->nomor_faktur;
-			$v->save();
-		}
+		return $this->bayar();
 	}
 
 	public function penerimaan_kas_kolektor($nomor_faktur){
@@ -344,17 +59,19 @@ class BayarAngsuran
 			$tagih->save();
 		}
 
-		$tanggal 			= Carbon::createFromFormat('d/m/Y H:i', $this->tanggal);
-		$this->nominal		= NotaBayar::where('nomor_faktur', $nomor_faktur)->sum('jumlah');
+		$tanggal	= Carbon::parse($this->tanggal);
+		$nb			= NotaBayar::where('nomor_faktur', $nomor_faktur)->first();
 
-		$bayar 		= new PerhitunganBayar($this->kredit['nomor_kredit'], $tanggal->format('d/m/Y'), 0, $this->formatMoneyTo($this->nominal));
+		$bayar 		= new PerhitunganBayar($this->kredit['nomor_kredit'], $tanggal, $this->nth, $nb['jumlah']);
 
 		//simpan nb baru
 		$this->buat_faktur($nomor_faktur, 'finance', 'memorial_kolektor');
-		$this->buat_detail_faktur($bayar);
+		$this->buat_detail_faktur($bayar, $this->notabayar);
 
 		//update jadwal t
-		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->skip(0)->take($this->nth)->update(['nomor_faktur' => $this->nomor_faktur, 'tanggal_bayar' => $this->formatDateTimeFrom($this->tanggal)]);
+		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->wherein('nth', $this->add_nth)->update(['nomor_faktur' => $this->notabayar->nomor_faktur]);
+
+		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->orderby('nth', 'asc')->wherein('nth', $this->nth)->update(['tanggal_bayar' => $this->tanggal->format('Y-m-d H:i:s')]);
 
 		return true;
 	}
@@ -366,16 +83,16 @@ class BayarAngsuran
 		$nb->morph_reference_id 	= $ref_id;
 		$nb->morph_reference_tag 	= $ref_tag;
 		$nb->nomor_rekening 		= $this->nomor_perkiraan;
-		$nb->tanggal 				= $this->tanggal;
+		$nb->tanggal 				= $this->tanggal->format('d/m/Y H:i');
 		$nb->karyawan 				= $this->karyawan;
-		$nb->jumlah 				= $this->formatMoneyTo($this->nominal);
+		$nb->jumlah 				= $this->jumlah;
 		$nb->jenis 					= $jenis;
 		$nb->save();
 
-		$this->nomor_faktur 	= $nb->nomor_faktur;
+		$this->notabayar 			= $nb;
 	}
 
-	private function buat_detail_faktur(PerhitunganBayar $bayar){
+	private function buat_detail_faktur(PerhitunganBayar $bayar, NotaBayar $notabayar){
 
 		if(str_is($this->kredit['jenis_pinjaman'], 'pa')){
 			$bayar 	= $bayar->pa();
@@ -383,68 +100,33 @@ class BayarAngsuran
 			$bayar 	= $bayar->pt();
 		}
 
-		$nth 		= 0;
-		$faktur 	= [];
-		$tanggal_1	= Carbon::parse(JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('tanggal', 'asc')->min('tanggal'));
+		$faktur 	= PerhitunganBayar::generateFaktur($this->kredit['nomor_kredit'], $bayar, $this->tanggal);
 
-		foreach ($bayar as $k => $v) {
-
-			if(str_is($v['tag'], 'angsuran_jt')){
-
-				$piut	= Calculator::PiutangBefore($this->kredit['nomor_kredit'], $tanggal_1->adddays(1));
-				$piut_p	= Calculator::PiutangPokokBefore($this->kredit['nomor_kredit'], $tanggal_1);
-				$piut_b	= Calculator::PiutangBungaBefore($this->kredit['nomor_kredit'], $tanggal_1);
-
-				while ($piut > 0 && $v['jumlah'] >= $piut){
-					$nth  		= $nth + 1;
-
-					if($piut_p > 0){
-						$faktur[]	= [
-							'deskripsi'	=> 'Pembayaran Pokok Angsuran Ke-'.$nth,
-							'tag'		=> 'pokok',
-							'jumlah'	=> $this->formatMoneyTo($piut_p)
-						];
-					}
-
-					if($piut_b > 0){
-						$faktur[]	= [
-							'deskripsi'	=> 'Pembayaran Bunga Angsuran Ke-'.$nth,
-							'tag'		=> 'bunga',
-							'jumlah'	=> $this->formatMoneyTo($piut_b)
-						];
-					}
-
-					$piut	= Calculator::PiutangBefore($this->kredit['nomor_kredit'], $tanggal_1->addmonthsnooverflow(1));
-					$piut_p	= Calculator::PiutangPokokBefore($this->kredit['nomor_kredit'], $tanggal_1) - $piut_p;
-					$piut_b	= Calculator::PiutangBungaBefore($this->kredit['nomor_kredit'], $tanggal_1) - $piut_b;
-				}
-			}elseif(str_is($v['tag'], 'angsuran_berikut')){
-				$next_t 	= JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->where('tanggal', '>=', $tanggal_1->format('Y-m-d H:i:s'))->wherenull('nomor_faktur')->orderby('tanggal', 'asc')->select('jumlah as total')->select('nth')->first();
-				$next 		= $next_t['total'];
-
-				while ($v['jumlah'] >= $next && $next_t){
-					$nth	= $nth + 1;
-					$next_t = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->where('tanggal', '>=', $tanggal_1->addmonthsnooverflow(1)->format('Y-m-d H:i:s'))->wherenull('nomor_faktur')->orderby('tanggal', 'asc')->select('jumlah as total')->select('nth')->first();
-					$next	= $next + $next_t['total'];
-				}
-
-				$faktur[]	= [
-						'deskripsi'	=> 'Titipan Pembayaran Angsuran',
-						'tag'		=> 'titipan',
-						'jumlah'	=> $this->formatMoneyTo($v['jumlah'])
-					];
-			}
-		}
-
-		foreach ($faktur as $k => $v) {
+		if($faktur['balance_titipan'] > 0){
+			//simpan balance titipan
 			$angs 		= new DetailTransaksi;
-			$angs->fill($v);
-			$angs->nomor_faktur 		= $this->nomor_faktur;
+			$angs->nomor_faktur		= $notabayar->nomor_faktur;
+			$angs->tag 				= 'titipan';
+			$angs->jumlah 			= $this->formatMoneyTo($faktur['balance_titipan']);
+			$angs->deskripsi 		= 'Titipan Angsuran';
 			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
 			$angs->morph_reference_tag 	= 'kredit';
 			$angs->save();
 		}
 
-		$this->nth 	= $nth;
+		foreach ($faktur['isi'] as $k => $v) {
+			$angs 		= new DetailTransaksi;
+			$angs->fill($v);
+			$angs->nomor_faktur 		= $notabayar->nomor_faktur;
+			$angs->morph_reference_id 	= $this->kredit['nomor_kredit'];
+			$angs->morph_reference_tag 	= 'kredit';
+			$angs->save();
+		}
+
+		$notabayar->jumlah 		= $this->formatMoneyTo($faktur['total']);
+		$notabayar->save();
+
+		$this->nth 				= $faktur['nth_jt'];
+		$this->add_nth 			= $faktur['nth'];
 	}
 }

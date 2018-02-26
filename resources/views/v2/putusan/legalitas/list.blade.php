@@ -18,7 +18,7 @@
 							<div class="col-9">
 								{!! Form::bsCheckbox(strtoupper(str_replace('_',' ',$kch)), 'checklists['.$kop.']['.$kch.']', (str_is('ada', $vch) ? 'tidak_ada' : 'ada'), (str_is('ada', $vch) ? true : false)) !!}
 							</div>
-							@if(str_is($kop, 'pengikat'))
+							@if(str_is($kop, 'pengikat') && !in_array($kch, ['perjanjian_kredit', 'pengakuan_hutang', 'kuasa_menjual_dan_menarik_jaminan', 'feo', 'kuasa_pembebanan_feo', 'surat_persetujuan_plang']))
 							<div class="col-3 text-right">
 								<a href="{{route('pengajuan.print', ['id' => $putusan['pengajuan_id'], 'mode' => $kch, 'kantor_aktif_id' => $kantor_aktif['id']])}}" target="__blank" class="text-success">
 									CETAK

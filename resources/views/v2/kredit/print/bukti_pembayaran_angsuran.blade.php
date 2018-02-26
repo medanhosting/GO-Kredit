@@ -124,19 +124,6 @@
 										<td class="text-right">{{ $v['jumlah'] }}</td>
 									</tr>
 								@endforeach
-								@if($potongan > 0)
-									<tr class="text-danger">
-										<td>{{ count($angsuran['details']) + 1 }}</td>
-										<td>Potongan Titipan</td>
-										<td class="text-right">{{ $idr->formatMoneyTo($potongan) }}</td>
-									</tr>
-								@elseif($potongan < 0)
-									<tr class="text-success">
-										<td>{{ count($angsuran['details']) + 1 }}</td>
-										<td>Simpanan Titipan</td>
-										<td class="text-right">{{ $idr->formatMoneyTo(abs($potongan)) }}</td>
-									</tr>
-								@endif
 							</tbody>
 							<tfoot>
 								<tr>

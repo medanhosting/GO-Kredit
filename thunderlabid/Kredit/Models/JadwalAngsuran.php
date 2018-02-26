@@ -148,6 +148,12 @@ class JadwalAngsuran extends Model
 					->where('tanggal_bayar', '>=', $value->format('Y-m-d H:i:s'))
 					;
 				})
+				->orwhere(function($q)use($value){
+					$q
+					->wherenull('tanggal_bayar')
+					->where('tanggal', '<=', $value->format('Y-m-d H:i:s'))
+					;
+				})
 				;
 			})
 		;

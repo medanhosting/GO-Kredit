@@ -54,8 +54,8 @@ class RouteServiceProvider extends ServiceProvider
 			'kredit.tunggakan'		=> ['operasional', 'tunggakan'], 
 			'kredit.jaminan'		=> ['operasional', 'jaminan'], 
 			
-			'keuangan.lkh'		=> ['keuangan'], 
-			'keuangan.jurnal'	=> ['keuangan'], 
+			'keuangan.lkh'		=> ['operasional', 'keuangan'], 
+			'keuangan.jurnal'	=> ['operasional', 'keuangan'], 
 			'keuangan.kas'		=> ['kas'], 
 			'keuangan.akun'		=> ['akun'], 
 			

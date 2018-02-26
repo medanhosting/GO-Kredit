@@ -40,12 +40,12 @@ trait KreditTrait {
  	}
 
  	public function penerimaan_kas_kolektor($aktif){
- 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, request()->get('tanggal'), request()->get('nomor_perkiraan'));
+ 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, null, request()->get('tanggal'), request()->get('nomor_perkiraan'));
 		$bayar->penerimaan_kas_kolektor(request()->get('nomor_faktur'));
  	}
 
  	public function store_angsuran($aktif){
- 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('temp_nth'), request()->get('tanggal'), request()->get('nomor_perkiraan'));
+ 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('jumlah'), request()->get('jumlah_angsuran'), request()->get('tanggal'), request()->get('nomor_perkiraan'));
 		$bayar->bayar(request()->get('turun_pokok'));
  	}
 
