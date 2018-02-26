@@ -217,8 +217,13 @@ class TestController extends Controller
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 		if(request()->has('q')){
-			Artisan::call('gokredit:jurnalpagi', ['--tanggal' => request()->get('q')]);
-			return redirect()->back()->withErrors(['Memorial telah dikeluarkan']);
+			if(request()->get('type')=='jp'){
+				Artisan::call('gokredit:jurnalpagi', ['--tanggal' => request()->get('q')]);
+				return redirect()->back()->withErrors(['Memorial telah dikeluarkan']);
+			}else{
+				Artisan::call('gokredit:terbitkansp', ['--tanggal' => request()->get('q')]);
+				return redirect()->back()->withErrors(['SP telah dikeluarkan']);
+			}
 		}
 
 		$this->layout->pages 	= view('v2.test.jurnal.predict');

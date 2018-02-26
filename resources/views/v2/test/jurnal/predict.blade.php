@@ -13,15 +13,34 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('header')
-					<h5 class="py-2 pl-3 mb-0 float-left">&nbsp;&nbsp;PREDIKSI JURNAL PAGI</h5>
+					<h5 class="py-2 pl-3 mb-0 float-left">&nbsp;&nbsp;PREDIKSI</h5>
 				@endslot
 
 				<div class="card-body">
-					<form action="{{route('jp.predict', ['kantor_aktif_id' => $kantor_aktif_id])}}" method="GET">
+					<form action="{{route('jp.predict', ['kantor_aktif_id' => $kantor_aktif_id, 'type' => 'jp'])}}" method="GET">
 						<div class="row">
 							<!-- CARI BERDASARKAN DOKUMEN -->
 							<div class="col-sm-4">
 								<label>Buat Jurnal Pagi Tanggal</label>
+								<div class="form-row">
+									<div class="col">
+										{!! Form::bsText(null, 'q', null, ['placeholder' => 'd/m/Y', 'class' => 'mask-date form-control']) !!}
+										{{Form::hidden('kantor_aktif_id', $kantor_aktif_id)}}
+									</div>
+									<div class="col-auto">
+										<button class="btn btn-primary" type="submit">Go!</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+
+					<div class="clearfix">&nbsp;</div>
+					<form action="{{route('jp.predict', ['kantor_aktif_id' => $kantor_aktif_id, 'type' => 'sp'])}}" method="GET">
+						<div class="row">
+							<!-- CARI BERDASARKAN DOKUMEN -->
+							<div class="col-sm-4">
+								<label>Buat SP</label>
 								<div class="form-row">
 									<div class="col">
 										{!! Form::bsText(null, 'q', null, ['placeholder' => 'd/m/Y', 'class' => 'mask-date form-control']) !!}
