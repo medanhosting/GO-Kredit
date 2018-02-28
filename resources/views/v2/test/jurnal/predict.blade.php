@@ -26,6 +26,7 @@
 									<div class="col">
 										{!! Form::bsText(null, 'q', null, ['placeholder' => 'd/m/Y', 'class' => 'mask-date form-control']) !!}
 										{{Form::hidden('kantor_aktif_id', $kantor_aktif_id)}}
+										{{Form::hidden('type', 'jp')}}
 									</div>
 									<div class="col-auto">
 										<button class="btn btn-primary" type="submit">Go!</button>
@@ -45,6 +46,7 @@
 									<div class="col">
 										{!! Form::bsText(null, 'q', null, ['placeholder' => 'd/m/Y', 'class' => 'mask-date form-control']) !!}
 										{{Form::hidden('kantor_aktif_id', $kantor_aktif_id)}}
+										{{Form::hidden('type', 'sp')}}
 									</div>
 									<div class="col-auto">
 										<button class="btn btn-primary" type="submit">Go!</button>
