@@ -136,7 +136,8 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 				//hitung titipan
 				$piut 		= Calculator::PiutangBefore($v['nomor_kredit'], $tomorrow->startofday());
 				$titipan 	= Calculator::titipanBefore($v['nomor_kredit'], $tomorrow->startofday());
-				if(($titipan - $piut) >= 0){
+
+				if(($titipan - $piut) >= 0 && $piut > 0){
 					$bayar 		= new PerhitunganBayar($v['nomor_kredit'], $tomorrow, 1, $this->formatMoneyTo(0));
 
 					if(str_is($v['kredit']['jenis_pinjaman'], 'pa')){
