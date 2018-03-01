@@ -169,7 +169,7 @@
 		</div>
 		<div class="row">
 			<div class="col">
-				{!! Form::vLabel('Tanggungan Keluarga', 'capacity[tanggungan_keluarga]', $survei['capacity']['dokumen_survei']['capacity']['tanggungan_keluarga'], ['class' => 'cattanggungankeluarga form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => ''], true) !!}
+				{!! Form::vLabel('Tanggungan Keluarga', 'capacity[tanggungan_keluarga]', $survei['capacity']['dokumen_survei']['capacity']['tanggungan_keluarga'], ['class' => 'cattanggungankeluarga mask-money form-control inline-edit border-input w-50 text-info pb-1', 'placeholder' => 'Rp 3.000.000'], true) !!}
 			</div>
 		</div>
 		{!! Form::bsSubmit('Simpan', ['class' => 'btn btn-primary float-right mr-3']) !!}
@@ -438,7 +438,7 @@
 
 								<div class="row">
 									<div class="col">
-										{!! Form::vText('Nomor Polisi', 'collateral['.$v['id'].'][bpkb][nomor_polisi]', $v['dokumen_survei']['collateral']['bpkb']['nomor_polisi'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'N 5577 CC'], true) !!}
+										{!! Form::vText('Nomor Polisi', 'collateral['.$v['id'].'][bpkb][nomor_polisi]', $v['dokumen_survei']['collateral']['bpkb']['nomor_polisi'], ['class' => 'form-control inline-edit text-info mask-full-no-polisi text-uppercase', 'placeholder' => 'N 5577 CC'], true) !!}
 									</div>
 								</div>
 								<div class="row">
@@ -449,12 +449,12 @@
 
 								<div class="row">
 									<div class="col">
-										{!! Form::vText('Nomor Mesin', 'collateral['.$v['id'].'][bpkb][nomor_mesin]', $v['dokumen_survei']['collateral']['bpkb']['nomor_mesin'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'JJ09E1266700'], true) !!}
+										{!! Form::vText('Nomor Mesin', 'collateral['.$v['id'].'][bpkb][nomor_mesin]', $v['dokumen_survei']['collateral']['bpkb']['nomor_mesin'], ['class' => 'form-control inline-edit text-info mask-no-mesin text-uppercase', 'placeholder' => 'JJ09E1266700'], true) !!}
 									</div>
 								</div>
 								<div class="row">
 									<div class="col">
-										{!! Form::vText('Nomor Rangka', 'collateral['.$v['id'].'][bpkb][nomor_rangka]', $v['dokumen_survei']['collateral']['bpkb']['nomor_rangka'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'MM9PK0322CJ173615'], true) !!}
+										{!! Form::vText('Nomor Rangka', 'collateral['.$v['id'].'][bpkb][nomor_rangka]', $v['dokumen_survei']['collateral']['bpkb']['nomor_rangka'], ['class' => 'form-control inline-edit text-info mask-no-rangka text-uppercase', 'placeholder' => 'MM9PK0322CJ173615'], true) !!}
 									</div>
 								</div>
 
@@ -546,7 +546,7 @@
 
 								<div class="row">
 									<div class="col">
-										{!! Form::vTextarea('Catatan', 'collateral['.$v['id'].'][bpkb][catatan]', $v['dokumen_survei']['collateral']['bpkb']['catatan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Ada cacat', 'rows' => 5], true) !!}
+										{!! Form::vTextarea('Catatan', 'collateral['.$v['id'].'][bpkb][catatan]', $v['dokumen_survei']['collateral']['bpkb']['catatan'], ['class' => 'form-control inline-edit text-info', 'placeholder' => 'Ada cacat', 'rows' => 2], true) !!}
 									</div>
 								</div>
 								
@@ -981,7 +981,7 @@
 
 
 		//PERUBAHAN STATUS PERNIKAHAN
-		$(".catstatuspernikahan").on("change", hitungTanggunganKeluarga);
+		$(".catstatuspernikahan").on("keyup", hitungTanggunganKeluarga);
 		
 		function hitungTanggunganKeluarga(){
 			status_p = $(this).val().replace('K-', '');
