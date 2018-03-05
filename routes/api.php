@@ -32,6 +32,12 @@ Route::middleware('api')->namespace('API')->group(function(){
 	//SURVEI
 	Route::any('/survei/index',										['uses' => 'SurveiController@index']);
 	Route::any('/survei/{pengajuan_id}/foto/{survei_detail_id}',	['uses' => 'SurveiController@simpan_foto']);
+	
+	//NOTABAYAR
+	Route::get('/nota/bayar/index',				['uses' => 'NotaBayarController@index']);
+	Route::get('/nota/bayar/show/{id}',			['uses' => 'NotaBayarController@show']);
+
+	//PENAGIHAN
 });
 
 

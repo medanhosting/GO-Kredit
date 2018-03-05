@@ -63,11 +63,11 @@ class LiveTableSeeder extends Seeder
 			],
 			[
 				'role' 		=> 'kabag_operasional',
-				'scopes' 	=> ['operasional', 'jaminan',  'restitusi', '*.hari_e_0', 'keuangan'],
+				'scopes' 	=> ['operasional', 'jaminan',  'restitusi', '*.hari_e_0', 'keuangan', 'realisasi'],
 			],
 			[
 				'role' 		=> 'kabag_kredit',
-				'scopes' 	=> ['realisasi', 'tunggakan', '*.hari_e_0'],
+				'scopes' 	=> ['tunggakan', '*.hari_e_0'],
 			],
 			[
 				'role' 		=> 'komisaris',

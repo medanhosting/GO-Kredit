@@ -28,7 +28,7 @@
 									<a href="{{ route('angsuran.print', ['id' => $v['morph_reference_id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'sementara']) }}" target="__blank" class="text-success">
 										<i class="fa fa-print"></i>
 									</a>
-									@if($v['child'])
+									@if(count($v['child']))
 									&emsp;
 									<a href="{{ route('angsuran.print', ['id' => $v['nomor_faktur'], 'nomor_faktur' => $v['child'][0]['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id'], 'case' => 'tukar_sementara']) }}" target="__blank" class="text-success">
 										<i class="fa fa-exchange"></i>
