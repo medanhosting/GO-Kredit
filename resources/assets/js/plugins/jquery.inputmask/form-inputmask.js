@@ -104,10 +104,13 @@ window.formInputMask = {
 		let selector = $('.mask-year-after-now');
 		yearAfter.mask(selector);
 	},
-	idKTP: function () {
+	idKTP: function () {	
 		var idKTP = new Inputmask('35-99-99-999999-9999');
+		var idKTPCustom = new Inputmask('99-99-999999-9999');
 		var selector = $('.mask-id-card');
-		idKTP.mask(selector);
+		var selector2 = $('.mask-id-card-default');
+		idKTPCustom.mask(selector);
+		idKTP.mask(selector2);
 	},
 	noTelp: function () {
 		var noTelp = new Inputmask('9999 999 999 99');

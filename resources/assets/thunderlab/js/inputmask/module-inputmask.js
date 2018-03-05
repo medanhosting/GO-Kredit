@@ -68,7 +68,7 @@ window.formInputMask = {
 		date.mask(selector);
 	},
 	dateTime: function () {
-		var selector = $('.mask-date'), min, max;
+		var selector = $('.mask-datetime'), min, max;
 
 		if (selector.attr('mask-date-min')) {
 			min = selector.attr('mask-date-min');
@@ -126,10 +126,27 @@ window.formInputMask = {
 		
 		yearRange.mask(selector);
 	},
+	yearNumber: function () {
+		var yearNumber = new Inputmask({
+			alias: '9999',
+			placeholder: ''
+		});
+		var selector = $('.mask-year-number');
+		yearNumber.mask(selector);
+	},
 	idKTP: function () {
-		var idKTP = new Inputmask('99-99-999999-9999');
+		var idKTP = new Inputmask({
+			alias: '99-99-99-999999-9999',
+			placeholder: ''
+		});
+		var idKTPCustom = new Inputmask({
+			alias: '35-99-999999-9999',
+			placeholder: ''
+		});
 		var selector = $('.mask-id-card');
-		idKTP.mask(selector);
+		var selector2 = $('.mask-id-card-default');
+		idKTPCustom.mask(selector);
+		idKTP.mask(selector2);
 	},
 	noTelp: function () {
 		var noTelp = new Inputmask({
@@ -257,6 +274,13 @@ window.formInputMask = {
 		var selector = $('.mask-kode-no-polisi');
 		kodeWilayah.mask(selector);
 	},
+	fullNoPolisi: function () {
+		var fullNoPolisi = new Inputmask({
+			alias: 'a{1,2}-9{1,4}-a{1,3}'
+		});
+		var selector = $('.mask-full-no-polisi');
+		fullNoPolisi.mask(selector);
+	},
 	vinNumber: function () {
 	    var noPol = new Inputmask('a{1,3}-*{1,6}-*{1,8}');
 	    var selector = $('.mask-no-rangka');
@@ -307,10 +331,12 @@ window.formInputMask = {
 		this.numberWithDelimiter();
 		this.noPolisi();
 		this.noPolisiNoKode();
+		this.fullNoPolisi();
 		this.vinNumber();
 		this.machineNumber();
 		this.kodeWilayahNoPolisi();
 		this.yearWithRange();
+		this.yearNumber();
 		this.email();
 		this.numberAndDecimal();
 	}

@@ -2467,9 +2467,8 @@ if (true) module.exports = flatpickr;
 /***/ }),
 
 /***/ "./resources/assets/thunderlab/js/ajax/ajax.js":
-/***/ (function(module, __webpack_exports__) {
+/***/ (function(module, exports) {
 
-"use strict";
 /*
 	=====================================================================
 	Ajax
@@ -4274,14 +4273,14 @@ window.formInputMask = {
 		    min,
 		    max;
 
-		if (selector.attr('mask-datetime-min')) {
-			min = selector.attr('mask-datetime-min');
+		if (selector.attr('mask-date-min')) {
+			min = selector.attr('mask-date-min');
 		} else {
 			min = '01/01/1800 00:00';
 		}
 
-		if (selector.attr('mask-datetime-max')) {
-			max = selector.attr('mask-datetime-max');
+		if (selector.attr('mask-date-max')) {
+			max = selector.attr('mask-date-max');
 		} else {
 			max = '31/12/9999 23:59';
 		}
@@ -4330,10 +4329,27 @@ window.formInputMask = {
 
 		yearRange.mask(selector);
 	},
+	yearNumber: function yearNumber() {
+		var yearNumber = new Inputmask({
+			alias: '9999',
+			placeholder: ''
+		});
+		var selector = $('.mask-year-number');
+		yearNumber.mask(selector);
+	},
 	idKTP: function idKTP() {
-		var idKTP = new Inputmask('99-99-999999-9999');
+		var idKTP = new Inputmask({
+			alias: '99-99-99-999999-9999',
+			placeholder: ''
+		});
+		var idKTPCustom = new Inputmask({
+			alias: '35-99-999999-9999',
+			placeholder: ''
+		});
 		var selector = $('.mask-id-card');
-		idKTP.mask(selector);
+		var selector2 = $('.mask-id-card-default');
+		idKTPCustom.mask(selector);
+		idKTP.mask(selector2);
 	},
 	noTelp: function noTelp() {
 		var noTelp = new Inputmask({
@@ -4442,6 +4458,13 @@ window.formInputMask = {
 		var selector = $('.mask-kode-no-polisi');
 		kodeWilayah.mask(selector);
 	},
+	fullNoPolisi: function fullNoPolisi() {
+		var fullNoPolisi = new Inputmask({
+			alias: 'a{1,2}-9{1,4}-a{1,3}'
+		});
+		var selector = $('.mask-full-no-polisi');
+		fullNoPolisi.mask(selector);
+	},
 	vinNumber: function vinNumber() {
 		var noPol = new Inputmask('a{1,3}-*{1,6}-*{1,8}');
 		var selector = $('.mask-no-rangka');
@@ -4492,10 +4515,12 @@ window.formInputMask = {
 		this.numberWithDelimiter();
 		this.noPolisi();
 		this.noPolisiNoKode();
+		this.fullNoPolisi();
 		this.vinNumber();
 		this.machineNumber();
 		this.kodeWilayahNoPolisi();
 		this.yearWithRange();
+		this.yearNumber();
 		this.email();
 		this.numberAndDecimal();
 	}
