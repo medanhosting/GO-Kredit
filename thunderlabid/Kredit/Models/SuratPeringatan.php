@@ -74,6 +74,18 @@ class SuratPeringatan extends Model
 	// ------------------------------------------------------------------------------------------------------------
 	// SCOPE
 	// ------------------------------------------------------------------------------------------------------------
+	public function scopeNomorSurat($q, $v){
+
+		$tag['SP.001'] 	= 'surat_peringatan_1';
+		$tag['SP.002'] 	= 'surat_peringatan_2';
+		$tag['SP.003'] 	= 'surat_peringatan_3';
+		$tag['SP.004'] 	= 'surat_somasi_1';
+		$tag['SP.005'] 	= 'surat_somasi_2';
+		$tag['SP.006'] 	= 'surat_somasi_3';
+
+		list($nk, $tg)	= explode('-', $v);
+		return $q->where('nomor_kredit', $nk)->where('tag', $tag[$tg]);
+	}
 
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
@@ -134,7 +146,13 @@ class SuratPeringatan extends Model
 
 	public function getNomorSuratAttribute($variable)
 	{
-		$tgl 	= Carbon::parse($this->attributes['tanggal']);
-		return $this->nomor_kredit.'-'.$tgl->format('d.m');
+		$tag['surat_peringatan_1'] 	= 'SP.001';
+		$tag['surat_peringatan_2'] 	= 'SP.002';
+		$tag['surat_peringatan_3'] 	= 'SP.003';
+		$tag['surat_somasi_1'] 		= 'SP.004';
+		$tag['surat_somasi_2'] 		= 'SP.005';
+		$tag['surat_somasi_3'] 		= 'SP.006';
+
+		return $this->nomor_kredit.'-'.$tag[$this->attributes['tag']];
 	}
 }

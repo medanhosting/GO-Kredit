@@ -4,12 +4,16 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Routing\Controller as BaseController;
 
+use Thunderlabid\Kredit\Models\Aktif;
+use Thunderlabid\Kredit\Models\SuratPeringatan;
+
 use Thunderlabid\Finance\Models\NotaBayar;
 use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
 use App\Service\Api\ResponseTrait;
+use App\Http\Service\Policy\FeedBackPenagihan;
 
-use Exception, Response, Auth, Carbon\Carbon;
+use Exception, Response, Auth, Carbon\Carbon, Config, DB;
 
 class NotaBayarController extends BaseController
 {
@@ -75,6 +79,64 @@ class NotaBayarController extends BaseController
 			return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => []]]);
 
 		} catch (Exception $e) {
+			return $this->error_response(request()->all(), $e);
+		}
+	}
+
+	// INPUT :
+	// Nomor Kredit
+	// Nomor SP
+	// Nama Penerima
+	// Nominal
+	public function store()
+	{
+		try {
+			DB::beginTransaction();
+
+			//1. find pengajuan
+			if(Auth::user()){
+				$k		= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active(Carbon::now());
+				$kre 	= Aktif::where('nomor_kredit', request()->get('nomor_kredit'));
+
+				if(request()->has('kode_kantor')){
+					$k		= $k->where('kantor_id', request()->get('kode_kantor'));
+					$kre	= $kre->where('kode_kantor', request()->get('kode_kantor'));
+				}
+
+				$k 		= $k->first();
+				$kre	= $kre->first();
+
+				if(request()->has('nomor_sp')){
+					$sp = SuratPeringatan::nomorsurat(request()->get('nomor_sp'))->first();
+				}else{
+					$sp = null;
+				}
+
+				request()->merge(['kantor_aktif_id' => $k->kantor_id]);
+
+				$kary 	= ['nip' => $k['orang']['nip'], 'nama' => $k['orang']['nama']];
+				$today 	= Carbon::now();
+				
+				$feedback 	= new FeedBackPenagihan($kre, $kary, $today->format('d/m/Y H:i'), request()->get('penerima'), request()->get('jumlah'), Config::get('finance.nomor_perkiraan_titipan_kolektor'), $sp['id']);
+				$feedback 	= $feedback->bayar();
+
+				$return['sp']			= $sp;
+				$return['penagihan']	= $feedback;
+				if($feedback->nomor_faktur){
+					$return['notabayar']= NotaBayar::where('nomor_faktur', $feedback->nomor_faktur)->with(['details'])->first();
+				}
+
+				// DB::commit();
+				
+				return response()->json(['status' => 1, 'data' => $return, 'error' => ['message' => []]]);
+			}
+			DB::rollback();
+
+			return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => []]]);
+
+		} catch (Exception $e) {
+			dd($e);
+			DB::rollback();
 			return $this->error_response(request()->all(), $e);
 		}
 	}

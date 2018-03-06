@@ -60,7 +60,7 @@ class FeedBackPenagihan
 		$tagih->karyawan 			= $this->karyawan;
 		$tagih->save();
 
-		return true;
+		return $tagih;
 	}
 
 	private function buat_faktur(){

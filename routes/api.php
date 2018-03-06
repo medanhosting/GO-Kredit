@@ -35,9 +35,8 @@ Route::middleware('api')->namespace('API')->group(function(){
 	
 	//NOTABAYAR
 	Route::get('/nota/bayar/index',				['uses' => 'NotaBayarController@index']);
+	Route::post('/nota/bayar/store',			['uses' => 'NotaBayarController@store']);
 	Route::get('/nota/bayar/show/{id}',			['uses' => 'NotaBayarController@show']);
-
-	//PENAGIHAN
 });
 
 
