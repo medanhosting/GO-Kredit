@@ -61,9 +61,12 @@
 				Route::resource('kas',			'KasController'); 
 				Route::resource('akun',			'AkunController'); 
 				Route::resource('jurnal',		'JurnalController'); 
-				Route::get('kasir/lkh',			['uses' => 'KasirController@lkh',			'as' => 'kasir.lkh']);
+				Route::get('kasir/lkh',					['uses' => 'KasirController@lkh',		'as' => 'kasir.lkh']);
 
-				Route::get('jurnal/{id}/print',	['uses' => 'JurnalController@print',	'as' => 'jurnal.print']);
+				Route::get('kasir/penerimaan/{akun}',	['uses' => 'KasController@penerimaan','as' => 'kasir.penerimaan']);
+				Route::get('kasir/pengeluaran/{akun}',	['uses' => 'KasController@pengeluaran','as' => 'kasir.pengeluaran']);
+
+				Route::get('jurnal/{id}/print',		['uses' => 'JurnalController@print',	'as' => 'jurnal.print']);
 				Route::get('kasir/print/lkh',		['uses' => 'KasirController@print',		'as' => 'kasir.print']);
 			});
 			
