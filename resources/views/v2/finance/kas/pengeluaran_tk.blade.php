@@ -13,9 +13,9 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('header')
-					<h5 class="py-2 pl-2 mb-0 float-left">&nbsp;&nbsp;PENGELUARAN KAS</h5>
-					<a href="{{route('kas.print', ['tipe' => 'pengeluaran', 'kantor_aktif_id' => $kantor_aktif_id, 'q' => request()->get('q')])}}" target="__blank" class="text-success float-right btn btn-link">
-						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK PENGELUARAN KAS
+					<h5 class="py-2 pl-2 mb-0 float-left">&nbsp;&nbsp;TUTUP KAS PENGELUARAN UANG TUNAI</h5>
+					<a href="{{route('kas.print', ['tipe' => 'pengeluaran_tk', 'kantor_aktif_id' => $kantor_aktif_id, 'q' => request()->get('q')])}}" target="__blank" class="text-success float-right btn btn-link">
+						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK TUTUP KAS PENGELUARAN UANG TUNAI
 					</a>
 				@endslot
 
@@ -95,7 +95,7 @@
 											<td colspan="8">&nbsp;</td>
 										</tr>
 										<tr>
-											<td class="align-middle" colspan="2" rowspan="3">SALDO KAS HARI INI {{$tanggal->format('d/m/Y')}}</td>
+											<td class="align-middle" colspan="2" rowspan="3">Pengeluaran Setelah Tutup Kas : {{$tanggal->format('d/m/Y')}}</td>
 											<td class="text-right align-middle" rowspan="3">{{$idr->formatMoneyTo($total)}}</td>
 											<td class="text-right align-middle" colspan="2" rowspan="3"><i>Terbilang : {{ucwords($idr->terbilang(abs($total)))}} Rupiah</i></td>
 											<th>Dibukukan</th>

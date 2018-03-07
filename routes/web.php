@@ -63,11 +63,16 @@
 				Route::resource('jurnal',		'JurnalController'); 
 				Route::get('kasir/lkh',					['uses' => 'KasirController@lkh',		'as' => 'kasir.lkh']);
 
-				Route::get('kasir/penerimaan/{akun}',	['uses' => 'KasController@penerimaan','as' => 'kasir.penerimaan']);
-				Route::get('kasir/pengeluaran/{akun}',	['uses' => 'KasController@pengeluaran','as' => 'kasir.pengeluaran']);
+				Route::get('kasir/penerimaan/{akun}',	['uses' => 'KasController@penerimaan',	'as' => 'kasir.penerimaan']);
+				Route::get('kasir/pengeluaran/{akun}',	['uses' => 'KasController@pengeluaran',	'as' => 'kasir.pengeluaran']);
+
+				Route::get('kasir/penerimaan/tutup/kas',	['uses' => 'KasController@penerimaan_tutup_kas',	'as' => 'kasir.penerimaan.tk']);
+				Route::get('kasir/pengeluaran/tutup/kas',	['uses' => 'KasController@pengeluaran_tutup_kas',	'as' => 'kasir.pengeluaran.tk']);
 
 				Route::get('jurnal/{id}/print',		['uses' => 'JurnalController@print',	'as' => 'jurnal.print']);
-				Route::get('kasir/print/lkh',		['uses' => 'KasirController@print',		'as' => 'kasir.print']);
+				Route::get('lkh/print',				['uses' => 'KasirController@print',		'as' => 'kasir.print']);
+				
+				Route::get('kas/print/{tipe}',		['uses' => 'KasController@print',		'as' => 'kas.print']);
 			});
 			
 		Route::namespace('V2\Kantor')->group(function(){

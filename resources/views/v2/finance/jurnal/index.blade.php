@@ -29,10 +29,31 @@
 								<div class="tab-pane fade @if($k==0) active show @endif" id="nav-{{$v['id']}}" role="tabpanel" aria-labelledby="nav-{{$v['id']}}-tab">
 									<div class="clearfix">&nbsp;</div>
 									<div class="row">
-										<div class="col-12">
+										<div class="col-6">
+											{{-- SEARCH --}}
+											{!! Form::open(['method' => "GET"]) !!}
+												@foreach(request()->all() as $k2 => $v2)
+													@if(!str_is($k2, 'q'))
+														<input type="hidden" name="{{$k2}}" value="{{$v2}}">
+													@endif
+												@endforeach
+												<div class="form-row align-items-end">
+													<div class='col'>
+														{!! Form::bsText('Cari Tanggal', 'q', $tanggal->format('d/m/Y'), ['placeholder' => 'tanggal', 'class' => 'mask-date form-control']) !!}
+													</div>
+													<div class='col-auto'>
+														<div class="form-group">
+															<label for="">&nbsp;</label>
+															{!! Form::bsSubmit('<i class="fa fa-search"></i>', ['class' => 'btn btn-primary']) !!}
+														</div>
+													</div>
+												</div>
+											{!! Form::close() !!}
+										</div>
+										<div class="col-6">
 											<ul class="nav justify-content-end">
 												<li class="nav-item">
-													<a href="{{ route('jurnal.print', ['id' => strtolower($v['id']), 'kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success nav-link text-uppercase">
+													<a href="{{ route('jurnal.print', ['id' => strtolower($v['id']), 'kantor_aktif_id' => $kantor_aktif['id'], 'q' => request()->get('q')]) }}" target="__blank" class="text-success nav-link text-uppercase">
 														<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK JURNAL {{ $v['akun'] }}
 													</a>
 												</li>
@@ -59,7 +80,7 @@
 														<td>{{$v2['nomor_perkiraan']}}</td>
 														<td>{{$v2['akun']}}</td>
 														@php 
-															$total = array_sum(array_column($v2['detailsin']->toArray(), 'amount'));
+															$total = array_sum(array_column($v2['detailsin'], 'amount'));
 														@endphp
 														<td class="text-right">{{$idr->formatMoneyTo($total)}}</td>
 													</tr>
@@ -85,7 +106,7 @@
 														<td>{{$v2['nomor_perkiraan']}}</td>
 														<td>{{$v2['akun']}}</td>
 														@php 
-															$total = array_sum(array_column($v2['detailsout']->toArray(), 'amount'));
+															$total = array_sum(array_column($v2['detailsout'], 'amount'));
 														@endphp
 														<td class="text-right">{{$idr->formatMoneyTo(abs($total))}}</td>
 													</tr>

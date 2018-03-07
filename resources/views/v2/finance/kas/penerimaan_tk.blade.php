@@ -13,9 +13,9 @@
 		<div class="col">
 			@component('bootstrap.card')
 				@slot('header')
-					<h5 class="py-2 pl-2 mb-0 float-left">&nbsp;&nbsp;PENERIMAAN KAS</h5>
-					<a href="{{route('kas.print', ['tipe' => 'penerimaan', 'kantor_aktif_id' => $kantor_aktif_id, 'q' => request()->get('q')])}}" target="__blank" class="text-success float-right btn btn-link">
-						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK PENERIMAAN KAS
+					<h5 class="py-2 pl-2 mb-0 float-left">&nbsp;&nbsp;TUTUP KAS PENERIMAAN UANG TUNAI</h5>
+					<a href="{{route('kas.print', ['tipe' => 'penerimaan_tk', 'kantor_aktif_id' => $kantor_aktif_id, 'q' => request()->get('q')])}}" target="__blank" class="text-success float-right btn btn-link">
+						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK TUTUP KAS PENERIMAAN UANG TUNAI
 					</a>
 				@endslot
 
@@ -120,10 +120,8 @@
 											<td colspan="12">&nbsp;</td>
 										</tr>
 										<tr>
-											<td colspan="2">JUMLAH PENERIMAAN HARI INI</td>
-											<td class="text-right">{{$idr->formatMoneyTo($total)}}</td>
-											<td colspan="3">JUMLAH ANGSURAN JATUH TEMPO</td>
-											<td class="text-right">{{$idr->formatMoneyTo($total_jt)}}</td>
+											<td colspan="5" class="text-right">JUMLAH ANGSURAN JATUH TEMPO</td>
+											<td colspan="2" class="text-right">{{$idr->formatMoneyTo($total_jt)}}</td>
 											<td colspan="5" rowspan="5">
 												<table style="width: 100%;height: 200px">
 													<thead>
@@ -151,21 +149,17 @@
 											<!-- <th>Dibuat</th> -->
 										</tr>
 										<tr>
-											<td colspan="2">SALDO KEMARIN TANGGAL {{$kemarin->format('d/m/Y')}}</td>
-											<td class="text-right">{{$idr->formatMoneyTo($p_total)}}</td>
-											<td colspan="3">JUMLAH PELUNASAN DIPERCEPAT DAN PENURUNAN POKOK</td>
-											<td class="text-right">{{$idr->formatMoneyTo($total_a)}}</td>
+											<td colspan="5" class="text-right">JUMLAH PELUNASAN DIPERCEPAT DAN PENURUNAN POKOK</td>
+											<td colspan="2" class="text-right">{{$idr->formatMoneyTo($total_a)}}</td>
 										<tr>
-											<td colspan="2">JUMLAH KONTROL</td>
-											<td></td>
-											<td colspan="3">TOTAL ANGSURAN</td>
-											<td class="text-right">{{$idr->formatMoneyTo($total_jt + $total_a)}}</td>
+											<td colspan="5" class="text-right">TOTAL ANGSURAN</td>
+											<td colspan="2" class="text-right">{{$idr->formatMoneyTo($total_jt + $total_a)}}</td>
 										</tr>
 										<tr>
 											<td colspan="2" rowspan="2">{{$kantor_aktif['nama']}}<br/>
 											<small>{{implode(' ', $kantor_aktif['alamat'])}}</small>
 											</td>
-											<td rowspan="2">SALDO KAS HARI INI<br/> {{$tanggal->format('d/m/Y')}}</td>
+											<td rowspan="2">SALDO TUTUP KAS HARI INI<br/> {{$today->adddays(1)->format('d/m/Y')}}</td>
 											<td rowspan="2" class="text-right" colspan="2"><h3>{{$idr->formatMoneyTo($total + $p_total )}}</h3></td>
 											<td colspan="2" rowspan="2"><i>Terbilang : {{ucwords($idr->terbilang(abs($total + $p_total) ))}} Rupiah</i></td>
 										</tr>

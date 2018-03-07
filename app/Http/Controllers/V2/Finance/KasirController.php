@@ -22,11 +22,11 @@ class KasirController extends Controller
 
 	public function lkh() 
 	{
-		$dbefore 	= Carbon::parse('yesterday')->endofDay();
+		$dbefore 	= Carbon::parse('yesterday')->startofday()->addhours(15);
 		$dday 		= Carbon::now()->startofday()->addhours(15);
 
 		if(request()->has('q')){
-			$dbefore 	= Carbon::createFromFormat('d/m/Y', request()->get('q'))->subdays(1)->endofDay();
+			$dbefore 	= Carbon::createFromFormat('d/m/Y', request()->get('q'))->subdays(1)->startofday()->addhours(15);
 			$dday 		= Carbon::createFromFormat('d/m/Y', request()->get('q'))->startofday()->addhours(15);
 		}
 
@@ -61,39 +61,17 @@ class KasirController extends Controller
 
 	public function print ()
 	{
-		$dbefore 	= Carbon::parse('yesterday')->endofDay();
+		$dbefore 	= Carbon::parse('yesterday')->startofday()->addhours(15);
 		$dday 		= Carbon::now()->startofday()->addhours(15);
 
-		if (request()->has('q'))
-		{
-			$dbefore 	= Carbon::createFromFormat('d/m/Y', request()->get('q'))->subdays(1)->endofDay();
+		if(request()->has('q')){
+			$dbefore 	= Carbon::createFromFormat('d/m/Y', request()->get('q'))->subdays(1)->startofday()->addhours(15);
 			$dday 		= Carbon::createFromFormat('d/m/Y', request()->get('q'))->startofday()->addhours(15);
 		}
 
-		$balance 	= TransactionDetail::wherehas('account', function($q) {
-							$q->where('nomor_perkiraan', 'like', '100.%')
-								->wherenotnull('f_account.akun_id')
-								->where('kode_kantor', request()->get('kantor_aktif_id'));
-						})->where('tanggal', '<=', $dbefore->format('Y-m-d H:i:s'))
-						->sum('amount');
-
-		$out 		= TransactionDetail::wherehas('account', function($q) {
-							$q->where('nomor_perkiraan', 'like', '100.%')
-								->wherenotnull('f_account.akun_id')
-								->where('kode_kantor', request()->get('kantor_aktif_id'));
-						})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))
-						->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))
-						->where('amount', '<=', 0)
-						->sum('amount');
-
-		$in 		= TransactionDetail::wherehas('account', function($q) {
-							$q->where('nomor_perkiraan', 'like', '100.%')
-								->wherenotnull('f_account.akun_id')
-								->where('kode_kantor', request()->get('kantor_aktif_id'));
-						})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))
-						->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))
-						->where('amount', '>=', 0)
-						->sum('amount');	
+		$balance 	= Jurnal::wherehas('coa', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_coa.coa_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '<=', $dbefore->format('Y-m-d H:i:s'))->sum('jumlah');
+		$out 		= Jurnal::wherehas('coa', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_coa.coa_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))->where('jumlah', '<=', 0)->sum('jumlah');
+		$in 		= Jurnal::wherehas('coa', function($q){$q->where('nomor_perkiraan', 'like', '100.%')->wherenotnull('f_coa.coa_id')->where('kode_kantor', request()->get('kantor_aktif_id'));})->where('tanggal', '>', $dbefore->format('Y-m-d H:i:s'))->where('tanggal', '<=', $dday->format('Y-m-d H:i:s'))->where('jumlah', '>=', 0)->sum('jumlah');
 
 		view()->share('balance', $balance);
 		view()->share('in', $in);

@@ -14,7 +14,7 @@
 			@component('bootstrap.card')
 				@slot('header')
 					<h5 class="py-2 pl-3 mb-0 float-left">&nbsp;&nbsp;LAPORAN KAS HARIAN</h5>
-					<a href="{{ route('kasir.print', ['kantor_aktif_id' => $kantor_aktif['id']]) }}" target="__blank" class="text-success float-right btn btn-link">
+					<a href="{{ route('kasir.print', ['kantor_aktif_id' => $kantor_aktif['id'], 'q' => request()->get('q')]) }}" target="__blank" class="text-success float-right btn btn-link">
 						<i class="fa fa-file-o fa-fw"></i>&nbsp; CETAK LAPORAN KAS HARIAN
 					</a>
 				@endslot
@@ -112,10 +112,10 @@
 					<div class="clearfix">&nbsp;</div>
 					<div class="row">
 						<div class="col-6 text-left">
-							<h5>Pada hari ini, __________________________</h5>
+							<h5>Pada hari ini, {{$dday->format('l')}}</h5>
 						</div>
 						<div class="col-6 text-right">
-							<h5>Pukul ________ WIB</h5>
+							<h5>Pukul {{$dday->format('H:i')}} WIB</h5>
 						</div>
 					</div>
 					<div class="row">
@@ -240,7 +240,7 @@
 
 					<div class="row">
 						<div class="col-12 text-left">
-							Terbilang :
+							Terbilang : {{ucwords($idr->terbilang(abs($balance + $in + $out)))}} Rupiah
 							<hr/>
 						</div>
 					</div>

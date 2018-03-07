@@ -17,7 +17,16 @@
 				@endslot
 
 				<div class="card-body">
-					<h1>WORKING</h1>
+					<div class="row">
+						<div class="col-12 text-right">
+							<a class="btn btn-primary" href="{{route('kas.create', ['kantor_aktif_id' => $kantor_aktif_id])}}">Bukti Baru</a>
+						</div>
+					</div>
+					<div class="clearfix">&nbsp;</div>
+					<div class="row">
+						<div class="col-12">
+						</div>
+					</div>
 				</div>
 			@endcomponent
 		</div>

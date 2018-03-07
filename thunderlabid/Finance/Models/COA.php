@@ -63,11 +63,11 @@ class COA extends Model
 	}
 
 	public function detailsin(){
-		return $this->belongsToMany(DetailTransaksi::class, 'f_jurnal', 'coa_id', 'detail_transaksi_id')->where('f_jurnal.jumlah', '>=', 0)->selectraw('f_jurnal.jumlah as amount');
+		return $this->hasMany(Jurnal::class, 'coa_id')->where('f_jurnal.jumlah', '>=', 0)->selectraw('f_jurnal.*')->selectraw('f_jurnal.jumlah as amount');
 	}
 
 	public function detailsout(){
-		return $this->belongsToMany(DetailTransaksi::class, 'f_jurnal', 'coa_id', 'detail_transaksi_id')->where('f_jurnal.jumlah', '<=', 0)->selectraw('f_jurnal.jumlah as amount');
+		return $this->hasMany(Jurnal::class, 'coa_id')->where('f_jurnal.jumlah', '<=', 0)->selectraw('f_jurnal.*')->selectraw('f_jurnal.jumlah as amount');
 	}
 
 	// ------------------------------------------------------------------------------------------------------------

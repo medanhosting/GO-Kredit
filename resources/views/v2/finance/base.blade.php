@@ -42,6 +42,29 @@ px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['pengeluaran']) ? 'acti
 </a>
 @endif
 
+
+@if(array_intersect($acl_menu['keuangan.lkh'], $scopes->scopes))
+<a href="{{route('kasir.penerimaan.tk', ['tipe' => 'kas', 'kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
+px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['penerimaan_tk']) ? 'active' : '' }}">
+	<i class="fa fa-check-square-o"></i>&nbsp;&nbsp;T.Kas Penerimaan
+</a>
+@else
+<a href="#" class="nav-link disabled">
+	<i class="fa fa-check-square-o"></i>&nbsp;&nbsp;T.Kas Penerimaan
+</a>
+@endif
+
+@if(array_intersect($acl_menu['keuangan.lkh'], $scopes->scopes))
+<a href="{{route('kasir.pengeluaran.tk', ['tipe' => 'kas', 'kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
+px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['pengeluaran_tk']) ? 'active' : '' }}">
+	<i class="fa fa-minus-square-o"></i>&nbsp;&nbsp;T.Kas Pengeluaran
+</a>
+@else
+<a href="#" class="nav-link disabled">
+	<i class="fa fa-minus-square-o"></i>&nbsp;&nbsp;T.Kas Pengeluaran
+</a>
+@endif
+
 @if(array_intersect($acl_menu['keuangan.kas'], $scopes->scopes))
 <a href="{{route('kas.index', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
 px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['kas']) ? 'active' : '' }}">

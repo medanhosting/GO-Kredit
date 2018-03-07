@@ -22,6 +22,7 @@ use Carbon\Carbon;
  * @author     C Mooy <chelsy@thunderlab.od>
  */
 trait PutusanTrait {
+	
 	private function checker_realisasi($checklists) 
 	{
 		//CHECKER Checklists

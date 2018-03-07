@@ -89,10 +89,10 @@
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-6 text-left">
-					Pada hari ini, __________________________
+					Pada hari ini, {{$dday->format('l')}}
 				</div>
 				<div class="col-6 text-right">
-					Pukul ________ WIB
+					Pukul {{$dday->format('H:i')}} WIB
 				</div>
 			</div>
 			<div class="row">
@@ -217,7 +217,7 @@
 
 			<div class="row">
 				<div class="col-12 text-left">
-					Terbilang :
+						Terbilang : {{ucwords($idr->terbilang(abs($balance + $in + $out)))}} Rupiah
 					<hr/>
 				</div>
 			</div>

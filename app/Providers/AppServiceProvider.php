@@ -32,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
 		Form::component('bsPassword'	, 'bootstrap.form.password'			, ['label' => null, 'name', 'attributes' => [], 'show_error' => true]);
 		Form::component('bsSubmit'		, 'bootstrap.form.submit'			, ['label' => null, 'attributes' => []]);
 		Form::component('bsIcon'		, 'bootstrap.icon'					, ['icon' => null, 'class' => null]);
+
+		setlocale(LC_TIME, 'Indonesia');
 		Carbon::setLocale('id');
 	}
 

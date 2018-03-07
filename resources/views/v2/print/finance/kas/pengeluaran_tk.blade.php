@@ -29,7 +29,7 @@
 		<div class="clearfix">&nbsp;</div>
 		<div class="row">
 			<div class="col-6">
-				<h4><strong>LAPORAN PENGELUARAN KAS</strong></h4>
+				<h4><strong>TUTUP KAS PENGELUARAN UANG TUNAI</strong></h4>
 			</div>
 			<div class="col-6 text-right">
 				{{ $tanggal->format('d/m/Y') }}
@@ -87,7 +87,7 @@
 						<td colspan="8">&nbsp;</td>
 					</tr>
 					<tr>
-						<td class="align-middle" colspan="2" rowspan="3">SALDO KAS HARI INI {{$tanggal->format('d/m/Y')}}</td>
+						<td class="align-middle" colspan="2" rowspan="3">Pengeluaran Setelah Tutup Kas : {{$tanggal->format('d/m/Y')}}</td>
 						<td class="text-right align-middle" rowspan="3">{{$idr->formatMoneyTo($total)}}</td>
 						<td class="text-right align-middle" colspan="2" rowspan="3"><i>Terbilang : {{ucwords($idr->terbilang(abs($total)))}} Rupiah</i></td>
 						<th>Dibukukan</th>
