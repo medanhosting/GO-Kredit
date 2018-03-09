@@ -80,14 +80,14 @@ class RollbackTransaction extends Command
 
 		
 		//restore trashed
-		$trash 		= JadwalAngsuran::where('tanggal', '>=', $tanggal->startofday()->format('Y-m-d H:i:s'))->onlyTrashed()->count();
+		// $trash 		= JadwalAngsuran::where('tanggal', '>=', $tanggal->startofday()->format('Y-m-d H:i:s'))->onlyTrashed()->count();
 
-		if($trash){
-			$jadwal 	= JadwalAngsuran::where('tanggal', '>=', $tanggal->startofday()->format('Y-m-d H:i:s'))->update(['nth' => 0]);
-			$restore 	= JadwalAngsuran::where('tanggal', '>=', $tanggal->startofday()->format('Y-m-d H:i:s'))->onlyTrashed()->restore();
-			$delete 	= JadwalAngsuran::where('nth', 0)->delete();
-			$forced 	= JadwalAngsuran::where('nth', 0)->onlyTrashed()->forceDelete();
-		}
+		// if($trash){
+		// 	$jadwal 	= JadwalAngsuran::where('tanggal', '>=', $tanggal->startofday()->format('Y-m-d H:i:s'))->update(['nth' => 0]);
+		// 	$restore 	= JadwalAngsuran::where('tanggal', '>=', $tanggal->startofday()->format('Y-m-d H:i:s'))->onlyTrashed()->restore();
+		// 	$delete 	= JadwalAngsuran::where('nth', 0)->delete();
+		// 	$forced 	= JadwalAngsuran::where('nth', 0)->onlyTrashed()->forceDelete();
+		// }
 
 		//hapus jadwal angsuran
 		$jadwal 	= JadwalAngsuran::where('tanggal', '>=', $tanggal->startofday()->format('Y-m-d H:i:s'))->update(['nomor_faktur' => null, 'tanggal_bayar' => null]);
