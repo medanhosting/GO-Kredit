@@ -66,6 +66,10 @@ class DetailTransaksi extends Model
 		return $this->belongsto(NotaBayar::class, 'nomor_faktur', 'nomor_faktur');
 	}
 
+	public function jurnals(){
+		return $this->hasmany(Jurnal::class, 'detail_transaksi_id');
+	}
+
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------

@@ -66,10 +66,6 @@ class AutoCreateAccount
 			['nomor_perkiraan'	=> '100.300',
 			'akun'				=> 'Kas Titipan',
 			'parent'			=> '100.000'],
-			['nomor_perkiraan'	=> '100.310',
-			'akun'				=> 'Kolektor',
-			'parent'			=> '100.300'],
-
 
 			['nomor_perkiraan'	=> '120.100',
 			'akun'				=> 'Pinjaman Angsuran',

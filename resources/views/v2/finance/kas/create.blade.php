@@ -11,6 +11,12 @@
 			@include('v2.finance.base')
 		</div>
 		<div class="col">
+			@if($notabayar)
+				{!! Form::open(['url' => route('kas.update', ['id' => $notabayar['id'], 'kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'PATCH']) !!}
+			@else
+				{!! Form::open(['url' => route('kas.store', ['kantor_aktif_id' => $kantor_aktif_id]), 'method' => 'POST']) !!}
+			@endif
+			
 			@component('bootstrap.card')
 				@slot('header')
 					<h5 class="py-2 pl-2 mb-0 float-left">&nbsp;&nbsp;BKK/BKM BARU</h5>
@@ -18,41 +24,118 @@
 				
 				<div class="card-body">
 					<div class="clearfix">&nbsp;</div>
-					<div id="table" class="table-editable">
-						<span class="table-add fa fa-plus"></span>
-						<table class="table">
-							<tr>
-							<th>Deskripsi</th>
-							<th>Unit</th>
-							<th>Harga@</th>
-							<th></th>
-							<th></th>
-							</tr>
-							<tr>
-							<td contenteditable="true">Biaya Operasional</td>
-							<td contenteditable="true">1</td>
-							<td contenteditable="true">Rp 30.000</td>
-							<td>
-								<span class="table-remove fa fa-remove"></span>
-							</td>
-							</tr>
-							<!-- This is our clonable table line -->
-							<tr class="hide">
-							<td contenteditable="true">Beli Bensin 1 Liter</td>
-							<td contenteditable="true">1</td>
-							<td contenteditable="true">Rp 9.000</td>
-							<td>
-								<span class="table-remove fa fa-remove"></span>
-							</td>
-							</tr>
-						</table>
-					  </div>
-					  
-					  <button id="export-btn" class="btn btn-primary">Export Data</button>
-					  <p id="export"></p>
+					<div class="row">
+						<div class="col-6 text-left">
+							<h3 class="mb-2">{{strtoupper($kantor_aktif['nama'])}}</h3>
+							<ul class="list-unstyled fa-ul">
+								<li>
+									<i class="fa fa-building-o fa-li" style="margin-top: .2rem;"></i>
+									{{ implode(' ', $kantor_aktif['alamat']) }}
+								</li>
+								<li>
+									<i class="fa fa-phone fa-li" style="margin-top: .2rem;"></i>
+									{{ $kantor_aktif['telepon'] }}
+								</li>
+							</ul>
+						</div>
+						<div class="col-6 text-right">
+							<div class="row justify-content-end">
+								<div class="col-3">Nomor</div>
+								<div class="col-5 mb-3">{{$notabayar['nomor_faktur']}}&nbsp;</div>
+							</div>
+							<div class="row justify-content-end">
+								<div class="col-3">Tanggal</div>
+								<div class="col-5">
+									{!! Form::bsText(null, 'tanggal', $notabayar['hari'], ['class' => 'form-control inline-edit text-info pb-0 border-input date-mask', 'placeholder' => 'dd/mm/yyyy', 'id' => 'tanggal'], true) !!}
+								</div>
+							</div>
+							<div class="row justify-content-end">
+								<div class="col-3">Dibayar Kepada</div>
+								<div class="col-5">
+									{!! Form::bsText(null, 'kepada', $notabayar['karyawan']['penerima']['nama'], ['class' => 'form-control inline-edit text-info pb-0 border-input', 'placeholder' => 'Rudy', 'id' => 'penerima'], true) !!}
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col text-center">
+							<h4 class="mb-1">
+								<strong>
+									{!! Form::bsSelect(null, 'jenis', ['bkk' => 'Bukti Kas Keluar', 'bkm' => 'Bukti Kas Masuk'], null, ['class' => 'form-control text-info inline-edit text-center'], true) !!}
+								</strong>
+							</h4>
+						</div>
+					</div>
+					<div class="clearfix">&nbsp;</div>
+					
+					<div class="row">
+						<div class="col-8">
+							<div id="table" class="table-editable">
+								<span class="table-add fa fa-plus"></span>
+								<table class="table">
+									<tr>
+									<th>Keterangan</th>
+									<th>Jumlah</th>
+									<th></th>
+									<th></th>
+									</tr>
+
+									@forelse($notabayar['details'] as $k => $v)
+										<tr>
+											<td contenteditable="true">{{$v['deskripsi']}}</td>
+											<td contenteditable="true">{{$v['jumlah']}}</td>
+											<td>
+												<span class="table-remove fa fa-remove"></span>
+											</td>
+										</tr>
+									@empty
+										<tr>
+											<td contenteditable="true">Biaya Operasional</td>
+											<td contenteditable="true">Rp 30.000</td>
+											<td>
+												<span class="table-remove fa fa-remove"></span>
+											</td>
+										</tr>
+									@endforelse
+
+									<!-- This is our clonable table line -->
+									<tr class="hide">
+									<td contenteditable="true">Beli Bensin 1 Liter</td>
+									<td contenteditable="true">Rp 9.000</td>
+									<td>
+										<span class="table-remove fa fa-remove"></span>
+									</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="col-4">
+							<table class="table table-bordered w-100">
+								<thead class="thead-light">
+									<tr>
+										<th class="text-center p-2 w-33">Kasir</th>
+										<th class="text-center p-2 w-33">Disetujui</th>
+										<th class="text-center p-2 w-33">Diterima</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="padding: 35px;">&nbsp;</td>
+										<td style="padding: 35px;">&nbsp;</td>
+										<td style="padding: 35px;">&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-12 text-right">
+							<button id="export-btn" class="btn btn-primary">Export Data</button>
+							{{Form::hidden('details', null, ['id' => 'export'])}}
+						</div>
 					</div>
 				</div>
 			@endcomponent
+
+			{!! Form::close() !!}	
 		</div>
 	</div>
 @endpush
@@ -137,10 +220,12 @@
 		jQuery.fn.pop = [].pop;
 		jQuery.fn.shift = [].shift;
 
-		$BTN.click(function () {
+		$BTN.click(parsingData);
+
+		function parsingData(){
 		  var $rows = $TABLE.find('tr:not(:hidden)');
 		  var headers = [];
-		  var data = [];
+		  var body = [];
 		  
 		  // Get the headers (add special header logic here)
 		  $($rows.shift()).find('th:not(:empty)').each(function () {
@@ -157,11 +242,11 @@
 		      h[header] = $td.eq(i).text();   
 		    });
 		    
-		    data.push(h);
+		    body.push(h);
 		  });
-		  
+
 		  // Output the result
-		  $EXPORT.text(JSON.stringify(data));
-		});
+		  $EXPORT.val(JSON.stringify(body));
+		};
 	</script>
 @endpush

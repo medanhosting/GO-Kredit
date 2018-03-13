@@ -23,10 +23,46 @@
 						</div>
 					</div>
 					<div class="clearfix">&nbsp;</div>
-					<div class="row">
-						<div class="col-12">
-						</div>
-					</div>
+					<table class="table table-hover table-bordered mb-0">
+						<thead>
+							<tr>
+								<th class="text-left text-secondary" width="5">No</th>
+								<th class="text-left text-secondary">Tanggal</th>
+								<th class="text-left text-secondary">Keterangan</th>
+								<th class="text-left text-secondary">Kasir</th>
+								<th class="text-left text-secondary">Diterima Oleh/Dibayar Ke</th>
+								<th class="text-right text-secondary">Jumlah</th>
+								<th class="text-center text-secondary" width="7.5%">Edit</th>
+								<th class="text-center text-secondary" width="7.5%">Jurnal</th>
+							</tr>
+						</thead>
+						<tbody>
+							@forelse($notabayar as $k => $v)
+								<tr>
+									<td class="text-left">{{ $notabayar->firstItem() + $k }} </td>
+									<td class="text-left">{{$v['hari']}}</td>
+									<td class="text-left">{{$v['deskripsi']}}</td>
+									<td class="text-left">{{$v['karyawan']['nama']}}</td>
+									<td class="text-left">{{$v['karyawan']['penerima']['nama']}}</td>
+									<td class="text-right text-style">{{$v['jumlah']}}</td>
+									<td class="text-center">
+										<a href="{{ route('kas.edit', ['id' => $v['id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id']]) }}" class="text-success">
+											<i class="fa fa-edit"></i>
+										</a>
+									</td>
+									<td class="text-center">
+										<a href="{{ route('kas.show', ['id' => $v['id'], 'nomor_faktur' => $v['nomor_faktur'], 'kantor_aktif_id' => $kantor_aktif['id']]) }}" class="text-success">
+											<i class="fa fa-book"></i>
+										</a>
+									</td>
+								</tr>
+							@empty
+								<tr>
+									<td colspan="8" class="text-center">tidak ada data</td>
+								</tr>
+							@endforelse
+						</tbody>
+					</table>
 				</div>
 			@endcomponent
 		</div>

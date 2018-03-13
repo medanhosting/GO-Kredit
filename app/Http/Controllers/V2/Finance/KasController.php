@@ -8,23 +8,31 @@ use Thunderlabid\Kredit\Models\Aktif;
 
 use Thunderlabid\Finance\Models\Jurnal;
 use Thunderlabid\Finance\Models\NotaBayar;
+use Thunderlabid\Finance\Models\DetailTransaksi;
 
 use App\Service\Traits\IDRTrait;
 
 use Exception, DB, Auth, Carbon\Carbon;
 
+use App\Http\Middleware\LimitDateMiddleware;
+use App\Http\Controllers\V2\Traits\AkunTrait;
+
 class KasController extends Controller
 {
 	use IDRTrait;
+	use AkunTrait;
 
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->middleware('scope:'.implode('|', $this->acl_menu['keuangan.kas']));
+		$this->middleware('limit_date:'.implode('|',$this->scopes['scopes']))->only(['store', 'update']);
 	}
 
 	public function index() 
 	{
-		$notabayar 				= NotaBayar::whereIn('jenis', ['bkk', 'bkm'])->paginate();
+		$notabayar		= NotaBayar::whereIn('jenis', ['bkk', 'bkm'])->with(['details'])->paginate();
 
 		view()->share('active_submenu', 'kas');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
@@ -35,13 +43,98 @@ class KasController extends Controller
 
 	public function create($id = null) 
 	{
-		$notabayar 				= NotaBayar::whereIn('jenis', ['bkk', 'bkm'])->where('id', $id)->first();
+		$notabayar		= NotaBayar::whereIn('jenis', ['bkk', 'bkm'])->where('id', $id)->first();
 
 		view()->share('active_submenu', 'kas');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 		$this->layout->pages 	= view('v2.finance.kas.create', compact('notabayar'));
 		return $this->layout;
+	}
+
+	public function show($id) 
+	{
+		$notabayar		= NotaBayar::whereIn('jenis', ['bkk', 'bkm'])->where('id', $id)->first();
+
+		if(str_is($notabayar['jenis'], 'bkk')){
+			$coa_deb 	= $this->get_akun(request()->get('kantor_aktif_id'), null, ['statement' => 'not like', 'string' => '100.%']);
+			$coa_kre 	= $this->get_akun(request()->get('kantor_aktif_id'), null, ['statement' => 'like', 'string' => '100.%']);
+		}elseif(str_is($notabayar['jenis'], 'bkm')){
+			$coa_deb 	= $this->get_akun(request()->get('kantor_aktif_id'), null, ['statement' => 'like', 'string' => '100.%']);
+			$coa_kre 	= $this->get_akun(request()->get('kantor_aktif_id'), null, ['statement' => 'not like', 'string' => '100.%']);
+		}
+
+		view()->share('active_submenu', 'kas');
+		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+
+		$this->layout->pages 	= view('v2.finance.kas.show', compact('notabayar', 'coa_deb', 'coa_kre'));
+		return $this->layout;
+	}
+
+	public function edit($id){
+		return $this->create($id);
+	}
+
+	public function update($id){
+		return $this->store($id);
+	}
+
+	public function store($id = null) 
+	{
+		try {
+
+			DB::beginTransaction();
+		
+			$data 				= request()->only('kepada', 'tanggal', 'jenis');
+			$data['details']	= json_decode(request()->get('details'), true);
+			$nb 		= NotaBayar::findornew($id);
+
+			if(is_null($id)){
+				$nb->nomor_faktur 	= NotaBayar::generatenomorfaktur(request()->get('kantor_aktif_id').'.BKK.'.date('dmy'));
+			}else{
+				request()->merge(['tanggal' => $nb->tanggal]);
+				LimitDateMiddleware::check(implode('|', $this->scopes['scopes']), 'kas');
+			}
+
+			$nb->tanggal 	= $data['tanggal'];
+			$nb->jenis 		= $data['jenis'];
+			$nb->karyawan 	= [
+				'nip'		=> Auth::user()['nip'],
+				'nama'		=> Auth::user()['nama'],
+				'penerima'	=> ['nama' => $data['kepada']]
+			];
+			$nb->jumlah 	= 'Rp 0';
+			$nb->save();
+
+			foreach ($data['details'] as $k => $v) {
+				$angs 		= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->skip($k)->take(1)->first();
+				if(!$angs){
+					$angs 	= new DetailTransaksi;
+				}
+				$angs->nomor_faktur = $nb->nomor_faktur;
+				$angs->tag 			= 'bkk';
+				$angs->jumlah 		= $v['jumlah'];
+				$angs->deskripsi 	= $v['keterangan'];
+				$angs->save();
+			}
+
+			$hapus_s 	= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->skip($k+1)->take(1000)->get(['id'])->toarray();
+
+			if(count($hapus_s)){
+				$hapus 	= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->wherein('id', array_column($hapus_s, 'id'))->delete();
+			}
+			$total 		= DetailTransaksi::where('nomor_faktur', $nb->nomor_faktur)->sum('jumlah');
+
+			$nb->jumlah = $this->formatMoneyTo($total);
+			$nb->save();
+
+			DB::commit();
+			return redirect()->route('kas.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id')]);
+		} catch (Exception $e) {
+			DB::rollback();
+			return redirect()->route('kas.index', ['kantor_aktif_id' => request()->get('kantor_aktif_id')])->withErrors($e->getMessage());
+		}
+
 	}
 
 	public function penerimaan($tipe = 'kas') 

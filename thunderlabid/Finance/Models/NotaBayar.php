@@ -207,6 +207,12 @@ class NotaBayar extends Model
 			case 'memorial_titipan':
 				$deskripsi 	= 'Bukti Memorial Pengambilan Titipan';
 				break;	
+			case 'bkk':
+				$deskripsi 	= 'Bukti Kas Keluar';
+				break;	
+			case 'bkm':
+				$deskripsi 	= 'Bukti Kas Masuk';
+				break;	
 		}
 
 		return $deskripsi;

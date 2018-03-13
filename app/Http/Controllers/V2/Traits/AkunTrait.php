@@ -15,7 +15,7 @@ use Thunderlabid\Finance\Models\COA;
  */
 trait AkunTrait {
 	
- 	public function get_akun($kantor_id, $kode = null){
+ 	public function get_akun($kantor_id, $kode = null, $like = null){
 		$acc	= COA::where('kode_kantor', $kantor_id)->wherenotnull('coa_id');
  		if(!is_null($kode)){
  			if(is_array($kode)){
@@ -24,6 +24,11 @@ trait AkunTrait {
 	 			$acc 	= $acc->where('nomor_perkiraan', $kode);
  			}
  		}
+
+ 		if(!is_null($like)){
+	 		$acc 	= $acc->where('nomor_perkiraan', $like['statement'], $like['string']);
+ 		}
+
  		$acc 	= $acc->get();
 		$akun	= [];
 

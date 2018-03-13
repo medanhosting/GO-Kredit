@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Routing\Controller as BaseController;
 
 use Thunderlabid\Kredit\Models\Aktif;
+use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
 
 use Thunderlabid\Finance\Models\NotaBayar;
@@ -60,18 +61,26 @@ class NotaBayarController extends BaseController
 				$k		= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active(Carbon::now());
 				$nb		= new NotaBayar;
 
-				if(request()->has('kode_kantor')){
-					$k	= $k->where('kantor_id', request()->get('kode_kantor'));
-				}
-
-				$k 		= $k->first();
 				
 				// if(request()->has('query')){
 				// 	$regexp 	= preg_replace("/-+/",'[^A-Za-z0-9_]+',request()->get('query'));
 				// 	$nb 	= $nb->where(function($q)use($regexp){$q->whereHas('collateral', function($q)use($regexp){$q->whereRaw(\DB::raw("dokumen_survei REGEXP '". $regexp."'"));})->orwherehas('pengajuan', function($q)use($regexp){$q->whereraw(\DB::raw("nasabah REGEXP '". $regexp."'"));});});
 				// }
 
-				$nb 	= $nb->Where('karyawan->nip', $k['orang']['nip'])->where('jenis', 'kolektor')->where('id', $id)->with(['details'])->first();
+				$nb 	= $nb->where('karyawan->nip', Auth::user()['nip'])->where('jenis', 'kolektor')->where('id', $id)->with(['details'])->first()->toarray();
+
+				if(request()->has('kode_kantor')){
+					$k	= $k->where('kantor_id', request()->get('kode_kantor'));
+				}else{
+					$nf = explode('.', $nb['nomor_faktur']);
+					$k	= $k->where('kantor_id', $nf[0].'.'.$nf[1]);
+				}
+
+				$k 		= $k->first();
+
+				$tagihan = Penagihan::where('nomor_faktur', $nb['nomor_faktur'])->first();
+				$nb['penerima']	= $tagihan['penerima'];
+				$nb['kantor']	= $k['kantor'];
 
 				return response()->json(['status' => 1, 'data' => $nb, 'error' => ['message' => []]]);
 			}
