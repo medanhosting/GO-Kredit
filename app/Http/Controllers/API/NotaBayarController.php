@@ -126,7 +126,7 @@ class NotaBayarController extends BaseController
 					$return['notabayar']= NotaBayar::where('nomor_faktur', $feedback->nomor_faktur)->with(['details'])->first();
 				}
 
-				// DB::commit();
+				DB::commit();
 				
 				return response()->json(['status' => 1, 'data' => $return, 'error' => ['message' => []]]);
 			}
@@ -135,7 +135,6 @@ class NotaBayarController extends BaseController
 			return response()->json(['status' => 1, 'data' => [], 'error' => ['message' => []]]);
 
 		} catch (Exception $e) {
-			dd($e);
 			DB::rollback();
 			return $this->error_response(request()->all(), $e);
 		}
