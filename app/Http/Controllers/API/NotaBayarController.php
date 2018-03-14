@@ -105,15 +105,15 @@ class NotaBayarController extends BaseController
 			//1. find pengajuan
 			if(Auth::user()){
 				$k		= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active(Carbon::now());
-				$kre 	= Aktif::where('nomor_kredit', request()->get('nomor_kredit'));
+				$kre 	= Aktif::where('nomor_kredit', request()->get('nomor_kredit'))->first();
 
 				if(request()->has('kode_kantor')){
-					$k		= $k->where('kantor_id', request()->get('kode_kantor'));
-					$kre	= $kre->where('kode_kantor', request()->get('kode_kantor'));
+					$k	= $k->where('kantor_id', request()->get('kode_kantor'));
+				}else{
+					$k	= $k->where('kantor_id', $kre->kode_kantor);
 				}
-
+				
 				$k 		= $k->first();
-				$kre	= $kre->first();
 
 				if(request()->has('nomor_sp')){
 					$sp = SuratPeringatan::nomorsurat(request()->get('nomor_sp'))->first();
@@ -132,7 +132,11 @@ class NotaBayarController extends BaseController
 				$return['sp']			= $sp;
 				$return['penagihan']	= $feedback;
 				if($feedback->nomor_faktur){
-					$return['notabayar']= NotaBayar::where('nomor_faktur', $feedback->nomor_faktur)->with(['details'])->first();
+					$return['notabayar']= NotaBayar::where('nomor_faktur', $feedback->nomor_faktur)->with(['details'])->first()->toarray();
+
+					$tagihan 			= Penagihan::where('nomor_faktur', $feedback->nomor_faktur)->first();
+					$return['penerima']	= $tagihan['penerima'];
+					$return['kantor']	= $k['kantor'];
 				}
 
 				DB::commit();
