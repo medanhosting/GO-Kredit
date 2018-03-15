@@ -11,10 +11,11 @@ use Thunderlabid\Kredit\Models\SuratPeringatan;
 use Thunderlabid\Finance\Models\NotaBayar;
 use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
+use App\Exceptions\AppException;
 use App\Service\Api\ResponseTrait;
 use App\Http\Service\Policy\FeedBackPenagihan;
 
-use Exception, Response, Auth, Carbon\Carbon, Config, DB;
+use Exception, Response, Auth, Carbon\Carbon, Config, DB, Validator;
 
 class NotaBayarController extends BaseController
 {
@@ -104,6 +105,21 @@ class NotaBayarController extends BaseController
 
 			//1. find pengajuan
 			if(Auth::user()){
+				$data 	= request()->only('nomor_kredit', 'penerima', 'jumlah', 'nomor_sp');
+
+				$rules['nomor_kredit']	= ['required'];
+				$rules['penerima.nama']	= ['required'];
+				$rules['jumlah']		= ['required'];
+	
+				//////////////
+				// Validate //
+				//////////////
+				$validator = Validator::make($data, $rules);
+				if ($validator->fails())
+				{
+					throw new AppException($validator->messages(), 1);
+				}
+
 				$k		= PenempatanKaryawan::where('orang_id', Auth::user()['id'])->active(Carbon::now());
 				$kre 	= Aktif::where('nomor_kredit', request()->get('nomor_kredit'))->first();
 
