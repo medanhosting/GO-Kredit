@@ -16,7 +16,7 @@ class UserController extends BaseController
 			//1. find pengajuan
 			if(Auth::user()){
 				$data['me'] 			= Auth::user();
-				$data['employment'] 	= PenempatanKaryawan::select(['kantor_id', 'role'])->where('orang_id', Auth::user()['id'])->active(Carbon::now())->with(['kantor' => function($q){$q->select(['nama', 'id']);}])->get();
+				$data['employment'] 	= PenempatanKaryawan::select(['kantor_id', 'role', 'scopes'])->where('orang_id', Auth::user()['id'])->active(Carbon::now())->with(['kantor' => function($q){$q->select(['nama', 'id']);}])->get();
 			}
 			else{
 				$data		= [];
