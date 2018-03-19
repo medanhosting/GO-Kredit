@@ -44,7 +44,7 @@ class NotaBayar extends Model
 	protected $table 	= 'f_nota_bayar';
 	protected $fillable = ['nomor_faktur', 'tanggal', 'jenis', 'karyawan', 'jumlah', 'nomor_rekening', 'morph_reference_id', 'morph_reference_tag'];
 	protected $hidden 	= [];
-	protected $appends	= ['jatuh_tempo', 'hari'];
+	protected $appends	= ['jatuh_tempo', 'hari', 'qrcode'];
 
 	protected $rules	= [];
 	protected $errors;
@@ -167,6 +167,11 @@ class NotaBayar extends Model
 	public function getHariAttribute($variable)
 	{
 		return $this->formatDateTo($this->attributes['tanggal']);
+	}
+
+	public function getQrcodeAttribute($variable)
+	{
+		return $this->simplecrypt($this->attributes['nomor_faktur'], 'e' );
 	}
 
 	public function getJumlahAttribute($variable)

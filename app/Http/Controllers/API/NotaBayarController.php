@@ -9,6 +9,7 @@ use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
 
 use Thunderlabid\Finance\Models\NotaBayar;
+use Thunderlabid\Manajemen\Models\Kantor;
 use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
 use App\Exceptions\AppException;
@@ -168,4 +169,27 @@ class NotaBayarController extends BaseController
 			return $this->error_response(request()->all(), $e);
 		}
 	}
+
+
+	public function qr($code)
+	{
+		try {
+			$hashed		= NotaBayar::simplecrypt($code, 'd');
+
+			$nb	= NotaBayar::where('nomor_faktur', $hashed)->with(['details'])->first()->toarray();
+
+			$nf = explode('.', $nb['nomor_faktur']);
+			$k	= Kantor::where('id', $nf[0].'.'.$nf[1])->first();
+
+			$tagihan = Penagihan::where('nomor_faktur', $nb['nomor_faktur'])->first();
+			$nb['penerima']	= $tagihan['penerima'];
+			$nb['kantor']	= $k['kantor'];
+
+			return response()->json(['status' => 1, 'data' => $nb, 'error' => ['message' => []]]);
+
+		} catch (Exception $e) {
+			return $this->error_response(request()->all(), $e);
+		}
+	}
+
 }

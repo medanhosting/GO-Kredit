@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('api')->namespace('API')->group(function(){
 	Route::any('/me',							['uses' => 'UserController@show']);
+	Route::any('/qr/{code}',					['uses' => 'NotaBayarController@qr']);
 	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi']);
 	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store']);
 	Route::any('/permohonan/index',				['uses' => 'PermohonanController@index']);
@@ -39,6 +40,7 @@ Route::middleware('api')->namespace('API')->group(function(){
 	Route::get('/nota/bayar/show/{id}',			['uses' => 'NotaBayarController@show']);
 });
 
+// Route::any('/sms',	['uses' => '\\Thunderlabid\\SMSGWay\\Controllers\\SMSController@twilio']);
 
 Route::any('/pengaturan', function (Request $request) 
 {
