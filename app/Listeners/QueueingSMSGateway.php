@@ -7,7 +7,7 @@ namespace App\Listeners;
 ///////////////
 use App\Exceptions\AppException;
 
-use Thunderlabid\SMSGWay\Models\SMSQueue;
+use Thunderlabid\SMSGway\Models\SMSQueue;
 use Thunderlabid\Pengajuan\Models\Pengajuan;
 
 class QueueingSMSGateway
@@ -39,8 +39,7 @@ class QueueingSMSGateway
 			if(!$data){
 				$pengajuan	= Pengajuan::findorfail($model->kredit->nomor_pengajuan);
 
-				$isi 		= 'Pembayaran angsuran atas nama '.$pengajuan->nasabah['nama'].', nomor kredit '.$model->nomor_kredit.' sejumlah '.$model->jumlah.' telah kami terima. Silahkan tukarkan kwitansi pembayaran Anda ke koperasi [GOKREDIT SMS CENTER]';
-
+				$isi 		= 'Pembayaran angsuran dengan nomor kredit '.$model->nomor_kredit.' sebesar '.$model->jumlah.' telah dterima. Segera tukarkan kuitansi ke koperasi kami.';
 				$telepon 	= $pengajuan->nasabah['telepon'];
 				$prefix		= '0';
 

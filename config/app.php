@@ -185,7 +185,7 @@ return [
         Thunderlabid\Survei\SurveiServiceProvider::class,
         Thunderlabid\Kredit\KreditServiceProvider::class,
         Thunderlabid\Finance\FinanceServiceProvider::class,
-
+        Thunderlabid\SMSGway\SMSGwayServiceProvider::class,
     ],
 
     /*

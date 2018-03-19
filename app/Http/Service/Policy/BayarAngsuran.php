@@ -72,7 +72,7 @@ class BayarAngsuran
 		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->wherenull('nomor_faktur')->orderby('nth', 'asc')->wherein('nth', $this->add_nth)->update(['nomor_faktur' => $this->notabayar->nomor_faktur]);
 
 		$nth_akan_d = JadwalAngsuran::where('nomor_kredit', $this->kredit['nomor_kredit'])->orderby('nth', 'asc')->wherein('nth', $this->nth)->update(['tanggal_bayar' => $this->tanggal->format('Y-m-d H:i:s')]);
-exit;
+
 		return true;
 	}
 

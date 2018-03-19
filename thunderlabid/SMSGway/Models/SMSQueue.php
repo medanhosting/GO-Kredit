@@ -25,8 +25,7 @@ use Thunderlabid\SMSGway\Events\SMSQueue\SMSQueueDeleting;
 use Thunderlabid\SMSGway\Events\SMSQueue\SMSQueueRestored;
 use Thunderlabid\SMSGway\Events\SMSQueue\SMSQueueRestoring;
 
-use Thunderlabid\SMSGway\Models\Traits\FakturTrait;
-
+use Validator;
 class SMSQueue extends Model
 {
 	protected $table 	= 'sms_queues';
@@ -103,7 +102,10 @@ class SMSQueue extends Model
 		//////////////
 		// Validate //
 		//////////////
-		$validator = Validator::make($this->attributes->toArray(), $rules);
+		$attr 				= $this->attributes;
+		$attr['penerima']	= json_decode($this->attributes['penerima'], true);
+
+		$validator = Validator::make($attr, $rules);
 		if ($validator->fails())
 		{
 			$this->errors = $validator->messages();

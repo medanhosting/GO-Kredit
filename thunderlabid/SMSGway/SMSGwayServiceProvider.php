@@ -22,7 +22,7 @@ class SMSGwayServiceProvider extends ServiceProvider
 	}
 
 	public function register(){
-		Config::set('messagebird.access_key', '5tHfbIaF95CgCjpCH0BqHam7y');
-		Config::set('messagebird.originator', 'GOKREDIT SMS CENTER');
+		Config::set('messagebird.access_key', env('SMS_MBIRD_AK', 'none'));
+		Config::set('messagebird.originator', 'GOKREDIT');
 	}
 }
