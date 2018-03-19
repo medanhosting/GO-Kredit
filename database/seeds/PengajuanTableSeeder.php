@@ -101,7 +101,7 @@ class PengajuanTableSeeder extends Seeder
 			$nasabah['tanggal_lahir'] 		= Carbon::parse(rand(19,60).' years ago')->format('d/m/Y');
 			$nasabah['tempat_lahir']		= $kota[rand(0,6)];
 			$nasabah['jenis_kelamin']		= $gndr[rand(0,1)];
-			$nasabah['telepon']				= $faker->phoneNumber;
+			$nasabah['telepon']				= '082232250755';
 			$nasabah['status_perkawinan']	= $sp[rand(0,3)];
 			$nasabah['pekerjaan']			= $pekerjaan[rand(0,5)];
 			$nasabah['penghasilan_bersih']	= 'Rp '.rand(1,9).rand(1,9).'00.000';

@@ -58,6 +58,14 @@ class Release extends Command
 		$this->info("\n--------------------------------------------------------");
 		$this->info('DONE');
 		$this->info("--------------------------------------------------------\n");
+
+		$this->info("--------------------------------------------------------");
+		$this->info('SEEDING');
+		$this->info("--------------------------------------------------------");
+		$this->seed();
+		$this->info("\n--------------------------------------------------------");
+		$this->info('DONE');
+		$this->info("--------------------------------------------------------\n");
 	}
 
 	public function v1()
@@ -68,6 +76,16 @@ class Release extends Command
 	public function v2()
 	{
 		Artisan::call('migrate:refresh', ['--path' => 'database/migrations/2.0.0/']);
+	}
+
+	public function seed()
+	{
+		Artisan::call('db:seed');
+	}
+
+	public function smsgway()
+	{
+		// Artisan::call('migrate', ['--path' => 'thunderlabid/SMSGway/Migrations/']);
 	}
 
 	public function developing(){

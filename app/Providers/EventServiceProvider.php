@@ -143,6 +143,17 @@ class EventServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiCreated', 'App\Listeners\TandaiJaminanKeluar');
 		Event::listen('Thunderlabid\Finance\Events\DetailTransaksi\DetailTransaksiUpdated', 'App\Listeners\TandaiJaminanKeluar');
 
+
+		//////////////////////////////////////////////////////
+		// Setiap transaksi via collector, buat queue SMS   //
+		//////////////////////////////////////////////////////
+		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanCreated', 'App\Listeners\QueueingSMSGateway');
+		Event::listen('Thunderlabid\Kredit\Events\Penagihan\PenagihanUpdated', 'App\Listeners\QueueingSMSGateway');
+
+
+		////////////////////
+		// Record Auditor //
+		////////////////////
 		Event::listen(['eloquent.creating: *', 'eloquent.updating: *'], 'App\Listeners\Auditor');
 	}
 }
