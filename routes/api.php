@@ -25,7 +25,9 @@ Route::middleware('api')->namespace('API')->group(function(){
 	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi']);
 	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store']);
 	Route::any('/permohonan/index',				['uses' => 'PermohonanController@index']);
+});
 	
+Route::middleware('auth:api')->namespace('API')->group(function(){
 	//UPLOAD FILE
 	Route::any('/simpan/gambar',	['uses' => 'UploadGambarController@store']);
 	Route::any('/hapus/gambar',		['uses' => 'UploadGambarController@destroy']);
