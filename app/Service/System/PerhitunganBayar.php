@@ -322,7 +322,12 @@ class PerhitunganBayar
 						$nth 		= $nth +1;
 						$tanggal_1 	= $tanggal_1->addmonthsnooverflow(1);
 					}else{
-						$v['jumlah']	= 0;
+						$faktur[] 	= [
+								'deskripsi'	=> 'Titipan Angsuran',
+								'tag'		=> 'titipan',
+								'jumlah'	=> self::formatMoneyTo($v['jumlah']),
+							];
+						$v['jumlah']= 0;
 					}
 				}
 			}elseif(str_is($v['tag'], 'angsuran_berikut')){
