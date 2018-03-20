@@ -20,7 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //LOGIN API
 
 Route::middleware('api')->namespace('API')->group(function(){
-	Route::any('/me',							['uses' => 'UserController@show']);
 	Route::any('/qr/{code}',					['uses' => 'NotaBayarController@qr']);
 	Route::any('/simulasi/{mode}',				['uses' => 'PermohonanController@simulasi']);
 	Route::any('/permohonan/store',				['uses' => 'PermohonanController@store']);
@@ -28,6 +27,8 @@ Route::middleware('api')->namespace('API')->group(function(){
 });
 	
 Route::middleware('auth:api')->namespace('API')->group(function(){
+	Route::any('/me',				['uses' => 'UserController@show']);
+	
 	//UPLOAD FILE
 	Route::any('/simpan/gambar',	['uses' => 'UploadGambarController@store']);
 	Route::any('/hapus/gambar',		['uses' => 'UploadGambarController@destroy']);
