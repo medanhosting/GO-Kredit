@@ -120,7 +120,8 @@ class AngsuranController extends Controller
 			$nth 		= implode(', ', array_column(JadwalAngsuran::where('nomor_faktur', $angsuran['nomor_faktur'])->get(['nth'])->toArray(), 'nth'));
 			$potongan 	= array_sum(array_column($angsuran['details'], 'total')) - $angsuran['total'];
 
-			$sisa_angsuran	= Calculator::hutangExactlyBefore($angsuran['kredit']['nomor_kredit'], $tanggal_bayar);
+			$sisa_angsuran		= Calculator::hutangExactlyBefore($angsuran['kredit']['nomor_kredit'], $tanggal_bayar);
+			$titipan_saat_itu	= Calculator::titipanExactlyBefore($angsuran['kredit']['nomor_kredit'], $tanggal_bayar);
 
 			view()->share('angsuran', $angsuran);
 			view()->share('tanggal_bayar', $tanggal_bayar);
@@ -128,6 +129,7 @@ class AngsuranController extends Controller
 			view()->share('id', $id);
 			view()->share('nth', $nth);
 			view()->share('potongan', $potongan);
+			view()->share('titipan_saat_itu', $titipan_saat_itu);
 			view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 			return view('v2.kredit.print.bukti_pembayaran_'.$case);

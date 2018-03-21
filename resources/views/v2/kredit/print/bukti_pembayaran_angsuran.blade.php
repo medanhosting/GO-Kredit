@@ -124,10 +124,10 @@
 										<td class="text-right">{{ $v['jumlah'] }}</td>
 									</tr>
 								@endforeach
-								@if($potongan > 0)
+								@if($titipan_saat_itu > 0)
 									<tr>
 										<td colspan="2" class="text-right text-danger">Potongan Titipan</td>
-										<td class="text-right text-danger">{{ $idr->formatMoneyto($potongan) }}</td>
+										<td class="text-right text-danger">{{ $idr->formatMoneyto($titipan_saat_itu) }}</td>
 									</tr>
 								@endif
 							</tbody>

@@ -40,6 +40,13 @@ Class Calculator {
 
 		return $total * -1;
 	}
+
+	public function titipanExactlyBefore($nk, Carbon $tanggal)
+	{
+		$total = Jurnal::where('morph_reference_id', $nk)->where('morph_reference_tag', 'kredit')->whereHas('coa', function($q){$q->whereIn('nomor_perkiraan', [Calculator::get_akun_table()['titipan']['pa'], Calculator::get_akun_table()['titipan']['pt']]);})->where('tanggal', '<', $tanggal->format('Y-m-d H:i:s'))->sum('jumlah');
+
+		return $total * -1;
+	}
  	 	
 	public function piutangBefore($nk, Carbon $tanggal)
 	{
