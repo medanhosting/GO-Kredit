@@ -124,6 +124,12 @@
 										<td class="text-right">{{ $v['jumlah'] }}</td>
 									</tr>
 								@endforeach
+								@if($potongan > 0)
+									<tr>
+										<td colspan="2" class="text-right text-danger">Potongan Titipan</td>
+										<td class="text-right text-danger">{{ $idr->formatMoneyto($potongan) }}</td>
+									</tr>
+								@endif
 							</tbody>
 							<tfoot>
 								<tr>
