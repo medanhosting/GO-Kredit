@@ -107,7 +107,7 @@ Class Calculator {
 			$tb 		= self::formatMoneyFrom($kredit['bunga']) * ($aktif['jangka_waktu'] - ($kredit['nth']*1 - 1));
 
 			$harian 	= (ceil($kredit['total_bunga']/3000) * 100);
-			$hari 		= Carbon::parse($tanggal)->diffInDays(Carbon::parse($kredit['tanggal_akhir'])->submonthsnooverflow(1));
+			$hari 		= Carbon::parse($tanggal)->subdays(1)->diffInDays(Carbon::parse($kredit['tanggal_akhir'])->submonthsnooverflow(1));
 
 			$potongan 	= $tb - ($harian * $hari);
 		}else{
