@@ -167,10 +167,11 @@ class KeluarkanMemorialUntukJurnalPagi extends Command
 
 				//2c. Hitung Denda
 				//cari selisih hari
-				$tgl_jtt  	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->subdays(1);
-				$tgl_b 		= Carbon::parse($tanggal);
+				$tgl_jtt  	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal'])->adddays(1)->startofday();
+				$tgl_b 		= Carbon::parse($tanggal)->adddays(1)->startofday();
+
 				if(!is_null($v['tanggal_bayar'])){
-					$tgl_b 	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal_bayar']);
+					$tgl_b 	= Carbon::createfromformat('d/m/Y H:i', $v['tanggal_bayar'])->startofday() ;
 				}
 				$days 		= $tgl_b->diffindays($tgl_jtt);
 

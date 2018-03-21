@@ -149,8 +149,8 @@ class KreditController extends Controller
 		$akun	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_rekening_aktif'));
 		$a_tt	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_titipan'));
 		$a_dd	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_perkiraan_denda'));
-		$today		= Carbon::now();
-		$tomorrow	= Carbon::now()->adddays(1);
+		$today		= Carbon::addyears(1);
+		$tomorrow	= Carbon::addyears(1)->adddays(1);
 		//1. PANEL ANGSURAN
 
 		//a. STAT SISA HUTANG
