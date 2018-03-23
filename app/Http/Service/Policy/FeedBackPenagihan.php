@@ -79,7 +79,7 @@ class FeedBackPenagihan
 	}
 
 	private function buat_detail_faktur(){
-		$deskripsi 	= 'Pembayaran Angsuran Melalui Kolektor';
+		$deskripsi 	= 'Pembayaran Angsuran';
 		$angs 		= new DetailTransaksi;
 		$angs->nomor_faktur 	= $this->nomor_faktur;
 		$angs->tag 				= 'kolektor';

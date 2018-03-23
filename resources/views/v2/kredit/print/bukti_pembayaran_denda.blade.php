@@ -103,7 +103,7 @@
 			</table>			
 			<div class="row">
 				<div class="col-6">
-					<table class="table table-bordered w-100 mt-4">
+					<!-- <table class="table table-bordered w-100 mt-4">
 						<thead class="thead-light">
 							<tr>
 								<th class="text-center p-2 w-25">Dibuat</th>
@@ -118,6 +118,18 @@
 								<td style="padding: 35px;">&nbsp;</td>
 								<td style="padding: 35px;">&nbsp;</td>
 								<td style="padding: 35px;">&nbsp;</td>
+							</tr>
+						</tbody>
+					</table> -->
+					<table class="table w-50 text-center ml-auto mr-5 mt-2" style="height: 220px;">
+						<tbody>
+							<tr>
+								<td class="border-0">Diterima Oleh</td>
+							</tr>
+							<tr>
+								<td class="border-0">
+									<p class="border border-left-0 border-right-0 border-bottom-0">{{$angsuran['karyawan']['nama']}}</p>
+								</td>
 							</tr>
 						</tbody>
 					</table>

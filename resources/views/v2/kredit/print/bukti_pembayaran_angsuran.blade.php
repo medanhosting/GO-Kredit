@@ -79,7 +79,7 @@
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
 						<p class="mb-2" style="border-bottom: 1px dotted #ccc">
-							{{$nth}}
+							{{$nth}}&nbsp;
 						</p>
 					</td>
 				</tr>
@@ -94,7 +94,7 @@
 					<td style="width: 12.5%">Sisa Angsuran</td>
 					<td style="width: 1%">:</td>
 					<td class="w-25 pl-2 pr-2">
-						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{ $idr->formatMoneyTo($sisa_angsuran) }}</p>
+						<p class="mb-2" style="border-bottom: 1px dotted #ccc">{{ $sisa_angsuran }}&nbsp;</p>
 					</td>
 				</tr>
 				<tr class="align-top">
@@ -144,7 +144,7 @@
 			</table>			
 			<div class="row">
 				<div class="col-6">
-					<table class="table table-bordered w-100 mt-4">
+					<!-- <table class="table table-bordered w-100 mt-4">
 						<thead class="thead-light">
 							<tr>
 								<th class="text-center p-2 w-25">Dibuat</th>
@@ -161,15 +161,30 @@
 								<td style="padding: 35px;">&nbsp;</td>
 							</tr>
 						</tbody>
+					</table> -->
+					
+					<table class="table table-bordered w-100 mt-4" style="height: 100px;">
+						<tbody style="font-size:10px;">
+							<tr>
+								<td>
+								<strong>PERHATIAN</strong><br/>
+								Pastikan kuitansi yang anda terima adalah kuitansi resmi
+								</td>
+							</tr>
+						</tbody>
 					</table>
 				</div>
 				<div class="col-6">
-					<table class="table w-50 text-center ml-auto mr-5 mt-2" style="height: 220px;">
+					<table class="table w-100 text-center ml-auto mr-5 mt" style="height: 220px;">
 						<tbody>
 							<tr>
-								<td class="border-0">{{ $kantor_aktif['alamat']['kota'] }}, {{ $tanggal_bayar->format('d/m/Y') }}</td>
+								<td class="border-0">&nbsp;<br/>Diterima Oleh</td>
+								<td class="border-0">{{ $kantor_aktif['alamat']['kota'] }}, {{ $tanggal_bayar->format('d/m/Y') }}<br/>Penyetor</td>
 							</tr>
 							<tr>
+								<td class="border-0">
+									<p class="border border-left-0 border-right-0 border-bottom-0">{{$angsuran['karyawan']['nama']}}</p>
+								</td>
 								<td class="border-0">
 									<p class="border border-left-0 border-right-0 border-bottom-0">{{$angsuran['kredit']['nasabah']['nama']}}</p>
 								</td>

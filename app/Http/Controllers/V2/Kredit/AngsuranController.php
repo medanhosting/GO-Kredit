@@ -120,7 +120,9 @@ class AngsuranController extends Controller
 			$nth 		= implode(', ', array_column(JadwalAngsuran::where('nomor_faktur', $angsuran['nomor_faktur'])->get(['nth'])->toArray(), 'nth'));
 			$potongan 	= array_sum(array_column($angsuran['details'], 'total')) - $angsuran['total'];
 
-			$sisa_angsuran		= Calculator::hutangExactlyBefore($angsuran['kredit']['nomor_kredit'], $tanggal_bayar);
+			$sisa_angsuran 	= JadwalAngsuran::where('nomor_kredit', $angsuran['kredit']['nomor_kredit'])->where(function($q)use($tanggal_bayar){$q->wherenull('tanggal_bayar')->orwhere('tanggal_bayar', '>', $tanggal_bayar->format('Y-m-d H:i:s'));})->orderby('nth', 'asc')->get(['nth'])->toArray();
+
+			$sisa_angsuran 		= implode(', ', array_column($sisa_angsuran, 'nth'));
 			$titipan_saat_itu	= Calculator::titipanExactlyBefore($angsuran['kredit']['nomor_kredit'], $tanggal_bayar);
 
 			view()->share('angsuran', $angsuran);
