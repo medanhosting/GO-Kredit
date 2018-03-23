@@ -126,6 +126,8 @@
 @push('js')
 	<script type="text/javascript">
    		$(".scopes-select").select2({
+   			tags: true,
+            tokenSeparators: [',', ' ', ';'],
 			ajax: {
 				url: "{{route('scopes.index')}}",
 				data: function (params) {
