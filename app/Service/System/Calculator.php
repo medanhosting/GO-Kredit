@@ -82,32 +82,36 @@ Class Calculator {
 		$aktif 		= Aktif::where('nomor_kredit', $nk)->first();
 
 		//find angsuran terdekat
-		$kredit 	= JadwalAngsuran::where('nomor_kredit', $nk)->where('tanggal', '>', $tanggal->endofday()->format('Y-m-d H:i:s'))->orderby('tanggal', 'asc')->first();
+		$kredit 	= JadwalAngsuran::where('nomor_kredit', $nk)->where('tanggal', '>', $tanggal->endofday()->format('Y-m-d H:i:s'))->orderby('tanggal', 'asc')->selectraw('*')->selectraw('bunga as total_bunga')->selectraw('tanggal as tanggal_akhir')->first();
 
 		if(str_is($aktif['jenis_pinjaman'], 'pa') && $kredit['nth'] < $aktif['jangka_waktu'])
 		{
 			$tb 		= self::formatMoneyFrom($kredit['bunga']) * ($aktif['jangka_waktu'] - ($kredit['nth']*1 - 1));
+			//check pelunasan > 1/2 masa nth
+			$max_jw 	= round($aktif['jangka_waktu']/2);
+
+			if($kredit['nth'] <= 4){
+				//a. kalau angsuran berikut sebelum JT4
+				$potongan 	= 0.7 * $tb;
+			}
+			elseif($max_jw >= $kredit['nth']){
+				//b. kalau angsuran berikut sebelum JT separuh angsuran
+				$potongan 	= 0.5 * $tb;
+			}else{
+				//c. else
+				$potongan 	= 0.2 * $tb;
+			}
 		}
 		elseif(str_is($aktif['jenis_pinjaman'], 'pt') && $kredit['nth'] < $aktif['jangka_waktu'])
 		{
 			$tb 		= self::formatMoneyFrom($kredit['bunga']) * ($aktif['jangka_waktu'] - ($kredit['nth']*1 - 1));
-		}else{
-			$tb 		= 0;
-		}
 
-		//check pelunasan > 1/2 masa nth
-		$max_jw 	= round($aktif['jangka_waktu']/2);
+			$harian 	= (ceil($kredit['total_bunga']/3000) * 100);
+			$hari 		= Carbon::parse($tanggal)->subdays(1)->diffInDays(Carbon::parse($kredit['tanggal_akhir'])->submonthsnooverflow(1));
 
-		if($kredit['nth'] <= 4){
-			//a. kalau angsuran berikut sebelum JT4
-			$potongan 	= 0.7 * $tb;
-		}
-		elseif($max_jw >= $kredit['nth']){
-			//b. kalau angsuran berikut sebelum JT separuh angsuran
-			$potongan 	= 0.5 * $tb;
+			$potongan 	= $tb - ($harian * $hari);
 		}else{
-			//c. else
-			$potongan 	= 0.2 * $tb;
+			$potongan 	= 0;
 		}
 
 		return $potongan;
