@@ -39,7 +39,7 @@
 												{!! Form::bsText('Kemampuan Angsur', 'kemampuan_angsur', null, ['class' => 'form-control mask-money', 'placeholder' => 'masukkan kemampuan angsur']) !!}
 											</div>
 											<div class="col-3">
-												{!! Form::bsText('Bunga per Tahun', 'bunga_per_tahun', null, ['class' => 'form-control', 'placeholder' => 'masukkan bunga per tahun']) !!}
+												{!! Form::bsText('Bunga per Tahun', 'bunga_per_tahun', null, ['class' => 'form-control', 'placeholder' => 'masukkan bunga per tahun'], true, null, null, '%') !!}
 											</div>
 											<div class="col-3" style="padding-top:23px;">
 												{!! Form::bsSubmit('Hitung', ['class' => 'btn btn-primary float-left']) !!}
@@ -60,7 +60,10 @@
 												{!! Form::bsText('Pokok Pinjaman', 'pokok_pinjaman', null, ['class' => 'form-control mask-money', 'placeholder' => 'masukkan pokok pinjaman']) !!}
 											</div>
 											<div class="col-3">
-												{!! Form::bsText('Bunga per Tahun', 'bunga_per_tahun', null, ['class' => 'form-control', 'placeholder' => 'masukkan bunga per tahun']) !!}
+												<div class="input-group">
+
+												</div>
+												{!! Form::bsText('Bunga per Tahun', 'bunga_per_tahun', null, ['class' => 'form-control', 'placeholder' => 'masukkan bunga per tahun'], true, null, null, '%') !!}
 											</div>
 											<div class="col-3" style="padding-top:23px;">
 												{!! Form::bsSubmit('Hitung', ['class' => 'btn btn-primary float-left']) !!}
