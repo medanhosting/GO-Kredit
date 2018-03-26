@@ -35,6 +35,7 @@ class TunggakanController extends Controller
 
 	public function index() 
 	{
+		//ganti kolektabilitias
 		$today 		= Carbon::now();
 		view()->share('read_only', false);
 
@@ -44,13 +45,50 @@ class TunggakanController extends Controller
 		}
 
 		$tunggakan 	= JadwalAngsuran::wherehas('kredit', function($q){$q->where('kode_kantor', request()->get('kantor_aktif_id'));})->HitungTunggakanBeberapaWaktuLalu($today)->with(['kredit', 'kredit.penagihan', 'kredit.suratperingatan'])->orderby('tanggal', 'asc')->get();
-
+		
 		view()->share('is_aktif_tab', 'show active');
 
 		view()->share('active_submenu', 'tunggakan');
 		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
 
 		$this->layout->pages 	= view('v2.kredit.tunggakan.index', compact('tunggakan'));
+		return $this->layout;
+	}
+
+	public function kolektabilitas() 
+	{
+		//ganti kolektabilitas
+		$today 		= Carbon::now();
+		view()->share('read_only', false);
+
+		if(request()->has('q')){
+			$today	= Carbon::createFromFormat('d/m/Y', request()->get('q'));
+			view()->share('read_only', true);
+		}
+
+		$tunggakan 	= Aktif::Kolektabilitas($today)->get();
+		$tgk 		= $tunggakan->toArray();
+		$stat['kol_1']	= array_sum(array_column($tgk, 'kol_1'));
+		$stat['kol_2']	= array_sum(array_column($tgk, 'kol_2'));
+		$stat['kol_3']	= array_sum(array_column($tgk, 'kol_3'));
+		$stat['kol_4']	= array_sum(array_column($tgk, 'kol_4'));
+		$stat['kol_5']	= array_sum(array_column($tgk, 'kol_5'));
+		$stat['all']	= $stat['kol_1'] + $stat['kol_2'] + $stat['kol_3'] + $stat['kol_4'] + $stat['kol_5'];
+
+		$perc['kol_1']	= 5;
+		$perc['kol_2']	= 5;
+		$perc['kol_3']	= 10;
+		$perc['kol_4']	= 50;
+		$perc['kol_5']	= 100;
+
+		$side 	= (($perc['kol_1'] * $stat['kol_1'])/100) + (($perc['kol_2'] * $stat['kol_2'])/100) + (($perc['kol_3'] * $stat['kol_3'])/100) + (($perc['kol_4'] * $stat['kol_4'])/100) + (($perc['kol_5'] * $stat['kol_5'])/100);
+
+		view()->share('is_aktif_tab', 'show active');
+
+		view()->share('active_submenu', 'kolektabilitas');
+		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+
+		$this->layout->pages 	= view('v2.kredit.tunggakan.kolektabilitas', compact('tunggakan', 'stat', 'perc', 'side'));
 		return $this->layout;
 	}
 

@@ -80,7 +80,7 @@ class Aktif extends Model
 	public function jaminan(){
 		return $this->hasMany(Jaminan::class, 'nomor_kredit', 'nomor_kredit');
 	}
-	
+
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------
@@ -156,6 +156,44 @@ class Aktif extends Model
 			]);
 	}
 
+	public function scopeKolektabilitas($query, Carbon $value){
+		return $query->selectraw('k_aktif.*')
+		//kol 1
+		->selectraw(\DB::raw('(select sum(jumlah) from k_jadwal_angsuran 
+			where k_jadwal_angsuran.nomor_kredit = k_aktif.nomor_kredit 
+			and k_jadwal_angsuran.deleted_at is null 
+			and  TIMESTAMPDIFF(MONTH, tanggal, IF(tanggal_bayar is null, "'.$value->format('Y-m-d H:i:s').'", tanggal_bayar)) < 2
+			) as kol_1'))
+		//kol 2
+		->selectraw(\DB::raw('(select sum(jumlah) from k_jadwal_angsuran 
+			where k_jadwal_angsuran.nomor_kredit = k_aktif.nomor_kredit 
+			and k_jadwal_angsuran.deleted_at is null 
+			and  TIMESTAMPDIFF(MONTH, tanggal, IF(tanggal_bayar is null, "'.$value->format('Y-m-d H:i:s').'", tanggal_bayar)) >= 2
+			and  TIMESTAMPDIFF(MONTH, tanggal, IF(tanggal_bayar is null, "'.$value->format('Y-m-d H:i:s').'", tanggal_bayar)) <= 3
+			) as kol_2'))
+
+		//kol 3
+		->selectraw(\DB::raw('(select sum(jumlah) from k_jadwal_angsuran 
+			where k_jadwal_angsuran.nomor_kredit = k_aktif.nomor_kredit 
+			and k_jadwal_angsuran.deleted_at is null 
+			and  TIMESTAMPDIFF(MONTH, tanggal, IF(tanggal_bayar is null, "'.$value->format('Y-m-d H:i:s').'", tanggal_bayar)) >= 4
+			and  TIMESTAMPDIFF(MONTH, tanggal, IF(tanggal_bayar is null, "'.$value->format('Y-m-d H:i:s').'", tanggal_bayar)) <= 6
+			) as kol_3'))
+		//kol 4
+		->selectraw(\DB::raw('(select sum(jumlah) from k_jadwal_angsuran 
+			where k_jadwal_angsuran.nomor_kredit = k_aktif.nomor_kredit 
+			and k_jadwal_angsuran.deleted_at is null 
+			and  TIMESTAMPDIFF(MONTH, tanggal, IF(tanggal_bayar is null, "'.$value->format('Y-m-d H:i:s').'", tanggal_bayar)) >= 7
+			and  TIMESTAMPDIFF(MONTH, tanggal, IF(tanggal_bayar is null, "'.$value->format('Y-m-d H:i:s').'", tanggal_bayar)) <= 8
+			) as kol_4'))
+		//kol 5
+		->selectraw(\DB::raw('(select sum(jumlah) from k_jadwal_angsuran 
+			where k_jadwal_angsuran.nomor_kredit = k_aktif.nomor_kredit 
+			and k_jadwal_angsuran.deleted_at is null 
+			and  TIMESTAMPDIFF(MONTH, tanggal, IF(tanggal_bayar is null, "'.$value->format('Y-m-d H:i:s').'", tanggal_bayar)) > 8
+			) as kol_5'))
+		;
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// MUTATOR
 	// ------------------------------------------------------------------------------------------------------------

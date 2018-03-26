@@ -53,6 +53,7 @@
 
 				Route::get('angsuran/{id}/print', 		['uses' => 'AngsuranController@print', 		'as' => 'angsuran.print']);
 				Route::get('tunggakan/{id}/print',		['uses' => 'TunggakanController@print',		'as' => 'tunggakan.print']);
+				Route::get('kolektabilitas',			['uses' => 'TunggakanController@kolektabilitas',		'as' => 'tunggakan.kolektabilitas']);
 
 				Route::any('angsuran/{id}/validasi', 	['uses' => 'MutasiJaminanController@validasi',	'as' => 'jaminan.validasi']);
 			});
