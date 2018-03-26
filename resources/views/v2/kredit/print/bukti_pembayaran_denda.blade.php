@@ -16,9 +16,33 @@
 		<!-- Fonts -->
 		<link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<style type="text/css">
+			.watermark { 
+				width: 100%; 
+				height: 100%; 
+				position: absolute; 		
+				top: 20%; 
+				bottom: 30%;
+				text-align: center; 
+				margin: 0 auto;
+				z-index: 1; }
+			.watermark span {
+				display: block;
+				font-size: 5rem; 
+				font-weight: 700; 
+				color: #009688; 
+				opacity: .2;
+				-ms-transform: rotate(330deg); 
+		    -webkit-transform: rotate(330deg);
+		    transform: rotate(330deg); 
+		  	letter-spacing: 0.15em; }
+		</style>
 	</head>
 	<body>
-		<div class="container-fluid" style="width: 21cm;height: 29.7cm; ">
+		<div class="container-fluid" style="width: 21cm;height: 29.7cm; position: relative;">
+			@if (isset($v['is_print']))
+				<div class="watermark"><span>COPY</span></div>
+			@endif
 			<div class="clearfix">&nbsp;</div>
 			<div class="row">
 				<div class="col-6 text-left">

@@ -140,7 +140,7 @@ window.formInputMask = {
 			placeholder: ''
 		});
 		var idKTPCustom = new Inputmask({
-			alias: '35-99-999999-9999',
+			alias: '35-99-99-999999-9999',
 			placeholder: ''
 		});
 		var selector = $('.mask-id-card');

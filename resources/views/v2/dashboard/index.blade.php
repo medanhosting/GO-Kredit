@@ -56,12 +56,10 @@
 						<tbody>
 							@forelse($data['list_survei'] as $k => $v)
 								<tr class="row m-0" href='{{ route('pengajuan.show', ['id' => $v['id'], 'kantor_aktif_id' => request()->get('kantor_aktif_id') ] ) }}'>
-									<td class="col-auto">
-										<h6 class="mb-1"><strong>{{($v['nasabah']['nama'])}}</strong><br/>
-										<i class="fa fa-phone"></i>&nbsp;{{ $v['nasabah']['telepon']}}
-									</td>
-									<td class="text-right col">
-										<p class="p-0 mt-1 m-0">{!!implode(' ', $v['nasabah']['alamat'])!!}</p>
+									<td class="col-auto w-100" colspan="2">
+										<h6 class="mb-1"><strong>{{($v['nasabah']['nama'])}}</strong></h6>
+										<p class="mb-1"><i class="fa fa-phone"></i>&nbsp;{{ $v['nasabah']['telepon']}}</p>
+										<p class="p-0 m-0" style="word-break: break-all;">{!!implode(' ', $v['nasabah']['alamat'])!!}</p>
 									</td>
 								</tr>
 							@empty
