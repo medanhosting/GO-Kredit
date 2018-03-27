@@ -164,6 +164,12 @@ class NotaBayarController extends BaseController
 					$return['kantor']	= $k['kantor'];
 				}
 
+				$cetak 		= new CetakNotaBayar;
+				$cetak->nomor_faktur 	= $feedback->nomor_faktur;
+				$cetak->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+				$cetak->karyawan 		= ['nip' => Auth::user()->nip, 'nama' => Auth::user()->nama];
+				$cetak->save();
+
 				DB::commit();
 				
 				return response()->json(['status' => 1, 'data' => $return, 'error' => ['message' => []]]);
