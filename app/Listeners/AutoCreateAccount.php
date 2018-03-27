@@ -561,7 +561,7 @@ class AutoCreateAccount
 
 			['nomor_perkiraan'	=> '501.120',
 			'akun'				=> 'Pihak ketiga bukan bank',
-			'parent'			=> '501.120'],
+			'parent'			=> '501.100'],
 			['nomor_perkiraan'	=> '501.121',
 			'akun'				=> 'Bunga Tabungan',
 			'parent'			=> '501.120'],
