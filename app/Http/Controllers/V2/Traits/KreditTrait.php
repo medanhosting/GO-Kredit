@@ -19,7 +19,7 @@ use Auth, Config;
 trait KreditTrait {
 	
  	public function store_denda($aktif){
-		$denda 		= new BayarDenda($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'), request()->get('nomor_perkiraan'));
+		$denda 		= new BayarDenda($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'), request()->get('nomor_perkiraan'), $aktif['nasabah']);
 		$denda->bayar(request()->get('nominal'));
  	}
 	
@@ -29,7 +29,7 @@ trait KreditTrait {
  	}
 
  	public function store_validasi_restitusi($aktif){
-		$denda 		= new BayarDenda($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'));
+		$denda 		= new BayarDenda($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('tanggal'), null, $aktif['nasabah']);
 		$denda->scopes 	= $this->scopes;
 		$denda->validasi_restitusi(request()->get('is_approved'));
  	}
@@ -40,17 +40,17 @@ trait KreditTrait {
  	}
 
  	public function penerimaan_kas_kolektor($aktif){
- 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, null, request()->get('tanggal'), request()->get('nomor_perkiraan'));
+ 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, null, request()->get('tanggal'), request()->get('nomor_perkiraan'), $aktif['nasabah']);
 		$bayar->penerimaan_kas_kolektor(request()->get('nomor_faktur'));
  	}
 
  	public function store_angsuran($aktif){
- 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('jumlah'), request()->get('jumlah_angsuran'), request()->get('tanggal'), request()->get('nomor_perkiraan'));
+ 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], request()->get('jumlah'), request()->get('jumlah_angsuran'), request()->get('tanggal'), request()->get('nomor_perkiraan'), $aktif['nasabah']);
 		$bayar->bayar(request()->get('turun_pokok'));
  	}
 
  	public function store_bayar_sebagian($aktif){
- 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, request()->get('tanggal'), request()->get('nomor_perkiraan'));
+ 		$bayar 		= new BayarAngsuran($aktif, ['nip' => Auth::user()['nip'], 'nama' => Auth::user()['nama']], null, request()->get('tanggal'), request()->get('nomor_perkiraan'), $aktif['nasabah']);
 		$bayar->bayar_sebagian(request()->get('nominal'));
  	}
 }

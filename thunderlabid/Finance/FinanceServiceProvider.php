@@ -28,6 +28,9 @@ class FinanceServiceProvider extends ServiceProvider
 		Event::listen('Thunderlabid\Finance\Events\NotaBayar\NotaBayarUpdating', 'Thunderlabid\Finance\Listeners\Saving');
 		Event::listen('Thunderlabid\Finance\Events\NotaBayar\NotaBayarDeleting', 'Thunderlabid\Finance\Listeners\Deleting');
 
+		Event::listen('Thunderlabid\Finance\Events\CetakNotaBayar\CetakNotaBayarCreating', 'Thunderlabid\Finance\Listeners\Saving');
+		Event::listen('Thunderlabid\Finance\Events\CetakNotaBayar\CetakNotaBayarUpdating', 'Thunderlabid\Finance\Listeners\Saving');
+		Event::listen('Thunderlabid\Finance\Events\CetakNotaBayar\CetakNotaBayarDeleting', 'Thunderlabid\Finance\Listeners\Deleting');
 		////////////////////////////////////////////////////
 		// Tidak boleh melakukan pembayaran setelah jam 3 //
 		////////////////////////////////////////////////////

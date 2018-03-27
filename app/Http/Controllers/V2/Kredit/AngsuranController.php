@@ -8,6 +8,7 @@ use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Kredit\Models\JadwalAngsuran;
 use Thunderlabid\Kredit\Models\PermintaanRestitusi;
 use Thunderlabid\Finance\Models\NotaBayar;
+use Thunderlabid\Finance\Models\CetakNotaBayar;
 use Thunderlabid\Finance\Models\DetailTransaksi;
 
 use App\Service\Traits\IDRTrait;
@@ -182,5 +183,24 @@ class AngsuranController extends Controller
 		$titipan	= DetailTransaksi::whereIn('tag', ['titipan_pokok', 'titipan_bunga', 'restitusi_titipan_pokok', 'restitusi_titipan_bunga'])->wherehas('notabayar', function($q)use($id){$q->where('morph_reference_id', $id)->where('morph_reference_tag', 'kredit');})->sum('jumlah');
 
 		return response()->json(['status' => 'success', 'data' => $titipan], 200);
+	}
+
+	public function register() 
+	{
+		$registers 	= CetakNotaBayar::where('nomor_faktur', 'like', request()->get('kantor_aktif_id').'%');
+
+		if(request()->has('q')){
+			$q			= Carbon::createFromFormat('d/m/Y', request()->get('q'));
+			$registers 	= $registers->where('tanggal', '<=', $q->endofday()->format('Y-m-d H:i:s'));
+			$registers 	= $registers->where('tanggal', '>=', $q->startofday()->format('Y-m-d H:i:s'));
+		}
+
+		$registers 	= $registers->orderby('tanggal', 'desc')->paginate();
+
+		view()->share('active_submenu', 'register');
+		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+
+		$this->layout->pages 	= view('v2.kredit.angsuran.register', compact('registers'));
+		return $this->layout;
 	}
 }

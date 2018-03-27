@@ -20,9 +20,10 @@ class BayarDenda
 {
 	use IDRTrait;
 
-	public function __construct(Aktif $aktif, $karyawan, $tanggal, $nomor_perkiraan = null){
+	public function __construct(Aktif $aktif, $karyawan, $tanggal, $nomor_perkiraan = null, $nasabah = null){
 		$this->kredit 			= $aktif;
 		$this->karyawan 		= $karyawan;
+		$this->nasabah 			= $nasabah;
 		$this->tanggal 			= $tanggal;
 		$this->nomor_perkiraan	= $nomor_perkiraan;
 	}
@@ -65,6 +66,7 @@ class BayarDenda
 			$nb->morph_reference_tag 	= 'kredit';
 			$nb->tanggal 				= $this->tanggal;
 			$nb->karyawan 				= $this->karyawan;
+			$nb->nasabah 				= $this->nasabah;
 			$nb->jumlah 				= $nominal;
 			$nb->jenis 					= 'restitusi_denda';
 			$nb->save();
@@ -93,6 +95,7 @@ class BayarDenda
 		$nb->nomor_rekening			= $this->nomor_perkiraan;
 		$nb->tanggal 				= $this->tanggal;
 		$nb->karyawan 				= $this->karyawan;
+		$nb->nasabah 				= $this->nasabah;
 		$nb->jumlah 				= $nominal;
 		$nb->jenis 					= 'denda';
 		$nb->save();

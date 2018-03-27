@@ -146,7 +146,7 @@
 									<p class="border border-left-0 border-right-0 border-bottom-0">{{$angsuran['karyawan']['nama']}}</p>
 								</td>
 								<td class="border-0">
-									<p class="border border-left-0 border-right-0 border-bottom-0">{{$angsuran['kredit']['nasabah']['nama']}}</p>
+									<p class="border border-left-0 border-right-0 border-bottom-0">{{$angsuran['nasabah']['nama']}}</p>
 								</td>
 							</tr>
 						</tbody>
@@ -154,5 +154,12 @@
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript">
+			window.onafterprint = function() {
+				var xhttp = new XMLHttpRequest();
+				xhttp.open("GET", "/api/print/notification/{{$angsuran['nomor_faktur']}}?kantor_aktif_id={{$kantor_aktif['id']}}", true);
+				xhttp.send();
+			};
+		</script>
 	</body>
 </html>

@@ -166,7 +166,7 @@ class KreditController extends Controller
 		$stat['jumlah_titipan']		= floor($stat['total_titipan']/max(1, $stat['angsuran_bulanan']));
 
 		//d. Bukti Transaksi
-		$notabayar 		= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['angsuran', 'kolektor'])->get();
+		$notabayar 		= NotaBayar::where('morph_reference_id', $aktif['nomor_kredit'])->where('morph_reference_tag', 'kredit')->whereIn('jenis', ['angsuran', 'kolektor', 'registers'])->get();
 
 		//e. NTH Angsuran
 		$sisa_angsuran 	= JadwalAngsuran::wherenull('nomor_faktur')->where('nomor_kredit', $aktif['nomor_kredit'])->selectraw('jumlah as total')->orderby('nth', 'asc')->get();

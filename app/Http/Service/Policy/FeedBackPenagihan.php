@@ -71,6 +71,7 @@ class FeedBackPenagihan
 		$nb->morph_reference_tag 	= 'kredit';
 		$nb->tanggal 				= $this->tanggal;
 		$nb->karyawan 				= $this->karyawan;
+		$nb->nasabah 				= $this->penerima;
 		$nb->jumlah 				= $this->formatMoneyTo($this->nominal);
 		$nb->jenis 					= 'kolektor';
 		$nb->save();
@@ -79,7 +80,7 @@ class FeedBackPenagihan
 	}
 
 	private function buat_detail_faktur(){
-		$deskripsi 	= 'Pembayaran Angsuran';
+		$deskripsi 	= 'Pembayaran angsuran melalui kolektor ['.$this->karyawan['nama'].']';
 		$angs 		= new DetailTransaksi;
 		$angs->nomor_faktur 	= $this->nomor_faktur;
 		$angs->tag 				= 'kolektor';

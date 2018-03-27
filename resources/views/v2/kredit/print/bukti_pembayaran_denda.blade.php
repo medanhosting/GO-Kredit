@@ -166,7 +166,7 @@
 							</tr>
 							<tr>
 								<td class="border-0">
-									<p class="border border-left-0 border-right-0 border-bottom-0">{{$angsuran['kredit']['nasabah']['nama']}}</p>
+									<p class="border border-left-0 border-right-0 border-bottom-0">{{$angsuran['nasabah']['nama']}}</p>
 								</td>
 							</tr>
 						</tbody>

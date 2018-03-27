@@ -12,13 +12,13 @@
 */
 
 #Route::domain('localhost')->group(function(){
-	Route::get('/', 						['as'	=> 'login', 				'uses' => 'LoginController@login']);
-	Route::post('/', 						['as'	=> 'login.post', 			'uses' => 'LoginController@post_login']);
-	Route::get('/logout', 					['as'	=> 'logout', 				'uses' => 'LoginController@logout']);
+	Route::get('/', 				['as'	=> 'login', 				'uses' => 'LoginController@login']);
+	Route::post('/', 				['as'	=> 'login.post', 			'uses' => 'LoginController@post_login']);
+	Route::get('/logout', 			['as'	=> 'logout', 				'uses' => 'LoginController@logout']);
 
-	Route::get('/forget/password', 			['as'	=> 'forget_password', 		'uses' => 'LoginController@forget_password']);
-	Route::post('/register', 				['as'	=> 'register.post', 		'uses' => 'LoginController@post_register']);
-	Route::post('/forget/password', 		['as'	=> 'forget_password.post', 	'uses' => 'LoginController@post_forget_password']);
+	Route::get('/forget/password', 	['as'	=> 'forget_password', 		'uses' => 'LoginController@forget_password']);
+	Route::post('/register', 		['as'	=> 'register.post', 		'uses' => 'LoginController@post_register']);
+	Route::post('/forget/password', ['as'	=> 'forget_password.post', 	'uses' => 'LoginController@post_forget_password']);
 
 	Route::get('/password', 	['as'	=> 'password.get', 		'uses' => 'LoginController@password_get']);
 	Route::post('/password', 	['as'	=> 'password.post', 	'uses' => 'LoginController@password_post']);
@@ -47,15 +47,19 @@
 			Route::namespace('V2\Kredit')->group(function(){
 				Route::resource('kredit', 			'KreditController'); 
 				Route::resource('jaminan',			'MutasiJaminanController'); 
-				Route::resource('tunggakan', 		'TunggakanController'); 
 				Route::resource('penagihan', 		'PenagihanController');
 				Route::resource('angsuran', 		'AngsuranController');
 
-				Route::get('angsuran/{id}/print', 		['uses' => 'AngsuranController@print', 		'as' => 'angsuran.print']);
-				Route::get('tunggakan/{id}/print',		['uses' => 'TunggakanController@print',		'as' => 'tunggakan.print']);
-				Route::get('kolektabilitas',			['uses' => 'TunggakanController@kolektabilitas',		'as' => 'tunggakan.kolektabilitas']);
+				//LAPORAN
+				//TUNGGAKAN
+				Route::resource('tunggakan', 		'TunggakanController'); 
+				Route::get('tunggakan/{id}/print',	['uses' => 'TunggakanController@print',			'as' => 'tunggakan.print']);
+				Route::get('kolektabilitas',		['uses' => 'TunggakanController@kolektabilitas','as' => 'tunggakan.kolektabilitas']);
+				Route::get('kolektor',				['uses' => 'TunggakanController@kolektor', 		'as' => 'angsuran.kolektor']);
 
-				Route::any('angsuran/{id}/validasi', 	['uses' => 'MutasiJaminanController@validasi',	'as' => 'jaminan.validasi']);
+				Route::get('angsuran/{id}/print', 	['uses' => 'AngsuranController@print', 			'as' => 'angsuran.print']);
+				Route::any('jaminan/{id}/validasi',	['uses' => 'MutasiJaminanController@validasi',	'as' => 'jaminan.validasi']);
+				Route::get('/register/bukti/trs',	['uses' => 'AngsuranController@register', 		'as' => 'angsuran.register']);
 			});
 
 			Route::namespace('V2\Finance')->group(function(){

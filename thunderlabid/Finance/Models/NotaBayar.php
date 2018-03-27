@@ -42,7 +42,7 @@ class NotaBayar extends Model
 	use FakturTrait;
 	
 	protected $table 	= 'f_nota_bayar';
-	protected $fillable = ['nomor_faktur', 'tanggal', 'jenis', 'karyawan', 'jumlah', 'nomor_rekening', 'morph_reference_id', 'morph_reference_tag'];
+	protected $fillable = ['nomor_faktur', 'tanggal', 'jenis', 'karyawan', 'nasabah', 'jumlah', 'nomor_rekening', 'morph_reference_id', 'morph_reference_tag'];
 	protected $hidden 	= [];
 	protected $appends	= ['jatuh_tempo', 'hari', 'qrcode'];
 
@@ -83,6 +83,9 @@ class NotaBayar extends Model
 		return $this->belongsto(NotaBayar::class, 'morph_reference_id', 'nomor_faktur')->where('morph_reference_tag', 'kredit');
 	}
 
+	public function registers(){
+		return $this->hasMany(CetakNotaBayar::class, 'nomor_faktur', 'nomor_faktur');
+	}
 	// ------------------------------------------------------------------------------------------------------------
 	// FUNCTION
 	// ------------------------------------------------------------------------------------------------------------
@@ -123,6 +126,11 @@ class NotaBayar extends Model
 	public function setKaryawanAttribute($variable)
 	{
 		$this->attributes['karyawan']		= json_encode($variable);
+	}
+
+	public function setNasabahAttribute($variable)
+	{
+		$this->attributes['nasabah']		= json_encode($variable);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -184,6 +192,11 @@ class NotaBayar extends Model
 		return json_decode($this->attributes['karyawan'], true);
 	}
 
+	public function getNasabahAttribute($variable)
+	{
+		return json_decode($this->attributes['nasabah'], true);
+	}
+
 	public function getJatuhTempoAttribute($variable){
 		return Carbon::parse($this->attributes['tanggal'])->addDays(Config::get('kredit.batas_pembayaran_angsuran_hari'))->format('d/m/Y H:i');
 	}
@@ -221,5 +234,12 @@ class NotaBayar extends Model
 		}
 
 		return $deskripsi;
+	}
+
+	public function getIsPrintedAttribute($variable){
+		if($this->registers()->count()){
+			return true;
+		}
+		return false;
 	}
 }

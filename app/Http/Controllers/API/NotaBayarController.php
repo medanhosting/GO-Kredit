@@ -9,6 +9,7 @@ use Thunderlabid\Kredit\Models\Penagihan;
 use Thunderlabid\Kredit\Models\SuratPeringatan;
 
 use Thunderlabid\Finance\Models\NotaBayar;
+use Thunderlabid\Finance\Models\CetakNotaBayar;
 use Thunderlabid\Manajemen\Models\Kantor;
 use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 
@@ -21,6 +22,13 @@ use Exception, Response, Auth, Carbon\Carbon, Config, DB, Validator;
 class NotaBayarController extends BaseController
 {
 	use ResponseTrait;
+
+	public function __construct(){
+
+		if(!Auth::check()){
+			$this->middleware('auth:api');
+		}
+	}
 
 	public function index()
 	{
@@ -41,7 +49,7 @@ class NotaBayarController extends BaseController
 				// 	$nb 	= $nb->where(function($q)use($regexp){$q->whereHas('collateral', function($q)use($regexp){$q->whereRaw(\DB::raw("dokumen_survei REGEXP '". $regexp."'"));})->orwherehas('pengajuan', function($q)use($regexp){$q->whereraw(\DB::raw("nasabah REGEXP '". $regexp."'"));});});
 				// }
 
-				$nb 	= $nb->Where('karyawan->nip', $k['orang']['nip'])->where('jenis', 'kolektor')->paginate();
+				$nb 	= $nb->Where('karyawan->nip', $k['orang']['nip'])->where('jenis', 'kolektor')->orderby('tanggal', 'desc')->paginate();
 
 				$nb->appends(request()->only('kode_kantor', 'query'));
 			
@@ -186,6 +194,21 @@ class NotaBayarController extends BaseController
 			$nb['kantor']	= $k['kantor'];
 
 			return response()->json(['status' => 1, 'data' => $nb, 'error' => ['message' => []]]);
+
+		} catch (Exception $e) {
+			return $this->error_response(request()->all(), $e);
+		}
+	}
+
+	public function print($faktur){
+		try {
+			$cetak 		= new CetakNotaBayar;
+			$cetak->nomor_faktur 	= $faktur;
+			$cetak->tanggal 		= Carbon::now()->format('d/m/Y H:i');
+			$cetak->karyawan 		= ['nip' => Auth::user()->nip, 'nama' => Auth::user()->nama];
+			$cetak->save();
+
+			return response()->json(['status' => 1, 'data' => $cetak, 'error' => ['message' => []]]);
 
 		} catch (Exception $e) {
 			return $this->error_response(request()->all(), $e);

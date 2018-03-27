@@ -43,6 +43,8 @@ Route::middleware('auth:api')->namespace('API')->group(function(){
 	Route::get('/nota/bayar/show/{id}',			['uses' => 'NotaBayarController@show']);
 });
 
+Route::get('/print/notification/{nomor_faktur}',['uses' => 'API\\NotaBayarController@print']);
+
 // Route::any('/sms',	['uses' => '\\Thunderlabid\\SMSGWay\\Controllers\\SMSController@twilio']);
 
 Route::any('/pengaturan', function (Request $request) 

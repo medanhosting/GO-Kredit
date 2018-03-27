@@ -62,9 +62,14 @@ class AutoCreateAccount
 			['nomor_perkiraan'	=> '280.000',
 			'akun'				=> 'HUTANG LAINNYA'],
 
+			['nomor_perkiraan'	=> '300.000',
+			'akun'				=> 'MODAL DAN CADANGAN UMUM'],
+
 			['nomor_perkiraan'	=> '400.000',
 			'akun'				=> 'PENDAPATAN'],
-			
+
+			['nomor_perkiraan'	=> '500.000',
+			'akun'				=> 'BUNGA DAN LABA/RUGI'],
 		];
 
 		$codes 	= [

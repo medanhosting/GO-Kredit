@@ -38,3 +38,23 @@ px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['kolektabilitas']) ? 'a
 	<i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;Laporan Kolektabilitas
 </a>
 @endif
+@if(array_intersect($acl_menu['kredit.tagihan'], $scopes->scopes))
+<a href="{{route('angsuran.kolektor', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
+px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['kolektor']) ? 'active' : '' }}">
+	<i class="fa fa-hand-paper-o"></i>&nbsp;&nbsp;Laporan Kolektor
+</a>
+@else
+<a href="#" class="nav-link disabled">
+	<i class="fa fa-hand-paper-o"></i>&nbsp;&nbsp;Laporan Kolektor
+</a>
+@endif
+@if(array_intersect($acl_menu['kredit.register'], $scopes->scopes))
+<a href="{{route('angsuran.register', ['kantor_aktif_id' => $kantor_aktif_id])}}" class="nav-link px-2 py-1 my-2
+px-2 py-1 my-2 {{ in_array(strtolower($active_submenu), ['register']) ? 'active' : '' }}">
+	<i class="fa fa-print"></i>&nbsp;&nbsp;Register Bukti Trs
+</a>
+@else
+<a href="#" class="nav-link disabled">
+	<i class="fa fa-print"></i>&nbsp;&nbsp;Register Bukti Trs
+</a>
+@endif

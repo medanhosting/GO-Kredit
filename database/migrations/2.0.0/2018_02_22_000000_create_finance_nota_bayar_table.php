@@ -23,6 +23,7 @@ class CreateFinanceNotaBayarTable extends Migration
 			$table->double('jumlah');
 			$table->string('jenis');
 			$table->text('karyawan')->nullable();
+			$table->text('nasabah')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			

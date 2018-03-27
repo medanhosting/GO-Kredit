@@ -24,9 +24,10 @@ class BayarAngsuran
 	use IDRTrait;
 	use WaktuTrait;
 
-	public function __construct(Aktif $aktif, $karyawan, $jumlah, $nth, $tanggal, $nomor_perkiraan = null){
+	public function __construct(Aktif $aktif, $karyawan, $jumlah, $nth, $tanggal, $nomor_perkiraan = null, $nasabah = null){
 		$this->kredit 			= $aktif;
 		$this->karyawan 		= $karyawan;
+		$this->nasabah 			= $nasabah;
 		$this->jumlah 			= $jumlah;
 		$this->nth 				= $nth;
 		$this->tanggal 			= Carbon::createFromFormat('d/m/Y H:i', $tanggal);
@@ -85,6 +86,7 @@ class BayarAngsuran
 		$nb->nomor_rekening 		= $this->nomor_perkiraan;
 		$nb->tanggal 				= $this->tanggal->format('d/m/Y H:i');
 		$nb->karyawan 				= $this->karyawan;
+		$nb->nasabah 				= $this->nasabah;
 		$nb->jumlah 				= $this->jumlah;
 		$nb->jenis 					= $jenis;
 		$nb->save();

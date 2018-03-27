@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V2\Kredit;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\V2\Traits\AkunTrait;
 
 use Thunderlabid\Kredit\Models\Aktif;
 use Thunderlabid\Kredit\Models\JadwalAngsuran;
@@ -16,11 +17,12 @@ use Thunderlabid\Manajemen\Models\PenempatanKaryawan;
 use App\Service\Traits\IDRTrait;
 use App\Http\Service\Policy\PerhitunganBunga;
 
-use Exception, Auth, Carbon\Carbon;
+use Exception, Auth, Carbon\Carbon, Config;
 
 class TunggakanController extends Controller
 {
 	use IDRTrait;
+	use AkunTrait;
 
 	public function __construct()
 	{
@@ -188,5 +190,26 @@ class TunggakanController extends Controller
 		} catch (Exception $e) {
 			return redirect()->back()->withErrors($e->getMessage());
 		}
+	}
+
+	public function kolektor() 
+	{
+		$notabayar 	= NotaBayar::where('jenis', 'kolektor')->where('nomor_faktur', 'like', request()->get('kantor_aktif_id').'%');
+
+		if(request()->has('q')){
+			$q		= Carbon::createFromFormat('d/m/Y', request()->get('q'));
+			$notabayar 	= $notabayar->where('tanggal', '<=', $q->endofday()->format('Y-m-d H:i:s'));
+			$notabayar 	= $notabayar->where('tanggal', '>=', $q->startofday()->format('Y-m-d H:i:s'));
+		}
+
+		$notabayar 	= $notabayar->orderby('karyawan->nip', 'asc')->orderby('karyawan->nama', 'asc')->paginate();
+
+		$akun	= $this->get_akun(request()->get('kantor_aktif_id'), Config::get('finance.nomor_rekening_aktif'));
+
+		view()->share('active_submenu', 'kolektor');
+		view()->share('kantor_aktif_id', request()->get('kantor_aktif_id'));
+
+		$this->layout->pages 	= view('v2.kredit.tunggakan.kolektor', compact('notabayar', 'akun'));
+		return $this->layout;
 	}
 }
