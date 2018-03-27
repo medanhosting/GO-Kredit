@@ -49,7 +49,7 @@ class NotaBayarController extends BaseController
 				// 	$nb 	= $nb->where(function($q)use($regexp){$q->whereHas('collateral', function($q)use($regexp){$q->whereRaw(\DB::raw("dokumen_survei REGEXP '". $regexp."'"));})->orwherehas('pengajuan', function($q)use($regexp){$q->whereraw(\DB::raw("nasabah REGEXP '". $regexp."'"));});});
 				// }
 
-				$nb 	= $nb->Where('karyawan->nip', $k['orang']['nip'])->where('jenis', 'kolektor')->orderby('tanggal', 'desc')->paginate();
+				$nb 	= $nb->where('karyawan->nip', $k['orang']['nip'])->where('jenis', 'kolektor')->orderby('tanggal', 'desc')->paginate();
 
 				$nb->appends(request()->only('kode_kantor', 'query'));
 			

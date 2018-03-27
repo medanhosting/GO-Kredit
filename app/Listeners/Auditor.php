@@ -29,7 +29,7 @@ class Auditor
 
 		$object 	= explode("\\", strtolower($class[1]));
 
-		if(isset($object[3]) && !str_is('audit', $object[3]) && Auth::check()){
+		if(isset($object[3]) && !str_is('audit', $object[3]) && !str_is('cetaknotabayar', $object[3]) && Auth::check()){
 			$audit 	= new Audit;
 			$audit->kode_kantor	= request()->get('kantor_aktif_id');
 			$audit->tanggal 	= Carbon::now()->format('d/m/Y H:i');
