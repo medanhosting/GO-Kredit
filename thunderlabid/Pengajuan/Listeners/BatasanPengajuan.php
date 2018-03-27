@@ -40,7 +40,7 @@ class BatasanPengajuan
 
 		if($exists_pengajuan > 2)
 		{
-			throw new AppException("Maksimal pengajuan untuk nasabah yang sama adalah 3 kali", AppException::DATA_VALIDATION);
+			throw new AppException(["nasabah.telepon" => "Maksimal pengajuan untuk nasabah yang sama adalah 3 kali"], AppException::DATA_VALIDATION);
 		}
 	}
 }

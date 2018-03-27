@@ -34,7 +34,7 @@ class HanyaProsesPermohonan
 		$model 		= $event->data;
 		if ($model->status_terakhir->status!='permohonan') 
 		{
-			throw new AppException('Kredit dalam proses ini tidak dapat dihapus', AppException::DATA_VALIDATION);
+			throw new AppException(['kredit' => 'Kredit dalam proses ini tidak dapat dihapus'], AppException::DATA_VALIDATION);
 		}
 	}
 }

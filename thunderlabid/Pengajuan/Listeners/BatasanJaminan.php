@@ -42,14 +42,14 @@ class BatasanJaminan
 			case 'shm': case 'shgb':
 				if($exists_jaminan > 2)
 				{
-					throw new AppException("Jaminan berupa ".strtoupper($model->jenis)." tidak boleh lebih dari 3 jaminan ");
+					throw new AppException(["dokumen_jaminan.".$model->jenis.'.jenis' => "Jaminan berupa ".strtoupper($model->jenis)." tidak boleh lebih dari 3 jaminan "]);
 				}
 				break;
 			
 			default:
 				if($exists_jaminan > 1)
 				{
-					throw new AppException("Jaminan berupa ".strtoupper($model->jenis)." tidak boleh lebih dari 2 jaminan ");
+					throw new AppException(["dokumen_jaminan.".$model->jenis.'.jenis' => "Jaminan berupa ".strtoupper($model->jenis)." tidak boleh lebih dari 2 jaminan "]);
 				}
 				break;
 		}
