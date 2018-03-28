@@ -134,6 +134,7 @@ class PermohonanController extends BaseController
 				$jaminan->save();
 			}
 
+			//simpan mobile data
 			DB::commit();
 
 			return response()->json(['status' => 1, 'data' => $pengajuan->toArray(), 'error' => ['message' => []]]);
@@ -174,10 +175,8 @@ class PermohonanController extends BaseController
 			}
 			else{
 				$phone		= request()->get('mobile');
-				\Log::info(json_encode($phone));
 				$pengajuan	= Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon']);
 			}
-
 
 			$pengajuan 		= $pengajuan->paginate();
 			$pengajuan->appends(request()->only('status', 'mobile', 'kode_kantor', 'query'));
