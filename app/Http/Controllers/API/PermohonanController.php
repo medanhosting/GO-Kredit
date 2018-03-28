@@ -50,18 +50,30 @@ class PermohonanController extends BaseController
 				$data_input['kode_kantor']	= $penempatankaryawan['kantor_id'];
 			}
 			else{
-				$location 			= request()->get('geolocation');
-				$semua_koperasi		= Kantor::whereIn('jenis', ['bpr', 'koperasi'])->get();
-				$min_distance 		= null;
+				//prioritas lokasi input
+				// similar_text(first, second)
+				if(request()->has('nasabah')){
+					$kota 		= request()->get('nasabah')['alamat']['kota'];
+					$kantor 	= Kantor::where('alamat->kota', 'like' , $kota)->first();
+					if($kantor){
+						$data_input['kode_kantor']	= $kantor['id'];
+					}
+				}
 
-				foreach ($semua_koperasi as $key => $value) 
-				{
-					$selisih 		= $this->count_distance(($value['geolocation']['latitude'] - $location['latitude']), ($value['geolocation']['latitude'] - $location['latitude']));
+				if(is_null($data_input['kode_kantor'])){
+					$location 			= request()->get('geolocation');
+					$semua_koperasi		= Kantor::whereIn('jenis', ['bpr', 'koperasi'])->get();
+					$min_distance 		= null;
 
-					if($selisih < $min_distance || is_null($min_distance))
+					foreach ($semua_koperasi as $key => $value) 
 					{
-						$min_distance 				= $selisih;
-						$data_input['kode_kantor']	= $value['id'];
+						$selisih 		= $this->count_distance(($value['geolocation']['latitude'] - $location['latitude']), ($value['geolocation']['latitude'] - $location['latitude']));
+
+						if($selisih < $min_distance || is_null($min_distance))
+						{
+							$min_distance 				= $selisih;
+							$data_input['kode_kantor']	= $value['id'];
+						}
 					}
 				}
 			}
@@ -160,6 +172,7 @@ class PermohonanController extends BaseController
 			}
 			else{
 				$phone		= request()->get('mobile');
+				\Log::info(json_encode($phone));
 				$pengajuan	= Pengajuan::status('permohonan')->where('nasabah->telepon', $phone['telepon']);
 			}
 
