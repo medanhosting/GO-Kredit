@@ -54,7 +54,7 @@
 				<label class="text-sm">Alamat Lengkap</label>
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-10">
-						<input id="pac-input" class="form-control col-6" type="text" placeholder="Search Box">
+						<input id="pac-input" class="form-control col-6" type="text" placeholder="Search Box" value="{{implode(', ', $kantor['alamat'])}}">
 						<div id="map" style="height: 300px;width: 100%;"></div>
 
 						<!-- <div class="input-group">
@@ -89,12 +89,9 @@
 					</div>
 				</div>
 				<br/> -->
-				{!! Form::hidden('latitude', $kantor['latitude'], ['class' => 'gllpLatitude']) !!}
-				{!! Form::hidden('longitude', $kantor['longitude'], ['class' => 'gllpLongitude']) !!}
-
-				<input type="hidden" name="latitude" class="gllpLatitude" value="{{ $kantor['latitude'] }}" />
-				<input type="hidden" name="longitude" class="gllpLongitude" value="{{ $kantor['longitude'] }}" />
-				<input type="hidden" class="gllpZoom"/>
+				{!! Form::hidden('alamat', json_encode($kantor['alamat']), ['id' => 'alamatk']) !!}
+				{!! Form::hidden('latitude', $kantor['geolocation']['latitude'], ['id' => 'gllpLatitude']) !!}
+				{!! Form::hidden('longitude', $kantor['geolocation']['longitude'], ['id' => 'gllpLongitude']) !!}
 			</fieldset>
 
 			<fieldset class="form-group">
@@ -124,12 +121,28 @@
 	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDhGU-wSjC89hoHPStx7bYGOjHpULJQHGI&libraries=places&callback=initAutocomplete" async defer></script>        
 	<script type="text/javascript">
 
+	@if(is_null($kantor))
+		var globallat 	= -7.9540221;
+		var globallng 	= 112.5684764;
+		var kantor 		= "Koperasi/BPR Baru";
+	@else
+		var globallat 	= {!!$kantor['geolocation']['latitude']!!};
+		var globallng 	= {!!$kantor['geolocation']['longitude']!!};
+		var kantor 		= "{!!$kantor['nama']!!}";
+	@endif
+
 	function initAutocomplete() {
 		var map = new google.maps.Map(document.getElementById('map'), {
-		  center: {lat: -7.9540221, lng: 112.5684764},
-		  zoom: 10,
+		  center: {lat: globallat, lng: globallng},
+		  zoom: 14,
 		  mapTypeId: 'roadmap'
 		});
+
+		var newmark = new google.maps.Marker({
+          position: {lat: globallat, lng: globallng},
+          map: map,
+          title: kantor
+        });
 
 		// Create the search box and link it to the UI element.
 		var input = document.getElementById('pac-input');
@@ -172,11 +185,9 @@
 				kota : place.address_components[3].long_name,
 			}
 
-			var geolocation = {
-				latitude : bounds.b.b,
-				longitude : bounds.f.b,
-			}
-
+			$("#alamatk").val(JSON.stringify(alamat));
+			$("#gllpLatitude").val(place.geometry.location.lat());
+			$("#gllpLongitude").val(place.geometry.location.lng());
 
 			var icon = {
 			  url: place.icon,
@@ -193,7 +204,6 @@
 			  title: place.name,
 			  position: place.geometry.location
 			}));
-			// console.log(markers.position);
 
 			if (place.geometry.viewport) {
 			  // Only geocodes have viewport.

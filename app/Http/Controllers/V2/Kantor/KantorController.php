@@ -84,7 +84,7 @@ class KantorController extends Controller
 	{
 		try {
 			$kantor 				= request()->only('nama', 'tipe', 'jenis', 'kantor_id', 'telepon');
-			$kantor['alamat']		= ['alamat' => request()->get('alamat')];
+			$kantor['alamat']		= json_decode(request()->get('alamat'), true);
 			$kantor['geolocation']	= ['latitude' => request()->get('latitude'), 'longitude' => request()->get('longitude')];
 
 			$kantor_simpan 	= Kantor::findornew($id);

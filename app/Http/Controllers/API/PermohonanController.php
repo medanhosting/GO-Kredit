@@ -54,7 +54,9 @@ class PermohonanController extends BaseController
 				// similar_text(first, second)
 				if(request()->has('nasabah')){
 					$kota 		= request()->get('nasabah')['alamat']['kota'];
-					$kantor 	= Kantor::where('alamat->kota', 'like' , $kota)->whereIn('jenis', ['bpr', 'koperasi'])->first();
+					$regexp 	= preg_replace("/-+/",'[^A-Za-z0-9_]+',$kota);
+					
+					$kantor 	= Kantor::whereRaw(\DB::raw("alamat->kota REGEXP '". $regexp."'"))->whereIn('jenis', ['bpr', 'koperasi'])->first();
 					if($kantor){
 						$data_input['kode_kantor']	= $kantor['id'];
 					}
